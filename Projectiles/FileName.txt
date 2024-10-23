@@ -1,0 +1,51 @@
+            NPC alwaysTarget = this.targetfortheRest;
+            if (alwaysTarget == null && !this.onHomeHit)
+            {
+                this.ySpeed += 0.1f;
+                if (timer < beforeHome) Projectile.velocity = new Vector2(0, -this.ySpeed);
+                if (timer >= beforeHome && timer <= beforeHome + 5)
+                {
+                    //if (Projectile.Center.Distance(this.lastMousePos) < 256f) this.mul = Projectile.Center.Distance(this.lastMousePos)/50f;
+                    Projectile.velocity = -Vector2.Lerp(-Projectile.velocity, (Projectile.Center - Main.MouseWorld).SafeNormalize(Vector2.Zero) * 40f, 0.25f) * this.mul;
+
+                }
+                return;
+            }
+            else if (alwaysTarget == null) return;
+            if (!alwaysTarget.active) return; // Just keep going without follow
+
+
+
+
+            if (this.timer >= beforeHome)
+            {
+                if(!onHomeHit) Projectile.velocity = -Vector2.Lerp(-Projectile.velocity, (Projectile.Center - alwaysTarget.Center).SafeNormalize(Vector2.Zero) * 40f, 0.25f);
+            }
+            else
+            {
+                if (!onHomeHit && this.debounce == 0)
+                {
+                    this.ySpeed += 0.1f;
+                    Projectile.velocity = new Vector2(0, -this.ySpeed);
+                }
+            }
+
+            if (this.timer > beforeHome + 10 && this.onHomeHit)
+            {
+                this.debounce += 1;
+                if (this.debounce < maxDebounce + 1)
+                {
+                    this.onHomeHit = false;
+                    this.timer = 0;
+                    Projectile.damage *= 2;
+                }
+            }
+
+            //Projectile.velocity *= 0.99f;
+            //rotSpeed *= 0.95f;
+            //if (Math.Round(rotSpeed * 100000) == 0)
+            //{
+            //    Projectile.alpha += 1;
+            //    Projectile.light -= 0.01f;
+            //    if (Projectile.alpha >= 255) Projectile.Kill();
+            //}

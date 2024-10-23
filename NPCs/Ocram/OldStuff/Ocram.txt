@@ -1,0 +1,504 @@
+﻿using Microsoft.Xna.Framework;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria;
+using VanillaModding.NPCs.Ocram.Ocram_Minions;
+using VanillaModding.NPCs.DuneTrapper;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria.GameContent;
+using Microsoft.CodeAnalysis;
+using ReLogic.Content;
+using Terraria.Audio;
+using Terraria.GameContent.ItemDropRules;
+using VanillaModding.Items.SoulofEssence;
+using Terraria.GameContent.Bestiary;
+using Terraria.Localization;
+using VanillaModding.Projectiles.OcramProjectile;
+
+namespace VanillaModding.NPCs.Ocram
+{
+    // The main part of the boss, usually referred to as "body"
+    [AutoloadBossHead] // This attribute looks for a texture called "ClassName_Head_Boss" and automatically registers it as the NPC boss head icon
+    public class Ocram : ModNPC
+    {
+        // Some Projectiles
+        int SpamProjectile = 20; // How many times it spams the god damn projectile.
+        int SpamPerSecond = 3; // Spam/sec ^
+
+        int SpamDemonthing = 10; // Spawn Demon Sickle upon Dash (varies on how many)
+        int maxMinions = 6; // Maximum minion spawn
+
+        // Dash boi
+        int dashMax = 2; // Maximum Dash it can do
+        int minDashTime = 2; // Minimum Time to Dash
+        int maxDashTime = 50; // Maximum Time to Dash
+        int divDashSpeed = 20; // Division of the speed Dash
+
+        // Speed Related NPC
+        float npcSpeed = 40f; // The Speed at which the NPC moves towards the target
+        float npcAccel = 0.015f; // The Acceleration at which the NPC moves towards the target 
+
+        // Offset NPC Guard
+        float offsetX = 200f;
+        float offsetY = 300f;
+
+        // e
+        public static LocalizedText BestiaryText
+        {
+            get; private set;
+        }
+        public override void SetStaticDefaults()
+        {
+            Main.npcFrameCount[Type] = 6;
+
+            // Add this in for bosses that have a summon item, requires corresponding code in the item (See MinionBossSummonItem.cs)
+            NPCID.Sets.MPAllowedEnemies[Type] = true;
+            // Automatically group with other bosses
+            NPCID.Sets.BossBestiaryPriority.Add(Type);
+
+            // Specify the debuffs it is immune to. Most NPCs are immune to Confused.
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Poisoned] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
+            // This boss also becomes immune to OnFire and all buffs that inherit OnFire immunity during the second half of the fight. See the ApplySecondStageBuffImmunities method.
+
+            // Influences how the NPC looks in the Bestiary
+            float Scale = 0.6f;
+            NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                //CustomTexturePath = "ExampleMod/Assets/Textures/Bestiary/MinionBoss_Preview",
+                PortraitScale = Scale, // Portrait refers to the full picture when clicking on the icon in the bestiary
+                PortraitPositionYOverride = -((NPC.height/2f - 25f) * Scale),
+            };
+            NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
+            BestiaryText = this.GetLocalization("Bestiary");
+        }
+
+        public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+        {
+            // We can use AddRange instead of calling Add multiple times in order to add multiple items at once
+            bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
+				// Sets the spawning conditions of this NPC that is listed in the bestiary.
+				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Times.NightTime,
+				//BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns,
+
+				// Sets the description of this NPC that is listed in the bestiary.
+				new FlavorTextBestiaryInfoElement(BestiaryText.ToString())
+            });
+        }
+
+        public override void SetDefaults()
+        {
+            NPC.width = 264;
+            NPC.height = 190;
+
+            NPC.damage = 65;
+            NPC.defense = 20;
+            NPC.lifeMax = 35000;
+
+            NPC.HitSound = SoundID.NPCHit1;
+            NPC.DeathSound = SoundID.NPCDeath1;
+
+            NPC.noGravity = true;
+            NPC.noTileCollide = true;
+            NPC.value = Item.buyPrice(0, 0, 0, 0);
+            NPC.aiStyle = -1;
+
+            NPC.knockBackResist = 0;
+
+            NPC.boss = true;
+
+            if (!Main.dedServ)
+            {
+                Music = MusicLoader.GetMusicSlot(Mod, "Music/Ocram");
+            }
+        }
+
+        public void ScaleStats(int numPlayers, float balance, float bossAdjustment)
+        {
+            if (Main.expertMode) // onExpertMode
+            {
+                SpamProjectile = 10 * 2;
+                SpamDemonthing = 10;
+                dashMax = 2;
+                maxMinions = 10;
+                //SpamPerSecond = 4;
+                //divDashSpeed = 15;
+            }
+
+            if (Main.getGoodWorld) // "For The Worthy"
+            {
+                SpamProjectile = 10 * 3;
+                SpamDemonthing = 15;
+                dashMax = 3;
+                maxMinions = 15; // Increase by 5 if using the "For The Worthy" seed
+                //SpamPerSecond = 3;
+                //divDashSpeed = 10;
+            }
+        }
+
+        public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
+        {
+            NPC.lifeMax = (int)(NPC.lifeMax * 0.5f * 1.3f);
+            NPC.damage = (int)(NPC.damage * 0.7f);
+            if (numPlayers <= 1) return;
+            float healthBoost = 0.35f;
+            for (int k = 1; k < numPlayers; k++)
+            {
+                NPC.lifeMax += (int)(NPC.lifeMax * healthBoost);
+                healthBoost += (1 - healthBoost) / 3;
+            }
+            ScaleStats(numPlayers, balance, bossAdjustment);
+        }
+
+        bool SecondSprite;
+        int stage = 0;
+        public override void AI()
+        {
+            if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active) NPC.TargetClosest();
+            
+            Player closestNPC = Main.player[NPC.target];
+            if (closestNPC == null)
+                return;
+
+            if (closestNPC.dead)
+            {
+                // If the targeted player is dead, flee
+                NPC.velocity.Y -= 0.04f;
+                // This method makes it so when the boss is in "despawn range" (outside of the screen), it despawns in 10 ticks
+                NPC.EncourageDespawn(10);
+                return;
+            }
+
+            
+            
+
+
+            CheckSecond();
+
+            AttackPhase(stage, closestNPC);
+        }
+
+        // Handler Timers
+        int c = 0;
+        int t1 = 0;
+        int t2 = 0;
+        int t3 = 0;
+
+        // dash timers
+        bool dash;
+        int d1;
+
+        bool flip;
+        bool hitonHome;
+
+        private void AttackPhase(int phaseType, Player target) // TODO this is crap
+        {
+            var source = NPC.GetSource_FromAI();
+            if (phaseType < 0) return;
+            if (!(NPC.Center.Distance(target.Center) < 1024f))
+            {
+                NPC.velocity = -Vector2.Lerp(-NPC.velocity, (NPC.Center - target.Center).SafeNormalize(Vector2.Zero) * npcSpeed, npcAccel);
+                return;
+            }
+
+            Vector2 s = NPC.DirectionTo(target.Center);
+            float sf = s.ToRotation() - MathHelper.PiOver2;
+            NPC.rotation = sf;
+
+            Vector2 abovePlayer = target.Top + new Vector2(NPC.direction, -(NPC.height + offsetY));
+            if (phaseType == 0) // first phase
+            {
+                if(!dash) NPC.velocity = -Vector2.Lerp(-NPC.velocity, (NPC.Center - abovePlayer).SafeNormalize(Vector2.Zero) * npcSpeed, npcAccel * 2.25f);
+
+                t1++;
+                if (t1 > SpamPerSecond && c < SpamProjectile && NPC.Center.Distance(target.Center) > 256f)
+                {
+                    
+                    Vector2 position = NPC.Center;
+                    Vector2 targetPosition = target.Center;
+                    Vector2 direction = targetPosition - position;
+
+                    Vector2 perturbedSpeed = direction.RotatedByRandom(MathHelper.ToRadians(45)); //12 is the spread in degrees, although like with Set Spread it's technically a 24 degree spread due to the fact that it's randomly between 12 degrees above and 12 degrees below your cursor.
+                    if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center, perturbedSpeed, ProjectileID.EyeLaser, 47, 8); //create the projectile
+                    c++;
+                    t1 = 0;
+                }
+                if (!dash && NPC.CountNPCS(ModContent.NPCType<OcramServants>()) < maxMinions)
+                {
+                    t3++;
+                    if (t3 > 10)
+                    {
+                        t3 = 0;
+                        NPC.NewNPC(source, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OcramServants>(), 0, NPC.whoAmI);
+                    }
+                }
+                if (t1 > 10 && c >= SpamProjectile) dash = true;
+                if (dash)
+                {
+
+                    t2++;
+                    if (NPC.Center.Distance(target.Center) < 80f) hitonHome = true;
+                    if (t2 < minDashTime)
+                    {
+                        Vector2 position = NPC.Center;
+                        Vector2 targetPosition = target.Center;
+                        Vector2 direction = targetPosition - position;
+
+                        //if (t2 < 5) NPC.velocity = Vector2.Zero;
+                        if (!hitonHome) NPC.velocity = direction / (NPC.Center.Distance(target.Center) / divDashSpeed); //-Vector2.Lerp(-NPC.velocity, (NPC.Center - target.Center).SafeNormalize(Vector2.Zero) * npcSpeed, npcAccel * 2f);
+
+                        SoundEngine.PlaySound(SoundID.ForceRoar, NPC.Center);
+
+                        for (int c1 = 0; c1 < SpamDemonthing; c1++)
+                        {
+                            int ySpread = 100;
+                            int xSpread = 200;
+
+                            Vector2 ranomCenter = new Vector2(NPC.Center.X + Main.rand.Next(-xSpread, xSpread), NPC.Center.Y + Main.rand.Next(-ySpread, ySpread));
+
+                            if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, ranomCenter, direction / 100, ModContent.ProjectileType<smolOcramProjectile>(), 180 / 2, 8); //create the projectile
+                        }
+                    }
+                    if (t2 > maxDashTime && d1 - 1 < dashMax) 
+                    { 
+                        t2 = 0;
+                        d1++;
+                        hitonHome = false;
+                    }
+                    if (t2 > maxDashTime && d1 - 1 >= dashMax)
+                    {
+                        ResetValue();
+                    }
+                }
+            }
+
+            if (phaseType == 1) // second phase
+            {
+                if (!flip) abovePlayer = target.Top + new Vector2(1 * offsetX, -(NPC.height + offsetY)); else abovePlayer = target.Top + new Vector2(-1 * offsetX, -(NPC.height + offsetY));
+                if (!dash) NPC.velocity = -Vector2.Lerp(-NPC.velocity, (NPC.Center - abovePlayer).SafeNormalize(Vector2.Zero) * npcSpeed, npcAccel * 2.25f);
+
+                t1++;
+                if (t1 > SpamPerSecond && c < SpamProjectile && NPC.Center.Distance(target.Center) > 256f)
+                {
+
+                    Vector2 position = NPC.Center;
+                    Vector2 targetPosition = target.Center;
+                    Vector2 direction = targetPosition - position;
+
+                    Vector2 perturbedSpeed = direction.RotatedByRandom(MathHelper.ToRadians(45)); //12 is the spread in degrees, although like with Set Spread it's technically a 24 degree spread due to the fact that it's randomly between 12 degrees above and 12 degrees below your cursor.
+                    if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center, perturbedSpeed, ProjectileID.DeathLaser, 140 / 3, 16); //create the projectile
+                    c++;
+                    t1 = 0;
+                }
+                if (!dash && NPC.CountNPCS(ModContent.NPCType<OcramServants>()) < maxMinions)
+                {
+                    t3++;
+                    if (t3 > 5)
+                    {
+                        t3 = 0;
+                        NPC.NewNPC(source, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OcramServants>(), 0, NPC.whoAmI);
+                    }
+                }
+                if (t1 > 10 && c >= SpamProjectile) dash = true;
+                if (dash)
+                {
+                    t2++;
+                    if (NPC.Center.Distance(target.Center) < 80f) hitonHome = true;
+                    if (t2 < minDashTime)
+                    {
+                        Vector2 position = NPC.Center;
+                        Vector2 targetPosition = target.Center;
+                        Vector2 direction = targetPosition - position;
+
+                        //if (t2 < 5) NPC.velocity = Vector2.Zero;
+                        if (!hitonHome) NPC.velocity = direction / (NPC.Center.Distance(target.Center) / divDashSpeed); //-Vector2.Lerp(-NPC.velocity, (NPC.Center - target.Center).SafeNormalize(Vector2.Zero) * npcSpeed, npcAccel * 2f);
+                        
+                        SoundEngine.PlaySound(SoundID.ForceRoarPitched, NPC.Center);
+
+                        for (int c1 = 0; c1 < SpamDemonthing; c1++)
+                        {
+                            int ySpread = 100;
+                            int xSpread = 200;
+
+                            Vector2 ranomCenter = new Vector2(NPC.Center.X + Main.rand.Next(-xSpread, xSpread), NPC.Center.Y + Main.rand.Next(-ySpread, ySpread));
+
+                            if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, ranomCenter, direction / 100, ModContent.ProjectileType<smolOcramProjectile>(), 180 / 3, 16); //create the projectile
+                        }
+                    }
+                    if (t2 > maxDashTime && d1 - 1 < dashMax)
+                    {
+                        t2 = 0;
+                        d1++;
+                        hitonHome = false;
+                    }
+                    if (t2 > maxDashTime && d1 - 1 >= dashMax)
+                    {
+                        ResetValue();
+                        flip = !flip;
+                    }
+                }
+            }
+        }
+
+        float accelrot = 0;
+        float rotdef;
+        bool swi;
+        private void CheckSecond()
+        {
+            if (stage > 0) return;
+            if (NPC.life < NPC.lifeMax/2)
+            {
+                if (NPC.velocity.Length() != 1) NPC.velocity *= 0.005f;
+                stage = -1;
+                NPC.immortal = true;
+                NPC.target = -1;
+                if (!swi) accelrot++;
+                if (swi) accelrot--;
+                rotdef += (accelrot / 1000);
+                NPC.rotation = rotdef;
+                if(rotdef >= 360f) rotdef = 0;
+                if (accelrot > 180)
+                {
+                    swi = true;
+                    SecondSprite = true;
+                    SoundEngine.PlaySound(SoundID.ForceRoar, NPC.Center);
+
+                    SpamProjectile *= 2;
+                    maxMinions += 5;
+                    dashMax += 2;
+                    divDashSpeed += 5;
+                    SpamPerSecond -= 3;
+                    maxDashTime -= 15;
+                }
+                if (accelrot <= 0 && swi)
+                {
+                    stage = 1;
+                    NPC.immortal = false;
+                }
+            }
+        }
+
+        public void ResetValue()
+        {
+            d1 = 0;
+            t1 = 0;
+            c = 0;
+            dash = false;
+            hitonHome = false;
+        }
+
+        public override void FindFrame(int frameHeight)
+        {
+            // This NPC animates with a simple "go from start frame to final frame, and loop back to start frame" rule
+            // In this case: First stage: 0-1-2-0-1-2, Second stage: 3-4-5-3-4-5, 5 being "total frame count - 1"
+            int startFrame = 0;
+            int finalFrame = 2;
+            if (SecondSprite)
+            {
+                startFrame = 3;
+                finalFrame = 5;
+            }
+            int frameSpeed = 5;
+            NPC.frameCounter += 1f;
+            //NPC.frameCounter += NPC.velocity.Length() / 10f; // Make the counter go faster with more movement speed
+            if (NPC.frameCounter > frameSpeed)
+            {
+                NPC.frameCounter = 0;
+                NPC.frame.Y += frameHeight;
+
+                if (NPC.frame.Y > finalFrame * frameHeight)
+                {
+                    NPC.frame.Y = startFrame * frameHeight;
+                }
+            }
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            Main.instance.LoadNPC(NPC.type);
+            Texture2D texture = TextureAssets.Npc[NPC.type].Value;
+
+            // Redraw the projectile with the color not influenced by light
+            Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, NPC.height * 0.5f);
+            for (int k = 0; k < NPC.oldPos.Length; k++)
+            {
+
+                Vector2 drawPos = NPC.oldPos[k] - screenPos + drawOrigin;
+                Color color = NPC.GetAlpha(drawColor) * ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
+                spriteBatch.Draw
+                (
+                    texture,
+                    new Vector2
+                    (
+                        NPC.position.X - drawPos.X + NPC.width * 0.5f,
+                        NPC.position.Y - drawPos.Y + NPC.height - texture.Height * 0.5f + 2f
+                    ),
+                    new Rectangle(0, 0, texture.Width, texture.Height),
+                    color,
+                    NPC.rotation,
+                    texture.Size() * 0.5f,
+                    NPC.scale,
+                    SpriteEffects.None,
+                    0f
+                );
+            }
+
+            return true;
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            // Do NOT misuse the ModifyNPCLoot and OnKill hooks: the former is only used for registering drops, the latter for everything else
+
+            // Add the treasure bag using ItemDropRule.BossBag (automatically checks for expert mode)
+            //npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<MinionBossBag>()));
+
+            // Trophies are spawned with 1/10 chance
+            //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.Placeable.Furniture.MinionBossTrophy>(), 10));
+
+            // ItemDropRule.MasterModeCommonDrop for the relic
+            //npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<Items.Placeable.Furniture.MinionBossRelic>()));
+
+            // ItemDropRule.MasterModeDropOnAllPlayers for the pet
+            //npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<MinionBossPetItem>(), 4));
+
+            // All our drops here are based on "not expert", meaning we use .OnSuccess() to add them into the rule, which then gets added
+            LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
+
+            // Notice we use notExpertRule.OnSuccess instead of npcLoot.Add so it only applies in normal mode
+            // Boss masks are spawned with 1/7 chance
+            //notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<MinionBossMask>(), 7));
+
+            // This part is not required for a boss and is just showcasing some advanced stuff you can do with drop rules to control how items spawn
+            // We make 12-15 ExampleItems spawn randomly in all directions, like the lunar pillar fragments. Hereby we need the DropOneByOne rule,
+            // which requires these parameters to be defined
+            int itemType = ModContent.ItemType<SoulofBlight>();
+            int itemType2 = ItemID.AdamantiteOre;
+            var parameters = new DropOneByOne.Parameters()
+            {
+                ChanceNumerator = 1,
+                ChanceDenominator = 1,
+                MinimumStackPerChunkBase = 1,
+                MaximumStackPerChunkBase = 1,
+                MinimumItemDropsCount = 5,
+                MaximumItemDropsCount = 16,
+            };
+
+            var parameters2 = new DropOneByOne.Parameters()
+            {
+                ChanceNumerator = 1,
+                ChanceDenominator = 1,
+                MinimumStackPerChunkBase = 1,
+                MaximumStackPerChunkBase = 1,
+                MinimumItemDropsCount = 10,
+                MaximumItemDropsCount = 38,
+            };
+
+            notExpertRule.OnSuccess(new DropOneByOne(itemType, parameters));
+            notExpertRule.OnSuccess(new DropOneByOne(itemType2, parameters2));
+
+            // Finally add the leading rule
+            npcLoot.Add(notExpertRule);
+        }
+    }
+}

@@ -1,0 +1,118 @@
+ public override void SetDefaults()
+        {
+            int width = 92; int height = 72;
+            Projectile.Size = new Vector2(width, height);
+
+            Projectile.DamageType = DamageClass.Melee;
+            Projectile.aiStyle = 190;
+
+            Projectile.friendly = true;
+            Projectile.tileCollide = true;
+
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.tileCollide = false;
+            Projectile.ignoreWater = true;
+
+            Projectile.localNPCHitCooldown = -1;
+            Projectile.ownerHitCheck = true;
+            Projectile.ownerHitCheckDistance = 300f;
+            Projectile.usesOwnerMeleeHitCD = true;
+            Projectile.stopsDealingDamageAfterPenetrateHits = true;
+
+            Projectile.noEnchantmentVisuals = true;
+        }
+
+
+        public override void AI()
+        {
+            Player player = Main.player[Projectile.owner];
+            Projectile.localAI[0]++;
+            Projectile.localAI[1] += 1f / (Projectile.ai[1] * 6f);
+            float percentageOfLife = Projectile.localAI[0] / Projectile.ai[1];
+            float scaleMulti = 0.8f;
+            float scaleAdder = 1f;
+
+            Projectile.Center = player.RotatedRelativePoint(player.MountedCenter) - Projectile.velocity;
+           // Projectile.scale = scaleAdder + percentageOfLife * scaleMulti;
+
+            float offset = Projectile.rotation + Main.rand.NextFloatDirection() * ((float)Math.PI / 2f) * 0.7f;
+            Vector2 position = Projectile.Center + offset.ToRotationVector2() * 84f * Projectile.scale;
+            Vector2 velocity = (offset + Projectile.ai[0] * ((float)Math.PI / 2f)).ToRotationVector2();
+            if (Main.rand.NextFloat() < Projectile.Opacity)
+            {
+                Dust dust = Dust.NewDustPerfect(Projectile.Center + offset.ToRotationVector2() * (Main.rand.NextFloat() * 80f * Projectile.scale + 20f * Projectile.scale), 27, velocity * 1f, 50, new Color(200, 191, 231), 0.4f);
+                dust.fadeIn = 0.3f + Main.rand.NextFloat() * 0.15f;
+                dust.noGravity = true;
+            }
+
+            if (Main.rand.NextFloat() * 1.5f < Projectile.Opacity)
+            {
+                Dust dust2 = Dust.NewDustPerfect(position, 27, velocity * 1.5f, 100, new Color(200, 191, 231) * Projectile.Opacity, Projectile.Opacity);
+                dust2.noGravity = true;
+            }
+
+            if (Projectile.localAI[0] >= Projectile.ai[1])
+                Projectile.Kill();
+
+            //Projectile.scale *= Projectile.ai[2];
+
+            for (float i = -MathHelper.PiOver4; i <= MathHelper.PiOver4; i += MathHelper.PiOver2)
+            {
+                Rectangle rectangle = Utils.CenteredRectangle(Projectile.Center + (Projectile.rotation + i).ToRotationVector2() * 70f * Projectile.scale, new Vector2(60f * Projectile.scale, 60f * Projectile.scale));
+                Vector2 BOXposition = (!(Projectile.ai[0] >= 0f)) ? rectangle.BottomLeft() : rectangle.TopLeft();
+                Projectile.EmitEnchantmentVisualsAt(BOXposition, rectangle.Width, rectangle.Height);
+            }
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.NightsEdge,
+            new ParticleOrchestraSettings { PositionInWorld = Main.rand.NextVector2FromRectangle(target.Hitbox) }, Projectile.owner);
+            hit.HitDirection = (Main.player[Projectile.owner].Center.X < target.Center.X) ? 1 : (-1);
+            target.AddBuff(BuffID.Bleeding, 720);
+        }
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.NightsEdge,
+            new ParticleOrchestraSettings { PositionInWorld = Main.rand.NextVector2FromRectangle(target.Hitbox) }, Projectile.owner);
+            info.HitDirection = (Main.player[Projectile.owner].Center.X < target.Center.X) ? 1 : (-1);
+            if (info.PvP) target.AddBuff(BuffID.Bleeding, 720);
+        }
+
+        private void DrawLikeGlowMask(SpriteBatch spriteBatch, Color lightColor)
+        {
+            Vector2 position = Projectile.Center - Main.screenPosition;
+            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+            String path = nameof(VanillaModding) + "/" + (ModContent.Request<Texture2D>(Texture).Name + "_Glow").Replace(@"\", "/");
+            Texture2D textureGlow = (Texture2D)ModContent.Request<Texture2D>($"{path}", AssetRequestMode.ImmediateLoad).Value;
+            Rectangle sourceRectangle = texture.Frame(1, Main.projFrames[Type]);
+            Vector2 origin = sourceRectangle.Size() / 2f;
+            float projectileScale = Projectile.scale * 1.1f;
+
+            SpriteEffects effects = (!(Projectile.ai[0] >= 0f)) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            float rotOffset = (!(Projectile.ai[0] >= 0f)) ? MathHelper.PiOver2 + 0.25f - (Projectile.localAI[1]) : MathHelper.PiOver4 + 0.25f + Projectile.localAI[1];
+
+            float percentageOfLife = Projectile.localAI[0] / Projectile.ai[1];
+            float lerpTime = Utils.Remap(percentageOfLife, 0f, 0.5f, 0f, 1f) * Utils.Remap(percentageOfLife, 0.5f, 1f, 1f, 0f);
+            float lightningValue = Lighting.GetColor(Projectile.Center.ToTileCoordinates()).ToVector3().Length() / (float)Math.Sqrt(3.0);
+            lightningValue = Utils.Remap(lightningValue, 0.2f, 1f, 0f, 1f);
+            Color value = Color.Lerp(new Color(80, 70, 210, 220), new Color(180, 60, 140, 220), lerpTime); //last part
+            float offset = Projectile.rotation * ((float)Math.PI / 2f) * 0.7f;
+            //Vector2 position = (!(Projectile.ai[0] >= 0f)) ? Projectile.Center + offset.ToRotationVector2() * 58 / Projectile.scale - Main.screenPosition : Projectile.Center - Main.screenPosition;
+            //Main.EntitySpriteDraw(texture, position + offset.ToRotationVector2() * 80, sourceRectangle, Color.White, Projectile.rotation + rotOffset, origin, projectileScale, effects, 1f);
+            spriteBatch.Draw(texture, position, sourceRectangle, lightColor, Projectile.rotation + rotOffset, origin, projectileScale, effects, 0f);
+            spriteBatch.Draw(textureGlow, position, sourceRectangle, Color.White, Projectile.rotation + rotOffset, origin, projectileScale, effects, 0f);
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            return false;
+        }
+
+        public override void PostDraw(Color lightColor)
+        {
+            SpriteBatch spriteBatch = Main.spriteBatch;
+            DrawLikeGlowMask(spriteBatch, lightColor);
+            // return false;
+        }

@@ -1,0 +1,11 @@
+## some no use stuff
+.git/
+.vs/
+/bin/
+/obj/
+
+## Just debug ignore literally
+/Debug/
+/pixilArt/
+/sprite/
+/UnusedSprites/

@@ -1,0 +1,213 @@
+Mods: {
+	VanillaModding: {
+		Items: {
+			BasicSword: {
+				DisplayName: Dirt Sword
+				Tooltip: sup Dem.
+			}
+
+			DebugProjectile: {
+				DisplayName: Debug Projectile
+				Tooltip: ""
+			}
+
+			LobotomyThrowable: {
+				DisplayName: Normal Lobotomy Disc
+				Tooltip: Light Disc but you... converted to Lobotomy mode.
+			}
+
+			ExtremeLobotomyThrowable: {
+				DisplayName: Homing Lobotomy Disc
+				Tooltip: You made it a bit angrier than Happy.
+			}
+
+			MightyScythe: {
+				DisplayName: Mighty Sickle
+				Tooltip: Forged with Death Sickle, Bloody Sickle & Ice Sickle from the Ancient Manipulation.
+			}
+
+			MightyScytheOld: {
+				DisplayName: Soul Scythe
+				Tooltip: Old Copyrighted stuff
+			}
+
+			OcramSummon: {
+				DisplayName: Suspicious Looking Skull
+				Tooltip: Summons Ocram
+			}
+
+			SoulofBlight: {
+				DisplayName: Soul of Blight
+				Tooltip: "'The essence of pure infection'"
+			}
+
+			HolyHandGrenade: {
+				DisplayName: Holy Hand Grenade
+				Tooltip: Why?
+			}
+
+			Tizona: {
+				DisplayName: Tizona
+				Tooltip: Has a chance to cause Bleeding
+			}
+
+			SiriusSummon: {
+				DisplayName: Mysterious Red Soul
+				Tooltip: A very red soul.
+			}
+
+			HornOPlenty: {
+				DisplayName: Horn o' Plenty
+				Tooltip: It is filled with the inexhaustible gifts of celebratory fruits.
+			}
+
+			SiriusBag: {
+				DisplayName: Treasure Bag (Sirius)
+				Tooltip: Right Click to open
+			}
+
+			BloodyScythe: {
+				DisplayName: Bloody Sickle
+				Tooltip: Shoots a bloody sickle
+			}
+
+			SandTrapperBag: {
+				DisplayName: Treasure Bag (Sand Trapper)
+				Tooltip: ""
+			}
+
+			SandTrapperStaff: {
+				DisplayName: Sand Trapper Staff
+				Tooltip: Summons an Mini Sand Trapper minion to fight for you
+			}
+
+			HeartCanister: {
+				DisplayName: Heart Canister
+				Tooltip: Increases maximum life by {0}
+			}
+
+			DiamondCanister: {
+				DisplayName: Diamond Heart Canister
+				Tooltip: Increases maximum life by {0}
+			}
+
+			PhasicWarpEjector: {
+				DisplayName: Phasic Disc Ejector
+				Tooltip: Launches a explosive land mine.
+			}
+
+			KoboldDynamiteBackpack: {
+				DisplayName: Dynamite Backpack
+				Tooltip: Explodes upon the player's death. One time use.
+				SelfDamage: "{0} (x{1}) explosion damage"
+			}
+
+			Sharanga: {
+				DisplayName: Spectral Sharanga
+				Tooltip: Transforms any suitable ammo into Spectral Arrows
+			}
+
+			TorosHead: {
+				DisplayName: Toros Head
+				Tooltip: ""
+			}
+
+			TorosChest: {
+				DisplayName: Toros Chest
+				Tooltip: ""
+			}
+
+			TorosLegs: {
+				DisplayName: Toros Legs
+				Tooltip: ""
+			}
+
+			LesserRestoration_Potion: {
+				DisplayName: Lesser Restoration Potion
+				Tooltip: Reduced potion cooldown
+			}
+
+			Tonbogiri: {
+				DisplayName: Tonbogiri
+				Tooltip: A legendary spear with tip coated in venom for poison usage in penetration
+			}
+
+			VulcanRepeater: {
+				DisplayName: Vulcan Repeater
+				Tooltip: Transforms any suitable ammo into Vulcan Bolts
+			}
+
+			VulcanBolt_Ammo: {
+				DisplayName: Vulcan Arrow
+				Tooltip: Explosive Arrow, explodes upon Impact
+			}
+
+			SpectralArrow_Ammo: {
+				DisplayName: Spectral Arrow
+				Tooltip: A frost fire arrow, does frost burn
+			}
+
+			PhasicDisc_Ammo: {
+				DisplayName: Phasic Disc
+				Tooltip: Explosive Air Mine, last for good 5 seconds before self-detonation or explodes on Entity or Tile Impact
+			}
+
+			OcramTrophy: {
+				DisplayName: Ocram Trophy
+				Tooltip: ""
+			}
+		}
+
+		NPCs: {
+			DuneTrapperBody.DisplayName: Sand Trapper
+			DuneTrapperHead.DisplayName: Sand Trapper
+			DuneTrapperTail.DisplayName: Sand Trapper
+			DuneSplicerCloneBody.DisplayName: Sand Splicer Clone
+			DuneSplicerCloneHead.DisplayName: Sand Splicer Clone
+			DuneSplicerCloneTail.DisplayName: Sand Splicer Clone
+
+			Ocram: {
+				DisplayName: Ocram
+				Bestiary: A very inf
+			}
+
+			OcramServants.DisplayName: Ocram Servants
+			Sirius.DisplayName: Sirius
+		}
+
+		Projectiles: {
+			LobotomyNormal.DisplayName: Lobotomy Normal Face
+			LobotomyExtremeDemon.DisplayName: Lobotomy Extreme Demon Face
+			MightyScythe_PROJ.DisplayName: Mighty Scythe
+			MightyScytheOLD_PROJ.DisplayName: Soul Scythe
+			MightyScythe_PROJ_Clone.DisplayName: Mini Mighty Scythe
+			HolyHandBomb.DisplayName: Holy Hand Grenade
+			SpikyRedE.DisplayName: Spiky Red
+			DeadlyBulb.DisplayName: Deadly Bulb
+			TizonaProjectile.DisplayName: Tizona Projectile
+			MightyScytheProjectile.DisplayName: Mighty Scythe Projectile
+			smolOcramProjectile.DisplayName: smol Ocram Projectile
+			BloodyScytheProjectile.DisplayName: Bloody Scythe Projectile
+			MightyProjectile.DisplayName: Mighty Projectile
+			LeftoverSpike.DisplayName: Leftover Spike
+			PinkishLaser.DisplayName: Pinkish Laser
+			OcramArmThrowaway.DisplayName: Ocram Arm Throwaway
+			LeftoverSpikeFriendly.DisplayName: Leftover Spike
+			SandTrapperPetBody.DisplayName: Sand Trapper Pet
+			SandTrapperPetHead.DisplayName: Sand Trapper Pet
+			SandTrapperPetTail.DisplayName: Sand Trapper Pet
+			PhasicDisk.DisplayName: Phasic Disk
+			KoboldDynamite.DisplayName: Kobold Dynamite
+			SpectralArrow.DisplayName: Spectral Arrow
+			TonbogiriProjectile.DisplayName: Tonbogiri
+			VulcanBolt.DisplayName: Vulcan Bolt
+		}
+
+		Buffs: {
+			ExampleSimpleMinionBuff: {
+				DisplayName: Example Simple Minion Buff
+				Description: Mods.VanillaModding.Buffs.ExampleSimpleMinionBuff.Description
+			}
+		}
+	}
+}
