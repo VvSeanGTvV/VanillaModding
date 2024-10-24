@@ -26,11 +26,11 @@ namespace VanillaModding.Items.Accessories
 
         public override void AddRecipes()
         {
-            Recipe recipe = CreateRecipe();
+            /*Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.LeadBar, 5);
             recipe.AddIngredient(ItemID.LifeCrystal, 1);
             recipe.AddTile(TileID.Anvils);
-            recipe.Register();
+            recipe.Register();*/
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)

@@ -3,7 +3,7 @@ Mods: {
 		Items: {
 			BasicSword: {
 				DisplayName: Dirt Sword
-				Tooltip: sup Dem.
+				Tooltip: Dirt with a silver blade attached.
 			}
 
 			DebugProjectile: {

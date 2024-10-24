@@ -17,9 +17,6 @@
     <None Remove="Projectiles\MightyScythe\MightyScytheProjectile_Glow.png" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Items\Weapon\Combo\MightyScythe\MightyScytheOld.txt" />
-  </ItemGroup>
-  <ItemGroup>
   </ItemGroup>
   <ItemGroup>
 	  <Reference Include="Microsoft.Xna.Framework.Xact">
