@@ -1,8 +1,9 @@
-## some no use stuff
+## Not useful to Github
 .git/
 .vs/
 /bin/
 /obj/
+/Properties/
 
 ## Just debug ignore literally
 /Debug/
