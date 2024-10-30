@@ -62,8 +62,8 @@ namespace VanillaModding.NPCs.Ocram
             //Main.npcFrameCount[Type] = 1;
 
             // Custom Texture Path for NPC Bestiary
-            String CustomTexturePath = nameof(VanillaModding) + "/" + (ModContent.Request<Texture2D>(Texture).Name + "Bestiary").Replace(@"\", "/");
-            Texture2D BestiaryTexture = (Texture2D)ModContent.Request<Texture2D>($"{CustomTexturePath}", AssetRequestMode.ImmediateLoad).Value;
+            // String CustomTexturePath = nameof(VanillaModding) + "/" + (ModContent.Request<Texture2D>(Texture).Name + "Bestiary").Replace(@"\", "/");
+            // Texture2D BestiaryTexture = (Texture2D)ModContent.Request<Texture2D>($"{CustomTexturePath}", AssetRequestMode.ImmediateLoad).Value;
 
             // Add this in for bosses that have a summon item, requires corresponding code in the item (See MinionBossSummonItem.cs)
             NPCID.Sets.MPAllowedEnemies[Type] = true;
@@ -76,12 +76,11 @@ namespace VanillaModding.NPCs.Ocram
             // This boss also becomes immune to OnFire and all buffs that inherit OnFire immunity during the second half of the fight. See the ApplySecondStageBuffImmunities method.
 
             // Influences how the NPC looks in the Bestiary
-            float Scale = 0.6f;
             NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers()
             {
-                CustomTexturePath = CustomTexturePath,
-                PortraitScale = Scale, // Portrait refers to the full picture when clicking on the icon in the bestiary
-                PortraitPositionYOverride = -((BestiaryTexture.Height / 2f - BestiaryTexture.Height / 2f) * Scale),
+                CustomTexturePath = "VanillaModding/NPCs/Ocram/OcramBestiary",
+                PortraitScale = 0.6f, // Portrait refers to the full picture when clicking on the icon in the bestiary
+                PortraitPositionYOverride = -((190f / 2f - 190f / 2f) * 0.6f),
             };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(Type, drawModifiers);
             BestiaryText = this.GetLocalization("Bestiary");
