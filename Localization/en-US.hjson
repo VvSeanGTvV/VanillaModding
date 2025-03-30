@@ -156,6 +156,11 @@ Mods: {
 				DisplayName: Ocram Trophy
 				Tooltip: ""
 			}
+
+			BoringBow: {
+				DisplayName: Boring Bow
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
