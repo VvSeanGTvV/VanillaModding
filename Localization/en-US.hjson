@@ -161,6 +161,11 @@ Mods: {
 				DisplayName: Boring Bow
 				Tooltip: ""
 			}
+
+			SandTrapperSummon: {
+				DisplayName: Sand Trapper Summon
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
@@ -173,7 +178,7 @@ Mods: {
 
 			Ocram: {
 				DisplayName: Ocram
-				Bestiary: A very inf
+				Bestiary: A Classical boss from the combined from Skull and two Eyes of the mech. Forged with Bars and merged with souls.
 			}
 
 			OcramServants.DisplayName: Ocram Servants
@@ -207,6 +212,7 @@ Mods: {
 			SpectralArrow.DisplayName: Spectral Arrow
 			TonbogiriProjectile.DisplayName: Tonbogiri
 			VulcanBolt.DisplayName: Vulcan Bolt
+			RedLaser.DisplayName: Red Laser
 		}
 
 		Buffs: {

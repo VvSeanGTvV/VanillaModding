@@ -50,7 +50,7 @@ namespace VanillaModding.NPCs.Ocram
 
         // Offset NPC Guard
         float offsetX = 200f;
-        float offsetY = 300f;
+        float offsetY = 200f;
 
         // Bestiary Localized Text
         public static LocalizedText BestiaryText
@@ -187,6 +187,7 @@ namespace VanillaModding.NPCs.Ocram
         bool onAnimation; //ANIMATING IN PROGRESS?
         bool onDash; //DASHING IN PROGRESS?
         bool onSpawn; //SPAWNING IN PROGRESS?
+        bool leftSide, onSide;
 
         int leyeg = 1;
         public override void AI()
@@ -197,7 +198,8 @@ namespace VanillaModding.NPCs.Ocram
             var source = NPC.GetSource_FromAI();
 
             bool isdudnotaiming = (CloseTargetPlayer() == null);
-            if (isdudnotaiming) return;
+            if (Main.dayTime) NPC.velocity.Y -= 0.04f;
+            if (isdudnotaiming || !Main.dayTime) return;
 
             var target = CloseTargetPlayer();
             Vector2 s = NPC.DirectionTo(target.Center);
@@ -206,8 +208,9 @@ namespace VanillaModding.NPCs.Ocram
 
             //NPC POSITION OFFSET GUARD
             Vector2 abovePlayer = target.Top + new Vector2(NPC.direction, -(NPC.height + offsetY));
+            Vector2 sidePlayer = (leftSide ? target.Left : target.Right) + new Vector2((leftSide ? -(NPC.width + offsetX) : (NPC.width + offsetX)), NPC.direction);
 
-            if (!(NPC.Center.Distance(target.Center) < 1024f) && !onSpawn)
+            if (!(NPC.Center.Distance(target.Center) < 512f) && !onSpawn)
             {
                 NPC.velocity = -Vector2.Lerp(-NPC.velocity, (NPC.Center - target.Center).SafeNormalize(Vector2.Zero) * npcSpeed, npcAccel * 2.25f);
                 return;
@@ -218,7 +221,7 @@ namespace VanillaModding.NPCs.Ocram
                 FrontArmAngle = (float)Math.Sin(i1) / divAng;
                 MidArmAngle = (float)Math.Sin(i2) / divAng;
                 BackArmAngle = (float)Math.Sin(i3) / divAng;
-                NPC.velocity = -Vector2.Lerp(-NPC.velocity, (NPC.Center - abovePlayer).SafeNormalize(Vector2.Zero) * npcSpeed, npcAccel * 2.25f);
+                if (!onSide) NPC.velocity = -Vector2.Lerp(-NPC.velocity, (NPC.Center - abovePlayer).SafeNormalize(Vector2.Zero) * npcSpeed, npcAccel * 2.25f); else NPC.velocity = -Vector2.Lerp(-NPC.velocity, (NPC.Center - sidePlayer).SafeNormalize(Vector2.Zero) * npcSpeed, npcAccel * 2.25f);
             }
 
             t1++;
@@ -230,6 +233,7 @@ namespace VanillaModding.NPCs.Ocram
                     stg = 0;
                     onDash = false;
                     onSpawn = false;
+                    ResetStage(0, boosSTG);
                 }
                 if (stg == 0) {
                     if (t1 >= LaserShotPerSec && l1 < LaserProjectileCount)
@@ -322,7 +326,72 @@ namespace VanillaModding.NPCs.Ocram
             {
                 if (stg == 0)
                 {
+                    if (t1 >= (LaserShotPerSec * 1.15f) && l1 < LaserProjectileCount)
+                    {
+                        Vector2 position = NPC.Center - new Vector2(0, 45);
+                        Vector2 targetPosition = target.Center;
+                        Vector2 direction = targetPosition - position;
 
+                        if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(0, 45), direction, ModContent.ProjectileType<RedLaser>(), 67, 8); //create the projectile
+                        leyeg = 3;
+
+                        l1++;
+                        t1 = 0;
+                    }
+                    else
+                    if (t1 >= LaserDelay && l2 < LaserRepeat)
+                    {
+                        t1 = 0;
+                        l1 = 0;
+                        l2++;
+                    }
+                    if (t1 >= LaserDelay && l2 >= LaserRepeat) ResetStage(Main.rand.Next(1, 2), boosSTG);
+                }
+                if (stg == 1)
+                {
+                    if (t1 >= (LaserShotPerSec / 1.15f) && l1 < LaserProjectileCount)
+                    {
+                        onSide = true;
+                        leftSide = !leftSide;
+                        Vector2 position = NPC.Center - new Vector2(45, 0);
+                        Vector2 targetPosition = target.Center;
+                        Vector2 direction = targetPosition - position;
+
+                        if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(45, 0), direction, ModContent.ProjectileType<RedLaser>(), 67, 8); //create the projectile
+                        leyeg = 3;
+
+                        l1++;
+                        t1 = 0;
+                    }
+                    else
+                    if (t1 >= LaserDelay && l2 < LaserRepeat)
+                    {
+                        t1 = 0;
+                        l1 = 0;
+                        l2++;
+                    }
+                    if (t1 >= LaserDelay && l2 >= LaserRepeat) ResetStage(2, boosSTG);
+                }
+
+                if (stg == 2)
+                {
+                    if (t2 <= 30)
+                    {
+                        t2++;
+                    }
+                    onSpawn = true;
+                    h1 += 0.1f;
+                    NPC.velocity.X = (float)Math.Cos(h1) * t2;
+                    NPC.velocity.Y = (float)Math.Sin(h1) * t2;
+                    NPC.rotation = (float)Math.Atan2(NPC.velocity.Y, NPC.velocity.X) - 1.57f;
+                    ki++;
+                    if (NPC.CountNPCS(ModContent.NPCType<OcramServants>()) < MaxMinions && ki > 10)
+                    {
+                        ki = 0;
+                        SoundEngine.PlaySound(SoundID.NPCDeath45, NPC.position);
+                        NPC.NewNPC(source, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OcramServants>(), 0, NPC.whoAmI);
+                    }
+                    if (NPC.CountNPCS(ModContent.NPCType<OcramServants>()) >= MaxMinions && ki > 10) ResetStage(Main.rand.Next(0, 2), boosSTG);
                 }
             }
         }
@@ -337,6 +406,16 @@ namespace VanillaModding.NPCs.Ocram
                 if (selectSTG == 0) l2 = l1 = 0;
                 if (selectSTG == 1) l3 = dash = t2 = 0;
                 if (selectSTG == 2) h1 = ki = t2 = 0;
+            }
+
+            if (boos == 1)
+            {
+                onSide = false;
+                if (selectSTG == 0) l2 = l1 = 0;
+                if (selectSTG == 1) l2 = l1 = 0;
+                if (selectSTG == 2) h1 = ki = t2 = 0;
+                //if (selectSTG == 1) l3 = dash = t2 = 0;
+                //if (selectSTG == 2) h1 = ki = t2 = 0;
             }
             stg = selectSTG;
         }
@@ -359,9 +438,9 @@ namespace VanillaModding.NPCs.Ocram
             if (closestNPC == null)
                 return null;
 
-            if (closestNPC.dead)
+            if (closestNPC.dead || !Main.dayTime)
             {
-                // If the targeted player is dead, flee
+                // If the targeted player is dead or out of range of the Desert, flee
                 NPC.velocity.Y -= 0.04f;
                 // This method makes it so when the boss is in "despawn range" (outside of the screen), it despawns in 10 ticks
                 NPC.EncourageDespawn(10);

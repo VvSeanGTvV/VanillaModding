@@ -33,11 +33,15 @@ namespace VanillaModding.NPCs.DuneTrapper
             var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers()
             { // Influences how the NPC looks in the Bestiary
                 //CustomTexturePath = "VanillaTestimony/NPCs/ExampleWorm_Bestiary", // Custom Texture needed for this specific if it has mutliple segments.
-                Position = new Vector2(40f, 24f), // Initial POS
+                Position = new Vector2(0f, 24f), // Initial POS
                 PortraitPositionXOverride = 0f, // Offset POS X
-                PortraitPositionYOverride = 12f // Offset POS Y
+                PortraitPositionYOverride = -12f, // Offset POS Y
+                Scale = 1f,
+                Rotation = 0f // Rotation
+
             };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+            
         }
 
         public override void SetDefaults()
@@ -122,20 +126,16 @@ namespace VanillaModding.NPCs.DuneTrapper
         public override void AI()
         {
 
-            if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
-            {
-                NPC.TargetClosest();
-            }
+            Player player = CloseTargetPlayer();
 
-            if (!Sandstorm.Happening)
+            if (player == null)
             {
-                Sandstorm.StartSandstorm();
+                NPC.netUpdate = true;
+                return;
             }
 
             if (attackCounter < 1) attackCounter = 150;
             if (attackProj > 0) attackProj--;
-
-            Player player = Main.player[NPC.target];
 
             annoyDune();
 
@@ -158,7 +158,27 @@ namespace VanillaModding.NPCs.DuneTrapper
                 attackProj = 350;
                 NPC.netUpdate = true;
             }
+        }
 
+        private Player CloseTargetPlayer()
+        {
+            if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active) NPC.TargetClosest();
+
+            Player closestNPC = Main.player[NPC.target];
+            if (closestNPC == null)
+                return null;
+
+            bool InDesert = (closestNPC.ZoneDesert || closestNPC.ZoneUndergroundDesert);
+            if (closestNPC.dead || !InDesert)
+            {
+                // If the targeted player is dead or out of range of the Desert, flee
+               ForcedTargetPosition = new Vector2(closestNPC.Center.X, closestNPC.Center.Y + 2000f);
+                // This method makes it so when the boss is in "despawn range" (outside of the screen), it despawns in 10 ticks
+                NPC.EncourageDespawn(10);
+                return null;
+            }
+            ForcedTargetPosition = null;
+            return closestNPC;
         }
 
         int savec = 0;
