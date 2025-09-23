@@ -163,8 +163,8 @@ Mods: {
 			}
 
 			SandTrapperSummon: {
-				DisplayName: Sand Trapper Summon
-				Tooltip: ""
+				DisplayName: Suspicious Looking Fossil
+				Tooltip: Summons Dune Trapper
 			}
 		}
 

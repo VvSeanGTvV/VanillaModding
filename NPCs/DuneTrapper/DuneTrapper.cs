@@ -39,9 +39,9 @@ namespace VanillaModding.NPCs.DuneTrapper
             var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers()
             { // Influences how the NPC looks in the Bestiary
                 //CustomTexturePath = "VanillaTestimony/NPCs/ExampleWorm_Bestiary", // Custom Texture needed for this specific if it has mutliple segments.
-                Position = new Vector2(0f, 24f), // Initial POS
+                Position = new Vector2(0f, 12f), // Initial POS
                 PortraitPositionXOverride = 0f, // Offset POS X
-                PortraitPositionYOverride = -12f, // Offset POS Y
+                PortraitPositionYOverride = 12f, // Offset POS Y
                 Scale = 1f,
                 Rotation = 0f // Rotation
 
@@ -224,7 +224,7 @@ namespace VanillaModding.NPCs.DuneTrapper
 
             if (Main.expertMode)
             {
-                count += 1; // Increase by 4 if expert or master mode
+                //count += 1; // Increase by 4 if expert or master mode
             }
 
             if (Main.hardMode)
