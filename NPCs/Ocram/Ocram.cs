@@ -160,6 +160,7 @@ namespace VanillaModding.NPCs.Ocram
         int t1; // TIMER 1
         int ki; // TIMER for MINION SPAWNER
         int t2;
+        int t3;
 
         int dash;
 
@@ -187,7 +188,7 @@ namespace VanillaModding.NPCs.Ocram
         bool onAnimation; //ANIMATING IN PROGRESS?
         bool onDash; //DASHING IN PROGRESS?
         bool onSpawn; //SPAWNING IN PROGRESS?
-        bool leftSide, onSide;
+        bool leftSide, onSide, roar;
 
         int leyeg = 1;
         public override void AI()
@@ -210,13 +211,13 @@ namespace VanillaModding.NPCs.Ocram
             Vector2 abovePlayer = target.Top + new Vector2(NPC.direction, -(NPC.height + offsetY));
             Vector2 sidePlayer = (leftSide ? target.Left : target.Right) + new Vector2((leftSide ? -(NPC.width + offsetX) : (NPC.width + offsetX)), NPC.direction);
 
-            if (!(NPC.Center.Distance(target.Center) < 512f) && !onSpawn)
+            if (!(NPC.Center.Distance(target.Center) < 512f) && !onSpawn && !roar)
             {
                 NPC.velocity = -Vector2.Lerp(-NPC.velocity, (NPC.Center - target.Center).SafeNormalize(Vector2.Zero) * npcSpeed, npcAccel * 2.25f);
                 return;
             }
 
-            if (!onDash)
+            if (!onDash && !roar)
             {
                 FrontArmAngle = (float)Math.Sin(i1) / divAng;
                 MidArmAngle = (float)Math.Sin(i2) / divAng;
@@ -260,7 +261,7 @@ namespace VanillaModding.NPCs.Ocram
                         l1 = 0;
                         l2++;
                     }
-                    if (t1 >= LaserDelay && l2 >= LaserRepeat) ResetStage(Main.rand.Next(0, 2), boosSTG);
+                    if (t1 >= LaserDelay && l2 >= LaserRepeat) ResetStage(Main.rand.Next(0, 3), boosSTG);
                 }
 
                 if (stg == 1)
@@ -319,7 +320,7 @@ namespace VanillaModding.NPCs.Ocram
                         SoundEngine.PlaySound(SoundID.NPCDeath45, NPC.position);
                         NPC.NewNPC(source, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OcramServants>(), 0, NPC.whoAmI);
                     }
-                    if (NPC.CountNPCS(ModContent.NPCType<OcramServants>()) >= MaxMinions && ki > 10) ResetStage(Main.rand.Next(0, 2), boosSTG);
+                    if (NPC.CountNPCS(ModContent.NPCType<OcramServants>()) >= MaxMinions && ki > 10) ResetStage(Main.rand.Next(0, 3), boosSTG);
                 }
             }
             if (boosSTG == 1)
@@ -345,11 +346,11 @@ namespace VanillaModding.NPCs.Ocram
                         l1 = 0;
                         l2++;
                     }
-                    if (t1 >= LaserDelay && l2 >= LaserRepeat) ResetStage(Main.rand.Next(1, 2), boosSTG);
+                    if (t1 >= LaserDelay && l2 >= LaserRepeat) ResetStage(Main.rand.Next(1, 4), boosSTG);
                 }
                 if (stg == 1)
                 {
-                    if (t1 >= (LaserShotPerSec / 1.15f) && l1 < LaserProjectileCount)
+                    if (t1 >= (LaserShotPerSec / 1.5f) && l1 < LaserProjectileCount)
                     {
                         onSide = true;
                         leftSide = !leftSide;
@@ -357,7 +358,7 @@ namespace VanillaModding.NPCs.Ocram
                         Vector2 targetPosition = target.Center;
                         Vector2 direction = targetPosition - position;
 
-                        if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(45, 0), direction, ModContent.ProjectileType<RedLaser>(), 67, 8); //create the projectile
+                        if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(45, 0), direction.RotatedByRandom(MathHelper.ToRadians(12)), ModContent.ProjectileType<PinkishLaser>(), 27, 8); //create the projectile
                         leyeg = 3;
 
                         l1++;
@@ -391,7 +392,22 @@ namespace VanillaModding.NPCs.Ocram
                         SoundEngine.PlaySound(SoundID.NPCDeath45, NPC.position);
                         NPC.NewNPC(source, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OcramServants>(), 0, NPC.whoAmI);
                     }
-                    if (NPC.CountNPCS(ModContent.NPCType<OcramServants>()) >= MaxMinions && ki > 10) ResetStage(Main.rand.Next(0, 2), boosSTG);
+                    if (NPC.CountNPCS(ModContent.NPCType<OcramServants>()) >= MaxMinions && ki > 10) ResetStage(Main.rand.Next(0, 4), boosSTG);
+                }
+
+                if (stg == 3)
+                {
+                    SoundEngine.PlaySound(SoundID.Roar with { PitchVariance = 0.15f, MaxInstances = 0 }, NPC.position);
+                    roar = true;
+                    stg = 99;
+                }
+                if (stg == 99)
+                {
+                    NPC.velocity.X = 0f;
+                    NPC.velocity.Y = 0f;
+                    NPC.rotation = 0f;
+                    t3++;
+                    if (t3>=120) ResetStage(Main.rand.Next(0, 2), boosSTG);
                 }
             }
         }
@@ -410,10 +426,12 @@ namespace VanillaModding.NPCs.Ocram
 
             if (boos == 1)
             {
+                roar = false;
                 onSide = false;
                 if (selectSTG == 0) l2 = l1 = 0;
                 if (selectSTG == 1) l2 = l1 = 0;
                 if (selectSTG == 2) h1 = ki = t2 = 0;
+                if (selectSTG == 3) h1 = ki = t3 = 0;
                 //if (selectSTG == 1) l3 = dash = t2 = 0;
                 //if (selectSTG == 2) h1 = ki = t2 = 0;
             }
@@ -438,7 +456,7 @@ namespace VanillaModding.NPCs.Ocram
             if (closestNPC == null)
                 return null;
 
-            if (closestNPC.dead || !Main.dayTime)
+            if (closestNPC.dead || Main.dayTime)
             {
                 // If the targeted player is dead or out of range of the Desert, flee
                 NPC.velocity.Y -= 0.04f;
@@ -476,6 +494,7 @@ namespace VanillaModding.NPCs.Ocram
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             String pathSecondPhase = nameof(VanillaModding) + "/" + (ModContent.Request<Texture2D>(Texture).Name + "_SecondPhase").Replace(@"\", "/");
+            String pathSecondPhaseRoar = nameof(VanillaModding) + "/" + (ModContent.Request<Texture2D>(Texture).Name + "_SecondPhase_roar").Replace(@"\", "/");
 
             String pathBrain = nameof(VanillaModding) + "/" + (ModContent.Request<Texture2D>(Texture).Name + "Brain").Replace(@"\", "/");
             String pathBrainEye = nameof(VanillaModding) + "/" + (ModContent.Request<Texture2D>(Texture).Name + "BrainEye").Replace(@"\", "/");
@@ -535,6 +554,7 @@ namespace VanillaModding.NPCs.Ocram
 
             Texture2D OriginTexture = ModContent.Request<Texture2D>(Texture).Value;
             if(boosSTG == 1) OriginTexture = (Texture2D)ModContent.Request<Texture2D>($"{pathSecondPhase}", AssetRequestMode.ImmediateLoad).Value;
+            if (roar) OriginTexture = (Texture2D)ModContent.Request<Texture2D>($"{pathSecondPhaseRoar}", AssetRequestMode.ImmediateLoad).Value;
 
             Vector2 origin = new(OriginTexture.Width / 2, OriginTexture.Height / 2);
             Vector2 originBack = new(BackArm.Width, 2);

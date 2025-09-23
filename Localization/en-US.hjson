@@ -169,16 +169,20 @@ Mods: {
 		}
 
 		NPCs: {
-			DuneTrapperBody.DisplayName: Sand Trapper
-			DuneTrapperHead.DisplayName: Sand Trapper
-			DuneTrapperTail.DisplayName: Sand Trapper
-			DuneSplicerCloneBody.DisplayName: Sand Splicer Clone
-			DuneSplicerCloneHead.DisplayName: Sand Splicer Clone
-			DuneSplicerCloneTail.DisplayName: Sand Splicer Clone
+			DuneTrapperBody.DisplayName: Dune Trapper
+			DuneTrapperTail.DisplayName: Dune Trapper
+			DuneSplicerCloneBody.DisplayName: Dune Splicer Clone
+			DuneSplicerCloneHead.DisplayName: Dune Splicer Clone
+			DuneSplicerCloneTail.DisplayName: Dune Splicer Clone
 
 			Ocram: {
 				DisplayName: Ocram
 				Bestiary: A Classical boss from the combined from Skull and two Eyes of the mech. Forged with Bars and merged with souls.
+			}
+
+			DuneTrapperHead: {
+				DisplayName: Dune Trapper
+				Bestiary: A messy boss, likes to be within a sandstorm in the desert. The spikes on its body are sharp and dangerously detachable.
 			}
 
 			OcramServants.DisplayName: Ocram Servants

@@ -66,8 +66,8 @@ namespace VanillaModding.NPCs.DuneTrapper
         {
             // Set the segment variance
             // If you want the segment length to be constant, set these two properties to the same value
-            MinSegmentLength = 6;
-            MaxSegmentLength = 10;
+            MinSegmentLength = 4;
+            MaxSegmentLength = 6;
 
             CommonWormInit(this);
         }

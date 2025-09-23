@@ -1,19 +1,20 @@
 ﻿using Microsoft.Xna.Framework;
-using System.IO;
-using Terraria;
-using Terraria.GameContent.Bestiary;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.GameContent.Events;
-using Terraria.DataStructures;
-using System.Threading.Tasks;
-using System;
 using Mono.Cecil;
-using VanillaModding.Projectiles.MightyScythe.MightyProjectile;
-using VanillaModding.Projectiles.DuneTrapper;
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using Terraria;
+using Terraria.DataStructures;
+using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.Events;
 using Terraria.GameContent.ItemDropRules;
-using VanillaModding.Items.SoulofEssence;
+using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ModLoader;
 using VanillaModding.Items.Consumable.BossBags;
+using VanillaModding.Items.SoulofEssence;
+using VanillaModding.Projectiles.DuneTrapper;
+using VanillaModding.Projectiles.MightyScythe.MightyProjectile;
 
 namespace VanillaModding.NPCs.DuneTrapper
 {
@@ -26,6 +27,11 @@ namespace VanillaModding.NPCs.DuneTrapper
         public override int TailType => ModContent.NPCType<DuneTrapperTail>();
 
         bool spawnInit;
+
+        public static LocalizedText BestiaryText
+        {
+            get; private set;
+        }
 
         public override void SetStaticDefaults()
         {
@@ -41,7 +47,8 @@ namespace VanillaModding.NPCs.DuneTrapper
 
             };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
-            
+            BestiaryText = this.GetLocalization("Bestiary");
+
         }
 
         public override void SetDefaults()
@@ -85,10 +92,13 @@ namespace VanillaModding.NPCs.DuneTrapper
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
 				// Sets the spawning conditions of this NPC that is listed in the bestiary.
 				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Desert,
+                BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Events.Sandstorm,
 				//BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns,
 
 				// Sets the description of this NPC that is listed in the bestiary.
-				new FlavorTextBestiaryInfoElement("A worm that likes eating people.")
+                new FlavorTextBestiaryInfoElement(BestiaryText.ToString())
+
+                //new FlavorTextBestiaryInfoElement("A worm that likes eating people.")
             });
         }
 
@@ -106,7 +116,7 @@ namespace VanillaModding.NPCs.DuneTrapper
         internal static void CommonWormInit(WormProjectile worm)
         {
             // These two properties handle the movement of the worm
-            worm.MoveSpeed = 20.5f;
+            worm.MoveSpeed = 15.5f;
             worm.Acceleration = 0.2f;
 
         }
@@ -169,7 +179,7 @@ namespace VanillaModding.NPCs.DuneTrapper
                 return null;
 
             bool InDesert = (closestNPC.ZoneDesert || closestNPC.ZoneUndergroundDesert);
-            if (closestNPC.dead || !InDesert)
+            if (closestNPC.dead || !InDesert || !Sandstorm.Happening)
             {
                 // If the targeted player is dead or out of range of the Desert, flee
                ForcedTargetPosition = new Vector2(closestNPC.Center.X, closestNPC.Center.Y + 2000f);
@@ -210,11 +220,11 @@ namespace VanillaModding.NPCs.DuneTrapper
 
         public static int MinCount()
         {
-            int count = 5;
+            int count = 1;
 
             if (Main.expertMode)
             {
-                count += 10; // Increase by 4 if expert or master mode
+                count += 1; // Increase by 4 if expert or master mode
             }
 
             if (Main.hardMode)
@@ -224,7 +234,7 @@ namespace VanillaModding.NPCs.DuneTrapper
 
             if (Main.getGoodWorld)
             {
-                count += 10; // Increase by 5 if using the "For The Worthy" seed
+                count += 5; // Increase by 5 if using the "For The Worthy" seed
             }
 
             return count;
@@ -232,11 +242,11 @@ namespace VanillaModding.NPCs.DuneTrapper
 
         public static int MinMAXCount()
         {
-            int count = 10;
+            int count = 2;
 
             if (Main.expertMode)
             {
-                count += 20; // Increase by 4 if expert or master mode
+                count += 2; // Increase by 4 if expert or master mode
             }
 
             if (Main.hardMode)
@@ -247,7 +257,7 @@ namespace VanillaModding.NPCs.DuneTrapper
 
             if (Main.getGoodWorld)
             {
-                count += 20; // Increase by 5 if using the "For The Worthy" seed
+                count += 5; // Increase by 5 if using the "For The Worthy" seed
             }
 
             return count;
@@ -255,7 +265,7 @@ namespace VanillaModding.NPCs.DuneTrapper
 
         public override void OnKill()
         {
-            Sandstorm.StopSandstorm();
+            //Sandstorm.StopSandstorm();
             // This sets downedMinionBoss to true, and if it was false before, it initiates a lantern night
             //NPC.SetEventFlagCleared(ref DownedBossSystem.downedMinionBoss, -1);
 
@@ -296,6 +306,7 @@ namespace VanillaModding.NPCs.DuneTrapper
             // This part is not required for a boss and is just showcasing some advanced stuff you can do with drop rules to control how items spawn
             // We make 12-15 ExampleItems spawn randomly in all directions, like the lunar pillar fragments. Hereby we need the DropOneByOne rule,
             // which requires these parameters to be defined
+            LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
             int itemType = ModContent.ItemType<SoulofBlight>();
             int itemType2 = ItemID.AdamantiteOre;
             var parameters = new DropOneByOne.Parameters()
@@ -318,11 +329,11 @@ namespace VanillaModding.NPCs.DuneTrapper
                 MaximumItemDropsCount = 38,
             };
 
-            //notExpertRule.OnSuccess(new DropOneByOne(itemType, parameters));
+            notExpertRule.OnSuccess(new DropOneByOne(itemType, parameters));
             //notExpertRule.OnSuccess(new DropOneByOne(itemType2, parameters2));
 
             // Finally add the leading rule
-            //npcLoot.Add(notExpertRule);
+            npcLoot.Add(notExpertRule);
         }
     }
 
@@ -336,8 +347,7 @@ namespace VanillaModding.NPCs.DuneTrapper
                 Hide = true // Hides this NPC from the Bestiary, useful for multi-part NPCs whom you only want one entry.
             };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, value);
-
-
+            NPCID.Sets.RespawnEnemyID[NPC.type] = ModContent.NPCType<DuneTrapperHead>();
         }
 
         public override void SetDefaults()
@@ -375,24 +385,39 @@ namespace VanillaModding.NPCs.DuneTrapper
         }
         public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
-            spikenooo();
+            spikenooo(projectile);
         }
         public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
         {
             spikenooo();
         }
 
-        void spikenooo()
+        void spikenooo(Projectile proj = null)
         {
-            Vector2 velco = new Vector2(Main.rand.Next(-25, 25), -10);
-            var source = NPC.GetSource_FromAI();
+            if (proj != null && proj.velocity.LengthSquared() > 0f)
+            {
 
-            int damage = (int)(NPC.damage * 0.25f);
-            float knockback = 4f;
-            float speed = 9f;
-            Vector2 velocity = Vector2.Normalize(Main.player[NPC.target].Center - NPC.Center) * speed;
+                Vector2 perturbedSpeed = new Vector2(-proj.velocity.X, -proj.velocity.Y).RotatedByRandom(MathHelper.ToRadians(12));
+                var source = NPC.GetSource_FromAI();
 
-            Projectile.NewProjectile(source, NPC.Center, new Vector2(velocity.X, velco.Y + velocity.Y), ModContent.ProjectileType<LeftoverSpike>(), 10, 6, -1);
+                int damage = (int)(NPC.damage * 0.25f);
+                float knockback = 4f;
+                float speed = 9f;
+
+                Projectile.NewProjectile(source, NPC.Center, perturbedSpeed / 2f, ModContent.ProjectileType<LeftoverSpike>(), 10, 6, -1);
+            }
+            else
+            {
+                Vector2 velco = new Vector2(Main.rand.Next(-25, 25), -10);
+                var source = NPC.GetSource_FromAI();
+
+                int damage = (int)(NPC.damage * 0.25f);
+                float knockback = 4f;
+                float speed = 9f;
+                Vector2 velocity = Vector2.Normalize(Main.player[NPC.target].Center - NPC.Center) * speed;
+
+                Projectile.NewProjectile(source, NPC.Center, new Vector2(velocity.X, velco.Y + velocity.Y), ModContent.ProjectileType<LeftoverSpike>(), 10, 6, -1);
+            }
         }
 
     }
@@ -407,6 +432,7 @@ namespace VanillaModding.NPCs.DuneTrapper
                 Hide = true // Hides this NPC from the Bestiary, useful for multi-part NPCs whom you only want one entry.
             };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, value);
+            NPCID.Sets.RespawnEnemyID[NPC.type] = ModContent.NPCType<DuneTrapperHead>();
         }
 
         public override void SetDefaults()
