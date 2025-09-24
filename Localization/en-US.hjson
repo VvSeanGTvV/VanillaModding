@@ -233,7 +233,7 @@ Mods: {
 
 			DiceBuff: {
 				DisplayName: Dice Buff
-				Description: Mods.VanillaModding.Buffs.DiceBuff.Description
+				Description: Multiplied by Dice roll number to Maximum Mana, Maximum Life, and Defense
 			}
 		}
 	}

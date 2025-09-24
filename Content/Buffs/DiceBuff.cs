@@ -15,7 +15,7 @@ namespace VanillaModding.Content.Buffs
         public static readonly int DefenseBonus = 10;
         public static readonly int LifeBonus = 10;
         public static readonly int ManaBonus = 10;
-        public override LocalizedText Description => base.Description.WithFormatArgs(DefenseBonus, LifeBonus, ManaBonus);
+        public override LocalizedText Description => base.Description.WithFormatArgs(0);
 
         public override void Update(Player player, ref int buffIndex)
         {
