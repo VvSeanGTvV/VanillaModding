@@ -43,6 +43,7 @@ namespace VanillaModding.Content.Items.Consumable
             // Gun Properties
             Item.shoot = ModContent.ProjectileType<DiceProjectile>(); // For some reason, all the guns in the vanilla source have this.
             Item.shootSpeed = 16f; // The speed of the projectile (measured in pixels per frame.)
+            Item.noUseGraphic = false;
         }
 
         public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
@@ -65,14 +66,15 @@ namespace VanillaModding.Content.Items.Consumable
 
         public override void AddRecipes()
         {
-            /*Recipe recipe = CreateRecipe();
-            //recipe.AddIngredient(ItemID.MechanicalSkull, 1);
-            recipe.AddIngredient(ItemID.AdamantiteBar, 30);
-            recipe.AddIngredient(ItemID.SoulofSight, 20);
-            recipe.AddIngredient(ItemID.SoulofFright, 20);
-            recipe.AddIngredient(ModContent.ItemType<SoulofBlight>(), 20);
+            Recipe recipe = CreateRecipe();
+            recipe.AddIngredient(ItemID.CompanionCube, 1);
+            recipe.AddIngredient(ItemID.SoulofSight, 10);
+            recipe.AddIngredient(ItemID.SoulofFright, 10);
+            recipe.AddIngredient(ItemID.SoulofLight, 10);
+            recipe.AddIngredient(ItemID.SoulofNight, 10);
+            recipe.AddIngredient(ItemID.SoulofMight, 10);
             recipe.AddTile(TileID.MythrilAnvil);
-            recipe.Register();*/
+            recipe.Register();
         }
 
         

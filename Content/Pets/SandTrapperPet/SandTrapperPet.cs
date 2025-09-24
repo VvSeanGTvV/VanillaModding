@@ -110,12 +110,12 @@ namespace VanillaModding.Content.Pets.SandTrapperPet
         {
             if (owner.dead || !owner.active)
             {
-                owner.ClearBuff(ModContent.BuffType<ExampleSimpleMinionBuff>());
+                owner.ClearBuff(ModContent.BuffType<SandTrapperPetBuff>());
 
                 return false;
             }
 
-            if (owner.HasBuff(ModContent.BuffType<ExampleSimpleMinionBuff>()))
+            if (owner.HasBuff(ModContent.BuffType<SandTrapperPetBuff>()))
             {
                 Projectile.timeLeft = 2;
             }
@@ -219,12 +219,12 @@ namespace VanillaModding.Content.Pets.SandTrapperPet
         {
             if (owner.dead || !owner.active)
             {
-                owner.ClearBuff(ModContent.BuffType<ExampleSimpleMinionBuff>());
+                owner.ClearBuff(ModContent.BuffType<SandTrapperPetBuff>());
 
                 return false;
             }
 
-            if (owner.HasBuff(ModContent.BuffType<ExampleSimpleMinionBuff>()))
+            if (owner.HasBuff(ModContent.BuffType<SandTrapperPetBuff>()))
             {
                 Projectile.timeLeft = 2;
             }
@@ -317,12 +317,12 @@ namespace VanillaModding.Content.Pets.SandTrapperPet
         {
             if (owner.dead || !owner.active)
             {
-                owner.ClearBuff(ModContent.BuffType<ExampleSimpleMinionBuff>());
+                owner.ClearBuff(ModContent.BuffType<SandTrapperPetBuff>());
 
                 return false;
             }
 
-            if (owner.HasBuff(ModContent.BuffType<ExampleSimpleMinionBuff>()))
+            if (owner.HasBuff(ModContent.BuffType<SandTrapperPetBuff>()))
             {
                 Projectile.timeLeft = 2;
             }

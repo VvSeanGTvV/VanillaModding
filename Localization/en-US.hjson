@@ -168,8 +168,8 @@ Mods: {
 			}
 
 			Dice: {
-				DisplayName: Dice
-				Tooltip: ""
+				DisplayName: D I C E
+				Tooltip: Roll once, either death or buff.
 			}
 		}
 
@@ -226,14 +226,14 @@ Mods: {
 		}
 
 		Buffs: {
-			ExampleSimpleMinionBuff: {
-				DisplayName: Example Simple Minion Buff
-				Description: Mods.VanillaModding.Buffs.ExampleSimpleMinionBuff.Description
-			}
-
 			DiceBuff: {
 				DisplayName: Dice Buff
 				Description: Multiplied by Dice roll number to Maximum Mana, Maximum Life, and Defense
+			}
+
+			SandTrapperPetBuff: {
+				DisplayName: Duny Trapi Pet
+				Description: A cool looking smol pet, that has detachable spikes.
 			}
 		}
 	}

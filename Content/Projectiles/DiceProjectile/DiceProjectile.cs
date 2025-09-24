@@ -58,7 +58,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
             {
                 DynamicDiceBuff modPlayer = player.GetModPlayer<DynamicDiceBuff>();
                 modPlayer.DiceMult = mult + 1;
-                player.AddBuff(ModContent.BuffType<DiceBuff>(), 60 * 30);
+                player.AddBuff(ModContent.BuffType<DiceBuff>(), 60 * 15);
                 
             }
             if (timer > maxRollTime + maxDisplayTime)

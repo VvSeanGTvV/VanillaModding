@@ -14,7 +14,7 @@ using static Humanizer.In;
 
 namespace VanillaModding.Content.Items.Weapon.Magic
 {
-    public class ExampleSimpleMinionBuff : ModBuff
+    public class SandTrapperPetBuff : ModBuff
     {
         public override void SetStaticDefaults()
         {
@@ -78,7 +78,7 @@ namespace VanillaModding.Content.Items.Weapon.Magic
             // These below are needed for a minion weapon
             Item.noMelee = true; // this item doesn't do any melee damage
             Item.DamageType = DamageClass.Summon; // Makes the damage register as summon. If your item does not have any damage type, it becomes true damage (which means that damage scalars will not affect it). Be sure to have a damage type
-            Item.buffType = ModContent.BuffType<ExampleSimpleMinionBuff>();
+            Item.buffType = ModContent.BuffType<SandTrapperPetBuff>();
             // No buffTime because otherwise the item tooltip would say something like "1 minute duration"
             Item.shoot = ModContent.ProjectileType<SandTrapperPetHead>(); // This item creates the minion projectile
         }
