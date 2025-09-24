@@ -13,11 +13,15 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
 {
     internal class DiceProjectile : ModProjectile
     {
+        public readonly int buffLast = 60 * 15;
         public readonly int maxRollTime = 60 * 10;
         public readonly int maxDisplayTime = 60 * 3;
+        public int diceType = 0;
+
+        private int frameOffset;
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Type] = 6;
+            frameOffset = Main.projFrames[Type] = 6;
         }
 
         public override void SetDefaults()
@@ -34,6 +38,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
             Projectile.ignoreWater = true; // Does the projectile's speed be influenced by water?
             Projectile.tileCollide = false; // Can the projectile collide with tiles?
             Projectile.scale = 1f;
+            Projectile.light = 1f;
             //Projectile.extraUpdates = 1; // Set to above 0 if you want the projectile to update multiple time in a frame
             //AIType = ProjectileID.Bullet; // Act exactly like default Bullet
         }
@@ -41,6 +46,8 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
         int timer = 0;
         int mult = 0;
         int waut = 0;
+        int bfti = 0;
+        bool once = false; 
         public override void AI()
         {
             timer++;
@@ -48,28 +55,31 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
             if (timer <= maxRollTime)
             {
                 waut++;
-                if (waut >= timer / (maxRollTime / 5))
+                if (waut >= timer / (maxRollTime / 10))
                 {
-                    Projectile.frame = mult = Main.rand.Next(0, 6);
+                    Projectile.frame = mult = Main.rand.Next(0, 6) + (frameOffset * diceType);
                     waut = 0;
                 }
-            } 
-            else if (!player.HasBuff(ModContent.BuffType<DiceBuff>()))
-            {
-                DynamicDiceBuff modPlayer = player.GetModPlayer<DynamicDiceBuff>();
-                modPlayer.DiceMult = mult + 1;
-                player.AddBuff(ModContent.BuffType<DiceBuff>(), 60 * 15);
-                
             }
-            if (timer > maxRollTime + maxDisplayTime)
+            else if (!once)
             {
-                Projectile.Kill();
+                if (diceType == 0) {
+                    DynamicDiceBuff modPlayer = player.GetModPlayer<DynamicDiceBuff>();
+                    modPlayer.DiceMult = mult + 1;
+                    player.AddBuff(ModContent.BuffType<DiceBuff>(), buffLast);
+                    once = true;
+                }
+            } 
+            else
+            {
+                bfti++;
+                if (bfti >= buffLast || !player.HasBuff(ModContent.BuffType<DiceBuff>())) Projectile.Kill();
             }
 
+            //Projectile.position = player.Top - new Vector2(Projectile.width / 2, Projectile.height + 15f);
             if (Projectile.velocity.X > -0.1f && Projectile.velocity.X < 0.1f) Projectile.velocity.X = 0f;
             if (Projectile.velocity.Y > -0.1f && Projectile.velocity.Y < 0.1f) Projectile.velocity.Y = 0f;
-            Projectile.velocity *= 0.75f; // Make it slow down.
-
+            Projectile.velocity *= 0.75f;
             Projectile.rotation = 0;
         }
     }

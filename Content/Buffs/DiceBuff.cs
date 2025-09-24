@@ -27,9 +27,9 @@ namespace VanillaModding.Content.Buffs
         {
             DynamicDiceBuff modPlayer = player.GetModPlayer<DynamicDiceBuff>();
             modPlayer.hasDiceBuff = true; // Set the flag to true to indicate that the buff is active.
-            player.statDefense += player.statDefense * modPlayer.DiceMult; // Grant a +10 * dice = Defense boost to the player while the buff is active.
-            player.statLifeMax2 += player.statLifeMax2 * modPlayer.DiceMult; // Grant a +10 * dice = Life boost to the player while the buff is active.
-            player.statManaMax2 += player.statManaMax2 * modPlayer.DiceMult; // Grant a +10 * dice = Mana boost to the player while the buff is active.
+            player.statDefense += modPlayer.DiceMult * modPlayer.DiceMult; // Grant a +10 * dice = Defense boost to the player while the buff is active.
+            player.statLifeMax2 += modPlayer.DiceMult * modPlayer.DiceMult; // Grant a +10 * dice = Life boost to the player while the buff is active.
+            player.statManaMax2 += modPlayer.DiceMult * modPlayer.DiceMult; // Grant a +10 * dice = Mana boost to the player while the buff is active.
             //Logging.PublicLogger.Info($"Buff is active. Current Dice Multiplier: {modPlayer.DiceMult}");
         }
     }

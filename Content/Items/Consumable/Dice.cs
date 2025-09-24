@@ -53,10 +53,9 @@ namespace VanillaModding.Content.Items.Consumable
 
         public override bool CanUseItem(Player player)
         {
-            // If you decide to use the below UseItem code, you have to include !NPC.AnyNPCs(id), as this is also the check the server does when receiving MessageID.SpawnBoss.
-            // If you want more constraints for the summon item, combine them as boolean expressions:
-            //    return !Main.dayTime && !NPC.AnyNPCs(ModContent.NPCType<MinionBossBody>()); would mean "not daytime and no MinionBossBody currently alive"
-            return !player.HasBuff(ModContent.BuffType<DiceBuff>());
+            // This is to prevent multi Dice Buff
+            DynamicDiceBuff modPlayer = player.GetModPlayer<DynamicDiceBuff>();
+            return !player.HasBuff(ModContent.BuffType<DiceBuff>()) && !modPlayer.hasDiceBuff;
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {

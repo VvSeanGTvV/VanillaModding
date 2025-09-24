@@ -17,7 +17,7 @@ namespace VanillaModding.Content.Projectiles.Bombs
         private const int DefaultWidthHeight = 26;
         private const int ExplosionWidthHeight = 250;
 
-        SoundStyle AHH = new SoundStyle($"{nameof(VanillaModding)}/SFX/Bombs/HolyHandGrenadeHallelujah")
+        SoundStyle AHH = new SoundStyle($"{nameof(VanillaModding)}/Assets/Sounds/Bombs/HolyHandGrenadeHallelujah")
         {
             Volume = 1f,
             //PitchVariance = 1f,
