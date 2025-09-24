@@ -166,6 +166,11 @@ Mods: {
 				DisplayName: Suspicious Looking Fossil
 				Tooltip: Summons Dune Trapper
 			}
+
+			Dice: {
+				DisplayName: Dice
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
@@ -217,12 +222,18 @@ Mods: {
 			TonbogiriProjectile.DisplayName: Tonbogiri
 			VulcanBolt.DisplayName: Vulcan Bolt
 			RedLaser.DisplayName: Red Laser
+			DiceProjectile.DisplayName: Dice Projectile
 		}
 
 		Buffs: {
 			ExampleSimpleMinionBuff: {
 				DisplayName: Example Simple Minion Buff
 				Description: Mods.VanillaModding.Buffs.ExampleSimpleMinionBuff.Description
+			}
+
+			DiceBuff: {
+				DisplayName: Dice Buff
+				Description: Mods.VanillaModding.Buffs.DiceBuff.Description
 			}
 		}
 	}

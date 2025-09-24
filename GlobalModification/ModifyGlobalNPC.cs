@@ -7,9 +7,9 @@ using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.GameContent.ItemDropRules;
-using VanillaModding.Items.Weapon.Melee.BloodyScythe;
-using VanillaModding.Items.Ammo;
-using VanillaModding.Items.Weapon.Ranged;
+using VanillaModding.Content.Items.Weapon.Melee.BloodyScythe;
+using VanillaModding.Content.Items.Ammo;
+using VanillaModding.Content.Items.Weapon.Ranged;
 
 namespace VanillaModding.GlobalModification
 {

@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Terraria;
+using Terraria.ModLoader;
+
+namespace VanillaModding.Content.Dusts.Sparkle
+{
+    internal class SparkleOld : ModDust
+    {
+
+        public override void OnSpawn(Dust dust)
+        {
+            dust.velocity *= 0.4f; // Multiply the dust's start velocity by 0.4, slowing it down
+            dust.noGravity = true; // Makes the dust have no gravity.
+            dust.noLight = true; // Makes the dust emit no light.
+            dust.scale *= 1.195f; // Multiplies the dust's initial scale by 1.5.
+
+            //dust.frame = new Microsoft.Xna.Framework.Rectangle(0, frameY, 8, 8 + frameH);
+        }
+
+        public override bool Update(Dust dust)
+        { // Calls every frame the dust is active
+            dust.position += dust.velocity;
+            dust.rotation += dust.velocity.X * 0.15f;
+            dust.scale *= 0.99f;
+
+            float light = 0.85f * dust.scale;
+            if (dust.frame.Y > 8)
+                Lighting.AddLight(dust.position, light, light, light * 0);
+            else
+                Lighting.AddLight(dust.position, light, light, light);
+
+            if (dust.scale < 0.5f)
+            {
+                dust.active = false;
+            }
+
+            return false; // Return false to prevent vanilla behavior.
+        }
+    }
+}
