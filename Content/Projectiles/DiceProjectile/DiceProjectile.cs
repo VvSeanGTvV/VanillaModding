@@ -13,7 +13,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
 {
     internal class DiceProjectile : ModProjectile
     {
-        public readonly int maxRollTime = 60 * 5;
+        public readonly int maxRollTime = 60 * 10;
         public readonly int maxDisplayTime = 60 * 3;
         public override void SetStaticDefaults()
         {
@@ -40,13 +40,19 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
 
         int timer = 0;
         int mult = 0;
+        int waut = 0;
         public override void AI()
         {
             timer++;
             Player player = Main.player[Projectile.owner];
             if (timer <= maxRollTime)
             {
-                Projectile.frame = mult = Main.rand.Next(0, 6);
+                waut++;
+                if (waut >= timer / (maxRollTime / 5))
+                {
+                    Projectile.frame = mult = Main.rand.Next(0, 6);
+                    waut = 0;
+                }
             } 
             else if (!player.HasBuff(ModContent.BuffType<DiceBuff>()))
             {
@@ -62,7 +68,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
 
             if (Projectile.velocity.X > -0.1f && Projectile.velocity.X < 0.1f) Projectile.velocity.X = 0f;
             if (Projectile.velocity.Y > -0.1f && Projectile.velocity.Y < 0.1f) Projectile.velocity.Y = 0f;
-            Projectile.velocity *= 0.5f; // Make it slow down.
+            Projectile.velocity *= 0.75f; // Make it slow down.
 
             Projectile.rotation = 0;
         }
