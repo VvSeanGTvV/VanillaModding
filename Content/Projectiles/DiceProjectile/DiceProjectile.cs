@@ -46,16 +46,14 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
             Player player = Main.player[Projectile.owner];
             if (timer <= maxRollTime)
             {
-                Projectile.frame = mult = Main.rand.Next(1, 6);
+                Projectile.frame = mult = Main.rand.Next(0, 6);
             } 
-            else if (timer < maxRollTime + 30)
-            {
-                player.AddBuff(ModContent.BuffType<DiceBuff>(), 60 * 30);
-                
-            } else
+            else if (!player.HasBuff(ModContent.BuffType<DiceBuff>()))
             {
                 DynamicDiceBuff modPlayer = player.GetModPlayer<DynamicDiceBuff>();
                 modPlayer.DiceMult = mult + 1;
+                player.AddBuff(ModContent.BuffType<DiceBuff>(), 60 * 30);
+                
             }
             if (timer > maxRollTime + maxDisplayTime)
             {
@@ -64,7 +62,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
 
             if (Projectile.velocity.X > -0.1f && Projectile.velocity.X < 0.1f) Projectile.velocity.X = 0f;
             if (Projectile.velocity.Y > -0.1f && Projectile.velocity.Y < 0.1f) Projectile.velocity.Y = 0f;
-            Projectile.velocity *= 0.97f; // Make it slow down.
+            Projectile.velocity *= 0.5f; // Make it slow down.
 
             Projectile.rotation = 0;
         }
