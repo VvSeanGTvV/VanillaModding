@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using VanillaModding.Content.Buffs;
 using VanillaModding.Content.Projectiles.DiceProjectile;
@@ -18,6 +19,16 @@ namespace VanillaModding.Content.Items.Consumable
 {
     internal class Dice : ModItem
     {
+        public static LocalizedText BadLuckDeath
+        {
+            get; private set;
+        }
+
+        public static LocalizedText RanOutofHealth
+        {
+            get; private set;
+        }
+
         public override void SetStaticDefaults()
         {
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(16, 6));
@@ -43,7 +54,10 @@ namespace VanillaModding.Content.Items.Consumable
             // Gun Properties
             Item.shoot = ModContent.ProjectileType<DiceProjectile>(); // For some reason, all the guns in the vanilla source have this.
             Item.shootSpeed = 16f; // The speed of the projectile (measured in pixels per frame.)
-            Item.noUseGraphic = false;
+            Item.noUseGraphic = true;
+
+            BadLuckDeath = this.GetLocalization("BadLuckDeath").WithFormatArgs("test");
+            RanOutofHealth = this.GetLocalization("RanOutofHealth").WithFormatArgs("test");
         }
 
         public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup)
@@ -55,10 +69,13 @@ namespace VanillaModding.Content.Items.Consumable
         {
             // This is to prevent multi Dice Buff
             DynamicDiceBuff modPlayer = player.GetModPlayer<DynamicDiceBuff>();
-            return !player.HasBuff(ModContent.BuffType<DiceBuff>()) && !modPlayer.hasDiceBuff;
+            return !modPlayer.hasAnyDiceEffect && !modPlayer.rolling;
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
+            BadLuckDeath = this.GetLocalization("BadLuckDeath").WithFormatArgs(player.name);
+            RanOutofHealth = this.GetLocalization("RanOutofHealth").WithFormatArgs(player.name);
+
             Projectile.NewProjectile(source, player.MountedCenter, velocity, ModContent.ProjectileType<DiceProjectile>(), damage, knockback / 2, player.whoAmI);
             return false;
         }

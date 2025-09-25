@@ -1,12 +1,16 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.DataStructures;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using VanillaModding.Content.Buffs;
+using VanillaModding.Content.Items.Consumable;
 using VanillaModding.External.AI;
 
 namespace VanillaModding.Content.Projectiles.DiceProjectile
@@ -18,10 +22,12 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
         public readonly int maxDisplayTime = 60 * 3;
         public int diceType = 0;
 
-        private int frameOffset;
+        private int colorTotal = 4;
+        private int frameCount = 6;
+
         public override void SetStaticDefaults()
         {
-            frameOffset = Main.projFrames[Type] = 6;
+            Main.projFrames[Type] = frameCount * colorTotal;
         }
 
         public override void SetDefaults()
@@ -47,39 +53,67 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
         int mult = 0;
         int waut = 0;
         int bfti = 0;
+        bool isEffect = false;
         bool once = false; 
+        int counter = 0;
         public override void AI()
         {
             timer++;
             Player player = Main.player[Projectile.owner];
+            DynamicDiceBuff modPlayer = player.GetModPlayer<DynamicDiceBuff>();
+            bool hasAnyEffect = player.HasBuff(ModContent.BuffType<DiceBuff>()) || player.HasBuff(ModContent.BuffType<DiceDebuff>());
             if (timer <= maxRollTime)
             {
+                modPlayer.rolling = true;
                 waut++;
                 if (waut >= timer / (maxRollTime / 10))
                 {
-                    Projectile.frame = mult = Main.rand.Next(0, 6) + (frameOffset * diceType);
+                    diceType = Main.rand.Next(0, colorTotal);
+                    mult = Main.rand.Next(0, 6);
+                    Projectile.frame = mult + (diceType * frameCount);
                     waut = 0;
                 }
             }
             else if (!once)
             {
                 if (diceType == 0) {
-                    DynamicDiceBuff modPlayer = player.GetModPlayer<DynamicDiceBuff>();
                     modPlayer.DiceMult = mult + 1;
                     player.AddBuff(ModContent.BuffType<DiceBuff>(), buffLast);
                     once = true;
+                    isEffect = true;
                 }
+                if (diceType == 1)
+                {
+                    int amount = player.statLifeMax2 / Math.Max(Math.Min(mult, 1), frameCount);
+                    //player.statLife = Math.Min(amount, player.statLifeMax2);
+                    once = true;
+                    player.HealEffect(amount, true);
+                }
+                if (diceType == 2)
+                {
+                    modPlayer.DiceMult = mult + 1;
+                    player.AddBuff(ModContent.BuffType<DiceDebuff>(), buffLast);
+                    once = true;
+                    isEffect = true;
+                }
+                if (diceType == 3)
+                {
+                    player.KillMe(PlayerDeathReason.ByCustomReason(Dice.BadLuckDeath.ToNetworkText()), player.statLifeMax2*2, 0);
+                    once = true;
+                }
+                modPlayer.rolling = false;
             } 
             else
             {
                 bfti++;
-                if (bfti >= buffLast || !player.HasBuff(ModContent.BuffType<DiceBuff>())) Projectile.Kill();
+                if (bfti >= buffLast || !hasAnyEffect) Projectile.Kill();
             }
 
-            //Projectile.position = player.Top - new Vector2(Projectile.width / 2, Projectile.height + 15f);
-            if (Projectile.velocity.X > -0.1f && Projectile.velocity.X < 0.1f) Projectile.velocity.X = 0f;
+            Projectile.position = player.Top - new Vector2(Projectile.width / 2 , Projectile.height + 15f);
+            /*if (Projectile.velocity.X > -0.1f && Projectile.velocity.X < 0.1f) Projectile.velocity.X = 0f;
             if (Projectile.velocity.Y > -0.1f && Projectile.velocity.Y < 0.1f) Projectile.velocity.Y = 0f;
-            Projectile.velocity *= 0.75f;
+            Projectile.velocity *= 0.75f;*/
+            Projectile.velocity = Vector2.Zero;
             Projectile.rotation = 0;
         }
     }
