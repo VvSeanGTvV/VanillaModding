@@ -108,6 +108,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
                 bfti++;
                 if (bfti >= buffLast || !hasAnyEffect) Projectile.Kill();
             }
+            if (player.dead || !player.active) Projectile.Kill();
 
             Projectile.position = player.Top - new Vector2(Projectile.width / 2 , Projectile.height + 15f);
             /*if (Projectile.velocity.X > -0.1f && Projectile.velocity.X < 0.1f) Projectile.velocity.X = 0f;

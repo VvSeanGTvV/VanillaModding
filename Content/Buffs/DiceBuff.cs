@@ -29,7 +29,7 @@ namespace VanillaModding.Content.Buffs
         {
             DynamicDiceBuff modPlayer = player.GetModPlayer<DynamicDiceBuff>();
             modPlayer.hasAnyDiceEffect = true; // Set the flag to true to indicate that the buff is active.
-            player.statDefense += modPlayer.DiceMult * modPlayer.DiceMult * modPlayer.DiceMult; // Grant a +10 * dice = Defense boost to the player while the buff is active.
+            player.statDefense *= modPlayer.DiceMult; // Grant a +10 * dice = Defense boost to the player while the buff is active.
             player.statLifeMax2 += modPlayer.DiceMult * modPlayer.DiceMult * modPlayer.DiceMult; // Grant a +10 * dice = Life boost to the player while the buff is active.
             player.statManaMax2 += modPlayer.DiceMult * modPlayer.DiceMult * modPlayer.DiceMult; // Grant a +10 * dice = Mana boost to the player while the buff is active.
             //Logging.PublicLogger.Info($"Buff is active. Current Dice Multiplier: {modPlayer.DiceMult}");
@@ -52,7 +52,7 @@ namespace VanillaModding.Content.Buffs
         {
             DynamicDiceBuff modPlayer = player.GetModPlayer<DynamicDiceBuff>();
             modPlayer.hasAnyDiceEffect = true; // Set the flag to true to indicate that the buff is active.
-            //player.statDefense = Math.Max((int)player.statDefense - modPlayer.DiceMult * modPlayer.DiceMult * modPlayer.DiceMult, 0);// Grant a +10 * dice = Defense boost to the player while the buff is active.
+            player.statDefense /= modPlayer.DiceMult;// Grant a +10 * dice = Defense boost to the player while the buff is active.
             player.statLifeMax2 = Math.Max(player.statLifeMax2  - modPlayer.DiceMult * modPlayer.DiceMult, 0); // Grant a +10 * dice = Life boost to the player while the buff is active.
             player.statManaMax2 = Math.Max(player.statManaMax2 - modPlayer.DiceMult * modPlayer.DiceMult, 0); // Grant a +10 * dice = Mana boost to the player while the buff is active.
             //Logging.PublicLogger.Info($"Buff is active. Current Dice Multiplier: {modPlayer.DiceMult}");
@@ -78,21 +78,28 @@ namespace VanillaModding.Content.Buffs
             hasAnyDiceEffect = false;
         }
 
+        public void ResetDice()
+        {
+            DiceMult = 0;
+            rolling = false;
+            hasAnyDiceEffect = false;
+        }
+
         public override void OnEnterWorld()
         {
-            rolling = false;
+            ResetDice();
             base.OnEnterWorld();
         }
 
         public override void UpdateDead()
         {
-            rolling = false;
+            ResetDice();
             base.UpdateDead();
         }
 
         public override void OnRespawn()
         {
-            rolling = false;
+            ResetDice();
             base.OnRespawn();
         }
     }

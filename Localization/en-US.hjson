@@ -230,7 +230,7 @@ Mods: {
 		Buffs: {
 			DiceBuff: {
 				DisplayName: Dice Buff
-				Description: Multiplied by Dice roll number to Maximum Mana, Maximum Life, and Defense
+				Description: Buffed up dependent on Dice Roll Number
 			}
 
 			SandTrapperPetBuff: {
@@ -240,7 +240,7 @@ Mods: {
 
 			DiceDebuff: {
 				DisplayName: Dice Debuff
-				Description: Divided by Dice roll number to Maximum Mana, Maximum Life, and Defense
+				Description: Weakened dependent on Dice Roll Number
 			}
 		}
 	}
