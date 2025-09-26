@@ -17,7 +17,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
 {
     internal class DiceProjectile : ModProjectile
     {
-        public readonly int buffLast = 60 * 15;
+        public readonly int buffLast = 60 * 5;
         public readonly int maxRollTime = 60 * 10;
         public readonly int maxDisplayTime = 60 * 3;
         public int diceType = 0;
@@ -68,7 +68,10 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
                 waut++;
                 if (waut >= timer / (maxRollTime / 10))
                 {
-                    diceType = Main.rand.Next(0, colorTotal);
+                    float biasFactor = 1f + modPlayer.totalRolls * 0.05f; // The more rolls, the stronger the bias
+                    float raw = (float)Math.Pow(Main.rand.NextDouble(), 1.0 / biasFactor); // Biased toward higher numbers
+                    diceType = (int)(raw * colorTotal);
+
                     mult = Main.rand.Next(0, 6);
                     Projectile.frame = mult + (diceType * frameCount);
                     waut = 0;
@@ -76,9 +79,10 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
             }
             else if (!once)
             {
+                modPlayer.totalRolls++;
                 if (diceType == 0) {
                     modPlayer.DiceMult = mult + 1;
-                    player.AddBuff(ModContent.BuffType<DiceBuff>(), buffLast);
+                    player.AddBuff(ModContent.BuffType<DiceBuff>(), buffLast * modPlayer.totalRolls);
                     once = true;
                     isEffect = true;
                 }
@@ -92,7 +96,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
                 if (diceType == 2)
                 {
                     modPlayer.DiceMult = mult + 1;
-                    player.AddBuff(ModContent.BuffType<DiceDebuff>(), buffLast);
+                    player.AddBuff(ModContent.BuffType<DiceDebuff>(), buffLast * modPlayer.totalRolls);
                     once = true;
                     isEffect = true;
                 }
@@ -108,7 +112,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
                 bfti++;
                 if (bfti >= buffLast || !hasAnyEffect) Projectile.Kill();
             }
-            if (player.dead || !player.active) Projectile.Kill();
+            if (!player.active || player.dead) Projectile.Kill();
 
             Projectile.position = player.Top - new Vector2(Projectile.width / 2 , Projectile.height + 15f);
             /*if (Projectile.velocity.X > -0.1f && Projectile.velocity.X < 0.1f) Projectile.velocity.X = 0f;

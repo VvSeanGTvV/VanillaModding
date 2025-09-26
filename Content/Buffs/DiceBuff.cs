@@ -52,7 +52,7 @@ namespace VanillaModding.Content.Buffs
         {
             DynamicDiceBuff modPlayer = player.GetModPlayer<DynamicDiceBuff>();
             modPlayer.hasAnyDiceEffect = true; // Set the flag to true to indicate that the buff is active.
-            player.statDefense /= modPlayer.DiceMult;// Grant a +10 * dice = Defense boost to the player while the buff is active.
+            player.statDefense /= modPlayer.DiceMult; // Grant a +10 * dice = Defense boost to the player while the buff is active.
             player.statLifeMax2 = Math.Max(player.statLifeMax2  - modPlayer.DiceMult * modPlayer.DiceMult, 0); // Grant a +10 * dice = Life boost to the player while the buff is active.
             player.statManaMax2 = Math.Max(player.statManaMax2 - modPlayer.DiceMult * modPlayer.DiceMult, 0); // Grant a +10 * dice = Mana boost to the player while the buff is active.
             //Logging.PublicLogger.Info($"Buff is active. Current Dice Multiplier: {modPlayer.DiceMult}");
@@ -70,6 +70,7 @@ namespace VanillaModding.Content.Buffs
         public bool rolling;
         public bool hasAnyDiceEffect;
         public int DiceMult;
+        public int totalRolls;
 
         // The ResetEffects hook is important for buffs to work correctly.
         // It resets the effects applied by your buff when it expires.
@@ -80,6 +81,7 @@ namespace VanillaModding.Content.Buffs
 
         public void ResetDice()
         {
+            totalRolls = 0;
             DiceMult = 0;
             rolling = false;
             hasAnyDiceEffect = false;

@@ -103,7 +103,7 @@ namespace VanillaModding.Content.NPCs.Ocram
             NPC.width = 264;
             NPC.height = 190;
 
-            NPC.damage = 65;
+            NPC.damage = 35;
             NPC.defense = 20;
             NPC.lifeMax = 35000;
 
@@ -199,7 +199,7 @@ namespace VanillaModding.Content.NPCs.Ocram
 
             bool isdudnotaiming = (CloseTargetPlayer() == null);
             if (Main.dayTime) NPC.velocity.Y -= 0.04f;
-            if (isdudnotaiming || !Main.dayTime) return;
+            if (isdudnotaiming || Main.dayTime) return;
 
             var target = CloseTargetPlayer();
             Vector2 s = NPC.DirectionTo(target.Center);
@@ -242,13 +242,13 @@ namespace VanillaModding.Content.NPCs.Ocram
                         Vector2 targetPosition = target.Center;
                         Vector2 direction = targetPosition - position;
 
-                        if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(-45, 0), direction, ModContent.ProjectileType<PinkishLaser>(), 47, 8); //create the projectile
+                        if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(-45, 0), direction, ModContent.ProjectileType<PinkishLaser>(), 18, 8); //create the projectile
 
                         Vector2 position1 = NPC.Center + new Vector2(-45, 0);
                         Vector2 targetPosition1 = target.Center;
                         Vector2 direction1 = targetPosition1 - position1;
 
-                        if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center + new Vector2(-45, 0), direction1, ModContent.ProjectileType<PinkishLaser>(), 47, 8); //create the projectile
+                        if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center + new Vector2(-45, 0), direction1, ModContent.ProjectileType<PinkishLaser>(), 187, 8); //create the projectile
                         leyeg = 3;
 
                         l1++;
@@ -332,7 +332,7 @@ namespace VanillaModding.Content.NPCs.Ocram
                         Vector2 targetPosition = target.Center;
                         Vector2 direction = targetPosition - position;
 
-                        if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(0, 45), direction, ModContent.ProjectileType<RedLaser>(), 67, 8); //create the projectile
+                        if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(0, 45), direction, ModContent.ProjectileType<RedLaser>(), 37, 8); //create the projectile
                         leyeg = 3;
 
                         l1++;
@@ -357,7 +357,7 @@ namespace VanillaModding.Content.NPCs.Ocram
                         Vector2 targetPosition = target.Center;
                         Vector2 direction = targetPosition - position;
 
-                        if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(45, 0), direction.RotatedByRandom(MathHelper.ToRadians(12)), ModContent.ProjectileType<PinkishLaser>(), 27, 8); //create the projectile
+                        if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(45, 0), direction.RotatedByRandom(MathHelper.ToRadians(12)), ModContent.ProjectileType<PinkishLaser>(), 17, 8); //create the projectile
                         leyeg = 3;
 
                         l1++;
@@ -435,16 +435,6 @@ namespace VanillaModding.Content.NPCs.Ocram
                 //if (selectSTG == 2) h1 = ki = t2 = 0;
             }
             stg = selectSTG;
-        }
-        
-        private void SpawnMinions (int MaxMinions, IEntitySource source, int SpawnSpeed)
-        {
-            ki++;
-            if(NPC.CountNPCS(ModContent.NPCType<OcramServants>()) < MaxMinions && ki > SpawnSpeed)
-            {
-                ki = 0;
-                NPC.NewNPC(source, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OcramServants>(), 0, NPC.whoAmI);
-            }
         }
 
         private Player CloseTargetPlayer()
