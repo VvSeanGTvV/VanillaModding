@@ -374,6 +374,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             NPC.knockBackResist = 0f;
             NPC.behindTiles = true;
             NPC.boss = true;
+            NPC.despawnEncouraged = false;
         }
 
         public override void Init()
@@ -459,6 +460,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             NPC.knockBackResist = 0f;
             NPC.behindTiles = true;
             NPC.boss = true;
+            NPC.despawnEncouraged = false;
         }
 
         public override void Init()
