@@ -68,7 +68,7 @@ namespace VanillaModding.Content.Items.Consumable
         public override bool CanUseItem(Player player)
         {
             // This is to prevent multi Dice Buff
-            DynamicDiceBuff modPlayer = player.GetModPlayer<DynamicDiceBuff>();
+            VanillaModdingPlayer modPlayer = player.GetModPlayer<VanillaModdingPlayer>();
             return !modPlayer.hasAnyDiceEffect && !modPlayer.rolling;
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
