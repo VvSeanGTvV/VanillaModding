@@ -56,6 +56,7 @@ namespace VanillaModding.Content.Items.Consumable
             Item.shootSpeed = 16f; // The speed of the projectile (measured in pixels per frame.)
             Item.noUseGraphic = true;
 
+            // by default with "test" to initalize it at hand
             BadLuckDeath = this.GetLocalization("BadLuckDeath").WithFormatArgs("test");
             RanOutofHealth = this.GetLocalization("RanOutofHealth").WithFormatArgs("test");
         }
@@ -73,6 +74,7 @@ namespace VanillaModding.Content.Items.Consumable
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
+            // Auto populate with the actual player name.
             BadLuckDeath = this.GetLocalization("BadLuckDeath").WithFormatArgs(player.name);
             RanOutofHealth = this.GetLocalization("RanOutofHealth").WithFormatArgs(player.name);
 
@@ -83,7 +85,7 @@ namespace VanillaModding.Content.Items.Consumable
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.CompanionCube, 1);
+            recipe.AddIngredient(ItemID.ShroomiteBar, 10);
             recipe.AddIngredient(ItemID.SoulofSight, 10);
             recipe.AddIngredient(ItemID.SoulofFright, 10);
             recipe.AddIngredient(ItemID.SoulofLight, 10);

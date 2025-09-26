@@ -9,10 +9,22 @@ namespace VanillaModding.Content
 {
     internal class VanillaModdingPlayer : ModPlayer
     {
-        // This variable will hold the dynamic value for your buff.
+        // This variable is for D I C E item.
+        /// <summary>
+        /// Player, currently rolling a Dice
+        /// </summary>
         public bool rolling;
+        /// <summary>
+        /// Has any existing Debuff/buff 
+        /// </summary>
         public bool hasAnyDiceEffect;
+        /// <summary>
+        /// Dice number that has been rolled
+        /// </summary>
         public int DiceMult;
+        /// <summary>
+        /// Total rolls, also used for dice incremental chance of death outcome.
+        /// </summary>
         public int totalRolls;
 
         // The ResetEffects hook is important for buffs to work correctly.
@@ -22,6 +34,10 @@ namespace VanillaModding.Content
             hasAnyDiceEffect = false;
         }
 
+        /// <summary>
+        /// Resets the entire DICE stats for the player.
+        /// Useful, once a player dies to properly reset.
+        /// </summary>
         public void ResetDice()
         {
             totalRolls = 0;
@@ -32,7 +48,7 @@ namespace VanillaModding.Content
 
         public override void OnEnterWorld()
         {
-            ResetDice();
+            ResetDice(); //TODO: should it be saved for balancing situation?
             base.OnEnterWorld();
         }
 

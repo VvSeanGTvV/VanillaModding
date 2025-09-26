@@ -169,7 +169,7 @@ Mods: {
 
 			Dice: {
 				DisplayName: D I C E
-				Tooltip: Roll once, either death or buff
+				Tooltip: Roll at your risk.
 				BadLuckDeath: "{0} has rolled a death outcome"
 				RanOutofHealth: "{0} seem to have ran out of maximum health"
 			}
