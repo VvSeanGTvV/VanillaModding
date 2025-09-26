@@ -60,7 +60,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
         {
             timer++;
             Player player = Main.player[Projectile.owner];
-            DynamicDiceBuff modPlayer = player.GetModPlayer<DynamicDiceBuff>();
+            VanillaModdingPlayer modPlayer = player.GetModPlayer<VanillaModdingPlayer>();
             bool hasAnyEffect = player.HasBuff(ModContent.BuffType<DiceBuff>()) || player.HasBuff(ModContent.BuffType<DiceDebuff>());
             if (timer <= maxRollTime)
             {
