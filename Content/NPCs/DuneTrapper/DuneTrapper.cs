@@ -176,7 +176,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             }
         }
 
-        private Player CloseTargetPlayer()
+        /*private Player CloseTargetPlayer()
         {
             if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active) NPC.TargetClosest();
 
@@ -195,7 +195,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             }
             ForcedTargetPosition = null;
             return closestNPC;
-        }
+        }*/
 
         int savec = 0;
         public void annoyDune()
