@@ -73,7 +73,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
         }
 
         // This method is invoked from ExampleWormHead, ExampleWormBody and ExampleWormTail
-        internal static void CommonWormInit(WormProjectile worm)
+        internal static void CommonWormInit(Worm worm)
         {
             // These two properties handle the movement of the worm
             worm.MoveSpeed = 25.5f;

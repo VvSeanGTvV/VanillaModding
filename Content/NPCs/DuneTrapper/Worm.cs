@@ -27,7 +27,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
     /// <summary>
     /// The base class for non-separating Worm enemies.
     /// </summary>
-    public abstract class WormProjectile : ModNPC
+    public abstract class Worm : ModNPC
     {
         /*  ai[] usage:
 		 *  
@@ -127,7 +127,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
     /// <summary>
     /// The base class for head segment NPCs of Worm enemies
     /// </summary>
-    public abstract class WormHead : WormProjectile
+    public abstract class WormHead : Worm
     {
         public sealed override WormSegmentType SegmentType => WormSegmentType.Head;
 
@@ -179,7 +179,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
         /// This method only runs if <see cref="HasCustomBodySegments"/> returns <see langword="true"/>.
         /// </summary>
         /// <param name="segmentCount">How many body segments are expected to be spawned</param>
-        /// <returns>The whoAmI of the most-recently spawned NPC, which is the result of calling <see cref="NPC.NewNPC(IEntitySource, int, int, int, int, float, float, float, float, int)"/></returns>
+        /// <returns>The whoAmI of the most-recently spawned NPC, which is the result of calling <see cref="NPC.NewNPC(Terraria.DataStructures.IEntitySource, int, int, int, int, float, float, float, float, int)"/></returns>
         public virtual int SpawnBodySegments(int segmentCount)
         {
             // Defaults to just returning this NPC's whoAmI, since the tail segment uses the return value as its "following" NPC index
@@ -268,22 +268,18 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 
                     // Ensure that all of the segments could spawn.  If they could not, despawn the worm entirely
                     int count = 0;
-                    for (int i = 0; i < Main.maxNPCs; i++)
+                    foreach (var n in Main.ActiveNPCs)
                     {
-                        NPC n = Main.npc[i];
-
-                        if (n.active && (n.type == Type || n.type == BodyType || n.type == TailType) && n.realLife == NPC.whoAmI)
+                        if ((n.type == Type || n.type == BodyType || n.type == TailType) && n.realLife == NPC.whoAmI)
                             count++;
                     }
 
                     if (count != randomWormLength)
                     {
                         // Unable to spawn all of the segments... kill the worm
-                        for (int i = 0; i < Main.maxNPCs; i++)
+                        foreach (var n in Main.ActiveNPCs)
                         {
-                            NPC n = Main.npc[i];
-
-                            if (n.active && (n.type == Type || n.type == BodyType || n.type == TailType) && n.realLife == NPC.whoAmI)
+                            if ((n.type == Type || n.type == BodyType || n.type == TailType) && n.realLife == NPC.whoAmI)
                             {
                                 n.active = false;
                                 n.netUpdate = true;
@@ -354,15 +350,13 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 
                 bool tooFar = true;
 
-                for (int i = 0; i < Main.maxPlayers; i++)
+                foreach (var player in Main.ActivePlayers)
                 {
                     Rectangle areaCheck;
 
-                    Player player = Main.player[i];
-
                     if (ForcedTargetPosition is Vector2 target)
                         areaCheck = new Rectangle((int)target.X - maxDistance, (int)target.Y - maxDistance, maxDistance * 2, maxDistance * 2);
-                    else if (player.active && !player.dead && !player.ghost)
+                    else if (!player.dead && !player.ghost)
                         areaCheck = new Rectangle((int)player.position.X - maxDistance, (int)player.position.Y - maxDistance, maxDistance * 2, maxDistance * 2);
                     else
                         continue;  // Not a valid player
@@ -398,10 +392,10 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             // Copy the value, since it will be clobbered later
             Vector2 npcCenter = NPC.Center;
 
-            float targetRoundedPosX = (int)(targetXPos / 16f) * 16;
-            float targetRoundedPosY = (int)(targetYPos / 16f) * 16;
-            npcCenter.X = (int)(npcCenter.X / 16f) * 16;
-            npcCenter.Y = (int)(npcCenter.Y / 16f) * 16;
+            float targetRoundedPosX = (float)((int)(targetXPos / 16f) * 16);
+            float targetRoundedPosY = (float)((int)(targetYPos / 16f) * 16);
+            npcCenter.X = (float)((int)(npcCenter.X / 16f) * 16);
+            npcCenter.Y = (float)((int)(npcCenter.Y / 16f) * 16);
             float dirX = targetRoundedPosX - npcCenter.X;
             float dirY = targetRoundedPosY - npcCenter.Y;
 
@@ -486,7 +480,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             dirX *= newSpeed;
             dirY *= newSpeed;
 
-            if (NPC.velocity.X > 0 && dirX > 0 || NPC.velocity.X < 0 && dirX < 0 || NPC.velocity.Y > 0 && dirY > 0 || NPC.velocity.Y < 0 && dirY < 0)
+            if ((NPC.velocity.X > 0 && dirX > 0) || (NPC.velocity.X < 0 && dirX < 0) || (NPC.velocity.Y > 0 && dirY > 0) || (NPC.velocity.Y < 0 && dirY < 0))
             {
                 // The NPC is moving towards the target location
                 if (NPC.velocity.X < dirX)
@@ -500,7 +494,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
                     NPC.velocity.Y -= acceleration;
 
                 // The intended Y-velocity is small AND the NPC is moving to the left and the target is to the right of the NPC or vice versa
-                if (Math.Abs(dirY) < speed * 0.2 && (NPC.velocity.X > 0 && dirX < 0 || NPC.velocity.X < 0 && dirX > 0))
+                if (Math.Abs(dirY) < speed * 0.2 && ((NPC.velocity.X > 0 && dirX < 0) || (NPC.velocity.X < 0 && dirX > 0)))
                 {
                     if (NPC.velocity.Y > 0)
                         NPC.velocity.Y += acceleration * 2f;
@@ -509,7 +503,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
                 }
 
                 // The intended X-velocity is small AND the NPC is moving up/down and the target is below/above the NPC
-                if (Math.Abs(dirX) < speed * 0.2 && (NPC.velocity.Y > 0 && dirY < 0 || NPC.velocity.Y < 0 && dirY > 0))
+                if (Math.Abs(dirX) < speed * 0.2 && ((NPC.velocity.Y > 0 && dirY < 0) || (NPC.velocity.Y < 0 && dirY > 0)))
                 {
                     if (NPC.velocity.X > 0)
                         NPC.velocity.X = NPC.velocity.X + acceleration * 2f;
@@ -574,12 +568,12 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             }
 
             // Force a netupdate if the NPC's velocity changed sign and it was not "just hit" by a player
-            if ((NPC.velocity.X > 0 && NPC.oldVelocity.X < 0 || NPC.velocity.X < 0 && NPC.oldVelocity.X > 0 || NPC.velocity.Y > 0 && NPC.oldVelocity.Y < 0 || NPC.velocity.Y < 0 && NPC.oldVelocity.Y > 0) && !NPC.justHit)
+            if (((NPC.velocity.X > 0 && NPC.oldVelocity.X < 0) || (NPC.velocity.X < 0 && NPC.oldVelocity.X > 0) || (NPC.velocity.Y > 0 && NPC.oldVelocity.Y < 0) || (NPC.velocity.Y < 0 && NPC.oldVelocity.Y > 0)) && !NPC.justHit)
                 NPC.netUpdate = true;
         }
     }
 
-    public abstract class WormBody : WormProjectile
+    public abstract class WormBody : Worm
     {
         public sealed override WormSegmentType SegmentType => WormSegmentType.Body;
 
@@ -588,7 +582,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             CommonAI_BodyTail(this);
         }
 
-        internal static void CommonAI_BodyTail(WormProjectile worm)
+        internal static void CommonAI_BodyTail(Worm worm)
         {
             if (!worm.NPC.HasValidTarget)
                 worm.NPC.TargetClosest(true);
@@ -635,7 +629,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
     }
 
     // Since the body and tail segments share the same AI
-    public abstract class WormTail : WormProjectile
+    public abstract class WormTail : Worm
     {
         public sealed override WormSegmentType SegmentType => WormSegmentType.Tail;
 

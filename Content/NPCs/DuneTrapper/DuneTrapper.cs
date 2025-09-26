@@ -70,6 +70,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             NPC.scale = 1.5f;
             NPC.behindTiles = true;
 
+            NPC.npcSlots = 10f;
             NPC.value = Item.sellPrice(0, 2, 10, 10);
             //NPC.BossBar = ModContent.GetInstance<ExampleWormHeadBossBar>();
 
@@ -112,7 +113,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
         }
 
         // This method is invoked from ExampleWormHead, ExampleWormBody and ExampleWormTail
-        internal static void CommonWormInit(WormProjectile worm)
+        internal static void CommonWormInit(Worm worm)
         {
             // These two properties handle the movement of the worm
             worm.MoveSpeed = 15.5f;
@@ -134,11 +135,17 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 
         public override void AI()
         {
-
-            Player player = CloseTargetPlayer();
-
-            if (player == null)
+            if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
             {
+                NPC.TargetClosest();
+            }
+            Player player = Main.player[NPC.target];
+
+            bool InDesert = (player.ZoneDesert || player.ZoneUndergroundDesert);
+            if (player == null || !InDesert || !Sandstorm.Happening)
+            {
+                ForcedTargetPosition = new Vector2(NPC.Center.X, NPC.Center.Y + 2000f);
+                NPC.EncourageDespawn(10);
                 NPC.netUpdate = true;
                 return;
             }
