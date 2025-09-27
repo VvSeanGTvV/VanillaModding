@@ -77,8 +77,8 @@ Mods: {
 			}
 
 			SandTrapperStaff: {
-				DisplayName: Sand Trapper Staff
-				Tooltip: Summons an Mini Sand Trapper minion to fight for you
+				DisplayName: Dune Trapper Staff
+				Tooltip: Summons an Mini Dune Trapper minion to fight for you
 			}
 
 			HeartCanister: {
@@ -169,9 +169,14 @@ Mods: {
 
 			Dice: {
 				DisplayName: D I C E
-				Tooltip: Roll at your risk.
+				Tooltip: Roll at your own risk
 				BadLuckDeath: "{0} has rolled a death outcome"
 				RanOutofHealth: "{0} seem to have ran out of maximum health"
+			}
+
+			HappyPackage: {
+				DisplayName: Mysterious Package
+				Tooltip: Call a Delivery Drone to deliver a mysterious package to you!
 			}
 		}
 
@@ -195,6 +200,7 @@ Mods: {
 			OcramServants.DisplayName: Ocram Servants
 			Sirius.DisplayName: Sirius
 			AlphaChan.DisplayName: Alpha Chan
+			deliveryPackage.DisplayName: Delivery Drone
 		}
 
 		Projectiles: {
@@ -224,7 +230,8 @@ Mods: {
 			TonbogiriProjectile.DisplayName: Tonbogiri
 			VulcanBolt.DisplayName: Vulcan Bolt
 			RedLaser.DisplayName: Red Laser
-			DiceProjectile.DisplayName: Dice Projectile
+			DiceProjectile.DisplayName: Dice
+			PackageProjectile.DisplayName: Package
 		}
 
 		Buffs: {

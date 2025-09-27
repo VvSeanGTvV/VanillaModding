@@ -74,7 +74,7 @@ namespace VanillaModding.Content.Items.Weapon.Combo.MightyScythe
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)
         {
-            Texture2D texture = ModContent.Request<Texture2D>($"{nameof(VanillaModding)}/Items/Weapon/Combo/MightyScythe/MightyScythe_Glow", AssetRequestMode.ImmediateLoad).Value;
+            Texture2D texture = ModContent.Request<Texture2D>($"{nameof(VanillaModding)}/Content/Items/Weapon/Combo/MightyScythe/MightyScythe_Glow", AssetRequestMode.ImmediateLoad).Value;
             spriteBatch.Draw
             (
                 texture,
