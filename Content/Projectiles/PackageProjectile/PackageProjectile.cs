@@ -22,16 +22,23 @@ namespace VanillaModding.Content.Projectiles.PackageProjectile
             Projectile.hostile = false;
             Projectile.friendly = false;
             Projectile.damage = 5;
-            Projectile.timeLeft = 300; // 300 = 5 seconds (60 ticks -> 1s)
+            Projectile.timeLeft = 1200; // 300 = 5 seconds (60 ticks -> 1s)
             Projectile.penetrate = -1; // Infinite penetration so that the blast can hit all enemies within its radius.
         }
 
         public override void AI()
         {
-            Projectile.timeLeft = 300;
-            if (Projectile.velocity.Y <= 10f) Projectile.velocity.Y += 0.25f;
-            if (Projectile.velocity.X > -0.1f && Projectile.velocity.X < 0.1f) Projectile.velocity.X = 0f;
-            Projectile.velocity.X *= 0.98f;
+            // Arrow Gravity
+            Projectile.ai[0] += 1f;
+            if (Projectile.ai[0] >= 15f)
+            {
+                Projectile.ai[0] = 15f;
+                Projectile.velocity.Y += 0.1f;
+            }
+            if (Projectile.velocity.Y > 16f) Projectile.velocity.Y = 16f;
+
+            //if (Projectile.velocity.X > -0.1f && Projectile.velocity.X < 0.1f) Projectile.velocity.X = 0f;
+            //Projectile.velocity.X *= 0.98f;
             //Projectile.rotation = (Projectile.velocity.ToRotation() - MathHelper.PiOver2) + Projectile.ai[0];
             float spinSpeed = MathHelper.Clamp(Projectile.velocity.X * 0.01f, -0.25f, 0.25f);
             Projectile.rotation += spinSpeed;

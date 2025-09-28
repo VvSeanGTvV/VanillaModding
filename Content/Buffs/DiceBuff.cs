@@ -45,6 +45,7 @@ namespace VanillaModding.Content.Buffs
 
         public override void SetStaticDefaults()
         {
+            Main.pvpBuff[Type] = true; // This buff can be applied by other players in Pvp, so we need this to be true.
             Main.buffNoSave[Type] = true;
         }
 
