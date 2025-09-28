@@ -69,7 +69,7 @@ namespace VanillaModding.Content.NPCs.DeliveryDrone
 
             NPC.damage = 0;
             NPC.defense = 5;
-            NPC.lifeMax = 40;
+            NPC.lifeMax = 80;
 
             NPC.HitSound = SoundID.NPCHit4;
             NPC.DeathSound = SoundID.NPCDeath14;
@@ -177,7 +177,7 @@ namespace VanillaModding.Content.NPCs.DeliveryDrone
                 NPC.life -= NPC.lifeMax * NPC.defense; // Instant death
             }
 
-            foreach (var otherNpc in Main.npc)
+            foreach (var otherNpc in Main.ActiveNPCs)
             {
                 if (otherNpc != NPC && otherNpc.active && otherNpc.getRect().Intersects(NPC.getRect()) && otherNpc.TypeName != NPC.TypeName) // Example using getRect() for bounding boxes
                 {
@@ -188,7 +188,7 @@ namespace VanillaModding.Content.NPCs.DeliveryDrone
                 }
             }
 
-            foreach (var otherPlayer in Main.player)
+            foreach (var otherPlayer in Main.ActivePlayers)
             {
                 if (otherPlayer.active && otherPlayer.getRect().Intersects(NPC.getRect())) // Example using getRect() for bounding boxes
                 {
@@ -198,6 +198,7 @@ namespace VanillaModding.Content.NPCs.DeliveryDrone
                     NPC.life -= NPC.lifeMax * NPC.defense; // Instant death
                 }
             }
+            if (NPC.life < NPC.lifeMax/1.1f) dropPackage(); // EMERGENCY RETREAT! incase it got hurt.
         }
 
         public override void OnKill()

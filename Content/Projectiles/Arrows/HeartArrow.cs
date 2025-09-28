@@ -35,15 +35,21 @@ namespace VanillaModding.Content.Projectiles.Arrows
             }
 
             // The projectile is rotated to face the direction of travel
-            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+            Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
 
             if (Projectile.velocity.Y > 16f) Projectile.velocity.Y = 16f;
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (!target.boss) target.AddBuff(ModContent.BuffType<Stunned>(), 90);
+            if (!target.boss && Main.rand.NextFloat() < 0.15f) target.AddBuff(ModContent.BuffType<Stunned>(), 90);
             base.OnHitNPC(target, hit, damageDone);
+        }
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            if (Main.rand.NextFloat() < 0.15f) target.AddBuff(ModContent.BuffType<Stunned>(), 90);
+            base.OnHitPlayer(target, info);
         }
 
         public override void OnKill(int timeLeft)

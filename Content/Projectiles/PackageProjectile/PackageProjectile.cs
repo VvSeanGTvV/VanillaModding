@@ -36,12 +36,22 @@ namespace VanillaModding.Content.Projectiles.PackageProjectile
                 Projectile.velocity.Y += 0.1f;
             }
             if (Projectile.velocity.Y > 16f) Projectile.velocity.Y = 16f;
+            if (Projectile.velocity.X > -0.1f && Projectile.velocity.X < 0.1f) Projectile.velocity.X = 0f;
+            Projectile.velocity.X *= 0.985f;
 
-            //if (Projectile.velocity.X > -0.1f && Projectile.velocity.X < 0.1f) Projectile.velocity.X = 0f;
-            //Projectile.velocity.X *= 0.98f;
-            //Projectile.rotation = (Projectile.velocity.ToRotation() - MathHelper.PiOver2) + Projectile.ai[0];
             float spinSpeed = MathHelper.Clamp(Projectile.velocity.X * 0.01f, -0.25f, 0.25f);
             Projectile.rotation += spinSpeed;
+
+            foreach (Projectile otherProjectile in Main.ActiveProjectiles)
+            {
+                if (otherProjectile.whoAmI == Projectile.whoAmI) continue; //Skip this projectile caue why?
+                if (otherProjectile.getRect().Intersects(Projectile.getRect()))
+                {
+                    SpawnRandomItems(3);
+                    otherProjectile.Kill();
+                    Projectile.Kill();
+                }
+            }
         }
 
         /*public override void OnHitPlayer(Player target, Player.HurtInfo info)
@@ -56,9 +66,8 @@ namespace VanillaModding.Content.Projectiles.PackageProjectile
             target.HitEffect(damageDone, 1.0);
         }*/
 
-        public override bool OnTileCollide(Vector2 oldVelocity)
+        public void SpawnRandomItems(int numberOfItems)
         {
-
             // Create a list of tuples: (itemID, weight)
             List<(int itemID, float weight)> weightedItems = new List<(int, float)>();
 
@@ -106,7 +115,7 @@ namespace VanillaModding.Content.Projectiles.PackageProjectile
                 {
                     if (!Main.hardMode) continue; // Just in case
                     if (!NPC.downedGolemBoss) continue;
-                    if (!NPC.downedPlantBoss) continue; 
+                    if (!NPC.downedPlantBoss) continue;
                 }
                 if (rare >= 9) // Prevent Lunar Event items from dropping in pre-hardmode or pre-Moon Lord
                 {
@@ -146,16 +155,21 @@ namespace VanillaModding.Content.Projectiles.PackageProjectile
 
             var source = Projectile.GetSource_FromAI();
             // Now spawn a few random items
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < numberOfItems; i++)
             {
                 int randomID = ChooseWeightedItem(weightedItems);
                 int spawned = Item.NewItem(source, Projectile.getRect(), randomID);
 
                 if (Main.item[spawned] is Item spawnedItem)
                 {
-                    spawnedItem.velocity = new Vector2(Main.rand.NextFloat(-2f, 2f), Main.rand.NextFloat(-4f, -1f));
+                    spawnedItem.velocity = new Vector2(Main.rand.NextFloat(-4f, 4f) - Projectile.velocity.X, Main.rand.NextFloat(-4f, -1f));
                 }
             }
+        }
+
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            SpawnRandomItems(3);
             Projectile.Kill();
             return false;
         }

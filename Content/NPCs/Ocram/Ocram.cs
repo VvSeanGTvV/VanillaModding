@@ -99,6 +99,7 @@ namespace VanillaModding.Content.NPCs.Ocram
             });
         }
 
+        int[] ocramServants;
         public override void SetDefaults()
         {
             NPC.width = 264;
@@ -124,6 +125,7 @@ namespace VanillaModding.Content.NPCs.Ocram
             {
                 Music = MusicLoader.GetMusicSlot(Mod, "Assets/Music/Ocram");
             }
+            ocramServants = new int[MaxMinions];
         }
 
         public void ScaleStats(int numPlayers, float balance, float bossAdjustment)
@@ -188,9 +190,17 @@ namespace VanillaModding.Content.NPCs.Ocram
         bool onAnimation; //ANIMATING IN PROGRESS?
         bool onDash; //DASHING IN PROGRESS?
         bool onSpawn; //SPAWNING IN PROGRESS?
-        bool leftSide, onSide, roar;
+        bool leftSide, onSide, roar, metRequirementsMinion;
 
         int leyeg = 1;
+
+        public int totalMinionsActive()
+        {
+            int total = 0;
+            foreach (NPC otherNPC in Main.ActiveNPCs) if (otherNPC.ai[0] == NPC.whoAmI) total++;
+            return total;
+        }
+
         public override void AI()
         {
             i1 += 0.25f;
@@ -211,8 +221,16 @@ namespace VanillaModding.Content.NPCs.Ocram
             Vector2 abovePlayer = target.Top + new Vector2(NPC.direction, -(NPC.height + offsetY));
             Vector2 sidePlayer = (leftSide ? target.Left : target.Right) + new Vector2((leftSide ? -(NPC.width + offsetX) : (NPC.width + offsetX)), NPC.direction);
 
-            if (!(NPC.Center.Distance(target.Center) < 512f) && !onSpawn && !roar)
+            int minionsCount = totalMinionsActive();
+            if (minionsCount <= (int)Math.Round(MaxMinions / 2f)) metRequirementsMinion = false;
+            if (!(NPC.Center.Distance(target.Center) < 512f + (!onDash ? 0f : 512f)) && !onSpawn && !roar)
             {
+                if (!onDash)
+                {
+                    FrontArmAngle = (float)Math.Sin(i1) / divAng;
+                    MidArmAngle = (float)Math.Sin(i2) / divAng;
+                    BackArmAngle = (float)Math.Sin(i3) / divAng;
+                }
                 NPC.velocity = -Vector2.Lerp(-NPC.velocity, (NPC.Center - target.Center).SafeNormalize(Vector2.Zero) * npcSpeed, npcAccel * 2.25f);
                 return;
             }
@@ -275,7 +293,7 @@ namespace VanillaModding.Content.NPCs.Ocram
                         BackArmAngle = l3;
                     }
 
-                    if (t1 >= 20) t2++;
+                    if (t1 >= 20 && NPC.Center.Distance(target.Center) > 256f) t2++;
                     if (t2 < 10) NPC.rotation = sf;
                     if (t2 >= 5 && dashstg == 0 && dash < dashMax)
                     {
@@ -304,6 +322,12 @@ namespace VanillaModding.Content.NPCs.Ocram
 
                 if(stg == 2)
                 {
+                    if (minionsCount >= MaxMinions || metRequirementsMinion)
+                    {
+                        ResetStage(Main.rand.Next(0, 3), boosSTG);
+                        return;
+                    }
+
                     if (t2 <= 30)
                     {
                         t2++;
@@ -320,7 +344,12 @@ namespace VanillaModding.Content.NPCs.Ocram
                         SoundEngine.PlaySound(SoundID.NPCDeath45, NPC.position);
                         NPC.NewNPC(source, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OcramServants>(), 0, NPC.whoAmI);
                     }
-                    if (NPC.CountNPCS(ModContent.NPCType<OcramServants>()) >= MaxMinions && ki > 10) ResetStage(Main.rand.Next(0, 3), boosSTG);
+
+                    if (NPC.CountNPCS(ModContent.NPCType<OcramServants>()) >= MaxMinions && ki > 10) 
+                    {
+                        metRequirementsMinion = true;
+                        ResetStage(Main.rand.Next(0, 3), boosSTG);
+                    }
                 }
             }
             if (boosSTG == 1)
@@ -333,7 +362,7 @@ namespace VanillaModding.Content.NPCs.Ocram
                         Vector2 targetPosition = target.Center;
                         Vector2 direction = targetPosition - position;
 
-                        if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(0, 45), direction, ModContent.ProjectileType<RedLaser>(), 37, 8); //create the projectile
+                        if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(0, 45), direction, ModContent.ProjectileType<RedLaser>(), 37, 8);
                         leyeg = 3;
 
                         l1++;
@@ -350,7 +379,7 @@ namespace VanillaModding.Content.NPCs.Ocram
                 }
                 if (stg == 1)
                 {
-                    if (t1 >= (LaserShotPerSec / 1.5f) && l1 < LaserProjectileCount)
+                    if (t1 >= (LaserShotPerSec / 1.5f) && l1 < LaserProjectileCount*2)
                     {
                         onSide = true;
                         leftSide = !leftSide;
@@ -358,7 +387,7 @@ namespace VanillaModding.Content.NPCs.Ocram
                         Vector2 targetPosition = target.Center;
                         Vector2 direction = targetPosition - position;
 
-                        if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(45, 0), direction.RotatedByRandom(MathHelper.ToRadians(12)), ModContent.ProjectileType<PinkishLaser>(), 17, 8); //create the projectile
+                        if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(45, 0), direction.RotatedByRandom(MathHelper.ToRadians(12)), ModContent.ProjectileType<PinkishLaser>(), 17, 8);
                         leyeg = 3;
 
                         l1++;
@@ -376,6 +405,12 @@ namespace VanillaModding.Content.NPCs.Ocram
 
                 if (stg == 2)
                 {
+                    if (minionsCount >= MaxMinions || metRequirementsMinion)
+                    {
+                        ResetStage(Main.rand.Next(0, 4), boosSTG);
+                        return;
+                    }
+
                     if (t2 <= 30)
                     {
                         t2++;
@@ -392,7 +427,11 @@ namespace VanillaModding.Content.NPCs.Ocram
                         SoundEngine.PlaySound(SoundID.NPCDeath45, NPC.position);
                         NPC.NewNPC(source, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OcramServants>(), 0, NPC.whoAmI);
                     }
-                    if (NPC.CountNPCS(ModContent.NPCType<OcramServants>()) >= MaxMinions && ki > 10) ResetStage(Main.rand.Next(0, 4), boosSTG);
+                    if (NPC.CountNPCS(ModContent.NPCType<OcramServants>()) >= MaxMinions && ki > 10)
+                    {
+                        metRequirementsMinion = true;
+                        ResetStage(Main.rand.Next(0, 4), boosSTG);
+                    }
                 }
 
                 if (stg == 3)
@@ -403,10 +442,19 @@ namespace VanillaModding.Content.NPCs.Ocram
                 }
                 if (stg == 99)
                 {
+                    
                     NPC.velocity.X = 0f;
                     NPC.velocity.Y = 0f;
                     NPC.rotation = 0f;
                     t3++;
+
+                    if (l3 < 0.15f)
+                    {
+                        l3 += 0.025f;
+                        FrontArmAngle = l3;
+                        MidArmAngle = l3;
+                        BackArmAngle = l3;
+                    }
 
                     PunchCameraModifier modifier = new PunchCameraModifier(NPC.Center, (Main.rand.NextFloat() * ((float)Math.PI * 2f)).ToRotationVector2(), 20f, 6f, 20, 1000f, FullName);
                     Main.instance.CameraModifiers.Add(modifier);
@@ -434,7 +482,7 @@ namespace VanillaModding.Content.NPCs.Ocram
                 if (selectSTG == 0) l2 = l1 = 0;
                 if (selectSTG == 1) l2 = l1 = 0;
                 if (selectSTG == 2) h1 = ki = t2 = 0;
-                if (selectSTG == 3) h1 = ki = t3 = 0;
+                if (selectSTG == 3) l3 = h1 = ki = t3 = 0;
                 //if (selectSTG == 1) l3 = dash = t2 = 0;
                 //if (selectSTG == 2) h1 = ki = t2 = 0;
             }

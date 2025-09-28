@@ -178,6 +178,11 @@ Mods: {
 				DisplayName: Mysterious Package
 				Tooltip: Call a Delivery Drone to deliver a mysterious package to you!
 			}
+
+			HeartArrow_Ammo: {
+				DisplayName: Heart Arrow
+				Tooltip: Legendary arrows from cupid himself, has a chance to stun enemies on hit! Though don't even try doing this to a boss.
+			}
 		}
 
 		NPCs: {
@@ -237,6 +242,7 @@ Mods: {
 			RedLaser.DisplayName: Red Laser
 			DiceProjectile.DisplayName: Dice
 			PackageProjectile.DisplayName: Package
+			HeartArrow.DisplayName: Heart Arrow
 		}
 
 		Buffs: {
@@ -253,6 +259,11 @@ Mods: {
 			DiceDebuff: {
 				DisplayName: Dice Debuff
 				Description: Weakened dependent on Dice Roll Number
+			}
+
+			Stunned: {
+				DisplayName: Stunned
+				Description: Mods.VanillaModding.Buffs.Stunned.Description
 			}
 		}
 	}

@@ -59,7 +59,7 @@ namespace VanillaModding.Content.Projectiles.OcramProjectile
                 for (int k = 0; k < Projectile.oldPos.Length - 1; k++)
                 {
                     Vector2 drawPos = Projectile.oldPos[k] + new Vector2(Projectile.width, Projectile.height) / 2f + Vector2.UnitY * Projectile.gfxOffY - Main.screenPosition;
-                    Color color = new Color(60 - k * 5, 10, 60 + k * 0, 40 + k * 0);
+                    Color color = new Color(60 + k * 5, 0, 0, 40 + k * 0);
                     float rotation = (float)Math.Atan2(Projectile.oldPos[k].Y - Projectile.oldPos[k + 1].Y, Projectile.oldPos[k].X - Projectile.oldPos[k + 1].X);
                     spriteBatch.Draw(textureGlow, drawPos, null, color, rotation, drawOrigin, (Projectile.scale - k / (float)Projectile.oldPos.Length) * 0.75f, effects, 0f);
                     spriteBatch.Draw(textureGlow, drawPos - Projectile.oldPos[k] * 0.5f + Projectile.oldPos[k + 1] * 0.5f, null, color, rotation, drawOrigin, (Projectile.scale - k / (float)Projectile.oldPos.Length) * 0.75f, effects, 0f);
