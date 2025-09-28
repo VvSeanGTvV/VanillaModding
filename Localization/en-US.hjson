@@ -201,6 +201,11 @@ Mods: {
 			Sirius.DisplayName: Sirius
 			AlphaChan.DisplayName: Alpha Chan
 			deliveryPackage.DisplayName: Delivery Drone
+
+			DeliveryDrone: {
+				DisplayName: Delivery Drone
+				Bestiary: It's a friendly drone that delivers packages to you! Although it's best to do it in the open area.
+			}
 		}
 
 		Projectiles: {

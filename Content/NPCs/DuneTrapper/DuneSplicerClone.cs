@@ -35,8 +35,8 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
         {
             // Head is 10 defense, body 20, tail 30.
             NPC.CloneDefaults(NPCID.DuneSplicerHead);
-            NPC.damage = 58;
-            NPC.defense = 18;
+            NPC.damage = 28;
+            NPC.defense = 14;
             NPC.lifeMax = 550;
 
             NPC.noTileCollide = true;
@@ -122,8 +122,8 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
         public override void SetDefaults()
         {
             NPC.CloneDefaults(NPCID.DuneSplicerBody);
-            NPC.damage = 54;
-            NPC.defense = 28;
+            NPC.damage = 24;
+            NPC.defense = 14;
             NPC.lifeMax = 550;
 
             NPC.noTileCollide = true;
@@ -152,8 +152,8 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
         public override void SetDefaults()
         {
             NPC.CloneDefaults(NPCID.DuneSplicerTail);
-            NPC.damage = 50;
-            NPC.defense = 34;
+            NPC.damage = 20;
+            NPC.defense = 16;
             NPC.lifeMax = 550;
 
             NPC.noTileCollide = true;

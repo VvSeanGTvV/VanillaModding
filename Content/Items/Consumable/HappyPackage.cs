@@ -7,7 +7,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using VanillaModding.Content.NPCs.deliveryPackage;
+using VanillaModding.Content.NPCs.DeliveryDrone;
 using VanillaModding.Content.NPCs.Sirius;
 using VanillaModding.Content.Projectiles.DiceProjectile;
 
@@ -29,7 +29,7 @@ namespace VanillaModding.Content.Items.Consumable
             Item.height = 16;
             Item.maxStack = Item.CommonMaxStack;
             Item.value = 100;
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ItemRarityID.Yellow;
             Item.useAnimation = 20;
             Item.useTime = 20;
             Item.useStyle = ItemUseStyleID.HoldUp;
@@ -40,7 +40,7 @@ namespace VanillaModding.Content.Items.Consumable
 
         public override bool? UseItem(Player player)
         {
-            int type = ModContent.NPCType<deliveryPackage>();
+            int type = ModContent.NPCType<DeliveryDrone>();
             NPC.NewNPC(player.GetSource_FromAI(), (int)player.Center.X - (int)Main.rand.NextFloat(-1200, 1200), (int)player.Center.Y - 600, type, ai0: player.whoAmI);
             //NPC.SpawnOnPlayer(player.whoAmI, type);
             return true;

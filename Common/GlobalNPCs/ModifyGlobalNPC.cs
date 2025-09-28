@@ -11,7 +11,7 @@ using VanillaModding.Content.Items.Weapon.Melee.BloodyScythe;
 using VanillaModding.Content.Items.Ammo;
 using VanillaModding.Content.Items.Weapon.Ranged;
 
-namespace VanillaModding.GlobalModification
+namespace VanillaModding.Common.GlobalNPCs
 {
     internal class ModifyGlobalNPC : GlobalNPC
     {

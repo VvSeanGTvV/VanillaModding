@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -51,25 +52,96 @@ namespace VanillaModding.Content.Projectiles.PackageProjectile
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
 
-            // Get a list of ALL valid item IDs (vanilla + modded)
-            List<int> validItemIDs = new List<int>();
+            // Create a list of tuples: (itemID, weight)
+            List<(int itemID, float weight)> weightedItems = new List<(int, float)>();
 
             foreach (var kv in ContentSamples.ItemsByType)
             {
                 int itemID = kv.Key;
                 Item item = kv.Value;
 
-                // skip unimplemented or useless items
+                // Skip invalid items
                 if (itemID <= 0 || item.IsAir || item.maxStack <= 0 || item.DamageType == DamageClass.Default)
                     continue;
-                validItemIDs.Add(itemID);
+
+                // Convert rarity to weight: common items have higher weight
+                // Clamp rare value to a reasonable range to avoid extreme weights
+                int rare = item.rare;
+                float weight;
+                switch (rare)
+                {
+                    case -1:  // Gray
+                        weight = 10f;
+                        break;
+                    case 0:   // White (common)
+                        weight = 5f;
+                        break;
+                    case 1:
+                    case 2:   // Blue / Uncommon
+                        weight = 2f;
+                        break;
+                    case 3:
+                    case 4:   // Green / Rare-ish
+                        weight = 1f;
+                        break;
+                    case 5:
+                    case 6:
+                    case 7:   // Orange / Light red
+                        weight = 0.5f;
+                        break;
+                    default:  // very rare / expert / special
+                        weight = 0.2f;
+                        break;
+                }
+
+                if (rare >= 4 && !Main.hardMode) continue; // Prevent hardmode items from dropping in pre-hardmode
+                if (rare >= 7) // Prevent Plantera/Golem items from dropping in pre-hardmode or pre-Plantara
+                {
+                    if (!Main.hardMode) continue; // Just in case
+                    if (!NPC.downedGolemBoss) continue;
+                    if (!NPC.downedPlantBoss) continue; 
+                }
+                if (rare >= 9) // Prevent Lunar Event items from dropping in pre-hardmode or pre-Moon Lord
+                {
+                    if (!Main.hardMode) continue; // Just in case
+                    if (!NPC.downedTowers) continue;
+                }
+                if (rare >= 9) // Prevent Moon Lord items from dropping in pre-hardmode or pre-Moon Lord
+                {
+                    if (!Main.hardMode) continue; // Just in case
+                    if (!NPC.downedTowers) continue;
+                    if (!NPC.downedMoonlord) continue;
+                }
+                if (rare == -12 && !Main.expertMode) continue; // Prevent expert mode exclusive items from dropping in normal mode
+                if (rare == -13 && !Main.masterMode) continue; // Prevent master mode exclusive items from dropping in normal mode
+                if (rare == -11) continue; // Prevent quest items from dropping :D
+                weightedItems.Add((itemID, weight));
             }
+
+            int ChooseWeightedItem(List<(int itemID, float weight)> items)
+            {
+                float totalWeight = 0f;
+                foreach (var pair in items)
+                    totalWeight += pair.weight;
+
+                float rand = Main.rand.NextFloat() * totalWeight;
+                foreach (var pair in items)
+                {
+                    rand -= pair.weight;
+                    if (rand <= 0f)
+                        return pair.itemID;
+                }
+
+                // Fallback (shouldn't happen)
+                return items[Main.rand.Next(items.Count)].itemID;
+            }
+
 
             var source = Projectile.GetSource_FromAI();
             // Now spawn a few random items
             for (int i = 0; i < 3; i++)
             {
-                int randomID = validItemIDs[Main.rand.Next(validItemIDs.Count)];
+                int randomID = ChooseWeightedItem(weightedItems);
                 int spawned = Item.NewItem(source, Projectile.getRect(), randomID);
 
                 if (Main.item[spawned] is Item spawnedItem)
@@ -83,6 +155,7 @@ namespace VanillaModding.Content.Projectiles.PackageProjectile
 
         public override void OnKill(int timeLeft)
         {
+            SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
             base.OnKill(timeLeft);
         }
     }

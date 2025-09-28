@@ -1,22 +1,23 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Mono.Cecil;
+using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
-using Terraria.ModLoader;
-using ReLogic.Content;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
+using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.Localization;
-using VanillaModding.Content.Projectiles.OcramProjectile;
+using Terraria.ModLoader;
 using VanillaModding.Content.NPCs.Ocram.Ocram_Minions;
-using Mono.Cecil;
-using Terraria.DataStructures;
-using Microsoft.CodeAnalysis;
-using Terraria.Audio;
+using VanillaModding.Content.Projectiles.OcramProjectile;
 
 namespace VanillaModding.Content.NPCs.Ocram
 {
@@ -406,6 +407,9 @@ namespace VanillaModding.Content.NPCs.Ocram
                     NPC.velocity.Y = 0f;
                     NPC.rotation = 0f;
                     t3++;
+
+                    PunchCameraModifier modifier = new PunchCameraModifier(NPC.Center, (Main.rand.NextFloat() * ((float)Math.PI * 2f)).ToRotationVector2(), 20f, 6f, 20, 1000f, FullName);
+                    Main.instance.CameraModifiers.Add(modifier);
                     if (t3>=120) ResetStage(Main.rand.Next(0, 2), boosSTG);
                 }
             }

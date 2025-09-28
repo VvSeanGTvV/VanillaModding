@@ -10,6 +10,8 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using VanillaModding.Common;
+using VanillaModding.Common.Systems;
 using VanillaModding.Content.Buffs;
 using VanillaModding.Content.Projectiles.DiceProjectile;
 using VanillaModding.Content.Projectiles.PhasicWarpEjector;

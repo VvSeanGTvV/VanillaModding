@@ -11,6 +11,7 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using VanillaModding.Common.Systems;
 using VanillaModding.Content.Items.Consumable.BossBags;
 using VanillaModding.Content.Items.SoulofEssence;
 using VanillaModding.Content.Projectiles.DuneTrapper;
@@ -35,13 +36,21 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
         public override void SetStaticDefaults()
         {
             //DisplayName.SetDefault("Dune Trapper");
+            /*NPCID.Sets.NPCBestiaryDrawModifiers drawModifiers = new NPCID.Sets.NPCBestiaryDrawModifiers()
+            {
+                CustomTexturePath = "VanillaModding/Content/NPCs/Ocram/OcramBestiary",
+                PortraitScale = 0.6f, // Portrait refers to the full picture when clicking on the icon in the bestiary
+                PortraitPositionYOverride = -((190f / 2f - 190f / 2f) * 0.6f),
+            };*/
             var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers()
             { // Influences how the NPC looks in the Bestiary
                 //CustomTexturePath = "VanillaTestimony/NPCs/ExampleWorm_Bestiary", // Custom Texture needed for this specific if it has mutliple segments.
-                Position = new Vector2(0f, 12f), // Initial POS
-                PortraitPositionXOverride = 0f, // Offset POS X
-                PortraitPositionYOverride = 12f, // Offset POS Y
-                Scale = 1f,
+                CustomTexturePath = "VanillaModding/Content/NPCs/DuneTrapper/DuneTrapperBestiary",
+                Position = new Vector2(58f, 15f), // Initial POS
+                PortraitPositionXOverride = 62f, // Offset POS X
+                PortraitPositionYOverride = 18f, // Offset POS Y
+                PortraitScale = 0.75f, // Portrait refers to the full picture when clicking on the icon in the bestiary
+                Scale = 0.5f,
                 Rotation = 0f // Rotation
 
             };
@@ -70,6 +79,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             NPC.scale = 1.5f;
             NPC.behindTiles = true;
 
+            NPC.SpawnWithHigherTime(30);
             NPC.npcSlots = 10f;
             NPC.value = Item.sellPrice(0, 2, 10, 10);
             //NPC.BossBar = ModContent.GetInstance<ExampleWormHeadBossBar>();
@@ -272,18 +282,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
         public override void OnKill()
         {
             //Sandstorm.StopSandstorm();
-            // This sets downedMinionBoss to true, and if it was false before, it initiates a lantern night
-            //NPC.SetEventFlagCleared(ref DownedBossSystem.downedMinionBoss, -1);
-
-            // Since this hook is only ran in singleplayer and serverside, we would have to sync it manually.
-            // Thankfully, vanilla sends the MessageID.WorldData packet if a BOSS was killed automatically, shortly after this hook is ran
-
-            // If your NPC is not a boss and you need to sync the world (which includes ModSystem, check DownedBossSystem), use this code:
-            /*
-			if (Main.netMode == NetmodeID.Server) {
-				NetMessage.SendData(MessageID.WorldData);
-			}
-			*/
+            NPC.SetEventFlagCleared(ref DownedBossSystem.downedDuneTrapper, -1);
         }
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
