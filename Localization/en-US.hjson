@@ -211,6 +211,8 @@ Mods: {
 				DisplayName: Delivery Drone
 				Bestiary: It's a friendly drone that delivers packages to you! Although it's best to do it in the open area.
 			}
+
+			TheChosenOne.DisplayName: The Chosen One
 		}
 
 		Projectiles: {
