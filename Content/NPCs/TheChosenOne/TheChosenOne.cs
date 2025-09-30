@@ -121,7 +121,7 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
                     }
                 }
 
-                if (timer > 60 * 5) FirstStage();
+                if (timer > 60 * 3.25f) FirstStage();
                 battleStart = true;
             }
         }
@@ -133,7 +133,7 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
             timer1++;
             if (stg == 0)
             {
-                if (timer1 > 30)
+                if (timer1 > 20)
                 {
                     Vector2 direction = Vector2.UnitY * 10f; // Adjust speed as needed
                     if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(3 + (2 * ((Frame - 7))), 15).RotatedBy(-0.25f * (Frame - 7)), direction.RotatedBy(-0.25f * (Frame - 7)).RotatedByRandom(0.25f), ModContent.ProjectileType<RedLaser>(), 17, 8);
