@@ -245,6 +245,7 @@ Mods: {
 			DiceProjectile.DisplayName: Dice
 			PackageProjectile.DisplayName: Package
 			HeartArrow.DisplayName: Heart Arrow
+			PrismLaser.DisplayName: Prism Laser
 		}
 
 		Buffs: {

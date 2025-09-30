@@ -136,8 +136,8 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
                 if (timer1 > 20)
                 {
                     Vector2 direction = Vector2.UnitY * 10f; // Adjust speed as needed
-                    if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(3 + (2 * ((Frame - 7))), 15).RotatedBy(-0.25f * (Frame - 7)), direction.RotatedBy(-0.25f * (Frame - 7)).RotatedByRandom(0.25f), ModContent.ProjectileType<RedLaser>(), 17, 8);
-                    if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(-(10 + (2 * ((Frame - 7)))), 15).RotatedBy(-0.25f * (Frame - 7)), direction.RotatedBy(-0.25f * (Frame - 7)).RotatedByRandom(0.25f), ModContent.ProjectileType<RedLaser>(), 17, 8);
+                    if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(3 + (2 * ((Frame - 7))), 15).RotatedBy(-0.25f * (Frame - 7)), direction.RotatedBy(-0.25f * (Frame - 7)), ModContent.ProjectileType<RedLaser>(), 17, 8);
+                    if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(-(10 + (2 * ((Frame - 7)))), 15).RotatedBy(-0.25f * (Frame - 7)), direction.RotatedBy(-0.25f * (Frame - 7)), ModContent.ProjectileType<RedLaser>(), 17, 8);
                     if (Frame < 8)
                     {
                         int frameSpeed = 2;
