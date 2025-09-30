@@ -58,7 +58,7 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
         public override void AI()
         {
             // If something has gone wrong with either the beam or the host Prism, destroy the beam.
-            Projectile hostPrism = Main.projectile[(int)HostPrismIndex];
+            NPC hostPrism = Main.npc[(int)HostPrismIndex];
             if (Projectile.type != ModContent.ProjectileType<PrismLaser>() || !hostPrism.active || hostPrism.type != ModContent.ProjectileType<PrismLaser>())
             {
                 Projectile.Kill();
@@ -66,7 +66,7 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
             }
 
             // Grab some variables from the host Prism.
-            Vector2 hostPrismDir = Vector2.Normalize(hostPrism.velocity);
+            Vector2 hostPrismDir = Vector2.Normalize(new Vector2(hostPrism.ai[0], hostPrism.ai[1]));
 
             Projectile.rotation = Projectile.velocity.ToRotation();
 

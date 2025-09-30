@@ -10,6 +10,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Content.Projectiles.OcramProjectile;
+using VanillaModding.Content.Projectiles.PrismLaser;
 
 namespace VanillaModding.Content.NPCs.TheChosenOne
 {
@@ -136,8 +137,10 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
                 if (timer1 > 20)
                 {
                     Vector2 direction = Vector2.UnitY * 10f; // Adjust speed as needed
-                    if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(3 + (2 * ((Frame - 7))), 15).RotatedBy(-0.25f * (Frame - 7)), direction.RotatedBy(-0.25f * (Frame - 7)), ModContent.ProjectileType<RedLaser>(), 17, 8);
-                    if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(-(10 + (2 * ((Frame - 7)))), 15).RotatedBy(-0.25f * (Frame - 7)), direction.RotatedBy(-0.25f * (Frame - 7)), ModContent.ProjectileType<RedLaser>(), 17, 8);
+                    NPC.ai[0] = direction.RotatedBy(-0.25f * (Frame - 7)).X;
+                    NPC.ai[1] = direction.RotatedBy(-0.25f * (Frame - 7)).Y;
+                    if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(3 + (2 * ((Frame - 7))), 15).RotatedBy(-0.25f * (Frame - 7)), direction.RotatedBy(-0.25f * (Frame - 7)), ModContent.ProjectileType<PrismLaser>(), 17, 8, -1, NPC.whoAmI);
+                    if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(-(10 + (2 * ((Frame - 7)))), 15).RotatedBy(-0.25f * (Frame - 7)), direction.RotatedBy(-0.25f * (Frame - 7)), ModContent.ProjectileType<PrismLaser>(), 17, 8, -1, NPC.whoAmI);
                     if (Frame < 8)
                     {
                         int frameSpeed = 2;
