@@ -16,7 +16,7 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
 {
     internal class PrismLaser : ModProjectile
     {
-        float beamLength = 1000f; // Beam distance — adjust for range
+        float beamLength = 2400f; // Beam distance — adjust for range
         float actualBeamLength = 0f;
         public override void SetDefaults()
         {
@@ -54,7 +54,7 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
                 Projectile.velocity = Vector2.Zero;
             }
             Projectile.position = hostNPCActive.Center - new Vector2(Projectile.ai[1], 15);
-            Projectile.rotation = velocityDirection.ToRotation();
+            Projectile.rotation = velocityDirection.RotatedBy(Projectile.ai[2]).ToRotation();
             actualBeamLength = BeamHitScan(3);
         }
 
@@ -63,20 +63,20 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
             Vector2 samplingPoint = Projectile.Center;
 
             Player player = Main.player[Projectile.owner];
-            NPC npc = Main.npc[Projectile.owner];
+            NPC npc = Main.npc[(int)HostNPC];
             if (!Collision.CanHitLine(player.Center, 0, 0, Projectile.Center, 0, 0)) samplingPoint = player.Center;
             if (!Collision.CanHitLine(npc.Center, 0, 0, Projectile.Center, 0, 0)) samplingPoint = npc.Center;
 
             float[] laserScanResults = new float[NumSamplePoints];
-            Collision.LaserScan(samplingPoint, velocityDirection, 0 * Projectile.scale, beamLength, laserScanResults);
+            Collision.LaserScan(samplingPoint, velocityDirection.RotatedBy(Projectile.ai[2]), Projectile.width * 0.5f * Projectile.scale, beamLength, laserScanResults);
             float averageLengthSample = 0f;
             for (int i = 0; i < laserScanResults.Length; ++i)
             {
                 averageLengthSample += laserScanResults[i];
             }
-            //averageLengthSample /= NumSamplePoints;
+            averageLengthSample /= NumSamplePoints;
 
-            return averageLengthSample*3;
+            return averageLengthSample;
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -85,7 +85,7 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
             Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
 
             Vector2 start = Projectile.Center;
-            Vector2 unit = velocityDirection.SafeNormalize(Vector2.UnitX);
+            Vector2 unit = velocityDirection.RotatedBy(Projectile.ai[2]).SafeNormalize(Vector2.UnitX);
             Color beamColor = Color.Red; // Adjustable color
 
             for (float i = 0; i <= actualBeamLength; i += texture.Height)
@@ -96,7 +96,7 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
                     drawPos,
                     null,
                     beamColor,
-                    Projectile.rotation,
+                    Projectile.rotation - MathHelper.PiOver2,
                     new Vector2(texture.Width / 2, texture.Height / 2),
                     1f,
                     SpriteEffects.None,

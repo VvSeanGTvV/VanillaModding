@@ -138,11 +138,19 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
                 if (timer1 > 20)
                 {
                     Vector2 direction = Vector2.UnitY * 10f; // Adjust speed as needed
-                    if (Main.netMode != NetmodeID.MultiplayerClient && laser0 == -1) laser0 = Projectile.NewProjectile(source, NPC.Center - new Vector2(3 + (2 * ((Frame - 7))), 15).RotatedBy(-0.25f * (Frame - 7)), direction.RotatedBy(-0.25f * (Frame - 7)), ModContent.ProjectileType<PrismLaser>(), 17, 8, -1, NPC.whoAmI);
-                    if (Main.netMode != NetmodeID.MultiplayerClient && laser1 == -1) laser1 = Projectile.NewProjectile(source, NPC.Center - new Vector2(-(10 + (2 * ((Frame - 7)))), 15).RotatedBy(-0.25f * (Frame - 7)), direction.RotatedBy(-0.25f * (Frame - 7)), ModContent.ProjectileType<PrismLaser>(), 17, -1, NPC.whoAmI);
-                    
-                    if (laser0 != -1) Main.projectile[laser0].ai[1] = 3 + (2 * ((Frame - 7)));
-                    if (laser1 != -1) Main.projectile[laser1].ai[1] = -(10 + (2 * ((Frame - 7))));
+                    if (Main.netMode != NetmodeID.MultiplayerClient && laser0 == -1) laser0 = Projectile.NewProjectile(source, NPC.Center - new Vector2(3 + (2 * ((Frame - 7))), 15).RotatedBy(-0.25f * (Frame - 7)), direction, ModContent.ProjectileType<PrismLaser>(), 17, 8, -1, NPC.whoAmI);
+                    if (Main.netMode != NetmodeID.MultiplayerClient && laser1 == -1) laser1 = Projectile.NewProjectile(source, NPC.Center - new Vector2(-(10 + (2 * ((Frame - 7)))), 15).RotatedBy(-0.25f * (Frame - 7)), direction, ModContent.ProjectileType<PrismLaser>(), 17, -1, NPC.whoAmI);
+
+                    if (laser0 != -1)
+                    {
+                        Main.projectile[laser0].ai[1] = 3 + (2 * ((Frame - 7)));
+                        Main.projectile[laser0].ai[2] = -0.25f * (Frame - 7);
+                    }
+                    if (laser1 != -1)
+                    {
+                        Main.projectile[laser1].ai[1] = -(10 + (2 * ((Frame - 7))));
+                        Main.projectile[laser1].ai[2] = -0.25f * (Frame - 7);
+                    }
                     if (Frame < 8)
                     {
                         int frameSpeed = 2;
