@@ -26,19 +26,34 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
             Projectile.friendly = false;
             Projectile.penetrate = -1;
             Projectile.tileCollide = false;
-            Projectile.timeLeft = 60; // Short lifespan, update as needed
+            Projectile.timeLeft = 120; // Short lifespan, update as needed
             Projectile.DamageType = DamageClass.Magic;
+        }
+
+        // This property encloses the internal AI variable Projectile.ai[1].
+        private float HostNPC
+        {
+            get => Projectile.ai[0];
+            set => Projectile.ai[0] = value;
         }
 
         Vector2 velocityDirection;
         public override void AI()
         {
             // Beam logic — set velocity direction or position, etc.
+            NPC hostNPCActive = Main.npc[(int)HostNPC];
+            if (!hostNPCActive.active || hostNPCActive.type != ModContent.NPCType<TheChosenOne>())
+            {
+                Projectile.Kill();
+                return;
+            }
+
             if (Projectile.velocity.LengthSquared() > 0)
             {
                 velocityDirection = Projectile.velocity;
                 Projectile.velocity = Vector2.Zero;
             }
+            Projectile.position = hostNPCActive.Center - new Vector2(Projectile.ai[1], 15);
             Projectile.rotation = velocityDirection.ToRotation();
             actualBeamLength = BeamHitScan(3);
         }
@@ -59,9 +74,9 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
             {
                 averageLengthSample += laserScanResults[i];
             }
-            averageLengthSample /= NumSamplePoints;
+            //averageLengthSample /= NumSamplePoints;
 
-            return averageLengthSample;
+            return averageLengthSample*3;
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -70,10 +85,10 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
             Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
 
             Vector2 start = Projectile.Center;
-            Vector2 unit = Projectile.velocity.SafeNormalize(Vector2.UnitX);
+            Vector2 unit = velocityDirection.SafeNormalize(Vector2.UnitX);
             Color beamColor = Color.Red; // Adjustable color
 
-            for (float i = 0; i <= actualBeamLength; i += texture.Height*2)
+            for (float i = 0; i <= actualBeamLength; i += texture.Height)
             {
                 Vector2 drawPos = start + unit * i - Main.screenPosition;
                 Main.spriteBatch.Draw(
