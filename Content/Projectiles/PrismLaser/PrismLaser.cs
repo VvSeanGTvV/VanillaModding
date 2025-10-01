@@ -24,6 +24,7 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
             Projectile.height = 10;
             Projectile.aiStyle = 0;
             Projectile.friendly = false;
+            Projectile.hostile = true;
             Projectile.penetrate = -1;
             Projectile.tileCollide = false;
             Projectile.timeLeft = 120; // Short lifespan, update as needed
@@ -56,6 +57,11 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
             Projectile.position = hostNPCActive.Center - new Vector2(Projectile.ai[1], 15);
             Projectile.rotation = velocityDirection.RotatedBy(Projectile.ai[2]).ToRotation();
             actualBeamLength = BeamHitScan(3);
+
+            if (Main.netMode != NetmodeID.Server)
+            {
+                //ProduceWaterRipples(beamDims);
+            }
         }
 
         private float BeamHitScan(int NumSamplePoints)
@@ -67,8 +73,10 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
             if (!Collision.CanHitLine(player.Center, 0, 0, Projectile.Center, 0, 0)) samplingPoint = player.Center;
             if (!Collision.CanHitLine(npc.Center, 0, 0, Projectile.Center, 0, 0)) samplingPoint = npc.Center;
 
+            // Must match the draw direction!
+            Vector2 unit = velocityDirection.RotatedBy(Projectile.ai[2]).SafeNormalize(Vector2.UnitX);
             float[] laserScanResults = new float[NumSamplePoints];
-            Collision.LaserScan(samplingPoint, velocityDirection.RotatedBy(Projectile.ai[2]), Projectile.width * 0.5f * Projectile.scale, beamLength, laserScanResults);
+            Collision.LaserScan(samplingPoint, unit, Projectile.width * 0.5f * Projectile.scale, beamLength, laserScanResults);
             float averageLengthSample = 0f;
             for (int i = 0; i < laserScanResults.Length; ++i)
             {
@@ -76,7 +84,25 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
             }
             averageLengthSample /= NumSamplePoints;
 
+            Vector2 hitPos = Projectile.Center + unit * actualBeamLength;
+            Dust.NewDustPerfect(hitPos, DustID.RedTorch, Vector2.Zero).noGravity = true;
+
             return averageLengthSample;
+        }
+
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+            // If the target is touching the beam's hitbox (which is a small rectangle vaguely overlapping the host Prism), that's good enough.
+            if (projHitbox.Intersects(targetHitbox))
+            {
+                return true;
+            }
+
+            // Otherwise, perform an AABB line collision check to check the whole beam.
+            float _ = float.NaN;
+            Vector2 unit = velocityDirection.RotatedBy(Projectile.ai[2]).SafeNormalize(Vector2.UnitX);
+            Vector2 beamEndPos = Projectile.Center + unit * actualBeamLength;
+            return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), Projectile.Center, beamEndPos, (Projectile.width + 2) * Projectile.scale, ref _);
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -88,16 +114,23 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
             Vector2 unit = velocityDirection.RotatedBy(Projectile.ai[2]).SafeNormalize(Vector2.UnitX);
             Color beamColor = Color.Red; // Adjustable color
 
-            for (float i = 0; i <= actualBeamLength; i += texture.Height)
+            // Define source rectangles for each frame
+            int frameHeight = texture.Height / 3;
+            Vector2 origin = new Vector2(texture.Width / 2f, frameHeight / 2f);
+
+            for (float i = 1; i <= actualBeamLength; i += Projectile.height)
             {
+                int frame = 0;
+                if (i > 1) frame++;
+                if (i >= actualBeamLength - frameHeight) frame++;
                 Vector2 drawPos = start + unit * i - Main.screenPosition;
                 Main.spriteBatch.Draw(
                     texture,
                     drawPos,
-                    null,
+                    new Rectangle(0, frameHeight * frame, texture.Width, Projectile.height),
                     beamColor,
                     Projectile.rotation - MathHelper.PiOver2,
-                    new Vector2(texture.Width / 2, texture.Height / 2),
+                    origin,
                     1f,
                     SpriteEffects.None,
                     0f
