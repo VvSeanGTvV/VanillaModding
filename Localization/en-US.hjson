@@ -266,7 +266,7 @@ Mods: {
 
 			Stunned: {
 				DisplayName: Stunned
-				Description: Mods.VanillaModding.Buffs.Stunned.Description
+				Description: Can't move.
 			}
 		}
 	}

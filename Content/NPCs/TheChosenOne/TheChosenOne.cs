@@ -143,7 +143,7 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
 
                     if (laser0 != -1)
                     {
-                        Main.projectile[laser0].ai[1] = 0 + (2 * ((Frame - 7)));
+                        Main.projectile[laser0].ai[1] = 3 + (2 * ((Frame - 7)));
                         Main.projectile[laser0].ai[2] = -0.25f * (Frame - 7);
                     }
                     if (laser1 != -1)

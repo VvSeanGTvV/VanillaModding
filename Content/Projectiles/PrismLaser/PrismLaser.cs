@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.GameContent;
+using Terraria.GameContent.Shaders;
+using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Content.NPCs.TheChosenOne;
@@ -16,7 +18,11 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
 {
     internal class PrismLaser : ModProjectile
     {
-        float beamLength = 2400f; // Beam distance — adjust for range
+        // The maximum brightness of the light emitted by the beams. Brightness scales from 0 to this value as the Prism's charge increases.
+        private const float BeamLightBrightness = 0.75f;
+        private const float BeamLength = 2400f; // Beam distance — adjust for range
+
+
         float actualBeamLength = 0f;
         public override void SetDefaults()
         {
@@ -38,11 +44,12 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
             set => Projectile.ai[0] = value;
         }
 
+        NPC hostNPCActive;
         Vector2 velocityDirection;
         public override void AI()
         {
             // Beam logic — set velocity direction or position, etc.
-            NPC hostNPCActive = Main.npc[(int)HostNPC];
+            hostNPCActive = Main.npc[(int)HostNPC];
             if (!hostNPCActive.active || hostNPCActive.type != ModContent.NPCType<TheChosenOne>())
             {
                 Projectile.Kill();
@@ -54,15 +61,28 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
                 velocityDirection = Projectile.velocity;
                 Projectile.velocity = Vector2.Zero;
             }
-            Projectile.position = hostNPCActive.Center - new Vector2(-Projectile.ai[1], 15);
+            Projectile.position = hostNPCActive.Center - new Vector2(Projectile.ai[1], 15);
             Projectile.rotation = velocityDirection.RotatedBy(Projectile.ai[2]).ToRotation();
             actualBeamLength = BeamHitScan(3);
             Main.NewText($"{Projectile.ai[1]} | ID: {Projectile.whoAmI}");
 
+            Vector2 beamDims = new Vector2(velocityDirection.Length() * BeamLength, Projectile.width * Projectile.scale);
             if (Main.netMode != NetmodeID.Server)
             {
-                //ProduceWaterRipples(beamDims);
+                ProduceWaterRipples(beamDims);
             }
+        }
+        private void ProduceWaterRipples(Vector2 beamDims)
+        {
+            WaterShaderData shaderData = (WaterShaderData)Filters.Scene["WaterDistortion"].GetShader();
+
+            // A universal time-based sinusoid which updates extremely rapidly. GlobalTime is 0 to 3600, measured in seconds.
+            float waveSine = 0.1f * (float)Math.Sin(Main.GlobalTimeWrappedHourly * 20f);
+            Vector2 ripplePos = Projectile.position + new Vector2(beamDims.X * 0.5f, 0f).RotatedBy(Projectile.rotation);
+
+            // WaveData is encoded as a Color. Not really sure why.
+            Color waveData = new Color(0.5f, 0.1f * Math.Sign(waveSine) + 0.5f, 0f, 1f) * Math.Abs(waveSine);
+            shaderData.QueueRipple(ripplePos, waveData, beamDims, RippleShape.Square, Projectile.rotation);
         }
 
         private float BeamHitScan(int NumSamplePoints)
@@ -77,7 +97,7 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
             // Must match the draw direction!
             Vector2 unit = velocityDirection.RotatedBy(Projectile.ai[2]).SafeNormalize(Vector2.UnitX);
             float[] laserScanResults = new float[NumSamplePoints];
-            Collision.LaserScan(samplingPoint, unit, Projectile.width * 0.5f * Projectile.scale, beamLength, laserScanResults);
+            Collision.LaserScan(samplingPoint, unit, Projectile.width * 0.5f * Projectile.scale, BeamLength, laserScanResults);
             float averageLengthSample = 0f;
             for (int i = 0; i < laserScanResults.Length; ++i)
             {
@@ -110,8 +130,12 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
         {
             //Texture2D texture = ModContent.Request<Texture2D>("Terraria/Images/Projectile_" + ProjectileID.LaserMachinegunLaser).Value;
             Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+            if (!hostNPCActive.active)
+            {
+                return false;
+            }
 
-            Vector2 start = Projectile.Center;
+            Vector2 start = hostNPCActive.Center - new Vector2(Projectile.ai[1], 15); ;
             Vector2 unit = velocityDirection.RotatedBy(Projectile.ai[2]).SafeNormalize(Vector2.UnitX);
             Color beamColor = Color.Red; // Adjustable color
 
