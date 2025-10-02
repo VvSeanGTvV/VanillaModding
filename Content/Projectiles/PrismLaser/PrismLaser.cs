@@ -20,8 +20,8 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
         float actualBeamLength = 0f;
         public override void SetDefaults()
         {
-            Projectile.width = 10; // Solid line width
-            Projectile.height = 10;
+            Projectile.width = 22; // Solid line width
+            Projectile.height = 22;
             Projectile.aiStyle = 0;
             Projectile.friendly = false;
             Projectile.hostile = true;
@@ -54,9 +54,10 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
                 velocityDirection = Projectile.velocity;
                 Projectile.velocity = Vector2.Zero;
             }
-            Projectile.position = hostNPCActive.Center - new Vector2(Projectile.ai[1], 15);
+            Projectile.position = hostNPCActive.Center - new Vector2(-Projectile.ai[1], 15);
             Projectile.rotation = velocityDirection.RotatedBy(Projectile.ai[2]).ToRotation();
             actualBeamLength = BeamHitScan(3);
+            Main.NewText($"{Projectile.ai[1]} | ID: {Projectile.whoAmI}");
 
             if (Main.netMode != NetmodeID.Server)
             {
@@ -118,10 +119,10 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
             int frameHeight = texture.Height / 3;
             Vector2 origin = new Vector2(texture.Width / 2f, frameHeight / 2f);
 
-            for (float i = 1; i <= actualBeamLength; i += Projectile.height)
+            for (float i = 0; i <= actualBeamLength; i += Projectile.height)
             {
                 int frame = 0;
-                if (i > 1) frame++;
+                if (i > 0) frame++;
                 if (i >= actualBeamLength - frameHeight) frame++;
                 Vector2 drawPos = start + unit * i - Main.screenPosition;
                 Main.spriteBatch.Draw(
@@ -131,7 +132,7 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
                     beamColor,
                     Projectile.rotation - MathHelper.PiOver2,
                     origin,
-                    1f,
+                    Projectile.scale,
                     SpriteEffects.None,
                     0f
                 );
