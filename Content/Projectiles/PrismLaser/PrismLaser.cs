@@ -64,7 +64,7 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
             Projectile.position = hostNPCActive.Center - new Vector2(Projectile.ai[1], 15);
             Projectile.rotation = velocityDirection.RotatedBy(Projectile.ai[2]).ToRotation();
             actualBeamLength = BeamHitScan(3);
-            Main.NewText($"{Projectile.ai[1]} | ID: {Projectile.whoAmI}");
+            //Main.NewText($"{Projectile.ai[1]} | ID: {Projectile.whoAmI}");
 
             Vector2 beamDims = new Vector2(velocityDirection.Length() * BeamLength, Projectile.width * Projectile.scale);
             if (Main.netMode != NetmodeID.Server)
@@ -72,6 +72,7 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
                 ProduceWaterRipples(beamDims);
             }
         }
+
         private void ProduceWaterRipples(Vector2 beamDims)
         {
             WaterShaderData shaderData = (WaterShaderData)Filters.Scene["WaterDistortion"].GetShader();
@@ -89,9 +90,8 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
         {
             Vector2 samplingPoint = Projectile.Center;
 
-            Player player = Main.player[Projectile.owner];
             NPC npc = Main.npc[(int)HostNPC];
-            if (!Collision.CanHitLine(player.Center, 0, 0, Projectile.Center, 0, 0)) samplingPoint = player.Center;
+            //if (!Collision.CanHitLine(player.Center, 0, 0, Projectile.Center, 0, 0)) samplingPoint = player.Center;
             if (!Collision.CanHitLine(npc.Center, 0, 0, Projectile.Center, 0, 0)) samplingPoint = npc.Center;
 
             // Must match the draw direction!
@@ -106,7 +106,8 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
             averageLengthSample /= NumSamplePoints;
 
             Vector2 hitPos = Projectile.Center + unit * actualBeamLength;
-            Dust.NewDustPerfect(hitPos, DustID.RedTorch, Vector2.Zero).noGravity = true;
+            Dust hitDust = Dust.NewDustPerfect(hitPos, DustID.RedTorch, new Vector2(Main.rand.NextFloat(-4f, 4f), Main.rand.NextFloat(-2f, -4f)));
+            hitDust.noGravity = true;
 
             return averageLengthSample;
         }
@@ -143,11 +144,12 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
             int frameHeight = texture.Height / 3;
             Vector2 origin = new Vector2(texture.Width / 2f, frameHeight / 2f);
 
-            for (float i = 0; i <= actualBeamLength; i += Projectile.height)
+            float totalLength = (Projectile.height + actualBeamLength);
+            for (float i = 0; i <= totalLength; i += Projectile.height)
             {
                 int frame = 0;
                 if (i > 0) frame++;
-                if (i >= actualBeamLength - frameHeight) frame++;
+                if (i >= (totalLength - frameHeight)) frame++;
                 Vector2 drawPos = start + unit * i - Main.screenPosition;
                 Main.spriteBatch.Draw(
                     texture,

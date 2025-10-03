@@ -169,6 +169,10 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
                         if (NPC.frameCounter > frameSpeed)
                         {
                             stg++;
+                            if (laser0 != -1) Main.projectile[laser0].Kill();
+                            if (laser1 != -1) Main.projectile[laser1].Kill();
+                            Frame = 4;
+                            laser0 = laser1 = -1;
                             timer1 = 0;
                         }
                     }
@@ -182,6 +186,10 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
                     Frame = 6;
                 }
             } 
+            if (stg == 1)
+            {
+
+            }
         }
 
         public override void FindFrame(int frameHeight)
