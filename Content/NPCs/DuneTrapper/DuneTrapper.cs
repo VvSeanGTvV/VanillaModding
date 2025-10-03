@@ -404,6 +404,8 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 
         void spikenooo(Projectile proj = null)
         {
+            if (Main.netMode == NetmodeID.MultiplayerClient) return;
+            if (Main.rand.Next(4) <= 2) return;
             if (proj != null && proj.velocity.LengthSquared() > 0f)
             {
 

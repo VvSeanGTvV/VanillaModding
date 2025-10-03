@@ -1,5 +1,39 @@
 Mods: {
 	VanillaModding: {
+		Buffs: {
+			DiceBuff: {
+				DisplayName: Dice Buff
+				Description: Buffed up dependent on Dice Roll Number
+			}
+
+			SandTrapperPetBuff: {
+				DisplayName: Duny Trapi Pet
+				Description: A cool looking smol pet, that has detachable spikes.
+			}
+
+			DiceDebuff: {
+				DisplayName: Dice Debuff
+				Description: Weakened dependent on Dice Roll Number
+			}
+
+			Stunned: {
+				DisplayName: Stunned
+				Description: Can't move.
+			}
+		}
+
+		Achievements: {
+			DuneTrapperKilled: {
+				FriendlyName: King of the Sandstorm
+				Description: Defeat Dune Trapper, an massive worm menace who loved to be within the Sandstorm event.
+			}
+
+			NotFriendlyDrone: {
+				FriendlyName: Not Friendly Guy
+				Description: Many Delivery Drones killed. Dude, they are just trying to deliver packages to you!
+			}
+		}
+
 		Items: {
 			BasicSword: {
 				DisplayName: Dirt Sword
@@ -31,9 +65,9 @@ Mods: {
 				Tooltip: Old Copyrighted stuff
 			}
 
-			OcramSummon: {
-				DisplayName: Suspicious Looking Skull
-				Tooltip: Summons Ocram
+			Tizona: {
+				DisplayName: Tizona
+				Tooltip: Has a chance to cause Bleeding
 			}
 
 			SoulofBlight: {
@@ -46,14 +80,19 @@ Mods: {
 				Tooltip: Why?
 			}
 
-			Tizona: {
-				DisplayName: Tizona
-				Tooltip: Has a chance to cause Bleeding
+			OcramSummon: {
+				DisplayName: Suspicious Looking Skull
+				Tooltip: Summons Ocram
 			}
 
 			SiriusSummon: {
 				DisplayName: Mysterious Red Soul
 				Tooltip: A very red soul.
+			}
+
+			SandTrapperSummon: {
+				DisplayName: Suspicious Looking Fossil
+				Tooltip: Summons Dune Trapper
 			}
 
 			HornOPlenty: {
@@ -66,14 +105,14 @@ Mods: {
 				Tooltip: Right Click to open
 			}
 
+			SandTrapperBag: {
+				DisplayName: Treasure Bag (Sand Trapper)
+				Tooltip: Right Click to open
+			}
+
 			BloodyScythe: {
 				DisplayName: Bloody Sickle
 				Tooltip: Shoots a bloody sickle
-			}
-
-			SandTrapperBag: {
-				DisplayName: Treasure Bag (Sand Trapper)
-				Tooltip: ""
 			}
 
 			SandTrapperStaff: {
@@ -102,24 +141,19 @@ Mods: {
 				SelfDamage: "{0} (x{1}) explosion damage"
 			}
 
-			Sharanga: {
-				DisplayName: Spectral Sharanga
-				Tooltip: Transforms any suitable ammo into Spectral Arrows
-			}
-
 			TorosHead: {
-				DisplayName: Toros Head
-				Tooltip: ""
+				DisplayName: Toro's Head
+				Tooltip: A Japanese set from Toro Inoue! Hello Sony!
 			}
 
 			TorosChest: {
-				DisplayName: Toros Chest
-				Tooltip: ""
+				DisplayName: Toro's Chest
+				Tooltip: A Japanese set from Toro Inoue! Hello Sony!
 			}
 
 			TorosLegs: {
-				DisplayName: Toros Legs
-				Tooltip: ""
+				DisplayName: Toro's Legs
+				Tooltip: A Japanese set from Toro Inoue! Hello Sony!
 			}
 
 			LesserRestoration_Potion: {
@@ -132,9 +166,19 @@ Mods: {
 				Tooltip: A legendary spear with tip coated in venom for poison usage in penetration
 			}
 
+			Sharanga: {
+				DisplayName: Spectral Sharanga
+				Tooltip: Transforms any suitable ammo into Spectral Arrows
+			}
+
 			VulcanRepeater: {
 				DisplayName: Vulcan Repeater
 				Tooltip: Transforms any suitable ammo into Vulcan Bolts
+			}
+
+			BoringBow: {
+				DisplayName: Boring Bow (wip)
+				Tooltip: ""
 			}
 
 			VulcanBolt_Ammo: {
@@ -152,19 +196,14 @@ Mods: {
 				Tooltip: Explosive Air Mine, last for good 5 seconds before self-detonation or explodes on Entity or Tile Impact
 			}
 
+			HeartArrow_Ammo: {
+				DisplayName: Heart Arrow
+				Tooltip: Legendary arrows from cupid himself, has a chance to stun enemies on hit! Though don't even try doing this to a boss.
+			}
+
 			OcramTrophy: {
 				DisplayName: Ocram Trophy
 				Tooltip: ""
-			}
-
-			BoringBow: {
-				DisplayName: Boring Bow
-				Tooltip: ""
-			}
-
-			SandTrapperSummon: {
-				DisplayName: Suspicious Looking Fossil
-				Tooltip: Summons Dune Trapper
 			}
 
 			Dice: {
@@ -178,16 +217,9 @@ Mods: {
 				DisplayName: Mysterious Package
 				Tooltip: Call a Delivery Drone to deliver a mysterious package to you!
 			}
-
-			HeartArrow_Ammo: {
-				DisplayName: Heart Arrow
-				Tooltip: Legendary arrows from cupid himself, has a chance to stun enemies on hit! Though don't even try doing this to a boss.
-			}
 		}
 
 		NPCs: {
-			DuneTrapperBody.DisplayName: Dune Trapper
-			DuneTrapperTail.DisplayName: Dune Trapper
 			DuneSplicerCloneBody.DisplayName: Dune Splicer Clone
 			DuneSplicerCloneHead.DisplayName: Dune Splicer Clone
 			DuneSplicerCloneTail.DisplayName: Dune Splicer Clone
@@ -196,6 +228,9 @@ Mods: {
 				DisplayName: Ocram
 				Bestiary: A Classical boss from the combined from Skull and two Eyes of the mech. Forged with Bars and merged with souls.
 			}
+
+			DuneTrapperBody.DisplayName: Dune Trapper
+			DuneTrapperTail.DisplayName: Dune Trapper
 
 			DuneTrapperHead: {
 				DisplayName: Dune Trapper
@@ -246,28 +281,6 @@ Mods: {
 			PackageProjectile.DisplayName: Package
 			HeartArrow.DisplayName: Heart Arrow
 			PrismLaser.DisplayName: Prism Laser
-		}
-
-		Buffs: {
-			DiceBuff: {
-				DisplayName: Dice Buff
-				Description: Buffed up dependent on Dice Roll Number
-			}
-
-			SandTrapperPetBuff: {
-				DisplayName: Duny Trapi Pet
-				Description: A cool looking smol pet, that has detachable spikes.
-			}
-
-			DiceDebuff: {
-				DisplayName: Dice Debuff
-				Description: Weakened dependent on Dice Roll Number
-			}
-
-			Stunned: {
-				DisplayName: Stunned
-				Description: Can't move.
-			}
 		}
 	}
 }
