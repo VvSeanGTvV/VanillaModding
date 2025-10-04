@@ -9,6 +9,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using VanillaModding.Content.NPCs.DuneTrapper;
+using VanillaModding.Common.Systems;
 
 namespace VanillaModding.Content.Projectiles.Bombs
 {
@@ -16,13 +17,6 @@ namespace VanillaModding.Content.Projectiles.Bombs
     {
         private const int DefaultWidthHeight = 26;
         private const int ExplosionWidthHeight = 250;
-
-        SoundStyle AHH = new SoundStyle($"{nameof(VanillaModding)}/Assets/Sounds/Bombs/HolyHandGrenadeHallelujah")
-        {
-            Volume = 1f,
-            //PitchVariance = 1f,
-            MaxInstances = 25,
-        };
 
         public override void SetDefaults()
         {
@@ -154,7 +148,7 @@ namespace VanillaModding.Content.Projectiles.Bombs
 
             if (Projectile.timeLeft <= 100 && !played && Projectile.ai[1] == 0)
             {
-                SoundEngine.PlaySound(AHH, Projectile.position);
+                SoundEngine.PlaySound(VanillaModdingSoundID.Hallelujah, Projectile.position);
                 played = true;
             }
         }

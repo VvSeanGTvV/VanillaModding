@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Shaders;
 using Terraria.Graphics.Effects;
@@ -14,9 +15,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Content.NPCs.TheChosenOne;
 
-namespace VanillaModding.Content.Projectiles.PrismLaser
+namespace VanillaModding.Content.Projectiles.RedSolidLaser
 {
-    internal class PrismLaser : ModProjectile
+    internal class RedSolidLaser : ModProjectile
     {
         // The maximum brightness of the light emitted by the beams. Brightness scales from 0 to this value as the Prism's charge increases.
         private const float BeamLightBrightness = 0.75f;
@@ -26,8 +27,8 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
         float actualBeamLength = 0f;
         public override void SetDefaults()
         {
-            Projectile.width = 22; // Solid line width
-            Projectile.height = 22;
+            Projectile.width = 16; // Solid line width
+            Projectile.height = 16;
             Projectile.aiStyle = 0;
             Projectile.friendly = false;
             Projectile.hostile = true;
@@ -71,6 +72,8 @@ namespace VanillaModding.Content.Projectiles.PrismLaser
             {
                 ProduceWaterRipples(beamDims);
             }
+
+            SoundEngine.PlaySound(SoundID.Item15, Projectile.position);
         }
 
         private void ProduceWaterRipples(Vector2 beamDims)

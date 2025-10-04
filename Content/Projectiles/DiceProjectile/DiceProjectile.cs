@@ -6,9 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using VanillaModding.Common.Systems;
 using VanillaModding.Content.Buffs;
 using VanillaModding.Content.Items.Consumable;
 using VanillaModding.External.AI;
@@ -17,6 +20,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
 {
     internal class DiceProjectile : ModProjectile
     {
+
         public readonly int buffLast = 60 * 5;
         public readonly int maxRollTime = 60 * 10;
         public readonly int maxDisplayTime = 60 * 3;
@@ -75,6 +79,8 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
                     mult = Main.rand.Next(0, 6);
                     Projectile.frame = mult + (diceType * frameCount);
                     waut = 0;
+                    //SoundEngine.PlaySound(SoundID.Item17, Projectile.position);
+                    SoundEngine.PlaySound(SoundID.Item40, Projectile.position);
                 }
             }
             else if (!once)
@@ -85,6 +91,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
                     player.AddBuff(ModContent.BuffType<DiceBuff>(), buffLast * modPlayer.totalRolls);
                     once = true;
                     isEffect = true;
+                    SoundEngine.PlaySound(SoundID.Item4, Projectile.position);
                 }
                 if (diceType == 1)
                 {
@@ -92,6 +99,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
                     //player.statLife = Math.Min(amount, player.statLifeMax2);
                     once = true;
                     player.HealEffect(amount, true);
+                    SoundEngine.PlaySound(SoundID.Item4, Projectile.position);
                 }
                 if (diceType == 2)
                 {
@@ -99,11 +107,31 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
                     player.AddBuff(ModContent.BuffType<DiceDebuff>(), buffLast * modPlayer.totalRolls);
                     once = true;
                     isEffect = true;
+                    SoundEngine.PlaySound(SoundID.Item40, Projectile.position);
                 }
                 if (diceType == 3)
                 {
                     player.KillMe(PlayerDeathReason.ByCustomReason(Dice.BadLuckDeath.ToNetworkText()), player.statLifeMax2*2, 0);
                     once = true;
+
+                    for (int i = 0; i < 20; i++)
+                    {
+                        Dust dust = Dust.NewDustDirect(player.position, player.width, player.height, DustID.Smoke, 0f, 0f, 100, default, 2f);
+                        dust.velocity *= 1.4f;
+                    }
+
+                    // Fire Dust spawn
+                    for (int i = 0; i < 40; i++)
+                    {
+                        Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.IceTorch, 0f, 0f, 100, default, 3f);
+                        dust.noGravity = true;
+                        dust.velocity *= 5f;
+                        dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.IceTorch, 0f, 0f, 100, default, 2f);
+                        dust.velocity *= 3f;
+                    }
+
+                    SoundEngine.PlaySound(SoundID.Item37, Projectile.position);
+                    SoundEngine.PlaySound(VanillaModdingSoundID.DeathNoteItemAsylum, Projectile.position);
                 }
                 modPlayer.rolling = false;
             } 

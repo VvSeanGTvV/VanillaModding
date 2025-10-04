@@ -16,6 +16,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
+using VanillaModding.Common.Systems;
 using VanillaModding.Content.Projectiles.PackageProjectile;
 using VanillaModding.Content.Projectiles.Tizona;
 using static System.Net.Mime.MediaTypeNames;
@@ -32,17 +33,6 @@ namespace VanillaModding.Content.NPCs.DeliveryDrone
 
     internal class DeliveryDrone : ModNPC
     {
-        public static SoundStyle SoundWhirr()
-        {
-            SoundStyle SS = new SoundStyle($"{nameof(VanillaModding)}/Assets/Sounds/DeliveryDrone/DroneWhirr")
-            {
-                Volume = 0.05f,
-                PitchVariance = 0f,
-                MaxInstances = 25,
-                IsLooped = false,
-            };
-            return SS;
-        }
         public static LocalizedText BestiaryText
         {
             get; private set;
@@ -108,7 +98,7 @@ namespace VanillaModding.Content.NPCs.DeliveryDrone
         }
 
 
-        SoundStyle Whirr = SoundWhirr();
+        SoundStyle Whirr = VanillaModdingSoundID.Whirr;
         public override void AI()
         {
             int deliveryTo = (int)NPC.ai[0];

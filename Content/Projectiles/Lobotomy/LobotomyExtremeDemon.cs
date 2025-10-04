@@ -5,6 +5,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Common.Systems;
 using VanillaModding.External.AI;
 
 namespace VanillaModding.Content.Projectiles.Lobotomy
@@ -13,17 +14,6 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
     // Can be tested with ExampleCustomAmmoGun
     public class LobotomyExtremeDemon : ModProjectile
     {
-        public static SoundStyle SoundEpicDeep()
-        {
-            SoundStyle SS = new SoundStyle($"{nameof(VanillaModding)}/Assets/Sounds/Lobotomy/FireInTheHole")
-            {
-                Volume = 1f,
-                Pitch = 0.25f,
-                PitchVariance = 0.25f,
-                MaxInstances = 25,
-            };
-            return SS;
-        }
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true; // Make the cultist resistant to this projectile, as it's resistant to all homing projectiles.
@@ -92,7 +82,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
 
         public override void OnKill(int timeLeft)
         {
-            SoundEngine.PlaySound(SoundEpicDeep(), Projectile.position);
+            SoundEngine.PlaySound(VanillaModdingSoundID.FireInTheHole, Projectile.position);
         }
         public override void OnSpawn(IEntitySource source)
         {

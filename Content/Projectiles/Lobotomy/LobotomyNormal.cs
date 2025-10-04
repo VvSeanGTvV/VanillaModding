@@ -7,21 +7,12 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Common.Systems;
 
 namespace VanillaModding.Content.Projectiles.Lobotomy
 {
     public class LobotomyNormal : ModProjectile
     {
-        public static SoundStyle SoundEpic()
-        {
-            SoundStyle SS = new SoundStyle($"{nameof(VanillaModding)}/Assets/Sounds/Lobotomy/FireintheHole_HIGH")
-            {
-                Volume = 1f,
-                PitchVariance = 1f,
-                MaxInstances = 25,
-            };
-            return SS;
-        }
 
         private float rotdef = 0f;
         public bool enemySide = false;
@@ -72,7 +63,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             else
             {
                 Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
-                SoundEngine.PlaySound(SoundEpic(), Projectile.position);
+                SoundEngine.PlaySound(VanillaModdingSoundID.FireInTheHoleHigh, Projectile.position);
 
                 // If the projectile hits the left or right side of the tile, reverse the X velocity
                 if (Math.Abs(Projectile.velocity.X - oldVelocity.X) > float.Epsilon)
@@ -112,7 +103,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
 
             // This code and the similar code above in OnTileCollide spawn dust from the tiles collided with. SoundID.Item10 is the bounce sound you hear.
             Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
-            SoundEngine.PlaySound(SoundEpic(), Projectile.position);
+            SoundEngine.PlaySound(VanillaModdingSoundID.FireInTheHoleHigh, Projectile.position);
         }
 
         public override void OnSpawn(IEntitySource data)
