@@ -80,7 +80,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
                     Projectile.frame = mult + (diceType * frameCount);
                     waut = 0;
                     //SoundEngine.PlaySound(SoundID.Item17, Projectile.position);
-                    SoundEngine.PlaySound(SoundID.Item40, Projectile.position);
+                    //SoundEngine.PlaySound(SoundID.Item40, Projectile.position); TOO ANNOYING lol
                 }
             }
             else if (!once)
