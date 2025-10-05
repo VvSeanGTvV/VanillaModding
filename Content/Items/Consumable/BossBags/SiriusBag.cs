@@ -7,7 +7,7 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
-using VanillaModding.Content.Items.SoulofEssence;
+using VanillaModding.Content.Items.Materials;
 
 namespace VanillaModding.Content.Items.Consumable.BossBags
 {

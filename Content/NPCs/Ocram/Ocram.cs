@@ -16,6 +16,7 @@ using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using VanillaModding.Common.Systems;
 using VanillaModding.Content.NPCs.Ocram.Ocram_Minions;
 using VanillaModding.Content.Projectiles.OcramProjectile;
 
@@ -123,7 +124,7 @@ namespace VanillaModding.Content.NPCs.Ocram
 
             if (!Main.dedServ)
             {
-                Music = MusicLoader.GetMusicSlot(Mod, "Assets/Music/Ocram");
+                Music = VanillaModdingMusicID.Ocram;
             }
             ocramServants = new int[MaxMinions];
         }
@@ -219,7 +220,7 @@ namespace VanillaModding.Content.NPCs.Ocram
 
             //NPC POSITION OFFSET GUARD
             Vector2 abovePlayer = target.Top + new Vector2(NPC.direction, -(NPC.height + offsetY));
-            Vector2 sidePlayer = (leftSide ? target.Left : target.Right) + new Vector2((leftSide ? -(NPC.width + offsetX) : (NPC.width + offsetX)), NPC.direction);
+            Vector2 sidePlayer = (leftSide ? target.Left : target.Right) + new Vector2((leftSide ? -(NPC.width + offsetX) : -(NPC.width - offsetX)), NPC.direction);
 
             int minionsCount = totalMinionsActive();
             if (minionsCount <= (int)Math.Round(MaxMinions / 2f)) metRequirementsMinion = false;
@@ -240,7 +241,8 @@ namespace VanillaModding.Content.NPCs.Ocram
                 FrontArmAngle = (float)Math.Sin(i1) / divAng;
                 MidArmAngle = (float)Math.Sin(i2) / divAng;
                 BackArmAngle = (float)Math.Sin(i3) / divAng;
-                if (!onSide) NPC.velocity = -Vector2.Lerp(-NPC.velocity, (NPC.Center - abovePlayer).SafeNormalize(Vector2.Zero) * npcSpeed, npcAccel * 2.25f); else NPC.velocity = -Vector2.Lerp(-NPC.velocity, (NPC.Center - sidePlayer).SafeNormalize(Vector2.Zero) * npcSpeed, npcAccel * 2.25f);
+                if (!onSide) NPC.velocity = -Vector2.Lerp(-NPC.velocity, (NPC.Center - abovePlayer).SafeNormalize(Vector2.Zero) * npcSpeed, npcAccel * 2.25f); 
+                else NPC.velocity = -Vector2.Lerp(-NPC.velocity, (NPC.Center - sidePlayer).SafeNormalize(Vector2.Zero) * npcSpeed, npcAccel * 4f);
             }
 
             t1++;

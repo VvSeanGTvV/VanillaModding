@@ -8,9 +8,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
 using VanillaModding.Content.NPCs.Sirius;
-using VanillaModding.Content.Items.SoulofEssence;
 using Terraria.DataStructures;
 using Microsoft.Xna.Framework;
+using VanillaModding.Content.Items.Materials;
 
 namespace VanillaModding.Content.Items.Consumable.BossSummon
 {

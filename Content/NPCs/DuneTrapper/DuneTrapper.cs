@@ -13,7 +13,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using VanillaModding.Common.Systems;
 using VanillaModding.Content.Items.Consumable.BossBags;
-using VanillaModding.Content.Items.SoulofEssence;
+using VanillaModding.Content.Items.Materials;
 using VanillaModding.Content.Projectiles.DuneTrapper;
 
 namespace VanillaModding.Content.NPCs.DuneTrapper
@@ -87,7 +87,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             // The following code assigns a music track to the boss in a simple way.
             if (!Main.dedServ)
             {
-                Music = MusicLoader.GetMusicSlot(Mod, "Assets/Music/GettingSandy");
+                Music = VanillaModdingMusicID.GettingSandy;
             }
         }
 
@@ -405,7 +405,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
         void spikenooo(Projectile proj = null)
         {
             if (Main.netMode == NetmodeID.MultiplayerClient) return;
-            if (Main.rand.Next(4) <= 2) return;
+            if (Main.rand.Next(4) != 0) return;
             if (proj != null && proj.velocity.LengthSquared() > 0f)
             {
 

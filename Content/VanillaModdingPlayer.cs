@@ -27,11 +27,17 @@ namespace VanillaModding.Content
         /// </summary>
         public int totalRolls;
 
+        /// <summary>
+        /// has been stunned by the Stunned debuff
+        /// </summary>
+        public bool stunned;
+
         // The ResetEffects hook is important for buffs to work correctly.
         // It resets the effects applied by your buff when it expires.
         public override void ResetEffects()
         {
             hasAnyDiceEffect = false;
+            stunned = false;
         }
 
         /// <summary>

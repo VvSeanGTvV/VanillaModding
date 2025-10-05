@@ -5,7 +5,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using VanillaModding.Content.Items.SoulofEssence;
+using VanillaModding.Content.Items.Materials;
 using VanillaModding.Content.Projectiles.Tonbogiri;
 
 namespace VanillaModding.Content.Items.Weapon.Melee

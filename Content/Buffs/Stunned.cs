@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
+using VanillaModding.Common.GlobalNPCs;
 
 namespace VanillaModding.Content.Buffs
 {
@@ -19,12 +20,17 @@ namespace VanillaModding.Content.Buffs
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            npc.velocity = Vector2.Zero;
+            StunnedNPC stunNPC = npc.GetGlobalNPC<StunnedNPC>();
+            npc.velocity = new Vector2(0, 6);
+            npc.frameCounter = 0;
+            stunNPC.stunned = true;
         }
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.velocity = Vector2.Zero;
+            VanillaModdingPlayer modPlayer = player.GetModPlayer<VanillaModdingPlayer>();
+            player.velocity = new Vector2(0, 6);
+            modPlayer.stunned = true;
         }
     }
 }

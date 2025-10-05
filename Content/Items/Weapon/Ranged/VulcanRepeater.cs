@@ -9,7 +9,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Content.Projectiles.Arrows;
-using VanillaModding.Content.Items.SoulofEssence;
+using VanillaModding.Content.Items.Materials;
 
 namespace VanillaModding.Content.Items.Weapon.Ranged
 {

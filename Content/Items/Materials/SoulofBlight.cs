@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria.GameContent;
 
-namespace VanillaModding.Content.Items.SoulofEssence
+namespace VanillaModding.Content.Items.Materials
 {
     internal class SoulofBlight : ModItem
     {
@@ -33,17 +33,18 @@ namespace VanillaModding.Content.Items.SoulofEssence
             Item.width = 18;
             Item.height = 18;
             Item.maxStack = Item.CommonMaxStack;
-            Item.value = 2000;
+
+            Item.value = Item.sellPrice(gold: 1, silver: 50);
             Item.rare = ItemRarityID.Pink;
         }
 
-        public override void PostUpdate()
+        /*public override void PostUpdate()
         {
             Lighting.AddLight(Item.Center, new Vector3(1f, 1f, 0.824f) * 0.55f * Main.essScale); // Makes this item glow when thrown out of inventory.
-        }
+        }*/
+        public override void PostUpdate()
+            => Lighting.AddLight(Item.Center, Color.Yellow.ToVector3() * 0.45f * Main.essScale);
         public override Color? GetAlpha(Color lightColor)
-        {
-            return new Color(1f * 0.97f, 1f * 0.97f, 0.824f * 0.97f, 0.5f);
-        }
+            => new Color(1f * 0.97f, 1f * 0.97f, 0.824f * 0.97f, 0.5f);
     }
 }

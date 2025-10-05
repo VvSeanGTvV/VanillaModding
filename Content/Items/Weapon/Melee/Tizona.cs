@@ -4,7 +4,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using VanillaModding.Content.Items.SoulofEssence;
+using VanillaModding.Content.Items.Materials;
 using VanillaModding.Content.Projectiles.Tizona;
 
 namespace VanillaModding.Content.Items.Weapon.Melee

@@ -217,6 +217,16 @@ Mods: {
 				DisplayName: Mysterious Package
 				Tooltip: Call a Delivery Drone to deliver a mysterious package to you!
 			}
+
+			AltRainMusicBox: {
+				DisplayName: Music Box (Morning Rain)
+				Tooltip: ""
+			}
+
+			ValentineRing: {
+				DisplayName: Valentine Ring
+				Tooltip: Give it to someone special! 50% health regeneration. Increases jump height
+			}
 		}
 
 		NPCs: {
@@ -281,7 +291,7 @@ Mods: {
 			PackageProjectile.DisplayName: Package
 			HeartArrow.DisplayName: Heart Arrow
 			PrismLaser.DisplayName: Prism Laser
-			RedSolidLaser.DisplayName: Red Solid Laser
+			RedSolidLaser.DisplayName: Red Laser
 		}
 	}
 }

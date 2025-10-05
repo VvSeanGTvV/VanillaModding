@@ -128,6 +128,7 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
         }
 
         int laser0 = -1, laser1 = -1;
+        float angle = -1f;
         public void FirstStage()
         {
             var source = NPC.GetSource_FromAI();
@@ -143,23 +144,27 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
 
                     if (laser0 != -1)
                     {
-                        Main.projectile[laser0].ai[1] = 3 + (2 * ((Frame - 7)));
-                        Main.projectile[laser0].ai[2] = -0.25f * (Frame - 7);
+                        Main.projectile[laser0].ai[1] = 3 + (2 * angle);
+                        Main.projectile[laser0].ai[2] = -0.25f * angle;
                     }
                     if (laser1 != -1)
                     {
-                        Main.projectile[laser1].ai[1] = -(10 + (2 * ((Frame - 7))));
-                        Main.projectile[laser1].ai[2] = -0.25f * (Frame - 7);
+                        Main.projectile[laser1].ai[1] = -(10 + (2 * angle));
+                        Main.projectile[laser1].ai[2] = -0.25f * angle;
                     }
+
+                    angle += 0.25f;
                     if (Frame < 8)
                     {
-                        int frameSpeed = 2;
+                        
+                        Frame = 7 + (int)Math.Round(angle);
+                        /*int frameSpeed = 2;
                         NPC.frameCounter += 0.5f;
                         if (NPC.frameCounter > frameSpeed)
                         {
                             NPC.frameCounter = 0;
                             Frame++;
-                        }
+                        }*/
                     }
                     else
                     {
@@ -173,7 +178,7 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
                             if (laser1 != -1) Main.projectile[laser1].Kill();
                             Frame = 4;
                             laser0 = laser1 = -1;
-                            timer1 = 0;
+                            angle = timer1 = 0;
                         }
                     }
                 }

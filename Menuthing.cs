@@ -10,6 +10,7 @@ using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
+using VanillaModding.Common.Systems;
 
 namespace VanillaModding
 {
@@ -23,7 +24,7 @@ namespace VanillaModding
 
         //public override Asset<Texture2D> MoonTexture => ModContent.Request<Texture2D>($"{menuAssetPath}/ExampliumMoon");
 
-        public override int Music => MusicLoader.GetMusicSlot(Mod, "Assets/Music/NowhereHome");
+        public override int Music => VanillaModdingMusicID.NowhereHome;
 
         //public override ModSurfaceBackgroundStyle MenuBackgroundStyle => ModContent.GetInstance<ExampleSurfaceBackgroundStyle>();
 
