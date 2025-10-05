@@ -227,6 +227,11 @@ Mods: {
 				DisplayName: Valentine Ring
 				Tooltip: Give it to someone special! 50% health regeneration. Increases jump height
 			}
+
+			RedEnvelope: {
+				DisplayName: Red Envelope
+				Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+			}
 		}
 
 		NPCs: {
