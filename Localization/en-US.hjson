@@ -75,11 +75,6 @@ Mods: {
 				Tooltip: "'The essence of pure infection'"
 			}
 
-			HolyHandGrenade: {
-				DisplayName: Holy Hand Grenade
-				Tooltip: Why?
-			}
-
 			OcramSummon: {
 				DisplayName: Suspicious Looking Skull
 				Tooltip: Summons Ocram
@@ -98,6 +93,11 @@ Mods: {
 			HornOPlenty: {
 				DisplayName: Horn o' Plenty
 				Tooltip: It is filled with the inexhaustible gifts of celebratory fruits.
+			}
+
+			LesserRestoration_Potion: {
+				DisplayName: Lesser Restoration Potion
+				Tooltip: Reduced potion cooldown
 			}
 
 			SiriusBag: {
@@ -130,11 +130,6 @@ Mods: {
 				Tooltip: Increases maximum life by {0}
 			}
 
-			PhasicWarpEjector: {
-				DisplayName: Phasic Disc Ejector
-				Tooltip: Launches a explosive land mine.
-			}
-
 			KoboldDynamiteBackpack: {
 				DisplayName: Dynamite Backpack
 				Tooltip: Explodes upon the player's death. One time use.
@@ -156,9 +151,19 @@ Mods: {
 				Tooltip: A Japanese set from Toro Inoue! Hello Sony!
 			}
 
-			LesserRestoration_Potion: {
-				DisplayName: Lesser Restoration Potion
-				Tooltip: Reduced potion cooldown
+			HolyHandGrenade: {
+				DisplayName: Holy Hand Grenade
+				Tooltip: Why?
+			}
+
+			Firecracker: {
+				DisplayName: Firecracker
+				Tooltip: Throw multiple Firecrackers in a 3 second fuse.
+			}
+
+			PhasicWarpEjector: {
+				DisplayName: Phasic Disc Ejector
+				Tooltip: Launches a explosive land mine.
 			}
 
 			Tonbogiri: {
@@ -232,6 +237,21 @@ Mods: {
 				DisplayName: Red Envelope
 				Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 			}
+
+			OutrageousBuildersClubHardHat: {
+				DisplayName: Outrageous Builders Club Hard Hat
+				Tooltip: This hard hat is a nod reference to the Roblox's Builders Club membership.
+			}
+
+			BuildersClubHardHat: {
+				DisplayName: Builders Club Hard Hat
+				Tooltip: This hard hat is a nod reference to the Roblox's Builders Club membership.
+			}
+
+			TurboBuildersClubHardHat: {
+				DisplayName: Turbo Builders Club Hard Hat
+				Tooltip: This hard hat is a nod reference to the Roblox's Builders Club membership.
+			}
 		}
 
 		NPCs: {
@@ -297,6 +317,7 @@ Mods: {
 			HeartArrow.DisplayName: Heart Arrow
 			PrismLaser.DisplayName: Prism Laser
 			RedSolidLaser.DisplayName: Red Laser
+			FirecrackerBomb.DisplayName: Firecracker
 		}
 	}
 }

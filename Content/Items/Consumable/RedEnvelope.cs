@@ -7,6 +7,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Content.Items.Bombs;
 using VanillaModding.Content.Projectiles.DiceProjectile;
 
 namespace VanillaModding.Content.Items.Consumable
@@ -65,6 +66,11 @@ namespace VanillaModding.Content.Items.Consumable
         public override void RightClick(Player player)
         {
             QuickSpawnCoins(player, Main.rand.Next(5, 500)); // Random amount between 1 silver and 1 gold
+            if (Main.rand.NextFloat() < 0.25f) // 25% chance
+            {
+                int type = ModContent.ItemType<Firecracker>();
+                player.QuickSpawnItem(player.GetSource_OpenItem(Type), type);
+            }
         }
     }
 }
