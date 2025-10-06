@@ -18,6 +18,7 @@ namespace VanillaModding.Common.Systems
         public static int LoadMusic(string path) 
             => MusicLoader.GetMusicSlot($"{nameof(VanillaModding)}/Assets/Music/{path}");
 
+        public static readonly int LobotomyGod = LoadMusic("BloomGod");
         public static readonly int GettingSandy = LoadMusic("GettingSandy");
         public static readonly int NowhereHome = LoadMusic("NowhereHome");
         public static readonly int Boss1Mindustry = LoadMusic("Boss1");
