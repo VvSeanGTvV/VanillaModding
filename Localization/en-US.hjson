@@ -18,7 +18,7 @@ Mods: {
 
 			Stunned: {
 				DisplayName: Stunned
-				Description: Can't move.
+				Description: I can't move.
 			}
 		}
 
@@ -315,7 +315,6 @@ Mods: {
 			DiceProjectile.DisplayName: Dice
 			PackageProjectile.DisplayName: Package
 			HeartArrow.DisplayName: Heart Arrow
-			PrismLaser.DisplayName: Prism Laser
 			RedSolidLaser.DisplayName: Red Laser
 			FirecrackerBomb.DisplayName: Firecracker
 		}
