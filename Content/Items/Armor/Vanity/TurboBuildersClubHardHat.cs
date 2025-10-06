@@ -16,7 +16,7 @@ namespace VanillaModding.Content.Items.Armor.Vanity
         {
             Item.width = 30; // Width of the item
             Item.height = 14; // Height of the item
-            Item.value = Item.sellPrice(gold: 1); // How many coins the item is worth
+            Item.value = Item.sellPrice(silver: 50); // How many coins the item is worth
             Item.rare = ItemRarityID.White; // The rarity of the item
             //Item.defense = 5; // The amount of defense the item will give when equipped
             Item.vanity = true;
