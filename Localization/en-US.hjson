@@ -283,6 +283,7 @@ Mods: {
 			}
 
 			TheChosenOne.DisplayName: The Chosen One
+			LobotomyGod.DisplayName: Lobotomy God
 		}
 
 		Projectiles: {
