@@ -122,13 +122,13 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
             {
                 float upT = progress / 0.5f; // Normalized [0,1]
                 float easedUp = upT * upT; // Ease-in (slow start, fast end)
-                wingRotation = MathHelper.Lerp(0.6f, -0.3f, easedUp); // Moving up
+                wingRotation = MathHelper.Lerp(0.85f, -0.15f, easedUp); // Moving up
             }
             else // Downstroke (fast → slow)
             {
                 float downT = (progress - 0.5f) / 0.5f; // Normalized [0,1]
-                float easedDown = 1f - (1f - downT) * (1f - downT); // Ease-out (fast start, slow end)
-                wingRotation = MathHelper.Lerp(-0.3f, 0.6f, easedDown); // Moving down
+                float easedDown = 1f - (float)Math.Pow(1f - downT, 5f); // Strong ease-out
+                wingRotation = MathHelper.Lerp(-0.15f, 0.85f, easedDown); // Moving down
             }
 
             Vector2 WingOffset = new(-125, 0);
