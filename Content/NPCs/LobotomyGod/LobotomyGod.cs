@@ -50,9 +50,15 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
 
         public float rotationSpeed = 0.02f;
         public float rotating = 0f;
+
+        public float flapDuration = 40f; // total frames per flap cycle
+        public float flapTime = 0f;
         public override void AI()
         {
             rotating += rotationSpeed;
+            flapTime = (float)Main.timeForVisualEffects % flapDuration;
+            if (rotating >= MathHelper.TwoPi) rotating = 0f;
+
             // This should almost always be the first code in AI() as it is responsible for finding the proper player target
             if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
             {
@@ -71,8 +77,9 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
             }
 
             float offsetX = 400f;
-            float offsetY = -100f;
-            Vector2 abovePlayer = player.Top + new Vector2(NPC.direction * offsetX, -(NPC.height + offsetY));
+            float offsetY = 0f;
+            int facing = 1;
+            Vector2 abovePlayer = player.Top + new Vector2(facing * offsetX, -(NPC.height + offsetY));
 
             Vector2 toAbovePlayer = abovePlayer - NPC.Center;
             Vector2 toAbovePlayerNormalized = toAbovePlayer.SafeNormalize(Vector2.UnitY);
@@ -113,22 +120,19 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
             Vector2 eyeOffset0 = new(25, -10);
             Vector2 eyeOffset1 = new(-25, -10);
 
-            float flapDuration = 80f; // total frames per flap cycle
-            float flapTime = (float)Main.timeForVisualEffects % flapDuration;
             float progress = flapTime / flapDuration;
-
             float wingRotation;
             if (progress < 0.5f) // Upstroke (slow → fast)
             {
                 float upT = progress / 0.5f; // Normalized [0,1]
                 float easedUp = upT * upT; // Ease-in (slow start, fast end)
-                wingRotation = MathHelper.Lerp(0.85f, -0.15f, easedUp); // Moving up
+                wingRotation = MathHelper.Lerp(0.95f, -0.15f, easedUp); // Moving up
             }
             else // Downstroke (fast → slow)
             {
                 float downT = (progress - 0.5f) / 0.5f; // Normalized [0,1]
                 float easedDown = 1f - (float)Math.Pow(1f - downT, 5f); // Strong ease-out
-                wingRotation = MathHelper.Lerp(-0.15f, 0.85f, easedDown); // Moving down
+                wingRotation = MathHelper.Lerp(-0.15f, 0.95f, easedDown); // Moving down
             }
 
             Vector2 WingOffset = new(-125, 0);
@@ -164,7 +168,6 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                 Vector2 HandsOffset = new(-125, 0);
                 Main.spriteBatch.Draw(Hand, position + HandsOffset.RotatedBy(radians), null, Color.Green, radians - MathHelper.PiOver2, originHand, NPC.scale - 0.5f, SpriteEffects.None, 0f);
             }
-            if (rotating >= MathHelper.TwoPi) rotating = 0f;
             return false;
         }
     }
