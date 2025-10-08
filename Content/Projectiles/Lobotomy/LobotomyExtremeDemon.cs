@@ -1,5 +1,8 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
@@ -84,9 +87,26 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
         {
             SoundEngine.PlaySound(VanillaModdingSoundID.FireInTheHole, Projectile.position);
         }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            String pathGlow = nameof(VanillaModding) + "/" + (ModContent.Request<Texture2D>(Texture).Name + "_Glow").Replace(@"\", "/");
+            
+            Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+            Texture2D glow = (Texture2D)ModContent.Request<Texture2D>($"{pathGlow}", AssetRequestMode.ImmediateLoad).Value;
+            Vector2 origin = new(texture.Width / 2, texture.Height / 2);
+            Vector2 originGlow = new(glow.Width / 2, glow.Height / 2);
+
+            Vector2 position = Projectile.Center - Main.screenPosition;
+            Main.spriteBatch.Draw(glow, position, null, new Color(255, 0, 0, 0), 0f, originGlow, Projectile.scale - 0.5f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(texture, position, null, Color.White, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0f); // Main Body
+            
+            return false;
+        }
+
         public override void OnSpawn(IEntitySource source)
         {
-            //SoundEngine.PlaySound(SoundEpicDeep(), Projectile.position);
+            SoundEngine.PlaySound(VanillaModdingSoundID.FireInTheHole, Projectile.position);
         }
     }
 }

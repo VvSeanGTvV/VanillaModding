@@ -75,6 +75,13 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                 NPC.EncourageDespawn(10);
                 return;
             }
+            // Time-based progress for parabolic motion (-1 → 1)
+            /*float time = Main.GameUpdateCount % 60; // 60 ticks = 1 second
+            float progress = (time / 60f) * 2f - 1f; // Range: -1 to 1
+
+            // Negative parabola centered at 0: ∩ shape
+            float arcX = (-MathF.Pow(progress, 2f) + 1f) * 3f - 2f;*/
+
 
             float offsetX = 400f;
             float offsetY = 0f;
@@ -93,6 +100,7 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                 speed = 48f;
             }
 
+            // Move toward target + arc
             Vector2 moveTo = toAbovePlayerNormalized * speed;
             NPC.velocity = (NPC.velocity * (inertia - 1) + moveTo) / inertia;
 
