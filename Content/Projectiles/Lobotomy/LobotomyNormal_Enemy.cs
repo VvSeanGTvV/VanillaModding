@@ -18,7 +18,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // The length of old position to be recorded
-            ProjectileID.Sets.TrailingMode[Projectile.type] = 0; // The recording mode
+            ProjectileID.Sets.TrailingMode[Projectile.type] = 2; // The recording mode
         }
 
         public override void SetDefaults()
@@ -29,7 +29,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             Projectile.friendly = false; // Can the projectile deal damage to enemies?
             Projectile.hostile = true; // Can the projectile deal damage to the player?
             Projectile.DamageType = DamageClass.Ranged; // Is the projectile shoot by a ranged weapon?
-            Projectile.penetrate = 3; // How many monsters the projectile can penetrate. (OnTileCollide below also decrements penetrate for bounces as well)
+            Projectile.penetrate = 1; // How many monsters the projectile can penetrate. (OnTileCollide below also decrements penetrate for bounces as well)
             Projectile.timeLeft = 600; // The live time for the projectile (60 = 1 second, so 600 is 10 seconds)
             Projectile.alpha = 0; // The transparency of the projectile, 255 for completely transparent. (aiStyle 1 quickly fades the projectile in) Make sure to delete this if you aren't using an aiStyle that fades in. You'll wonder why your projectile is invisible.
             Projectile.light = 0f; // How much light emit around the projectile
@@ -44,7 +44,8 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
         public override void AI()
         {
             Projectile.rotation += MathHelper.ToRadians(15f) * Projectile.direction;
-            //Projectile.damage += 1;
+            Projectile.ai[0]++;
+            if (Projectile.ai[0] % 60 == 0) Projectile.damage += 1;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -88,7 +89,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             {
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
                 Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.oldRot[k], drawOrigin, Projectile.scale, SpriteEffects.None, 0);
             }
 
             return true;
