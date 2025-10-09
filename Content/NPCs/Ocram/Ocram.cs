@@ -220,7 +220,7 @@ namespace VanillaModding.Content.NPCs.Ocram
 
             //NPC POSITION OFFSET GUARD
             Vector2 abovePlayer = target.Top + new Vector2(NPC.direction, -(NPC.height + offsetY));
-            Vector2 sidePlayer = (leftSide ? target.Left : target.Right) + new Vector2((leftSide ? -(NPC.width + offsetX) : -(NPC.width - offsetX)), NPC.direction);
+            Vector2 sidePlayer = (leftSide ? target.Left : target.Right) + new Vector2((leftSide ? (NPC.width + offsetX) : -(NPC.width + offsetX)), NPC.direction);
 
             int minionsCount = totalMinionsActive();
             if (minionsCount <= (int)Math.Round(MaxMinions / 2f)) metRequirementsMinion = false;
@@ -384,7 +384,6 @@ namespace VanillaModding.Content.NPCs.Ocram
                     if (t1 >= (LaserShotPerSec / 1.5f) && l1 < LaserProjectileCount*2)
                     {
                         onSide = true;
-                        leftSide = !leftSide;
                         Vector2 position = NPC.Center - new Vector2(45, 0);
                         Vector2 targetPosition = target.Center;
                         Vector2 direction = targetPosition - position;
@@ -398,6 +397,7 @@ namespace VanillaModding.Content.NPCs.Ocram
                     else
                     if (t1 >= LaserDelay && l2 < LaserRepeat)
                     {
+                        leftSide = !leftSide;
                         t1 = 0;
                         l1 = 0;
                         l2++;

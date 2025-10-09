@@ -11,9 +11,9 @@ using VanillaModding.Common.Systems;
 
 namespace VanillaModding.Content.Projectiles.Lobotomy
 {
-    public class LobotomyNormal : ModProjectile
+    public class LobotomyNormal_Enemy : ModProjectile
     {
-
+        public override string Texture => $"{nameof(VanillaModding)}/Content/Projectiles/Lobotomy/LobotomyNormal";
         private float rotdef = 0f;
         public override void SetStaticDefaults()
         {
@@ -26,8 +26,8 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             Projectile.width = 32; // The width of projectile hitbox
             Projectile.height = 32; // The height of projectile hitbox
             Projectile.aiStyle = 0; // The ai style of the projectile, please reference the source code of Terraria
-            Projectile.friendly = true; // Can the projectile deal damage to enemies?
-            Projectile.hostile = false; // Can the projectile deal damage to the player?
+            Projectile.friendly = false; // Can the projectile deal damage to enemies?
+            Projectile.hostile = true; // Can the projectile deal damage to the player?
             Projectile.DamageType = DamageClass.Ranged; // Is the projectile shoot by a ranged weapon?
             Projectile.penetrate = 3; // How many monsters the projectile can penetrate. (OnTileCollide below also decrements penetrate for bounces as well)
             Projectile.timeLeft = 600; // The live time for the projectile (60 = 1 second, so 600 is 10 seconds)

@@ -54,6 +54,38 @@ namespace VanillaModding.External.AI
         }
 
         /// <summary>
+        /// Find the closest Player by distance. Using via: Projectile.
+        /// </summary>
+        /// <param name="maxDetectDistance"></param>
+        /// <param name="projectile"></param>
+        /// <returns></returns>
+        public static Player FindClosestPlayer(float maxDetectDistance, Projectile projectile)
+        {
+            Player closestNPC = null;
+
+            // Using squared values in distance checks will let us skip square root calculations, drastically improving this method's speed.
+            float sqrMaxDetectDistance = maxDetectDistance * maxDetectDistance;
+
+            // Loop through all NPCs(max always 200)
+            for (int k = 0; k < Main.maxPlayers; k++)
+            {
+                Player target = Main.player[k];
+
+                // The DistanceSquared function returns a squared distance between 2 points, skipping relatively expensive square root calculations
+                float sqrDistanceToTarget = Vector2.DistanceSquared(target.Center, projectile.Center);
+
+                // Check if it is within the radius
+                if (sqrDistanceToTarget < sqrMaxDetectDistance)
+                {
+                    sqrMaxDetectDistance = sqrDistanceToTarget;
+                    closestNPC = target;
+                }
+            }
+
+            return closestNPC;
+        }
+
+        /// <summary>
         /// Basic Animation Projectile function.
         /// </summary>
         /// <param name="startFrame"></param>

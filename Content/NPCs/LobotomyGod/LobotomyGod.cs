@@ -12,6 +12,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Common.Systems;
 using VanillaModding.Content.NPCs.Ocram.Ocram_Minions;
+using VanillaModding.Content.Projectiles.Lobotomy;
 
 namespace VanillaModding.Content.NPCs.LobotomyGod
 {
@@ -19,7 +20,7 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
     {
 
         // Sway Related NPC
-        float maxSwayRotation = 0.3f; // Maximum rotation in radians (~11.5 degrees)
+        float maxSwayRotation = 0.6f; // Maximum rotation in radians (~11.5 degrees)
         float swaySpeed = 0.1f;   // How quickly the rotation adjusts
         public override void SetDefaults()
         {
@@ -53,6 +54,16 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
 
         public float flapDuration = 40f; // total frames per flap cycle
         public float flapTime = 0f;
+
+        private int phase = 0;
+        private float angleOffset = 0;
+
+        private int timesSpawned = 0;
+        private void Phase(int phase)
+        {
+            this.phase = phase;
+            timesSpawned = 0;
+        }
         public override void AI()
         {
             rotating += rotationSpeed;
@@ -75,34 +86,112 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                 NPC.EncourageDespawn(10);
                 return;
             }
-            // Time-based progress for parabolic motion (-1 → 1)
-            /*float time = Main.GameUpdateCount % 60; // 60 ticks = 1 second
-            float progress = (time / 60f) * 2f - 1f; // Range: -1 to 1
 
-            // Negative parabola centered at 0: ∩ shape
-            float arcX = (-MathF.Pow(progress, 2f) + 1f) * 3f - 2f;*/
-
-
-            float offsetX = 400f;
-            float offsetY = 0f;
-            int facing = 1;
-            Vector2 abovePlayer = player.Top + new Vector2(facing * offsetX, -(NPC.height + offsetY));
-
-            Vector2 toAbovePlayer = abovePlayer - NPC.Center;
-            Vector2 toAbovePlayerNormalized = toAbovePlayer.SafeNormalize(Vector2.UnitY);
-
+            Vector2 moveTo = player.Center;
+            // Movement
             float speed = 24f;
             float inertia = 20f;
-
-            // If the boss is somehow below the player, move faster to catch up
-            if (NPC.Top.Y > player.Bottom.Y)
+            if (phase == 0)
             {
-                speed = 48f;
-            }
+                float arcWidth = 1200f;
+                float arcPeakHeight = 600f;   // Distance above the player's center
+                float arcDuration = 60f;
 
-            // Move toward target + arc
-            Vector2 moveTo = toAbovePlayerNormalized * speed;
-            NPC.velocity = (NPC.velocity * (inertia - 1) + moveTo) / inertia;
+                // Time + progress
+                float time = NPC.ai[0];
+                float progress = (time % arcDuration) / arcDuration;
+
+                // Direction (alternates every arc)
+                int currentArc = (int)(time / arcDuration);
+                int facing = (currentArc % 2 == 0) ? 1 : -1;
+
+                // X: Lerp from left to right (or right to left)
+                float xOffset = MathHelper.Lerp(-arcWidth / 2f, arcWidth / 2f, progress) * facing;
+
+                // Y: Parabola from 0 → -arcPeakHeight → 0
+                float yOffset = -4f * arcPeakHeight * progress * (1f - progress);
+
+                // Final position relative to player
+                Vector2 arcPos = player.Center + new Vector2(xOffset, yOffset * progress);
+
+                
+                Vector2 toArc = arcPos - NPC.Center;
+                moveTo = toArc.SafeNormalize(Vector2.Zero) * speed;
+
+                if (NPC.ai[0] % 10 == 0)
+                {
+                    int numberOfProjectiles = 14;
+                    float projectileSpeed = 6f;
+                    Vector2 spawnPosition = NPC.Center; // or any origin point
+                    int projectileType = ModContent.ProjectileType<LobotomyNormal_Enemy>(); // replace with your projectile
+
+                    for (int i = 0; i < numberOfProjectiles; i++)
+                    {
+                        float angle = MathHelper.ToRadians(360f / numberOfProjectiles * i) + rotating; // optional rotating offset
+                        Vector2 direction = new Vector2(1f, 0f).RotatedBy(angle + angleOffset); // unit vector rotated
+
+                        Vector2 velocity = direction * projectileSpeed;
+
+                        if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(
+                            NPC.GetSource_FromAI(),
+                            spawnPosition,
+                            velocity,
+                            projectileType,
+                            10,
+                            5f,
+                            -1
+                        );
+                    }
+                    timesSpawned++;
+                    angleOffset += MathHelper.ToRadians(10f); // Increment the angle offset for next time
+                }
+
+                if (timesSpawned >= 7) Phase(1);
+            }
+            if (phase == 1)
+            {
+                Vector2 abovePlayer = player.Top + new Vector2(0, -(NPC.height + 300f));
+                Vector2 toAbovePlayer = abovePlayer - NPC.Center;
+                Vector2 toAbovePlayerNormalized = toAbovePlayer.SafeNormalize(Vector2.UnitY);
+
+                speed = 12f;
+                inertia = 40f;
+                moveTo = toAbovePlayerNormalized * speed;
+
+                if (NPC.ai[0] % 30 == 0)
+                {
+                    int numberOfProjectiles = 14;
+                    float projectileSpeed = 6f;
+                    Vector2 spawnPosition = NPC.Center; // or any origin point
+                    int projectileType = ModContent.ProjectileType<LobotomyNormal_Enemy>(); // replace with your projectile
+
+                    for (int i = 0; i < numberOfProjectiles; i++)
+                    {
+                        float angle = MathHelper.ToRadians(360f / numberOfProjectiles * i) + rotating; // optional rotating offset
+                        Vector2 direction = new Vector2(1f, 0f).RotatedBy(angle + angleOffset); // unit vector rotated
+
+                        Vector2 velocity = direction * projectileSpeed;
+
+                        if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(
+                            NPC.GetSource_FromAI(),
+                            spawnPosition,
+                            velocity,
+                            projectileType,
+                            10,
+                            5f,
+                            -1
+                        );
+                    }
+                    timesSpawned++;
+                    angleOffset += MathHelper.ToRadians(10f); // Increment the angle offset for next time
+                }
+
+                if (timesSpawned >= 12) Phase(0);
+            }
+            NPC.velocity = (NPC.velocity * (inertia - 1f) + moveTo) / inertia;
+
+            NPC.ai[0]++;
+            
 
             float targetRotation = NPC.velocity.X * 0.05f;
             targetRotation = MathHelper.Clamp(targetRotation, -maxSwayRotation, maxSwayRotation);

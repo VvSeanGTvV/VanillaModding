@@ -15,8 +15,9 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
 {
     // This Example show how to implement simple homing projectile
     // Can be tested with ExampleCustomAmmoGun
-    public class LobotomyExtremeDemon : ModProjectile
+    public class LobotomyExtremeDemon_Enemy : ModProjectile
     {
+        public override string Texture => $"{nameof(VanillaModding)}/Content/Projectiles/Lobotomy/LobotomyExtremeDemon";
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.CultistIsResistantTo[Projectile.type] = true; // Make the cultist resistant to this projectile, as it's resistant to all homing projectiles.
@@ -34,8 +35,8 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
 
             Projectile.aiStyle = 0; // The ai style of the projectile (0 means custom AI). For more please reference the source code of Terraria
             Projectile.DamageType = DamageClass.Ranged; // What type of damage does this projectile affect?
-            Projectile.friendly = true; // Can the projectile deal damage to enemies?
-            Projectile.hostile = false; // Can the projectile deal damage to the player?
+            Projectile.friendly = false; // Can the projectile deal damage to enemies?
+            Projectile.hostile = true; // Can the projectile deal damage to the player?
             Projectile.ignoreWater = true; // Does the projectile's speed be influenced by water?
             Projectile.light = 1f; // How much light emit around the projectile
             Projectile.tileCollide = false; // Can the projectile collide with tiles?

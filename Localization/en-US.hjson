@@ -318,6 +318,8 @@ Mods: {
 			HeartArrow.DisplayName: Heart Arrow
 			RedSolidLaser.DisplayName: Red Laser
 			FirecrackerBomb.DisplayName: Firecracker
+			LobotomyExtremeDemon_Enemy.DisplayName: Lobotomy Extreme Demon_ Enemy
+			LobotomyNormal_Enemy.DisplayName: Lobotomy Normal_ Enemy
 		}
 	}
 }
