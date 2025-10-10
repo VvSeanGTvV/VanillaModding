@@ -16,6 +16,7 @@ using VanillaModding.Content.Projectiles.Lobotomy;
 
 namespace VanillaModding.Content.NPCs.LobotomyGod
 {
+    [AutoloadBossHead]
     internal class LobotomyGod : ModNPC
     {
 

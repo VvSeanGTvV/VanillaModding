@@ -13,8 +13,6 @@ using VanillaModding.External.AI;
 
 namespace VanillaModding.Content.Projectiles.Lobotomy
 {
-    // This Example show how to implement simple homing projectile
-    // Can be tested with ExampleCustomAmmoGun
     public class LobotomyExtremeDemon_Enemy : ModProjectile
     {
         public override string Texture => $"{nameof(VanillaModding)}/Content/Projectiles/Lobotomy/LobotomyExtremeDemon";
