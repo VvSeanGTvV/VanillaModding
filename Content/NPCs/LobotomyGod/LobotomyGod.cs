@@ -193,7 +193,6 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
 
             NPC.ai[0]++;
             
-
             float targetRotation = NPC.velocity.X * 0.05f;
             targetRotation = MathHelper.Clamp(targetRotation, -maxSwayRotation, maxSwayRotation);
             NPC.rotation = MathHelper.Lerp(NPC.rotation, targetRotation, swaySpeed);

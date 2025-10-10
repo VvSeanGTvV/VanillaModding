@@ -45,7 +45,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
         {
             Projectile.rotation += MathHelper.ToRadians(15f) * Projectile.direction;
             Projectile.ai[0]++;
-            if (Projectile.ai[0] % 60 == 0) Projectile.damage += 1;
+            if (Projectile.ai[0] % 120 == 0) Projectile.damage += 1;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
