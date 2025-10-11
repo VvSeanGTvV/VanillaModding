@@ -25,7 +25,6 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
 
         // Setting the default parameters of the projectile
         // You can check most of Fields and Properties here https://github.com/tModLoader/tModLoader/wiki/Projectile-Class-Documentation
-        int timeLast = 600;
         public override void SetDefaults()
         {
             Projectile.width = 42; // The width of projectile hitbox
@@ -38,12 +37,14 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             Projectile.ignoreWater = true; // Does the projectile's speed be influenced by water?
             Projectile.light = 1f; // How much light emit around the projectile
             Projectile.tileCollide = false; // Can the projectile collide with tiles?
-            Projectile.timeLeft = timeLast; // The live time for the projectile (60 = 1 second, so 600 is 10 seconds)
+            Projectile.timeLeft = 60 * 6; // The live time for the projectile (60 = 1 second, so 600 is 10 seconds)
 
 
         }
 
         // Custom AI
+
+        int alpha = 0;
         public override void AI()
         {
             float maxDetectRadius = 960f; // The maximum radius at which a projectile can detect a target
@@ -58,20 +59,40 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             else
                 closestNPC = AdvAI.FindClosestNPC(maxDetectRadius, Projectile);
 
-            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+            Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
             if ((closestNPC == null && !isEnemy) || (closestPlayer == null && isEnemy))
                 return;
 
             Vector2 target = (isEnemy) ? closestPlayer.Center : closestNPC.Center;
-            Projectile.velocity = -Vector2.Lerp(-Projectile.velocity, (Projectile.Center - target).SafeNormalize(Vector2.Zero) * projSpeed, 0.05f);
+            Projectile.velocity = -Vector2.Lerp(-Projectile.velocity, (Projectile.Center - target).SafeNormalize(Vector2.Zero) * projSpeed, 0.015f);
 
+            if (Projectile.timeLeft < (int)(60 * 5.5f))
+            {
+                // Linearly increase alpha over the last 300 ticks
+                int fadeDuration = (int)(60 * 5.5f);
+                int timeFading = fadeDuration - Projectile.timeLeft;
 
+                // Alpha goes from 0 to 255 over 300 ticks
+                alpha = (int)(255f * timeFading / fadeDuration);
+
+                // Clamp to avoid going above 255
+                if (alpha > 255)
+                    alpha = 255;
+            }
+            else
+            {
+                // Fully visible before fading starts
+                alpha = 0;
+            }
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            //base.OnHitNPC(target, hit, damageDone);
-            //Projectile.damage += 10;
+            explodeLobotomy();
+        }
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
             explodeLobotomy();
         }
 
@@ -88,7 +109,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             for (int i = 0; i < numberProjectiles; i++)
             {
                 Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f; // Vector for spread. Watch out for dividing by 0 if there is only 1 projectile.
-                Projectile.NewProjectile(enS, new Vector2(position.X, position.Y), new Vector2(perturbedSpeed.X, perturbedSpeed.Y) * speedMul, ModContent.ProjectileType<LobotomyNormal>(), Projectile.damage / 2, Projectile.damage / 2, Projectile.owner); //Creates a new projectile with our new vector for spread.
+                Projectile.NewProjectile(enS, new Vector2(position.X, position.Y), new Vector2(perturbedSpeed.X, perturbedSpeed.Y) * speedMul, ModContent.ProjectileType<LobotomyNormal_Enemy>(), Projectile.damage / 2, Projectile.damage / 2, Projectile.owner); //Creates a new projectile with our new vector for spread.
             }
         }
 
@@ -108,10 +129,11 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             Vector2 origin = new(texture.Width / 2, texture.Height / 2);
             Vector2 originGlow = new(glow.Width / 2, glow.Height / 2);
 
+            float opacity = 1f - (alpha / 255f);
             Vector2 position = Projectile.Center - Main.screenPosition;
-            Main.spriteBatch.Draw(glow, position, null, new Color(255, 0, 0, 0), 0f, originGlow, Projectile.scale - 0.5f, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(glow, position, null, new Color(255, 50, 50, 0), 0f, originGlow, Projectile.scale - 0.75f, SpriteEffects.None, 0f);
-            Main.spriteBatch.Draw(glow, position, null, new Color(255, 250, 250, 0), 0f, originGlow, Projectile.scale - 0.8f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(glow, position, null, new Color(255, 0, 0, 0) * opacity, 0f, originGlow, Projectile.scale - 0.5f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(glow, position, null, new Color(255, 50, 50, 0) * opacity, 0f, originGlow, Projectile.scale - 0.75f, SpriteEffects.None, 0f);
+            Main.spriteBatch.Draw(glow, position, null, new Color(255, 250, 250, 0) * opacity, 0f, originGlow, Projectile.scale - 0.8f, SpriteEffects.None, 0f);
 
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {
@@ -119,18 +141,19 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
                 float g = 1f - c;
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + origin + new Vector2(0f, Projectile.gfxOffY);
                 Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                Main.spriteBatch.Draw(glowTrail, drawPos, null, new Color(255, 50, 50, 0) * g, Projectile.oldRot[k] + MathHelper.PiOver2, originGlow, Projectile.scale - 0.75f, SpriteEffects.None, 0f);
-                Main.spriteBatch.Draw(glowTrail, drawPos, null, new Color(255, 250, 250, 0) * g, Projectile.oldRot[k] + MathHelper.PiOver2, originGlow, Projectile.scale - 0.9f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(glowTrail, drawPos, null, new Color(255, 50, 50, 0) * g * opacity, Projectile.oldRot[k] + MathHelper.PiOver2, originGlow, Projectile.scale - 0.75f, SpriteEffects.None, 0f);
+                Main.spriteBatch.Draw(glowTrail, drawPos, null, new Color(255, 250, 250, 0) * g * opacity, Projectile.oldRot[k] + MathHelper.PiOver2, originGlow, Projectile.scale - 0.9f, SpriteEffects.None, 0f);
             }
 
-            Main.spriteBatch.Draw(texture, position, null, Color.White, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0f); // Main Body
+            Main.spriteBatch.Draw(texture, position, null, Color.White * opacity, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0f); // Main Body
             
             return false;
         }
 
         public override void OnSpawn(IEntitySource source)
         {
-            SoundEngine.PlaySound(VanillaModdingSoundID.FireInTheHole, Projectile.position);
+            SoundEngine.PlaySound(VanillaModdingSoundID.ExtremeDemonFire, Projectile.position);
+            SoundEngine.PlaySound(VanillaModdingSoundID.ExtremeDemonFire2, Projectile.position);
         }
     }
 }

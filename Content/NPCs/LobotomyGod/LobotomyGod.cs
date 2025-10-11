@@ -65,6 +65,22 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
             this.phase = phase;
             timesSpawned = 0;
         }
+
+        private int getNewPhase()
+        {
+            int[] attackTable = new int[]
+            {
+                -1, -1, -1, -1, -1, -1,       
+                 0,  0, 
+                 1,  1,  1,  1,  1,               
+                 2,  2,  2,    
+            };
+
+            int attackType = attackTable[Main.rand.Next(attackTable.Length)];
+
+            return attackType;
+        }
+
         public override void AI()
         {
             rotating += rotationSpeed;
@@ -92,6 +108,23 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
             // Movement
             float speed = 24f;
             float inertia = 20f;
+            if (phase == -1)
+            {
+                NPC.ai[1]++;
+
+                Vector2 abovePlayer = player.Top + new Vector2(0, -(NPC.height + 300f));
+                Vector2 toAbovePlayer = abovePlayer - NPC.Center;
+                Vector2 toAbovePlayerNormalized = toAbovePlayer.SafeNormalize(Vector2.UnitY);
+
+                moveTo = toAbovePlayerNormalized * speed;
+
+                if (NPC.ai[1] >= 60 * 10)
+                {
+                    NPC.ai[1] = 0;
+                    Phase(getNewPhase());
+                }
+            }
+
             if (phase == 0)
             {
                 float arcWidth = 1200f;
@@ -147,7 +180,7 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                     angleOffset += MathHelper.ToRadians(10f); // Increment the angle offset for next time
                 }
 
-                if (timesSpawned >= 7) Phase(1);
+                if (timesSpawned >= 7) Phase(getNewPhase());
             }
             if (phase == 1)
             {
@@ -187,8 +220,46 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                     angleOffset += MathHelper.ToRadians(10f); // Increment the angle offset for next time
                 }
 
-                if (timesSpawned >= 12) Phase(0);
+                if (timesSpawned >= 12) Phase(getNewPhase());
             }
+            if (phase == 2)
+            {
+                Vector2 abovePlayer = player.Top + new Vector2(0, -(NPC.height + 300f));
+                Vector2 toAbovePlayer = abovePlayer - NPC.Center;
+                Vector2 toAbovePlayerNormalized = toAbovePlayer.SafeNormalize(Vector2.UnitY);
+
+                speed = 12f;
+                inertia = 40f;
+                moveTo = toAbovePlayerNormalized * speed;
+
+                if (NPC.ai[0] % 10 == 0)
+                {
+                    float projectileSpeed = 6f;
+                    Vector2 spawnPosition = NPC.Center; // or any origin point
+                    int projectileType = ModContent.ProjectileType<LobotomyExtremeDemon_Enemy>(); // replace with your projectile
+
+                    float angle = MathHelper.ToRadians(Main.rand.NextFloat(-180f, 180f)) + rotating; // optional rotating offset
+                    Vector2 direction = new Vector2(1f, 0f).RotatedBy(angle + angleOffset); // unit vector rotated
+
+                    Vector2 velocity = direction * projectileSpeed;
+
+                    if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(
+                        NPC.GetSource_FromAI(),
+                        spawnPosition,
+                        velocity,
+                        projectileType,
+                        10,
+                        5f,
+                        -1
+                    );
+
+                    timesSpawned++;
+                    angleOffset += MathHelper.ToRadians(10f); // Increment the angle offset for next time
+                }
+
+                if (timesSpawned >= 12) Phase(getNewPhase());
+            }
+
             NPC.velocity = (NPC.velocity * (inertia - 1f) + moveTo) / inertia;
 
             NPC.ai[0]++;
