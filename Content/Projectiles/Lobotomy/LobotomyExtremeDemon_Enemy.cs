@@ -64,7 +64,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
                 return;
 
             Vector2 target = (isEnemy) ? closestPlayer.Center : closestNPC.Center;
-            Projectile.velocity = -Vector2.Lerp(-Projectile.velocity, (Projectile.Center - target).SafeNormalize(Vector2.Zero) * projSpeed, 0.015f);
+            Projectile.velocity = -Vector2.Lerp(-Projectile.velocity, (Projectile.Center - target).SafeNormalize(Vector2.Zero) * projSpeed, 0.0125f);
 
             if (Projectile.timeLeft < (int)(60 * 5.5f))
             {

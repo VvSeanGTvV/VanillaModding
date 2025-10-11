@@ -287,8 +287,6 @@ Mods: {
 		}
 
 		Projectiles: {
-			LobotomyNormal.DisplayName: Lobotomy Normal Face
-			LobotomyExtremeDemon.DisplayName: Lobotomy Extreme Demon Face
 			MightyScythe_PROJ.DisplayName: Mighty Scythe
 			MightyScytheOLD_PROJ.DisplayName: Soul Scythe
 			MightyScythe_PROJ_Clone.DisplayName: Mini Mighty Scythe
@@ -318,8 +316,11 @@ Mods: {
 			HeartArrow.DisplayName: Heart Arrow
 			RedSolidLaser.DisplayName: Red Laser
 			FirecrackerBomb.DisplayName: Firecracker
-			LobotomyExtremeDemon_Enemy.DisplayName: Lobotomy Extreme Demon_ Enemy
-			LobotomyNormal_Enemy.DisplayName: Lobotomy Normal_ Enemy
+			LobotomyNormal.DisplayName: Lobotomy Normal Face
+			LobotomyExtremeDemon.DisplayName: Lobotomy Extreme Demon Face
+			LobotomyExtremeDemon_Enemy.DisplayName: Homing Lobotomy Extreme Demon
+			LobotomyNormal_Enemy.DisplayName: Lobotomy Normal
+			LobotomyLaser.DisplayName: Lobotomy Beam
 		}
 	}
 }

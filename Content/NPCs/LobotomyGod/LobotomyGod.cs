@@ -60,17 +60,20 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
         private float angleOffset = 0;
 
         private int timesSpawned = 0;
+        bool includeLaser = false;
+
         private void Phase(int phase)
         {
             this.phase = phase;
             timesSpawned = 0;
+            includeLaser = (phase == -1) ? true : (phase == 1) ? Main.rand.NextBool() : false ;
         }
-
+        
         private int getNewPhase()
         {
             int[] attackTable = new int[]
             {
-                -1, -1, -1, -1, -1, -1,       
+                -1, -1, -1, -1, -1, -1, -1,
                  0,  0, 
                  1,  1,  1,  1,  1,               
                  2,  2,  2,    
@@ -108,6 +111,17 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
             // Movement
             float speed = 24f;
             float inertia = 20f;
+
+            if (NPC.ai[0] % 60 == 0 && includeLaser)
+            {
+                for (int i = 0; i < 7; i++)
+                {
+                    Vector2 offset = new Vector2(Main.rand.Next(-640, 640), Main.rand.Next(-640, 640));
+                    int projectile = Projectile.NewProjectile(NPC.GetSource_FromThis(), player.Center - offset, new Vector2(10, 0), ModContent.ProjectileType<LobotomyLaser>(), 20, 5, -1);
+                    Main.projectile[projectile].timeLeft = 500;
+                }
+            }
+
             if (phase == -1)
             {
                 NPC.ai[1]++;
