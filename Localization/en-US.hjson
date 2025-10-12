@@ -321,6 +321,7 @@ Mods: {
 			LobotomyExtremeDemon_Enemy.DisplayName: Homing Lobotomy Extreme Demon
 			LobotomyNormal_Enemy.DisplayName: Lobotomy Normal
 			LobotomyLaser.DisplayName: Lobotomy Beam
+			LobotomyEasy.DisplayName: Lobotomy Easy
 		}
 	}
 }
