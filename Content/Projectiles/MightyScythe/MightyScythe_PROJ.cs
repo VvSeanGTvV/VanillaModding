@@ -140,7 +140,7 @@ namespace VanillaModding.Content.Projectiles.MightyScythe
             {
                 SF = SpriteEffects.FlipHorizontally;
             }
-            Texture2D textureGlow = ModContent.Request<Texture2D>($"{nameof(VanillaModding)}/Projectiles/MightyScythe/MightyScythe_PROJ_Glow", AssetRequestMode.ImmediateLoad).Value;
+            Texture2D textureGlow = ModContent.Request<Texture2D>($"{nameof(VanillaModding)}/Content/Projectiles/MightyScythe/MightyScythe_PROJ_Glow", AssetRequestMode.ImmediateLoad).Value;
             Vector2 drawOrigin = new Vector2(textureGlow.Width * 0.5f, Projectile.height * 0.5f);
 
             Main.EntitySpriteDraw(textureGlow, Projectile.Center - Main.screenPosition, null, Color.White, Projectile.rotation, drawOrigin, Projectile.scale, SF, 0);

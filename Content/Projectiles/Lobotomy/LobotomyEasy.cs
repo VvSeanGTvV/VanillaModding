@@ -11,11 +11,6 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
 {
     internal class LobotomyEasy : ModProjectile
     {
-        private Vector2 origin;
-        private float t = 0f; // Normalized progress [0, 1]
-        private float tSpeed = 1f / 60f; // One arc per 60 frames
-        private float parabolaWidth = 60f; // Width of the arc
-        private float parabolaHeight = 20f; // Height of the arc
         public override void SetDefaults()
         {
             Projectile.width = 100; // The width of projectile hitbox
@@ -33,41 +28,35 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
 
         public override void AI()
         {
-            // Initialize
-            if (Projectile.localAI[0] == 0)
+            // Settings
+            float arcLength = 60f;  // How long one full arc lasts (in frames)
+            float arcWidth = 100f;  // Width of the arc
+            float arcHeight = 40f;  // Height of the arc
+            Vector2 center = Projectile.Center; // Will be overridden below
+
+            // Time progress (0 to 1)
+            float progress = Projectile.ai[0] / arcLength;
+
+            // Reset when arc finishes to make it loop
+            if (Projectile.ai[0] >= arcLength)
             {
-                origin = Projectile.Center;
-                Projectile.localAI[0] = 1;
+                Projectile.ai[0] = 0;
             }
 
-            // Clamp t to avoid overshooting
-            t = MathHelper.Clamp(t, 0f, 2f);
+            // Calculate X and Y offset using parametric equation
+            float x = progress * arcWidth;
+            float y = -(4 * arcHeight / (arcWidth * arcWidth)) * (x - arcWidth / 2f) * (x - arcWidth / 2f);
 
-            // Move from -width/2 to +width/2
-            float x = MathHelper.Lerp(-parabolaWidth / 2f, parabolaWidth / 2f, t);
+            // Movement direction (right to left or left to right)
+            Vector2 origin = Projectile.ai[1] == 0 ? Projectile.Center - new Vector2(arcWidth / 2f, 0)
+                                                   : Projectile.Center + new Vector2(arcWidth / 2f, 0);
 
-            // True parabola: y = a * x^2
-            float a = parabolaHeight / (float)Math.Pow(parabolaWidth / 2f, 2);
-            float y = a * x * x;
+            // Set position based on arc
+            Vector2 offset = new Vector2(x - arcWidth / 2f, y);
+            Projectile.position = origin + offset;
 
-            // Drift upward
-            float upwardOffset = -t * 60f; // Upward motion over time
-
-            // Apply position
-            Projectile.Center = origin + new Vector2(x, y + upwardOffset);
-
-            // Progress along the curve
-            t += tSpeed;
-
-            // ✅ Reset only when t reaches 1.0 (end of arc)
-            if (t >= 2.0f)
-            {
-                t = 0f;
-                origin = Projectile.Center;
-            }
-
-            // Optional rotation (based on movement)
-            Projectile.rotation = Projectile.velocity.ToRotation();
+            // Advance time
+            Projectile.ai[0]++;
         }
     }
 }
