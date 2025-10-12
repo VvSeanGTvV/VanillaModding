@@ -1,10 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ModLoader;
 
 namespace VanillaModding.Content.Projectiles.Lobotomy
@@ -25,38 +27,26 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             Projectile.tileCollide = false; // Can the projectile collide with tiles?
             Projectile.timeLeft = 60 * 5; // The live time for the projectile (60 = 1 second, so 600 is 10 seconds)
         }
+        public float value = -1f;
+        public Vector2 startPosition;
+
+        public override void OnSpawn(IEntitySource source)
+        {
+            startPosition = Projectile.position;
+        }
 
         public override void AI()
         {
-            // Settings
-            float arcLength = 60f;  // How long one full arc lasts (in frames)
-            float arcWidth = 100f;  // Width of the arc
-            float arcHeight = 40f;  // Height of the arc
-            Vector2 center = Projectile.Center; // Will be overridden below
+            value += 0.05f;  // increase value each tick
 
-            // Time progress (0 to 1)
-            float progress = Projectile.ai[0] / arcLength;
-
-            // Reset when arc finishes to make it loop
-            if (Projectile.ai[0] >= arcLength)
+            if (value > 1f)
             {
-                Projectile.ai[0] = 0;
+                value = -1f;
+                Projectile.position = startPosition;  // reset position on each bounce cycle
             }
 
-            // Calculate X and Y offset using parametric equation
-            float x = progress * arcWidth;
-            float y = -(4 * arcHeight / (arcWidth * arcWidth)) * (x - arcWidth / 2f) * (x - arcWidth / 2f);
-
-            // Movement direction (right to left or left to right)
-            Vector2 origin = Projectile.ai[1] == 0 ? Projectile.Center - new Vector2(arcWidth / 2f, 0)
-                                                   : Projectile.Center + new Vector2(arcWidth / 2f, 0);
-
-            // Set position based on arc
-            Vector2 offset = new Vector2(x - arcWidth / 2f, y);
-            Projectile.position = origin + offset;
-
-            // Advance time
-            Projectile.ai[0]++;
+            float velocityFactor = value < 0 ? value : 1 - (value - 1) * (value - 1);
+            Projectile.velocity = new Vector2(0, -10f * velocityFactor);
         }
     }
 }
