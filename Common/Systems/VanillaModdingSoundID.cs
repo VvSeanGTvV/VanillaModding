@@ -28,9 +28,9 @@ namespace VanillaModding.Common.Systems
         public static readonly SoundStyle ExtremeDemonFire2 = LoadSound("Lobotomy/LobotomyExtremeDemonFire2") with { Volume = 0.25f, Pitch = 0.985f, MaxInstances = 25 };
         public static readonly SoundStyle LobotomyLaserFire = LoadSound("Lobotomy/LobotomyLaserFire") with { Volume = 0.25f, Pitch = 0f, MaxInstances = 25 };
 
-        public static readonly SoundStyle LobotomyEasySpell = LoadSound("Lobotomy/LobotomyEasySpell") with { Volume = 0.25f, Pitch = -0.5f, MaxInstances = 25 };
-        public static readonly SoundStyle LobotomyEasy = LoadSound("Lobotomy/LobotomyEasy") with { Volume = 0.25f, Pitch = -0.5f, MaxInstances = 25 };
-        public static readonly SoundStyle LobotomyEasyBounce = LoadSound("Lobotomy/LobotomyEasyBounce") with { Volume = 0.25f, Pitch = 0f, MaxInstances = 25 };
+        public static readonly SoundStyle LobotomyEasySpell = LoadSound("Lobotomy/LobotomyEasySpell") with { Volume = 0.45f, Pitch = -0.5f, MaxInstances = 25 };
+        public static readonly SoundStyle LobotomyEasy = LoadSound("Lobotomy/LobotomyEasy") with { Volume = 0.45f, Pitch = -0.5f, MaxInstances = 25 };
+        public static readonly SoundStyle LobotomyEasyBounce = LoadSound("Lobotomy/LobotomyEasyBounce") with { Volume = 0.45f, Pitch = 0f, MaxInstances = 25 };
 
         public static readonly SoundStyle Hallelujah = LoadSound("Bombs/HolyHandGrenadeHallelujah");
     }

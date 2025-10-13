@@ -60,13 +60,17 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
         private float angleOffset = 0;
 
         private int timesSpawned = 0;
-        bool includeLaser = false;
+        bool includeLaser = false, includeLobotomyEasy = false;
+        bool alreadyuseHoming = false;
 
         private void Phase(int phase)
         {
             this.phase = phase;
             timesSpawned = 0;
-            includeLaser = (phase == -1) ? true : (phase == 1) ? Main.rand.NextBool() : false ;
+            while (this.phase == 2 && alreadyuseHoming) this.phase = getNewPhase();
+            includeLaser = (this.phase == -1) ? true : (this.phase == 1) ? Main.rand.NextBool() : false ;
+            includeLobotomyEasy = (this.phase == -1) ? Main.rand.NextBool() : (this.phase == 1) ? Main.rand.NextBool() : false;
+            alreadyuseHoming = false;
         }
         
         private int getNewPhase()
@@ -116,10 +120,16 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
             {
                 for (int i = 0; i < 7; i++)
                 {
-                    Vector2 offset = new Vector2(Main.rand.Next(-640, 640), Main.rand.Next(-640, 640));
+                    Vector2 offset = new Vector2(Main.rand.Next(-640, 640), Main.rand.Next(-640, 320));
                     int projectile = Projectile.NewProjectile(NPC.GetSource_FromThis(), player.Center - offset, new Vector2(10, 0), ModContent.ProjectileType<LobotomyLaser>(), 20, 5, -1);
                     Main.projectile[projectile].timeLeft = 500;
                 }
+            }
+
+            if (NPC.ai[0] % 60*5 == 0 && includeLobotomyEasy)
+            {
+                Vector2 offset = new Vector2(Main.rand.Next(-640, 640), -640);
+                int projectile = Projectile.NewProjectile(NPC.GetSource_FromThis(), player.Center - offset, new Vector2(10, 0), ModContent.ProjectileType<LobotomyEasy>(), 50, 0, -1, player.direction);
             }
 
             if (phase == -1)
@@ -271,7 +281,11 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                     angleOffset += MathHelper.ToRadians(10f); // Increment the angle offset for next time
                 }
 
-                if (timesSpawned >= 12) Phase(getNewPhase());
+                if (timesSpawned >= 12)
+                {
+                    alreadyuseHoming = true;
+                    Phase(getNewPhase());
+                }
             }
 
             NPC.velocity = (NPC.velocity * (inertia - 1f) + moveTo) / inertia;
