@@ -56,7 +56,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
         public override void AI()
         {
             if (value == -1f) SoundEngine.PlaySound(VanillaModdingSoundID.LobotomyEasy, Projectile.position);
-            value += 0.05f / 2.5f;  // increase value each tick
+            value += 0.05f / 2.75f;  // increase value each tick
 
             if (value > 1f)
             {
@@ -71,7 +71,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
 
             float velocityFactor = value < 0 ? value : 1 - (value - 1) * (value - 1);
             Projectile.velocity = new Vector2(-7f * velocityFactor * Projectile.ai[0], -7);
-            Projectile.rotation += MathHelper.ToRadians(-7 / 2.5f);
+            Projectile.rotation += MathHelper.ToRadians((-7 / 2.75f) * Projectile.ai[0]);
             if (bounce >= maxBounce + 1) Projectile.Kill();
         }
 
