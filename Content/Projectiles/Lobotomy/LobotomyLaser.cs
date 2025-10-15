@@ -34,7 +34,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             Projectile.hostile = false;
             Projectile.penetrate = -1;
             Projectile.tileCollide = false;
-            Projectile.timeLeft = 60 * 3; // Short lifespan, update as needed
+            Projectile.timeLeft = 60 * 5; // Short lifespan, update as needed
             Projectile.DamageType = DamageClass.Magic;
             Projectile.scale = 0.25f;
         }
@@ -138,7 +138,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             Color beamColor = new Color(255, 0, 0, 0); // Adjustable color
 
             // Define source rectangles for each frame
-            int frameHeight = texture.Height / 3;
+            int frameHeight = texture.Height;
             Vector2 origin = new Vector2(texture.Width / 2f, frameHeight / 2f);
 
             float opacity = (alpha / 255f);

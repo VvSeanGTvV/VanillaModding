@@ -126,7 +126,7 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                 }
             }
 
-            if (NPC.ai[0] % 60*5 == 0 && includeLobotomyEasy)
+            if (NPC.ai[0] % 60*10 == 0 && includeLobotomyEasy)
             {
                 Vector2 offset = new Vector2(Main.rand.Next(-640, 640), -640);
                 int projectile = Projectile.NewProjectile(NPC.GetSource_FromThis(), player.Center - offset, new Vector2(10, 0), ModContent.ProjectileType<LobotomyEasy>(), 50, 0, -1, player.direction);
