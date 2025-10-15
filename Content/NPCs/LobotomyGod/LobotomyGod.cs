@@ -116,7 +116,7 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
             float speed = 24f;
             float inertia = 20f;
 
-            if (NPC.ai[0] % 60 == 0 && includeLaser)
+            if (NPC.ai[0] % 60 == 0 && includeLaser && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 for (int i = 0; i < 7; i++)
                 {
@@ -126,7 +126,7 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                 }
             }
 
-            if (NPC.ai[0] % 60*10 == 0 && includeLobotomyEasy)
+            if (NPC.ai[0] % 60*10 == 0 && includeLobotomyEasy && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Vector2 offset = new Vector2(Main.rand.Next(-640, 640), -640);
                 int projectile = Projectile.NewProjectile(NPC.GetSource_FromThis(), player.Center - offset, new Vector2(10, 0), ModContent.ProjectileType<LobotomyEasy>(), 50, 0, -1, player.direction);

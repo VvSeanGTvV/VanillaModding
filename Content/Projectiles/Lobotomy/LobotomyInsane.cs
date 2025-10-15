@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Common.Systems;
@@ -45,32 +46,55 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
         public override void AI()
         {
             // Beam logic — set velocity direction or position, etc.
-            if (Projectile.velocity.LengthSquared() > 0)
+            if (Projectile.ai[0] == 0)
             {
-                velocityDirection = Projectile.velocity;
-                Projectile.velocity = Vector2.Zero;
-                rotationOffset = 90f;
-            }
-            Projectile.rotation = velocityDirection.RotatedBy(rotationOffset).ToRotation();
-            actualBeamLength = BeamLength;
-            //Main.NewText($"{Projectile.ai[1]} | ID: {Projectile.whoAmI}");
+                if (Projectile.velocity.LengthSquared() > 0)
+                {
+                    velocityDirection = Projectile.velocity;
+                    Projectile.velocity = Vector2.Zero;
+                    rotationOffset = 0f;
+                }
+                Projectile.rotation = velocityDirection.RotatedBy(rotationOffset).ToRotation();
+                actualBeamLength = BeamLength;
+                //Main.NewText($"{Projectile.ai[1]} | ID: {Projectile.whoAmI}");
 
-            Vector2 beamDims = new Vector2(velocityDirection.Length() * BeamLength, Projectile.width * Projectile.scale);
-            if (Main.netMode != NetmodeID.Server)
-            {
-                //ProduceWaterRipples(beamDims);
+                Vector2 beamDims = new Vector2(velocityDirection.Length() * BeamLength, Projectile.width * Projectile.scale);
+                if (Main.netMode != NetmodeID.Server)
+                {
+                    //ProduceWaterRipples(beamDims);
+                }
+                Projectile.ai[1]++;
+                if (Projectile.ai[1] < (int)(60 * 0.5f))
+                {
+                    int fadeDuration = (int)(60 * 0.5f);
+                    alpha = (int)(255f * Projectile.ai[1] / fadeDuration);
+                }
+
+                if (Projectile.ai[1] > (int)(60 * 1f))
+                {
+                    Vector2 unit = velocityDirection.RotatedBy(rotationOffset).SafeNormalize(Vector2.UnitX);
+                    Vector2 beamStart = Projectile.Center - unit * (actualBeamLength / 2f);
+                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    {
+                        for (int i = 0; i < 7; i++)
+                        {
+                            Vector2 offset = new Vector2(Main.rand.Next(-500, 500), beamStart.Y);
+                            int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), offset, new Vector2(10, 0), ModContent.ProjectileType<LobotomyLaser>(), 20, 5, -1, 1);
+                            Main.projectile[projectile].timeLeft = 60 * 5;
+
+                            int fadeDuration = (int)(60 * 1.5f);
+                            alpha = 255 - (int)(255f * Projectile.ai[1] / fadeDuration);
+                            if (Projectile.ai[1] > (int)(60 * 1.5f)) Projectile.Kill();
+                        }
+                    }
+                }
             }
-            Projectile.ai[1]++;
-            if (Projectile.ai[1] < (int)(60 * 0.5f))
+            else
             {
-                int fadeDuration = (int)(60 * 0.5f);
-                alpha = (int)(255f * Projectile.ai[1] / fadeDuration);
+                alpha = 255;
+                Projectile.hostile = true;
             }
 
-            if (Projectile.ai[1] > (int)(60 * 1f))
-            {
-                
-            }
 
             if (alpha > 255)
                 alpha = 255;
@@ -133,11 +157,17 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             else
             {
                 Vector2 position = Projectile.Center - Main.screenPosition;
-                Main.spriteBatch.Draw(texture, position, null, Color.White, Projectile.rotation, origin, Projectile.scale, SpriteEffects.None, 0f); // Main Body
+                Main.spriteBatch.Draw(texture, position, null, new Color(255, 255, 255, 0), 0f, origin, Projectile.scale + Main.rand.NextFloat(-0.5f, 0.5f), SpriteEffects.None, 0f); // Main Body
             }
 
 
-                return false; // We handled drawing
+            return false; // We handled drawing
+        }
+
+        public override void OnSpawn(IEntitySource source)
+        {
+            SoundEngine.PlaySound(VanillaModdingSoundID.LobotomyInsane, Projectile.position);
+
         }
     }
 }
