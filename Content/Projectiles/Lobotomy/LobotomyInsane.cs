@@ -74,12 +74,13 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
                 {
                     Vector2 unit = velocityDirection.RotatedBy(rotationOffset).SafeNormalize(Vector2.UnitX);
                     Vector2 beamStart = Projectile.Center - unit * (actualBeamLength / 2f);
+                    Vector2 beamEnd = Projectile.Center + unit * (actualBeamLength / 2f);
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
                         for (int i = 0; i < 7; i++)
                         {
-                            Vector2 offset = new Vector2(Main.rand.Next(-500, 500), beamStart.Y);
-                            int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), offset, new Vector2(10, 0), ModContent.ProjectileType<LobotomyLaser>(), 20, 5, -1, 1);
+                            Vector2 offset = new Vector2(Main.rand.Next(-500, 500), 360f);
+                            int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), offset, new Vector2(10, 0), ModContent.ProjectileType<LobotomyInsane>(), 20, 5, -1, 1);
                             Main.projectile[projectile].timeLeft = 60 * 5;
 
                             int fadeDuration = (int)(60 * 1.5f);
