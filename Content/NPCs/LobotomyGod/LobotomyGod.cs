@@ -80,7 +80,8 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                 -1, -1, -1, -1, -1, -1, -1,
                  0,  0, 
                  1,  1,  1,  1,  1,               
-                 2,  2,  2,    
+                 2,  2,  2,  
+                 3,  3,  3,
             };
 
             int attackType = attackTable[Main.rand.Next(attackTable.Length)];
@@ -125,8 +126,6 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                     Main.projectile[projectile].timeLeft = 500;
                 }
             }
-
-            
 
             if (phase == -1)
             {
@@ -284,7 +283,31 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                 }
             }
 
+            if (phase == 3)
+            {
+                Vector2 abovePlayer = player.Top + new Vector2(0, -(NPC.height + 300f));
+                Vector2 toAbovePlayer = abovePlayer - NPC.Center;
+                Vector2 toAbovePlayerNormalized = toAbovePlayer.SafeNormalize(Vector2.UnitY);
 
+                speed = 12f;
+                inertia = 40f;
+                moveTo = toAbovePlayerNormalized * speed;
+
+                if (NPC.ai[0] % 60 * 10 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    Vector2 offset = new Vector2(Main.rand.Next(-640, 640), 0);
+                    int projectile0 = Projectile.NewProjectile(NPC.GetSource_FromThis(), player.Center - offset, new Vector2(10, 0), ModContent.ProjectileType<LobotomyEasy>(), 50, 0, -1, player.direction);
+                    int projectile1 = Projectile.NewProjectile(NPC.GetSource_FromThis(), player.Center - offset, new Vector2(0, -1), ModContent.ProjectileType<LobotomyInsane>(), 50, 0, -1);
+                    timesSpawned++;
+                }
+
+
+
+                if (timesSpawned >= 12)
+                {
+                    Phase(getNewPhase());
+                }
+            }
 
             NPC.velocity = (NPC.velocity * (inertia - 1f) + moveTo) / inertia;
 

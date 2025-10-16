@@ -50,7 +50,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             {
                 if (Projectile.velocity.LengthSquared() > 0)
                 {
-                    SoundEngine.PlaySound(VanillaModdingSoundID.LobotomyInsane, Projectile.position);
+                    
                     velocityDirection = Projectile.velocity;
                     Projectile.velocity = Vector2.Zero;
                     rotationOffset = 0f;
@@ -76,6 +76,8 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
                     Vector2 unit = velocityDirection.RotatedBy(rotationOffset).SafeNormalize(Vector2.UnitX);
                     Vector2 beamStart = Projectile.Center - unit * (actualBeamLength / 2f);
                     Vector2 beamEnd = Projectile.Center + unit * (actualBeamLength / 2f);
+                    if (fire == false) SoundEngine.PlaySound(VanillaModdingSoundID.LobotomyInsane, Projectile.position);
+                    fire = true;
                     for (int i = 0; i < 12; i++)
                     {
                         Vector2 offset = new Vector2(Main.rand.Next(-250, 250)*0.5f, 760f+ Main.rand.Next(-150, 150));
