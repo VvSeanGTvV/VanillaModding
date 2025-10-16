@@ -26,8 +26,8 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
         float actualBeamLength = 0f;
         public override void SetDefaults()
         {
-            Projectile.width = 16; // Solid line width
-            Projectile.height = 16;
+            Projectile.width = 100;
+            Projectile.height = 100;
             Projectile.aiStyle = 0;
             Projectile.friendly = false;
             Projectile.hostile = false;
@@ -39,7 +39,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
         }
 
         Vector2 velocityDirection;
-        float rotationOffset = 0f;
+        float rotationOffset = 0f, scaleOffset = 0f;
 
         int alpha = 0;
         bool fire = false;
@@ -50,6 +50,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             {
                 if (Projectile.velocity.LengthSquared() > 0)
                 {
+                    SoundEngine.PlaySound(VanillaModdingSoundID.LobotomyInsane, Projectile.position);
                     velocityDirection = Projectile.velocity;
                     Projectile.velocity = Vector2.Zero;
                     rotationOffset = 0f;
@@ -75,24 +76,25 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
                     Vector2 unit = velocityDirection.RotatedBy(rotationOffset).SafeNormalize(Vector2.UnitX);
                     Vector2 beamStart = Projectile.Center - unit * (actualBeamLength / 2f);
                     Vector2 beamEnd = Projectile.Center + unit * (actualBeamLength / 2f);
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    for (int i = 0; i < 12; i++)
                     {
-                        for (int i = 0; i < 7; i++)
+                        Vector2 offset = new Vector2(Main.rand.Next(-250, 250)*0.5f, 760f+ Main.rand.Next(-150, 150));
+                        if (Main.netMode != NetmodeID.MultiplayerClient && Main.rand.NextBool())
                         {
-                            Vector2 offset = new Vector2(Main.rand.Next(-500, 500), 360f);
-                            int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), offset, new Vector2(10, 0), ModContent.ProjectileType<LobotomyInsane>(), 20, 5, -1, 1);
-                            Main.projectile[projectile].timeLeft = 60 * 5;
-
-                            int fadeDuration = (int)(60 * 1.5f);
-                            alpha = 255 - (int)(255f * Projectile.ai[1] / fadeDuration);
-                            if (Projectile.ai[1] > (int)(60 * 1.5f)) Projectile.Kill();
+                            int projectile = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.position - offset.RotatedBy(Projectile.rotation - MathHelper.PiOver2), new Vector2(0, 50).RotatedBy(Projectile.rotation - MathHelper.PiOver2), ModContent.ProjectileType<LobotomyInsane>(), 20, 5, -1, 1);
+                            Main.projectile[projectile].timeLeft = 60 * 10;
                         }
+
+                        int fadeDuration = (int)(60 * 2f);
+                        alpha = 255 - (int)(255f * Projectile.ai[1] / fadeDuration);
+                        if (Projectile.ai[1] > (int)(60 * 2f)) Projectile.Kill();
                     }
                 }
             }
             else
             {
                 alpha = 255;
+                Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.PiOver2;
                 Projectile.hostile = true;
             }
 
@@ -102,6 +104,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             if (alpha < 0)
                 alpha = 0;
         }
+
 
         public override bool PreDraw(ref Color lightColor)
         {
@@ -117,13 +120,14 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             Color beamColor = new Color(255, 185, 239, 0); // Adjustable color
 
             // Define source rectangles for each frame
-            int frameHeight = side.Height;
+            int frameHeight = 16;
             Vector2 origin = new Vector2(side.Width / 2f, frameHeight / 2f);
+            Vector2 originA = new Vector2(texture.Width / 2f, texture.Height / 2f);
             if (Projectile.ai[0] == 0)
             {
                 float opacity = (alpha / 255f);
-                float totalLength = (Projectile.height + actualBeamLength);
-                for (float i = 0; i <= totalLength; i += Projectile.height)
+                float totalLength = (frameHeight + actualBeamLength);
+                for (float i = 0; i <= totalLength; i += frameHeight / 2f)
                 {
                     Vector2 drawPos = start + unit * i - Main.screenPosition;
                     Main.spriteBatch.Draw(
@@ -139,7 +143,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
                     );
                 }
 
-                for (float i = 0; i <= totalLength; i += Projectile.height)
+                for (float i = 0; i <= totalLength; i += frameHeight / 2f)
                 {
                     Vector2 drawPos = start + unit * i - Main.screenPosition;
                     Main.spriteBatch.Draw(
@@ -158,7 +162,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             else
             {
                 Vector2 position = Projectile.Center - Main.screenPosition;
-                Main.spriteBatch.Draw(texture, position, null, new Color(255, 255, 255, 0), 0f, origin, Projectile.scale + Main.rand.NextFloat(-0.5f, 0.5f), SpriteEffects.None, 0f); // Main Body
+                Main.spriteBatch.Draw(texture, position, null, new Color(255, 255, 255, 0), Projectile.rotation, originA, Projectile.scale + scaleOffset, SpriteEffects.None, 0f); // Main Body
             }
 
 
@@ -167,8 +171,8 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
 
         public override void OnSpawn(IEntitySource source)
         {
-            SoundEngine.PlaySound(VanillaModdingSoundID.LobotomyInsane, Projectile.position);
-
+            scaleOffset = Main.rand.NextFloat(-0.5f, 0.5f);
+            
         }
     }
 }
