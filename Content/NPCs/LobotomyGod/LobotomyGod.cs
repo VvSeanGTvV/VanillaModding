@@ -330,8 +330,6 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                     timesSpawned++;
                 }
 
-
-
                 if (timesSpawned >= 1)
                 {
                     Phase(getNewPhase());
