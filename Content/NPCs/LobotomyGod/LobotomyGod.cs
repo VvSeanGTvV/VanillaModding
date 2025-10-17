@@ -82,6 +82,7 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                  1,  1,  1,  1,  1,               
                  2,  2,  2,  
                  3,  3,  3,
+                 4,
             };
 
             int attackType = attackTable[Main.rand.Next(attackTable.Length)];
@@ -295,15 +296,43 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
 
                 if (NPC.ai[0] % 60 * 10 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
                 {
-                    Vector2 offset = new Vector2(Main.rand.Next(-640, 640), 0);
-                    int projectile0 = Projectile.NewProjectile(NPC.GetSource_FromThis(), player.Center - offset, new Vector2(10, 0), ModContent.ProjectileType<LobotomyEasy>(), 50, 0, -1, player.direction);
-                    int projectile1 = Projectile.NewProjectile(NPC.GetSource_FromThis(), player.Center - offset, new Vector2(0, 1), ModContent.ProjectileType<LobotomyInsane>(), 50, 0, -1);
+                    int projectile0 = Projectile.NewProjectile(NPC.GetSource_FromThis(), player.Center - new Vector2(Main.rand.Next(-640, 640), -640), new Vector2(10, 0), ModContent.ProjectileType<LobotomyEasy>(), 50, 0, -1, player.direction);
+                    int projectile1 = Projectile.NewProjectile(NPC.GetSource_FromThis(), player.Center - new Vector2(Main.rand.Next(-640, 640), 0), new Vector2(0, 1), ModContent.ProjectileType<LobotomyInsane>(), 50, 0, -1);
                     timesSpawned++;
                 }
 
 
 
                 if (timesSpawned >= 12)
+                {
+                    Phase(getNewPhase());
+                }
+            }
+
+            if (phase == 4)
+            {
+                Vector2 abovePlayer = player.Top + new Vector2(0, -(NPC.height + 300f));
+                Vector2 toAbovePlayer = abovePlayer - NPC.Center;
+                Vector2 toAbovePlayerNormalized = toAbovePlayer.SafeNormalize(Vector2.UnitY);
+
+                speed = 12f;
+                inertia = 40f;
+                moveTo = toAbovePlayerNormalized * speed;
+
+                if (NPC.ai[0] % 60 * 10 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    float x = Main.rand.Next(-640, 640);
+                    for (int i = 0; i < 3; i++)
+                    {
+                        int projectile1 = Projectile.NewProjectile(NPC.GetSource_FromThis(), player.Center - new Vector2(x + (250f * player.direction * i), 0), new Vector2(0, 1), ModContent.ProjectileType<LobotomyInsane>(), 50, 0, -1);
+                    }
+                    //int projectile0 = Projectile.NewProjectile(NPC.GetSource_FromThis(), player.Center - new Vector2(Main.rand.Next(-640, 640), -640), new Vector2(10, 0), ModContent.ProjectileType<LobotomyEasy>(), 50, 0, -1, player.direction);
+                    timesSpawned++;
+                }
+
+
+
+                if (timesSpawned >= 1)
                 {
                     Phase(getNewPhase());
                 }
