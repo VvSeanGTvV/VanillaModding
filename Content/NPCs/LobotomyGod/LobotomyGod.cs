@@ -324,7 +324,7 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                     float x = Main.rand.Next(-640, 640);
                     for (int i = 0; i < 3; i++)
                     {
-                        int projectile1 = Projectile.NewProjectile(NPC.GetSource_FromThis(), player.Center - new Vector2(x + (250f * player.direction * i), 0), new Vector2(0, 1), ModContent.ProjectileType<LobotomyInsane>(), 50, 0, -1);
+                        int projectile1 = Projectile.NewProjectile(NPC.GetSource_FromThis(), player.Center - new Vector2(x + (300f * player.direction * i), 0), new Vector2(0, 1), ModContent.ProjectileType<LobotomyInsane>(), 50, 0, -1);
                     }
                     //int projectile0 = Projectile.NewProjectile(NPC.GetSource_FromThis(), player.Center - new Vector2(Main.rand.Next(-640, 640), -640), new Vector2(10, 0), ModContent.ProjectileType<LobotomyEasy>(), 50, 0, -1, player.direction);
                     timesSpawned++;
