@@ -40,7 +40,7 @@ namespace VanillaModding.Content.Items.Weapon.Throwable.Lobotomy
             recipe.AddIngredient(ItemID.SoulofFright, 20);
             recipe.AddIngredient(ItemID.AdamantiteBar, 35);
             recipe.AddIngredient(ItemID.AntlionMandible, 6);
-            recipe.AddIngredient(ItemID.SoulofNight, 10);
+            recipe.AddIngredient(ItemID.SoulofSight, 10);
             recipe.AddIngredient(ModContent.ItemType<LobotomyThrowable>(), 1);
             recipe.AddTile(TileID.LunarCraftingStation);
             recipe.Register();

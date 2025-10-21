@@ -222,7 +222,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 
             if (NPC.CountNPCS(ModContent.NPCType<DuneSplicerCloneHead>()) < count && attackCounter < 1)
             {
-                NPC.NewNPC(entitySource, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<DuneSplicerCloneHead>(), NPC.whoAmI);
+                if (Main.netMode != NetmodeID.MultiplayerClient) NPC.NewNPC(entitySource, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<DuneSplicerCloneHead>(), NPC.whoAmI);
             }
         }
 
@@ -322,16 +322,6 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
                 MaximumStackPerChunkBase = 1,
                 MinimumItemDropsCount = 5,
                 MaximumItemDropsCount = 16,
-            };
-
-            var parameters2 = new DropOneByOne.Parameters()
-            {
-                ChanceNumerator = 1,
-                ChanceDenominator = 1,
-                MinimumStackPerChunkBase = 1,
-                MaximumStackPerChunkBase = 1,
-                MinimumItemDropsCount = 10,
-                MaximumItemDropsCount = 38,
             };
 
             notExpertRule.OnSuccess(new DropOneByOne(itemType, parameters));

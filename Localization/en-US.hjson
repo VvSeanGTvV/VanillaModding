@@ -102,12 +102,17 @@ Mods: {
 
 			SiriusBag: {
 				DisplayName: Treasure Bag (Sirius)
-				Tooltip: Right Click to open
+				Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 			}
 
 			SandTrapperBag: {
 				DisplayName: Treasure Bag (Sand Trapper)
-				Tooltip: Right Click to open
+				Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+			}
+
+			LogodomyBag: {
+				DisplayName: Treasure Bag (Logodomy)
+				Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 			}
 
 			BloodyScythe: {
@@ -252,6 +257,11 @@ Mods: {
 				DisplayName: Turbo Builders Club Hard Hat
 				Tooltip: This hard hat is a nod reference to the Roblox's Builders Club membership.
 			}
+
+			LogodomyShard: {
+				DisplayName: Logodomy Shard
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
@@ -284,8 +294,7 @@ Mods: {
 
 			TheChosenOne.DisplayName: The Chosen One
 			LobotomyGod.DisplayName: Logodomy
-			LobotomyExtremeDemon_NPC.DisplayName: Lobotomy Extreme Demon_ N P C
-			LobotomyExtremeDemonNPC.DisplayName: Lobotomy Extreme Demon N P C
+			LobotomyExtremeDemonNPC.DisplayName: Homing Lobotomy Extreme Demon
 		}
 
 		Projectiles: {

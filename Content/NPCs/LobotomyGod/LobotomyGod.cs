@@ -9,9 +9,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Common.Systems;
+using VanillaModding.Content.Items.Consumable.BossBags;
+using VanillaModding.Content.Items.Materials;
 using VanillaModding.Content.NPCs.DuneTrapper;
 using VanillaModding.Content.NPCs.Ocram.Ocram_Minions;
 using VanillaModding.Content.Projectiles.Lobotomy;
@@ -408,6 +411,62 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
             }
 
             return false;
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            // Do NOT misuse the ModifyNPCLoot and OnKill hooks: the former is only used for registering drops, the latter for everything else
+
+            // Add the treasure bag using ItemDropRule.BossBag (automatically checks for expert mode)
+            npcLoot.Add(ItemDropRule.BossBag(ModContent.ItemType<LogodomyBag>()));
+
+            // Trophies are spawned with 1/10 chance
+            //npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.Placeable.Furniture.MinionBossTrophy>(), 10));
+
+            // ItemDropRule.MasterModeCommonDrop for the relic
+            //npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<Items.Placeable.Furniture.MinionBossRelic>()));
+
+            // ItemDropRule.MasterModeDropOnAllPlayers for the pet
+            //npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<MinionBossPetItem>(), 4));
+
+            // All our drops here are based on "not expert", meaning we use .OnSuccess() to add them into the rule, which then gets added
+            //LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
+
+            // Notice we use notExpertRule.OnSuccess instead of npcLoot.Add so it only applies in normal mode
+            // Boss masks are spawned with 1/7 chance
+            //notExpertRule.OnSuccess(ItemDropRule.Common(ModContent.ItemType<MinionBossMask>(), 7));
+
+            // This part is not required for a boss and is just showcasing some advanced stuff you can do with drop rules to control how items spawn
+            // We make 12-15 ExampleItems spawn randomly in all directions, like the lunar pillar fragments. Hereby we need the DropOneByOne rule,
+            // which requires these parameters to be defined
+            LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
+            int itemType = ModContent.ItemType<LogodomyShard>();
+            int itemType2 = ItemID.SoulofFlight;
+            var parameters = new DropOneByOne.Parameters()
+            {
+                ChanceNumerator = 1,
+                ChanceDenominator = 1,
+                MinimumStackPerChunkBase = 1,
+                MaximumStackPerChunkBase = 1,
+                MinimumItemDropsCount = 3,
+                MaximumItemDropsCount = 6,
+            };
+
+            var parameters2 = new DropOneByOne.Parameters()
+            {
+                ChanceNumerator = 1,
+                ChanceDenominator = 1,
+                MinimumStackPerChunkBase = 1,
+                MaximumStackPerChunkBase = 1,
+                MinimumItemDropsCount = 5,
+                MaximumItemDropsCount = 10,
+            };
+
+            notExpertRule.OnSuccess(new DropOneByOne(itemType, parameters));
+            notExpertRule.OnSuccess(new DropOneByOne(itemType2, parameters2));
+
+            // Finally add the leading rule
+            npcLoot.Add(notExpertRule);
         }
     }
 }
