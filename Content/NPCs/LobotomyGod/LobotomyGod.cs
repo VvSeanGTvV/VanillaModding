@@ -8,9 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Common.Systems;
+using VanillaModding.Content.NPCs.DuneTrapper;
 using VanillaModding.Content.NPCs.Ocram.Ocram_Minions;
 using VanillaModding.Content.Projectiles.Lobotomy;
 
@@ -263,15 +265,7 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
 
                     Vector2 velocity = direction * projectileSpeed;
 
-                    if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(
-                        NPC.GetSource_FromAI(),
-                        spawnPosition,
-                        velocity,
-                        projectileType,
-                        10,
-                        5f,
-                        -1
-                    );
+                    if (Main.netMode != NetmodeID.MultiplayerClient) NPC.NewNPC(NPC.GetSource_FromAI(), (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<LobotomyExtremeDemonNPC>(), NPC.whoAmI);
 
                     timesSpawned++;
                     angleOffset += MathHelper.ToRadians(10f); // Increment the angle offset for next time
@@ -412,6 +406,7 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                 Vector2 HandsOffset = new(-125, 0);
                 Main.spriteBatch.Draw(Hand, position + HandsOffset.RotatedBy(radians), null, Color.Green, radians - MathHelper.PiOver2, originHand, NPC.scale - 0.5f, SpriteEffects.None, 0f);
             }
+
             return false;
         }
     }

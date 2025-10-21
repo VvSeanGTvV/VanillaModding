@@ -284,6 +284,8 @@ Mods: {
 
 			TheChosenOne.DisplayName: The Chosen One
 			LobotomyGod.DisplayName: Logodomy
+			LobotomyExtremeDemon_NPC.DisplayName: Lobotomy Extreme Demon_ N P C
+			LobotomyExtremeDemonNPC.DisplayName: Lobotomy Extreme Demon N P C
 		}
 
 		Projectiles: {
