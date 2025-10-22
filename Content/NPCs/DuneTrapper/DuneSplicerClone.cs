@@ -17,6 +17,10 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 
         public override int TailType => ModContent.NPCType<DuneSplicerCloneTail>();
 
+        public static LocalizedText BestiaryText
+        {
+            get; private set;
+        }
 
         public override void SetStaticDefaults()
         {
@@ -29,12 +33,14 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
                 PortraitPositionYOverride = 12f // Offset POS Y
             };
             NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+            BestiaryText = this.GetLocalization("Bestiary");
         }
 
         public override void SetDefaults()
         {
             // Head is 10 defense, body 20, tail 30.
-            NPC.CloneDefaults(NPCID.DuneSplicerHead);
+            NPC.width = 50;
+            NPC.height = 48 / 2;
             NPC.damage = 28;
             NPC.defense = 14;
             NPC.lifeMax = 550;
@@ -58,7 +64,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 				//BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns,
 
 				// Sets the description of this NPC that is listed in the bestiary.
-				new FlavorTextBestiaryInfoElement("A worm that likes eating people.")
+				new FlavorTextBestiaryInfoElement(BestiaryText.ToString())
             });
         }
 
@@ -66,7 +72,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
         {
             // Set the segment variance
             // If you want the segment length to be constant, set these two properties to the same value
-            MinSegmentLength = 4;
+            MinSegmentLength = 6;
             MaxSegmentLength = 6;
 
             CommonWormInit(this);
@@ -121,7 +127,8 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 
         public override void SetDefaults()
         {
-            NPC.CloneDefaults(NPCID.DuneSplicerBody);
+            NPC.width = 50;
+            NPC.height = 36 / 2;
             NPC.damage = 24;
             NPC.defense = 14;
             NPC.lifeMax = 550;
@@ -151,7 +158,8 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 
         public override void SetDefaults()
         {
-            NPC.CloneDefaults(NPCID.DuneSplicerTail);
+            NPC.width = 50;
+            NPC.height = 36/2;
             NPC.damage = 20;
             NPC.defense = 16;
             NPC.lifeMax = 550;

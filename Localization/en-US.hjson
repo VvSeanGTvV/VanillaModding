@@ -266,7 +266,12 @@ Mods: {
 
 		NPCs: {
 			DuneSplicerCloneBody.DisplayName: Dune Splicer Clone
-			DuneSplicerCloneHead.DisplayName: Dune Splicer Clone
+
+			DuneSplicerCloneHead: {
+				DisplayName: Dune Nuisance
+				Bestiary: Minion of the Dune Trapper.
+			}
+
 			DuneSplicerCloneTail.DisplayName: Dune Splicer Clone
 
 			Ocram: {
