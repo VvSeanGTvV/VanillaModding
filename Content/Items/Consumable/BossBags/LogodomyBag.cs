@@ -48,7 +48,7 @@ namespace VanillaModding.Content.Items.Consumable.BossBags
 
             //itemLoot.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<MinionBossMask>(), 7));
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<LogodomyShard>(), 1, 3, 6));
-            itemLoot.Add(ItemDropRule.Common(ItemID.SoulofFlight, 1, 5, 10));
+            itemLoot.Add(ItemDropRule.Common(ItemID.SoulofFlight, 1, 10, 20));
             itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(ModContent.NPCType<LobotomyGod>()));
             //itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<SandTrapperStaff>(), 30));
         }

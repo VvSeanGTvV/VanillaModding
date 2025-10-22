@@ -42,7 +42,7 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
 
             NPC.noGravity = true;
             NPC.noTileCollide = true;
-            NPC.value = Item.buyPrice(0, 0, 0, 0);
+            NPC.value = Item.buyPrice(0, 20, 0, 10);
             NPC.aiStyle = -1;
 
             NPC.knockBackResist = 0;
@@ -458,8 +458,8 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                 ChanceDenominator = 1,
                 MinimumStackPerChunkBase = 1,
                 MaximumStackPerChunkBase = 1,
-                MinimumItemDropsCount = 5,
-                MaximumItemDropsCount = 10,
+                MinimumItemDropsCount = 10,
+                MaximumItemDropsCount = 20,
             };
 
             notExpertRule.OnSuccess(new DropOneByOne(itemType, parameters));

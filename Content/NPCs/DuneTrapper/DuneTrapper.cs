@@ -126,8 +126,8 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
         internal static void CommonWormInit(Worm worm)
         {
             // These two properties handle the movement of the worm
-            worm.MoveSpeed = 15.5f;
-            worm.Acceleration = 0.2f;
+            worm.MoveSpeed = 16.5f;
+            worm.Acceleration = 0.4f;
 
         }
 
