@@ -159,6 +159,12 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
         public bool CanFly { get; set; }
 
         /// <summary>
+        /// Instead of using HeadAI(), it uses primarily all on AI() or another function to work, this is ONLY intended for using a new pattern or such.
+        /// If <see cref="UseCustomAI"/> are true, collisions will be returned to <see cref="GetCollision"/>.
+        /// </summary>
+        public bool UseCustomAI { get; set; }
+
+        /// <summary>
         /// The maximum distance in <b>pixels</b> within which the NPC will use tile collision, if <see cref="CanFly"/> returns <see langword="false"/>.<br/>
         /// Defaults to 1000 pixels, which is equivalent to 62.5 tiles.
         /// </summary>
@@ -219,7 +225,12 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 
             HeadAI_CheckTargetDistance(ref collision);
 
-            HeadAI_Movement(collision);
+            if (!UseCustomAI) HeadAI_Movement(collision);
+        }
+
+        public bool GetCollision()
+        {
+            return HeadAI_CheckCollisionForDustSpawns();
         }
 
         private void HeadAI_SpawnSegments()

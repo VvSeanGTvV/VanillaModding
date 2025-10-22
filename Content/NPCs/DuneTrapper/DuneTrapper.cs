@@ -57,6 +57,13 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
             BestiaryText = this.GetLocalization("Bestiary");
 
+            // Add this in for bosses that have a summon item, requires corresponding code in the item (See MinionBossSummonItem.cs)
+            NPCID.Sets.MPAllowedEnemies[Type] = true;
+            // Automatically group with other bosses
+            NPCID.Sets.BossBestiaryPriority.Add(Type);
+
+            // Specify the debuffs it is immune to. Most NPCs are immune to Confused.
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
         }
 
         public override void SetDefaults()
@@ -146,9 +153,8 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
         public override void AI()
         {
             if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
-            {
                 NPC.TargetClosest();
-            }
+            
             Player player = Main.player[NPC.target];
 
             bool InDesert = (player.ZoneDesert || player.ZoneUndergroundDesert);
@@ -222,7 +228,8 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 
             if (NPC.CountNPCS(ModContent.NPCType<DuneSplicerCloneHead>()) < count && attackCounter < 1)
             {
-                if (Main.netMode != NetmodeID.MultiplayerClient) NPC.NewNPC(entitySource, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<DuneSplicerCloneHead>(), NPC.whoAmI);
+                Vector2 offset = new Vector2(Main.rand.Next(-640, 640), Main.rand.Next(-640, 640));
+                if (Main.netMode != NetmodeID.MultiplayerClient) NPC.NewNPC(entitySource, (int)(NPC.Center.X + offset.X), (int)(NPC.Center.Y + offset.Y), ModContent.NPCType<DuneSplicerCloneHead>(), NPC.whoAmI);
             }
         }
 

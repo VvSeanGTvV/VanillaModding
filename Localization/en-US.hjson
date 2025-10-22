@@ -265,27 +265,25 @@ Mods: {
 		}
 
 		NPCs: {
-			DuneSplicerCloneBody.DisplayName: Dune Splicer Clone
-
 			DuneSplicerCloneHead: {
 				DisplayName: Dune Nuisance
-				Bestiary: Minion of the Dune Trapper.
+				Bestiary: Shorty speed, Lookout for them worm!
 			}
-
-			DuneSplicerCloneTail.DisplayName: Dune Splicer Clone
+			DuneSplicerCloneBody.DisplayName: Dune Nuisance
+			DuneSplicerCloneTail.DisplayName: Dune Nuisance
 
 			Ocram: {
 				DisplayName: Ocram
 				Bestiary: A Classical boss from the combined from Skull and two Eyes of the mech. Forged with Bars and merged with souls.
 			}
 
-			DuneTrapperBody.DisplayName: Dune Trapper
-			DuneTrapperTail.DisplayName: Dune Trapper
-
 			DuneTrapperHead: {
 				DisplayName: Dune Trapper
-				Bestiary: A messy boss, likes to be within a sandstorm in the desert. The spikes on its body are sharp and dangerously detachable.
+				Bestiary: A chaotic boss, likes to be within a Sandstorm in the desert. The spikes on its body are insanely sharp and are loose.
 			}
+
+			DuneTrapperBody.DisplayName: Dune Trapper
+			DuneTrapperTail.DisplayName: Dune Trapper
 
 			OcramServants.DisplayName: Ocram Servants
 			Sirius.DisplayName: Sirius
@@ -294,7 +292,7 @@ Mods: {
 
 			DeliveryDrone: {
 				DisplayName: Delivery Drone
-				Bestiary: It's a friendly drone that delivers packages to you! Although it's best to do it in the open area.
+				Bestiary: It's your friendly drone! Delivers random items to you! It's fragile, explosive upon contact, and retreat
 			}
 
 			TheChosenOne.DisplayName: The Chosen One
