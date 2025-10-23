@@ -269,6 +269,7 @@ Mods: {
 				DisplayName: Dune Nuisance
 				Bestiary: Shorty speed, Lookout for them worm!
 			}
+
 			DuneSplicerCloneBody.DisplayName: Dune Nuisance
 			DuneSplicerCloneTail.DisplayName: Dune Nuisance
 
@@ -284,7 +285,6 @@ Mods: {
 
 			DuneTrapperBody.DisplayName: Dune Trapper
 			DuneTrapperTail.DisplayName: Dune Trapper
-
 			OcramServants.DisplayName: Ocram Servants
 			Sirius.DisplayName: Sirius
 			AlphaChan.DisplayName: Alpha Chan
@@ -292,7 +292,7 @@ Mods: {
 
 			DeliveryDrone: {
 				DisplayName: Delivery Drone
-				Bestiary: It's your friendly drone! Delivers random items to you! It's fragile, explosive upon contact, and retreat
+				Bestiary: It's your friendly drone! Delivers random items to you! It's fragile, explosive upon contact, and retreat on damage.
 			}
 
 			TheChosenOne.DisplayName: The Chosen One

@@ -212,16 +212,9 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             ForcedTargetPosition = null;
             return closestNPC;
         }*/
-
-        int savec = 0;
         public void annoyDune()
         {
-            int count = savec;
-            if (!spawnInit)
-            {
-                savec = onRand();
-                spawnInit = true;
-            }
+            int count = 2;
             var entitySource = NPC.GetSource_FromAI();
             attackCounter--;
 
@@ -233,63 +226,51 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             }
         }
 
-        public static int onRand()
+        private void NPCLoot_DropItems(Player closestPlayer)
         {
-            int count = MinCount();
-            int countMAX = MinMAXCount();
-            return Main.rand.Next(count, countMAX);
-
-        }
-
-        public static int MinCount()
-        {
-            int count = 1;
-
-            if (Main.expertMode)
-            {
-                //count += 1; // Increase by 4 if expert or master mode
-            }
-
-            if (Main.hardMode)
-            {
-                count += 2; // Increase by 2 if hard mode
-            }
-
-            if (Main.getGoodWorld)
-            {
-                count += 5; // Increase by 5 if using the "For The Worthy" seed
-            }
-
-            return count;
-        }
-
-        public static int MinMAXCount()
-        {
-            int count = 2;
-
-            if (Main.expertMode)
-            {
-                count += 2; // Increase by 4 if expert or master mode
-            }
-
-            if (Main.hardMode)
-            {
-                //count += 4; // Increase by 2 if hard mode
-                //NPC.lifeMax = 
-            }
-
-            if (Main.getGoodWorld)
-            {
-                count += 5; // Increase by 5 if using the "For The Worthy" seed
-            }
-
-            return count;
+            DropAttemptInfo dropAttemptInfo = default(DropAttemptInfo);
+            dropAttemptInfo.player = closestPlayer;
+            dropAttemptInfo.npc = this.NPC;
+            dropAttemptInfo.IsExpertMode = Main.expertMode;
+            dropAttemptInfo.IsMasterMode = Main.masterMode;
+            dropAttemptInfo.IsInSimulation = false;
+            dropAttemptInfo.rng = Main.rand;
+            DropAttemptInfo info = dropAttemptInfo;
+            Main.ItemDropSolver.TryDropping(info);
         }
 
         public override void OnKill()
         {
-            //Sandstorm.StopSandstorm();
+            
+
+            //NPC.SetEventFlagCleared(ref DownedBossSystem.downedDuneTrapper, -1);
+        }
+
+        public override bool PreKill()
+        {
+            Vector2 vector = NPC.position;
+            Vector2 center = Main.player[NPC.target].Center;
+            float num8 = 100000000f;
+            Vector2 vector2 = NPC.position;
+            for (int n = 0; n < 200; n++)
+            {
+                if (Main.npc[n].active && (Main.npc[n].type == this.Type || Main.npc[n].type == BodyType || Main.npc[n].type == TailType))
+                {
+                    float num9 = Math.Abs(Main.npc[n].Center.X - center.X) + Math.Abs(Main.npc[n].Center.Y - center.Y);
+                    if (num9 < num8)
+                    {
+                        num8 = num9;
+                        vector2 = Main.npc[n].position;
+                    }
+                }
+            }
+
+            NPC.position = vector2;
+            NPCLoot_DropItems(Main.player[NPC.target]);
+            NPC.position = vector;
+
             NPC.SetEventFlagCleared(ref DownedBossSystem.downedDuneTrapper, -1);
+            return false;
         }
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)

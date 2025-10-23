@@ -1,8 +1,10 @@
+using Microsoft.VisualBasic;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -581,6 +583,159 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             // Force a netupdate if the NPC's velocity changed sign and it was not "just hit" by a player
             if (((NPC.velocity.X > 0 && NPC.oldVelocity.X < 0) || (NPC.velocity.X < 0 && NPC.oldVelocity.X > 0) || (NPC.velocity.Y > 0 && NPC.oldVelocity.Y < 0) || (NPC.velocity.Y < 0 && NPC.oldVelocity.Y > 0)) && !NPC.justHit)
                 NPC.netUpdate = true;
+        }
+
+        public void NPCLoot_Drop_Center(int player, int HeadType, int BodyType, int TailType)
+        {
+            Vector2 vector = NPC.position;
+            Vector2 center = Main.player[player].Center;
+            float num8 = 100000000f;
+            Vector2 vector2 = NPC.position;
+            for (int n = 0; n < 200; n++)
+            {
+                if (Main.npc[n].active && (Main.npc[n].type == HeadType || Main.npc[n].type == BodyType || Main.npc[n].type == TailType))
+                {
+                    float num9 = Math.Abs(Main.npc[n].Center.X - center.X) + Math.Abs(Main.npc[n].Center.Y - center.Y);
+                    if (num9 < num8)
+                    {
+                        num8 = num9;
+                        vector2 = Main.npc[n].position;
+                    }
+                }
+            }
+
+            NPC.position = vector2;
+            NPCLoot_DropItems(Main.player[player]);
+            NPCLoot_DropMoney(Main.player[player]);
+            NPC.position = vector;
+        }
+
+        private void NPCLoot_DropItems(Player closestPlayer)
+        {
+            DropAttemptInfo dropAttemptInfo = default(DropAttemptInfo);
+            dropAttemptInfo.player = closestPlayer;
+            dropAttemptInfo.npc = this.NPC;
+            dropAttemptInfo.IsExpertMode = Main.expertMode;
+            dropAttemptInfo.IsMasterMode = Main.masterMode;
+            dropAttemptInfo.IsInSimulation = false;
+            dropAttemptInfo.rng = Main.rand;
+            DropAttemptInfo info = dropAttemptInfo;
+            Main.ItemDropSolver.TryDropping(info);
+        }
+
+        private void NPCLoot_DropMoney(Player closestPlayer)
+        {
+            float num = 0f;
+            float luck = closestPlayer.luck;
+            int num2 = 1;
+            if (Main.rand.NextFloat() < Math.Abs(luck))
+                num2 = 2;
+
+            for (int i = 0; i < num2; i++)
+            {
+                float num3 = NPC.value;
+                if (NPC.midas)
+                    num3 *= 1f + (float)Main.rand.Next(10, 51) * 0.01f;
+
+                num3 *= 1f + (float)Main.rand.Next(-20, 76) * 0.01f;
+                if (Main.rand.Next(2) == 0)
+                    num3 *= 1f + (float)Main.rand.Next(5, 11) * 0.01f;
+
+                if (Main.rand.Next(4) == 0)
+                    num3 *= 1f + (float)Main.rand.Next(10, 21) * 0.01f;
+
+                if (Main.rand.Next(8) == 0)
+                    num3 *= 1f + (float)Main.rand.Next(15, 31) * 0.01f;
+
+                if (Main.rand.Next(16) == 0)
+                    num3 *= 1f + (float)Main.rand.Next(20, 41) * 0.01f;
+
+                if (Main.rand.Next(32) == 0)
+                    num3 *= 1f + (float)Main.rand.Next(25, 51) * 0.01f;
+
+                if (Main.rand.Next(64) == 0)
+                    num3 *= 1f + (float)Main.rand.Next(50, 101) * 0.01f;
+
+                if (Main.bloodMoon)
+                    num3 *= 1f + (float)Main.rand.Next(101) * 0.01f;
+
+                if (i == 0)
+                {
+                    num = num3;
+                }
+                else if (luck < 0f)
+                {
+                    if (num3 < num)
+                        num = num3;
+                }
+                else if (num3 > num)
+                {
+                    num = num3;
+                }
+            }
+
+            num += (float)NPC.extraValue;
+            while ((int)num > 0)
+            {
+                if (num > 1000000f)
+                {
+                    int num4 = (int)(num / 1000000f);
+                    if (num4 > 50 && Main.rand.Next(5) == 0)
+                        num4 /= Main.rand.Next(3) + 1;
+
+                    if (Main.rand.Next(5) == 0)
+                        num4 /= Main.rand.Next(3) + 1;
+
+                    int num5 = num4;
+                    while (num5 > 999)
+                    {
+                        num5 -= 999;
+                        Item.NewItem(NPC.GetSource_Loot(), (int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height, 74, 999);
+                    }
+
+                    num -= (float)(1000000 * num4);
+                    Item.NewItem(NPC.GetSource_Loot(), (int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height, 74, num5);
+                }
+                else if (num > 10000f)
+                {
+                    int num6 = (int)(num / 10000f);
+                    if (num6 > 50 && Main.rand.Next(5) == 0)
+                        num6 /= Main.rand.Next(3) + 1;
+
+                    if (Main.rand.Next(5) == 0)
+                        num6 /= Main.rand.Next(3) + 1;
+
+                    num -= (float)(10000 * num6);
+                    Item.NewItem(NPC.GetSource_Loot(), (int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height, 73, num6);
+                }
+                else if (num > 100f)
+                {
+                    int num7 = (int)(num / 100f);
+                    if (num7 > 50 && Main.rand.Next(5) == 0)
+                        num7 /= Main.rand.Next(3) + 1;
+
+                    if (Main.rand.Next(5) == 0)
+                        num7 /= Main.rand.Next(3) + 1;
+
+                    num -= (float)(100 * num7);
+                    Item.NewItem(NPC.GetSource_Loot(), (int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height, 72, num7);
+                }
+                else
+                {
+                    int num8 = (int)num;
+                    if (num8 > 50 && Main.rand.Next(5) == 0)
+                        num8 /= Main.rand.Next(3) + 1;
+
+                    if (Main.rand.Next(5) == 0)
+                        num8 /= Main.rand.Next(4) + 1;
+
+                    if (num8 < 1)
+                        num8 = 1;
+
+                    num -= (float)num8;
+                    Item.NewItem(NPC.GetSource_Loot(), (int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height, 71, num8);
+                }
+            }
         }
     }
 
