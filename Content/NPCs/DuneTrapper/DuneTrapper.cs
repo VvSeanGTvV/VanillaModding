@@ -237,7 +237,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
         public override bool PreKill()
         {
 
-            NPCLoot_Drop_Center(NPC.target, this.Type, BodyType, TailType);
+            NPCLoot_Center(NPC.target, this.Type, BodyType, TailType);
             NPC.SetEventFlagCleared(ref DownedBossSystem.downedDuneTrapper, -1);
             return false;
         }

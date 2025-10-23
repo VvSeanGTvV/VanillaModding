@@ -3,9 +3,11 @@ using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.Audio;
+using Terraria.Chat;
 using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace VanillaModding.Content.NPCs.DuneTrapper
@@ -585,7 +587,17 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
                 NPC.netUpdate = true;
         }
 
-        public void NPCLoot_Drop_Center(int player, int HeadType, int BodyType, int TailType)
+
+        /// <summary>
+        /// Spawns Loot on the middle segment of the worm, nearest to the player. 
+        /// Same of the hardcoded worm loot of the Destroyer, can be found in <see cref="NPC.checkDead()"/>.
+        /// </summary>
+        /// <param name="player">Center to Player</param>
+        /// <param name="HeadType">The ID of the segment NPC of the Head</param>
+        /// <param name="BodyType">The ID of the segment NPC of the Body</param>
+        /// <param name="TailType">The ID of the segment NPC of the Tail</param>
+        /// <returns></returns>
+        public void NPCLoot_Center(int player, int HeadType, int BodyType, int TailType)
         {
             Vector2 vector = NPC.position;
             Vector2 center = Main.player[player].Center;
@@ -603,11 +615,55 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
                     }
                 }
             }
+            string typeName = NPC.TypeName;
 
             NPC.position = vector2;
             NPCLoot_DropItems(Main.player[player]);
             NPCLoot_DropMoney(Main.player[player]);
             NPC.position = vector;
+
+            DoDeathEvents_DropBossPotionsAndHearts(ref typeName);
+            DoDeathEvents_CelebrateBossDeath(typeName);
+        }
+
+        //TML: Added 'typeName' parameter.
+        private void DoDeathEvents_DropBossPotionsAndHearts(ref string typeName)
+        {
+            int stack = Main.rand.Next(5, 16);
+            int num = 28;
+
+            NPCLoader.BossLoot(NPC, ref typeName, ref num);
+
+            Item.NewItem(NPC.GetSource_Loot(), (int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height, num, stack);
+            int num2 = Main.rand.Next(5) + 5;
+            for (int i = 0; i < num2; i++)
+            {
+                Item.NewItem(NPC.GetSource_Loot(), (int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height, 58);
+            }
+        }
+
+        private void DoDeathEvents_CelebrateBossDeath(string typeName)
+        {
+            Color color = new Color(175, 75, 255);
+            NetworkText custom = null;
+            if (this.DeathMessage is LocalizedText customDeathMessage)
+            {
+                // Modder might have already used WithFormatArgs/BoundArgs to fill out custom boss fight name as well.
+                custom = customDeathMessage.BoundArgs != null ? customDeathMessage.ToNetworkText() : customDeathMessage.ToNetworkText(NPC.GetFullNetName());
+            }
+            // Note: typeName comes from NPC.TypeName->NPCLoader.ModifyTypeName and NPCLoader.BossLoot, but is just a literal string and won't be localized on other clients properly if used, so it is not used in DeathMessage.
+            bool skipMessage = NPCLoader.ModifyDeathMessage(NPC, ref custom, ref color);
+            if (skipMessage)
+            {
+            }
+            else if (Main.netMode == 0)
+            {
+                Main.NewText(Language.GetTextValue("Announcement.HasBeenDefeated_Single", typeName), color);
+            }
+            else if (Main.netMode == 2)
+            {
+                ChatHelper.BroadcastChatMessage(NetworkText.FromKey("Announcement.HasBeenDefeated_Single", NPC.GetTypeNetName()), color);
+            }
         }
 
         private void NPCLoot_DropItems(Player closestPlayer)
