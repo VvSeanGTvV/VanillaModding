@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Mono.Cecil;
+using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -226,19 +227,6 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             }
         }
 
-        private void NPCLoot_DropItems(Player closestPlayer)
-        {
-            DropAttemptInfo dropAttemptInfo = default(DropAttemptInfo);
-            dropAttemptInfo.player = closestPlayer;
-            dropAttemptInfo.npc = this.NPC;
-            dropAttemptInfo.IsExpertMode = Main.expertMode;
-            dropAttemptInfo.IsMasterMode = Main.masterMode;
-            dropAttemptInfo.IsInSimulation = false;
-            dropAttemptInfo.rng = Main.rand;
-            DropAttemptInfo info = dropAttemptInfo;
-            Main.ItemDropSolver.TryDropping(info);
-        }
-
         public override void OnKill()
         {
             
@@ -248,27 +236,8 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 
         public override bool PreKill()
         {
-            Vector2 vector = NPC.position;
-            Vector2 center = Main.player[NPC.target].Center;
-            float num8 = 100000000f;
-            Vector2 vector2 = NPC.position;
-            for (int n = 0; n < 200; n++)
-            {
-                if (Main.npc[n].active && (Main.npc[n].type == this.Type || Main.npc[n].type == BodyType || Main.npc[n].type == TailType))
-                {
-                    float num9 = Math.Abs(Main.npc[n].Center.X - center.X) + Math.Abs(Main.npc[n].Center.Y - center.Y);
-                    if (num9 < num8)
-                    {
-                        num8 = num9;
-                        vector2 = Main.npc[n].position;
-                    }
-                }
-            }
 
-            NPC.position = vector2;
-            NPCLoot_DropItems(Main.player[NPC.target]);
-            NPC.position = vector;
-
+            NPCLoot_Drop_Center(NPC.target, this.Type, BodyType, TailType);
             NPC.SetEventFlagCleared(ref DownedBossSystem.downedDuneTrapper, -1);
             return false;
         }
