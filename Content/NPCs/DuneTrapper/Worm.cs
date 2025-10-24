@@ -165,7 +165,8 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 
         /// <summary>
         /// Instead of using HeadAI(), it uses primarily all on AI() or another function to work, this is ONLY intended for using a new pattern or such.
-        /// If <see cref="UseCustomAI"/> are true, collisions will be returned to <see cref="GetCollision"/>.
+        /// If <see cref="UseCustomAI"/> are true, collisions will be returned to <see cref="GetCollision"/>. 
+        /// Enabling this variable, also causes to not use HeadAI Movements function. Requiring you to make your own movements.
         /// </summary>
         public bool UseCustomAI { get; set; }
 
@@ -622,10 +623,12 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             NPCLoot_DropItems(Main.player[player]);
             NPCLoot_DropMoney(Main.player[player]);
             NPCLoot_DropHeals(Main.player[player]);
-            NPC.position = vector;
 
             DoDeathEvents_DropBossPotionsAndHearts(ref typeName);
             DoDeathEvents_CelebrateBossDeath(typeName);
+            NPC.position = vector;
+
+            
         }
 
         //TML: Added 'typeName' parameter.

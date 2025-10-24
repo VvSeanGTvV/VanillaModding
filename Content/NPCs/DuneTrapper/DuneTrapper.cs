@@ -126,7 +126,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             // If you want the segment length to be constant, set these two properties to the same value
             MinSegmentLength = 48;
             MaxSegmentLength = MinSegmentLength;
-
+            UseCustomAI = true;
             CommonWormInit(this);
         }
 
@@ -157,16 +157,25 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
                 NPC.TargetClosest();
             
             Player player = Main.player[NPC.target];
+            float speed = 24f;
+            float inertia = 20f;
 
             bool InDesert = (player.ZoneDesert || player.ZoneUndergroundDesert);
             if (player == null || !InDesert || !Sandstorm.Happening)
             {
-                ForcedTargetPosition = new Vector2(NPC.Center.X, NPC.Center.Y + 2000f);
+                Vector2 Down = NPC.position + new Vector2(0, 100);
+                Vector2 DownNormalized = Down.SafeNormalize(Vector2.UnitY);
+                Vector2 moveToDown = DownNormalized * speed;
+                NPC.velocity = (NPC.velocity * (inertia - 1f) + moveToDown) / inertia;
+
                 NPC.EncourageDespawn(10);
                 NPC.netUpdate = true;
                 return;
             }
-
+            
+            Vector2 toPlayerNormalized = player.position.SafeNormalize(Vector2.UnitY);
+            Vector2 moveTo = toPlayerNormalized * speed;
+            NPC.velocity = (NPC.velocity * (inertia - 1f) + moveTo) / inertia;
             if (attackCounter < 1) attackCounter = 150;
             if (attackProj > 0) attackProj--;
 
