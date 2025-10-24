@@ -239,6 +239,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 
             NPCLoot_Center(NPC.target, this.Type, BodyType, TailType);
             NPC.SetEventFlagCleared(ref DownedBossSystem.downedDuneTrapper, -1);
+            this.OnKill();
             return false;
         }
 
