@@ -9,6 +9,7 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace VanillaModding.Content.NPCs.DuneTrapper
 {
@@ -620,6 +621,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             NPC.position = vector2;
             NPCLoot_DropItems(Main.player[player]);
             NPCLoot_DropMoney(Main.player[player]);
+            NPCLoot_DropHeals(Main.player[player]);
             NPC.position = vector;
 
             DoDeathEvents_DropBossPotionsAndHearts(ref typeName);
@@ -664,6 +666,25 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             {
                 ChatHelper.BroadcastChatMessage(NetworkText.FromKey("Announcement.HasBeenDefeated_Single", NPC.GetTypeNetName()), color);
             }
+        }
+
+        private void NPCLoot_DropHeals(Player closestPlayer)
+        {
+            NPCLoot_DropCommonLifeAndMana(closestPlayer);
+        }
+
+        private void NPCLoot_DropCommonLifeAndMana(Player closestPlayer)
+        {
+            if (!NPCID.Sets.NeverDropsResourcePickups[NPC.type] && closestPlayer.RollLuck(6) == 0 && NPC.lifeMax > 1 && NPC.damage > 0)
+            {
+                if (Main.rand.Next(2) == 0 && closestPlayer.statMana < closestPlayer.statManaMax2)
+                    Item.NewItem(NPC.GetSource_Loot(), (int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height, 184);
+                else if (Main.rand.Next(2) == 0 && closestPlayer.statLife < closestPlayer.statLifeMax2)
+                    Item.NewItem(NPC.GetSource_Loot(), (int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height, 58);
+            }
+
+            if (!NPCID.Sets.NeverDropsResourcePickups[NPC.type] && closestPlayer.RollLuck(2) == 0 && NPC.lifeMax > 1 && NPC.damage > 0 && closestPlayer.statMana < closestPlayer.statManaMax2)
+                Item.NewItem(NPC.GetSource_Loot(), (int)NPC.position.X, (int)NPC.position.Y, NPC.width, NPC.height, 184);
         }
 
         private void NPCLoot_DropItems(Player closestPlayer)
