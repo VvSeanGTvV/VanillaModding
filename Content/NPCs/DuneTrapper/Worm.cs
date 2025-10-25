@@ -230,7 +230,6 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             bool collision = HeadAI_CheckCollisionForDustSpawns();
 
             HeadAI_CheckTargetDistance(ref collision);
-
             if (!UseCustomAI) HeadAI_Movement(collision);
         }
 

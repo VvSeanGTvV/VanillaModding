@@ -157,25 +157,42 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
                 NPC.TargetClosest();
             
             Player player = Main.player[NPC.target];
-            float speed = 24f;
-            float inertia = 20f;
-
+            float speed = 14f;
+            float inertia = 40f;
+            float turnSpeed = MathHelper.ToRadians(25f); // radians per frame — smaller = slower turning
             bool InDesert = (player.ZoneDesert || player.ZoneUndergroundDesert);
+
+            Vector2 targetWNoSpeed = ((NPC.Center + new Vector2(0, 100)) - NPC.Center).SafeNormalize(Vector2.Zero);
+            Vector2 targetWSpeed = targetWNoSpeed * speed;
+            NPC.rotation = NPC.velocity.ToRotation() + MathHelper.PiOver2;
             if (player == null || !InDesert || !Sandstorm.Happening)
             {
-                Vector2 Down = NPC.position + new Vector2(0, 100);
-                Vector2 DownNormalized = Down.SafeNormalize(Vector2.UnitY);
-                Vector2 moveToDown = DownNormalized * speed;
-                NPC.velocity = (NPC.velocity * (inertia - 1f) + moveToDown) / inertia;
+                NPC.velocity = (NPC.velocity * (inertia - 1f) + targetWSpeed) / inertia;
 
                 NPC.EncourageDespawn(10);
                 NPC.netUpdate = true;
                 return;
             }
-            
-            Vector2 toPlayerNormalized = player.position.SafeNormalize(Vector2.UnitY);
-            Vector2 moveTo = toPlayerNormalized * speed;
+            targetWNoSpeed = (player.Center - NPC.Center).SafeNormalize(Vector2.Zero);
+            float distance = (NPC.Center - player.Center).Length();
+            // This smoothly scales between 0.8x (close) and 2.5x (far)
+            float distanceFactor = MathHelper.Clamp(distance / 400f, 1f, 40f);
+            turnSpeed = turnSpeed * distanceFactor;
+
+            targetWSpeed = targetWNoSpeed * speed;
+            // Smoothly rotate toward target direction
+            Vector2 targetDir = targetWSpeed.SafeNormalize(Vector2.UnitY);
+            float currentRot = NPC.velocity.SafeNormalize(Vector2.UnitY).ToRotation();
+            float targetRot = targetDir.ToRotation();
+            float newRot = currentRot.AngleTowards(targetRot, turnSpeed);
+
+            // Apply the new direction and speed
+            Vector2 moveTo = newRot.ToRotationVector2() * speed;
+
+            // Apply inertia-based smoothing
             NPC.velocity = (NPC.velocity * (inertia - 1f) + moveTo) / inertia;
+
+
             if (attackCounter < 1) attackCounter = 150;
             if (attackProj > 0) attackProj--;
 
