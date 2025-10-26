@@ -39,8 +39,8 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
         public override void SetDefaults()
         {
             // Head is 10 defense, body 20, tail 30.
-            NPC.width = 50;
-            NPC.height = 48 / 2;
+            NPC.width = 42;
+            NPC.height = 12;
             NPC.damage = 28;
             NPC.defense = 14;
             NPC.lifeMax = 550;
@@ -127,8 +127,8 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 
         public override void SetDefaults()
         {
-            NPC.width = 50;
-            NPC.height = 36 / 2;
+            NPC.width = 44;
+            NPC.height = 8;
             NPC.damage = 24;
             NPC.defense = 14;
             NPC.lifeMax = 550;
@@ -158,8 +158,8 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 
         public override void SetDefaults()
         {
-            NPC.width = 50;
-            NPC.height = 36/2;
+            NPC.width = 22;
+            NPC.height = 10;
             NPC.damage = 20;
             NPC.defense = 16;
             NPC.lifeMax = 550;
