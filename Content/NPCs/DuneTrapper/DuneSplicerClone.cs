@@ -158,8 +158,8 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 
         public override void SetDefaults()
         {
-            NPC.width = 22;
-            NPC.height = 10;
+            NPC.width = 50/2;
+            NPC.height = 44/12;
             NPC.damage = 20;
             NPC.defense = 16;
             NPC.lifeMax = 550;
