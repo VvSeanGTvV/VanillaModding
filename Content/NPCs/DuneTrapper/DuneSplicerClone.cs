@@ -1,12 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 using System.IO;
+using System.Threading.Tasks;
 using Terraria;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.Events;
 using Terraria.ID;
-using Terraria.ModLoader;
-using System.Threading.Tasks;
-using System;
 using Terraria.Localization;
+using Terraria.ModLoader;
+using VanillaModding.Content.Projectiles.DuneTrapper;
 
 namespace VanillaModding.Content.NPCs.DuneTrapper
 {
@@ -43,11 +45,13 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             NPC.height = 12;
             NPC.damage = 28;
             NPC.defense = 14;
-            NPC.lifeMax = 550;
+            NPC.lifeMax = 1050;
 
             NPC.noTileCollide = true;
             NPC.noGravity = true;
             NPC.knockBackResist = 0f;
+            NPC.scale = 1.15f;
+            NPC.behindTiles = true;
         }
 
         //public override void ScaleExpertStats(int numPlayers, float bossLifeScale){
@@ -73,8 +77,8 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             // Set the segment variance
             // If you want the segment length to be constant, set these two properties to the same value
             MinSegmentLength = 6;
-            MaxSegmentLength = 6;
-
+            MaxSegmentLength = MinSegmentLength;
+            UseCustomAI = true;
             CommonWormInit(this);
         }
 
@@ -107,6 +111,45 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
                 return;
             }
 
+            if (NPC.target < 0 || NPC.target == 255 || Main.player[NPC.target].dead || !Main.player[NPC.target].active)
+                NPC.TargetClosest();
+
+            Player player = Main.player[NPC.target];
+            float speed = 22f;
+            float inertia = 40f;
+            float turnSpeed = MathHelper.ToRadians(35f); // radians per frame — smaller = slower turning
+            bool InDesert = (player.ZoneDesert || player.ZoneUndergroundDesert);
+
+            Vector2 targetWNoSpeed = ((NPC.Center + new Vector2(0, 100)) - NPC.Center).SafeNormalize(Vector2.Zero);
+            Vector2 targetWSpeed = targetWNoSpeed * speed;
+            NPC.rotation = NPC.velocity.ToRotation() + MathHelper.PiOver2;
+            if (player == null || !InDesert || !Sandstorm.Happening)
+            {
+                NPC.velocity = (NPC.velocity * (inertia - 1f) + targetWSpeed) / inertia;
+
+                NPC.EncourageDespawn(10);
+                NPC.netUpdate = true;
+                return;
+            }
+            targetWNoSpeed = (player.Center - NPC.Center).SafeNormalize(Vector2.Zero);
+            float distance = (NPC.Center - player.Center).Length();
+            // This smoothly scales between 0.8x (close) and 2.5x (far)
+            float distanceFactor = MathHelper.Clamp(distance / 400f, 1f, 60f);
+            turnSpeed = turnSpeed * distanceFactor;
+
+            targetWSpeed = targetWNoSpeed * speed;
+            // Smoothly rotate toward target direction
+            Vector2 targetDir = targetWSpeed.SafeNormalize(Vector2.UnitY);
+            float currentRot = NPC.velocity.SafeNormalize(Vector2.UnitY).ToRotation();
+            float targetRot = targetDir.ToRotation();
+            float newRot = currentRot.AngleTowards(targetRot, turnSpeed);
+
+            // Apply the new direction and speed
+            Vector2 moveTo = newRot.ToRotationVector2() * speed;
+
+            // Apply inertia-based smoothing
+            NPC.velocity = (NPC.velocity * (inertia - 1f) + moveTo) / inertia;
+
         }
     }
 
@@ -131,11 +174,60 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             NPC.height = 8;
             NPC.damage = 24;
             NPC.defense = 14;
-            NPC.lifeMax = 550;
+            NPC.lifeMax = 1050;
 
             NPC.noTileCollide = true;
             NPC.noGravity = true;
             NPC.knockBackResist = 0f;
+            NPC.scale = 1.15f;
+            NPC.behindTiles = true;
+        }
+
+        public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
+        {
+            spikenooo();
+        }
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit)
+        {
+            spikenooo();
+        }
+        public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
+        {
+            spikenooo(projectile);
+        }
+        public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
+        {
+            spikenooo();
+        }
+
+        void spikenooo(Projectile proj = null)
+        {
+            if (Main.netMode == NetmodeID.MultiplayerClient) return;
+            if (Main.rand.Next(2) != 0) return;
+            if (proj != null && proj.velocity.LengthSquared() > 0f)
+            {
+
+                Vector2 perturbedSpeed = new Vector2(-proj.velocity.X, -proj.velocity.Y).RotatedByRandom(MathHelper.ToRadians(12));
+                var source = NPC.GetSource_FromAI();
+
+                int damage = (int)(NPC.damage * 0.25f);
+                float knockback = 4f;
+                float speed = 9f;
+
+                Projectile.NewProjectile(source, NPC.Center, perturbedSpeed / 2f, ModContent.ProjectileType<LeftoverSpike>(), 10, 6, -1);
+            }
+            else
+            {
+                Vector2 velco = new Vector2(Main.rand.Next(-25, 25), -10);
+                var source = NPC.GetSource_FromAI();
+
+                int damage = (int)(NPC.damage * 0.25f);
+                float knockback = 4f;
+                float speed = 9f;
+                Vector2 velocity = Vector2.Normalize(Main.player[NPC.target].Center - NPC.Center) * speed;
+
+                Projectile.NewProjectile(source, NPC.Center, new Vector2(velocity.X, velco.Y + velocity.Y), ModContent.ProjectileType<LeftoverSpike>(), 10, 6, -1);
+            }
         }
 
         public override void Init()
@@ -159,14 +251,16 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
         public override void SetDefaults()
         {
             NPC.width = 50/2;
-            NPC.height = 44/12;
+            NPC.height = 44/6;
             NPC.damage = 20;
             NPC.defense = 16;
-            NPC.lifeMax = 550;
+            NPC.lifeMax = 1050;
 
             NPC.noTileCollide = true;
             NPC.noGravity = true;
             NPC.knockBackResist = 0f;
+            NPC.scale = 1.15f;
+            NPC.behindTiles = true;
         }
 
         public override void Init()
