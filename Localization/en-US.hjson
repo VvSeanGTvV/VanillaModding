@@ -337,6 +337,7 @@ Mods: {
 			LobotomyLaser.DisplayName: Lobotomy Beam
 			LobotomyEasy.DisplayName: Lobotomy Easy
 			LobotomyInsane.DisplayName: Lobotomy Insane
+			BoringArrow.DisplayName: Boring Arrow
 		}
 	}
 }
