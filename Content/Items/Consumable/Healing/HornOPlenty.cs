@@ -8,7 +8,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 
-namespace VanillaModding.Content.Items.Consumable
+namespace VanillaModding.Content.Items.Consumable.Healing
 {
     internal class HornOPlenty : ModItem
     {
