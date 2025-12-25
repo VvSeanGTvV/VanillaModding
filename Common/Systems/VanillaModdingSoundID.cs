@@ -16,9 +16,11 @@ namespace VanillaModding.Common.Systems
         /// <param name="path"></param>
         /// <returns>SoundStyle from Assets/Sounds/{path}.ogg </returns>
         public static SoundStyle LoadSound(string path) 
-            => new SoundStyle($"{nameof(VanillaModding)}/Assets/Sounds/{path}");
+            => new($"{nameof(VanillaModding)}/Assets/Sounds/{path}");
 
         public static readonly SoundStyle DeathNoteItemAsylum = LoadSound("DICE/DeathNote_ItemAsylum") with { Volume = 0.25f };
+        public static readonly SoundStyle FishSpeak = LoadSound("Fish/Fish") with { Volume = 0.45f, Pitch = 0f, MaxInstances = 25 };
+        public static readonly SoundStyle FishHit = LoadSound("Fish/FishHit") with { Volume = 0.45f, Pitch = 0f, MaxInstances = 25 };
         public static readonly SoundStyle Whirr = LoadSound("DeliveryDrone/DroneWhirr") with { Volume = 0.05f, PitchVariance = 0f, MaxInstances = 25 };
 
         // LOBOTOMY SOUNDS (GD)

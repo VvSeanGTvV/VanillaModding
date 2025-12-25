@@ -262,6 +262,21 @@ Mods: {
 				DisplayName: Logodomy Shard
 				Tooltip: ""
 			}
+
+			Cantaloupe: {
+				DisplayName: Cantaloupe
+				Tooltip: ""
+			}
+
+			RedFish: {
+				DisplayName: Red Fish
+				Tooltip: Insanity knockback. Don't ask why.
+			}
+
+			FishTrout: {
+				DisplayName: Fish Trout
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
@@ -338,6 +353,8 @@ Mods: {
 			LobotomyEasy.DisplayName: Lobotomy Easy
 			LobotomyInsane.DisplayName: Lobotomy Insane
 			BoringArrow.DisplayName: Boring Arrow
+			RedFish.DisplayName: Red Fish
+			FishTrout.DisplayName: Fish Trout
 		}
 	}
 }
