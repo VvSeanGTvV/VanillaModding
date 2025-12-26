@@ -21,6 +21,7 @@ namespace VanillaModding.Common.Systems
         public static readonly SoundStyle DeathNoteItemAsylum = LoadSound("DICE/DeathNote_ItemAsylum") with { Volume = 0.25f };
         public static readonly SoundStyle FishSpeak = LoadSound("Fish/Fish") with { Volume = 0.45f, Pitch = 0f, MaxInstances = 25 };
         public static readonly SoundStyle FishHit = LoadSound("Fish/FishHit") with { Volume = 0.45f, Pitch = 0f, MaxInstances = 25 };
+        public static readonly SoundStyle FishSpeeen = LoadSound("Fish/FishSpeeen") with { Volume = 0.45f, Pitch = 0f, MaxInstances = 25 };
         public static readonly SoundStyle Whirr = LoadSound("DeliveryDrone/DroneWhirr") with { Volume = 0.05f, PitchVariance = 0f, MaxInstances = 25 };
 
         // LOBOTOMY SOUNDS (GD)

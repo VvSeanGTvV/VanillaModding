@@ -8,9 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Common.Systems;
 
 namespace VanillaModding.Content.Projectiles.FishProjectile
 {
@@ -56,7 +58,7 @@ namespace VanillaModding.Content.Projectiles.FishProjectile
         public override void AI()
         {
             // Extend use animation until projectile is killed
-            Projectile.localAI[1] += 1f / (Projectile.ai[1] / 10f);
+            Projectile.localAI[1] += 1f / (Projectile.ai[1] / 135f);
             Projectile.localAI[0]++;
 
             Owner.itemAnimation = 2;
@@ -93,38 +95,52 @@ namespace VanillaModding.Content.Projectiles.FishProjectile
             if (Projectile.spriteDirection > 0)
             {
                 origin = new Vector2(0, Projectile.height);
-                rotationOffset = MathHelper.ToRadians(45f);
-                effects = SpriteEffects.None;
+                rotationOffset = MathHelper.ToRadians(0f);
+                effects = SpriteEffects.FlipHorizontally;
             }
             else
             {
                 origin = new Vector2(Projectile.width, Projectile.height);
-                rotationOffset = MathHelper.ToRadians(135f);
-                effects = SpriteEffects.FlipHorizontally;
+                rotationOffset = MathHelper.ToRadians(180f);
+                effects = SpriteEffects.None;
             }
 
             // Simple Glowmask Draw
             Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
-            Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, default, lightColor * Projectile.Opacity, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
+            Main.spriteBatch.Draw(texture, (Projectile.Center + new Vector2(0, Projectile.height/2).RotatedBy(Projectile.rotation + rotationOffset)) - Main.screenPosition, default, lightColor * Projectile.Opacity, Projectile.rotation + rotationOffset, origin, Projectile.scale, effects, 0);
 
             // Since we are doing a custom draw, prevent it from normally drawing
             return false;
         }
 
-        // Find the start and end of the sword and use a line collider to check for collision with enemies
-        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        float GetVisualRotation()
         {
-            Vector2 start = Owner.MountedCenter;
-            Vector2 end = start + Projectile.rotation.ToRotationVector2() * ((Projectile.Size.Length()) * Projectile.scale);
-            float collisionPoint = 0f;
-            return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), start, end, 15f * Projectile.scale, ref collisionPoint);
+            return Projectile.rotation + (Projectile.spriteDirection == -1 ? MathHelper.Pi : 0f);
         }
 
-        // Do a similar collision check for tiles
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+            Vector2 start = Projectile.Center;
+            float visualRot = GetVisualRotation();
+
+            Vector2 end = start + visualRot.ToRotationVector2() * Projectile.width * Projectile.scale;
+
+            float collisionPoint = 0f;
+            return Collision.CheckAABBvLineCollision(
+                targetHitbox.TopLeft(),
+                targetHitbox.Size(),
+                start,
+                end,
+                15f * Projectile.scale,
+                ref collisionPoint
+            );
+        }
+
         public override void CutTiles()
         {
-            Vector2 start = Owner.MountedCenter;
-            Vector2 end = start + Projectile.rotation.ToRotationVector2() * (Projectile.Size.Length() * Projectile.scale);
+            Vector2 start = Projectile.Center;
+            Vector2 end = start + GetVisualRotation().ToRotationVector2() * Projectile.width * Projectile.scale;
+
             Utils.PlotTileLine(start, end, 15 * Projectile.scale, DelegateMethods.CutTiles);
         }
 
@@ -132,6 +148,16 @@ namespace VanillaModding.Content.Projectiles.FishProjectile
         public override bool? CanDamage()
         {
             return base.CanDamage();
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            SoundEngine.PlaySound(VanillaModdingSoundID.FishHit, Projectile.position);
+        }
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            SoundEngine.PlaySound(VanillaModdingSoundID.FishHit, Projectile.position);
         }
     }
 }
