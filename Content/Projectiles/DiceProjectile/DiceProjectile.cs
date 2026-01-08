@@ -11,6 +11,8 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using VanillaModding.Common;
+using VanillaModding.Common.GlobalNPCs;
 using VanillaModding.Common.Systems;
 using VanillaModding.Content.Buffs;
 using VanillaModding.Content.Items.Consumable;
@@ -57,92 +59,176 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
         int mult = 0;
         int waut = 0;
         int bfti = 0;
-        bool isEffect = false;
         bool once = false; 
-        int counter = 0;
         public override void AI()
         {
             timer++;
+            bool npcMode = Projectile.ai[0] == 1;
             Player player = Main.player[Projectile.owner];
-            VanillaModdingPlayer modPlayer = player.GetModPlayer<VanillaModdingPlayer>();
-            bool hasAnyEffect = player.HasBuff(ModContent.BuffType<DiceBuff>()) || player.HasBuff(ModContent.BuffType<DiceDebuff>());
-            if (timer <= maxRollTime)
+            NPC npc = Main.npc[Projectile.owner];
+
+            if (player == null && npc == null) Projectile.Kill();
+            Vector2 top = (player != null && !npcMode) ? player.Top : npc.Top;
+            if (!npcMode)
             {
-                modPlayer.rolling = true;
-                waut++;
-                if (waut >= timer / (maxRollTime / 10))
+                VanillaModdingPlayer modPlayer = player.GetModPlayer<VanillaModdingPlayer>();
+                bool hasAnyEffect = player.HasBuff(ModContent.BuffType<DiceBuff>()) || player.HasBuff(ModContent.BuffType<DiceDebuff>());
+                if (timer <= maxRollTime)
                 {
-                    float biasFactor = 1f + modPlayer.totalRolls * 0.05f; // The more rolls, the stronger the bias
-                    float raw = (float)Math.Pow(Main.rand.NextDouble(), 1.0 / biasFactor); // Biased toward higher numbers
-                    diceType = (int)(raw * colorTotal);
-
-                    mult = Main.rand.Next(0, 6);
-                    Projectile.frame = mult + (diceType * frameCount);
-                    waut = 0;
-                    //SoundEngine.PlaySound(SoundID.Item17, Projectile.position);
-                    //SoundEngine.PlaySound(SoundID.Item40, Projectile.position); TOO ANNOYING lol
-                }
-            }
-            else if (!once)
-            {
-                modPlayer.totalRolls++;
-                if (diceType == 0) {
-                    modPlayer.DiceMult = mult + 1;
-                    player.AddBuff(ModContent.BuffType<DiceBuff>(), buffLast * modPlayer.totalRolls);
-                    once = true;
-                    isEffect = true;
-                    SoundEngine.PlaySound(SoundID.Item4, Projectile.position);
-                }
-                if (diceType == 1)
-                {
-                    int amount = player.statLifeMax2 / Math.Max(Math.Min(mult, 1), frameCount);
-                    //player.statLife = Math.Min(amount, player.statLifeMax2);
-                    once = true;
-                    player.HealEffect(amount, true);
-                    SoundEngine.PlaySound(SoundID.Item4, Projectile.position);
-                }
-                if (diceType == 2)
-                {
-                    modPlayer.DiceMult = mult + 1;
-                    player.AddBuff(ModContent.BuffType<DiceDebuff>(), buffLast * modPlayer.totalRolls);
-                    once = true;
-                    isEffect = true;
-                    SoundEngine.PlaySound(SoundID.Item40, Projectile.position);
-                }
-                if (diceType == 3)
-                {
-                    player.KillMe(PlayerDeathReason.ByCustomReason(Dice.BadLuckDeath.ToNetworkText()), player.statLifeMax2*2, 0);
-                    once = true;
-
-                    for (int i = 0; i < 20; i++)
+                    modPlayer.rolling = true;
+                    waut++;
+                    if (waut >= timer / (maxRollTime / 10))
                     {
-                        Dust dust = Dust.NewDustDirect(player.position, player.width, player.height, DustID.Smoke, 0f, 0f, 100, default, 2f);
-                        dust.velocity *= 1.4f;
-                    }
+                        float biasFactor = 1f + modPlayer.totalRolls * 0.05f; // The more rolls, the stronger the bias
+                        float raw = (float)Math.Pow(Main.rand.NextDouble(), 1.0 / biasFactor); // Biased toward higher numbers
+                        diceType = (int)(raw * colorTotal);
 
-                    // Fire Dust spawn
-                    for (int i = 0; i < 40; i++)
-                    {
-                        Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.IceTorch, 0f, 0f, 100, default, 3f);
-                        dust.noGravity = true;
-                        dust.velocity *= 5f;
-                        dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.IceTorch, 0f, 0f, 100, default, 2f);
-                        dust.velocity *= 3f;
+                        mult = Main.rand.Next(0, 6);
+                        Projectile.frame = mult + (diceType * frameCount);
+                        waut = 0;
+                        //SoundEngine.PlaySound(SoundID.Item17, Projectile.position);
+                        //SoundEngine.PlaySound(SoundID.Item40, Projectile.position); TOO ANNOYING lol
                     }
-
-                    SoundEngine.PlaySound(SoundID.Item37, Projectile.position);
-                    SoundEngine.PlaySound(VanillaModdingSoundID.DeathNoteItemAsylum, Projectile.position);
                 }
-                modPlayer.rolling = false;
+                else if (!once)
+                {
+                    modPlayer.totalRolls++;
+                    if (diceType == 0)
+                    {
+                        modPlayer.DiceMult = mult + 1;
+                        player.AddBuff(ModContent.BuffType<DiceBuff>(), buffLast * modPlayer.totalRolls);
+                        once = true;
+                        SoundEngine.PlaySound(SoundID.Item4, Projectile.position);
+                    }
+                    if (diceType == 1)
+                    {
+                        int amount = player.statLifeMax2 / Math.Max(Math.Min(mult, 1), frameCount);
+                        //player.statLife = Math.Min(amount, player.statLifeMax2);
+                        once = true;
+                        player.HealEffect(amount, true);
+                        SoundEngine.PlaySound(SoundID.Item4, Projectile.position);
+                    }
+                    if (diceType == 2)
+                    {
+                        modPlayer.DiceMult = mult + 1;
+                        player.AddBuff(ModContent.BuffType<DiceDebuff>(), buffLast * modPlayer.totalRolls);
+                        once = true;
+                        SoundEngine.PlaySound(SoundID.Item40, Projectile.position);
+                    }
+                    if (diceType == 3)
+                    {
+                        player.KillMe(PlayerDeathReason.ByCustomReason(Dice.BadLuckDeath.ToNetworkText()), player.statLifeMax2 * 2, 0);
+                        once = true;
+
+                        for (int i = 0; i < 20; i++)
+                        {
+                            Dust dust = Dust.NewDustDirect(player.position, player.width, player.height, DustID.Smoke, 0f, 0f, 100, default, 2f);
+                            dust.velocity *= 1.4f;
+                        }
+
+                        // Fire Dust spawn
+                        for (int i = 0; i < 40; i++)
+                        {
+                            Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.IceTorch, 0f, 0f, 100, default, 3f);
+                            dust.noGravity = true;
+                            dust.velocity *= 5f;
+                            dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.IceTorch, 0f, 0f, 100, default, 2f);
+                            dust.velocity *= 3f;
+                        }
+
+                        SoundEngine.PlaySound(SoundID.Item37, Projectile.position);
+                        SoundEngine.PlaySound(VanillaModdingSoundID.DeathNoteItemAsylum, Projectile.position);
+                    }
+                    modPlayer.rolling = false;
+                }
+                else
+                {
+                    bfti++;
+                    if (bfti >= buffLast || !hasAnyEffect) Projectile.Kill();
+                }
+                if (!player.active || player.dead) Projectile.Kill();
             } 
             else
             {
-                bfti++;
-                if (bfti >= buffLast || !hasAnyEffect) Projectile.Kill();
-            }
-            if (!player.active || player.dead) Projectile.Kill();
+                DiceNPC modNPC = npc.GetGlobalNPC<DiceNPC>();
+                bool hasAnyEffect = npc.HasBuff(ModContent.BuffType<DiceBuff>()) || npc.HasBuff(ModContent.BuffType<DiceDebuff>());
+                if (timer <= maxRollTime)
+                {
+                    modNPC.rolling = true;
+                    waut++;
+                    if (waut >= timer / (maxRollTime / 10))
+                    {
+                        float biasFactor = 1f + modNPC.totalRolls * 0.05f; // The more rolls, the stronger the bias
+                        float raw = (float)Math.Pow(Main.rand.NextDouble(), 1.0 / biasFactor); // Biased toward higher numbers
+                        diceType = (int)(raw * colorTotal);
 
-            Projectile.position = player.Top - new Vector2(Projectile.width / 2 , Projectile.height + 15f);
+                        mult = Main.rand.Next(0, 6);
+                        Projectile.frame = mult + (diceType * frameCount);
+                        waut = 0;
+                        //SoundEngine.PlaySound(SoundID.Item17, Projectile.position);
+                        //SoundEngine.PlaySound(SoundID.Item40, Projectile.position); TOO ANNOYING lol
+                    }
+                }
+                else if (!once)
+                {
+                    modNPC.totalRolls++;
+                    if (diceType == 0)
+                    {
+                        modNPC.DiceMult = mult + 1;
+                        npc.AddBuff(ModContent.BuffType<DiceBuff>(), buffLast * modNPC.totalRolls);
+                        once = true;
+                        SoundEngine.PlaySound(SoundID.Item4, Projectile.position);
+                    }
+                    if (diceType == 1)
+                    {
+                        int amount = npc.lifeMax / Math.Max(Math.Min(mult, 1), frameCount);
+                        //player.statLife = Math.Min(amount, player.statLifeMax2);
+                        once = true;
+                        npc.HealEffect(amount, true);
+                        SoundEngine.PlaySound(SoundID.Item4, Projectile.position);
+                    }
+                    if (diceType == 2)
+                    {
+                        modNPC.DiceMult = mult + 1;
+                        npc.AddBuff(ModContent.BuffType<DiceDebuff>(), buffLast * modNPC.totalRolls);
+                        once = true;
+                        SoundEngine.PlaySound(SoundID.Item40, Projectile.position);
+                    }
+                    if (diceType == 3)
+                    {
+                        npc.StrikeInstantKill();
+                        once = true;
+
+                        for (int i = 0; i < 20; i++)
+                        {
+                            Dust dust = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustID.Smoke, 0f, 0f, 100, default, 2f);
+                            dust.velocity *= 1.4f;
+                        }
+
+                        // Fire Dust spawn
+                        for (int i = 0; i < 40; i++)
+                        {
+                            Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.IceTorch, 0f, 0f, 100, default, 3f);
+                            dust.noGravity = true;
+                            dust.velocity *= 5f;
+                            dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.IceTorch, 0f, 0f, 100, default, 2f);
+                            dust.velocity *= 3f;
+                        }
+
+                        SoundEngine.PlaySound(SoundID.Item37, Projectile.position);
+                        SoundEngine.PlaySound(VanillaModdingSoundID.DeathNoteItemAsylum, Projectile.position);
+                    }
+                    modNPC.rolling = false;
+                }
+                else
+                {
+                    bfti++;
+                    if (bfti >= buffLast || !hasAnyEffect) Projectile.Kill();
+                }
+                if (!npc.active) Projectile.Kill();
+            }
+
+            Projectile.position = top - new Vector2(Projectile.width / 2, Projectile.height + 15f);
             /*if (Projectile.velocity.X > -0.1f && Projectile.velocity.X < 0.1f) Projectile.velocity.X = 0f;
             if (Projectile.velocity.Y > -0.1f && Projectile.velocity.Y < 0.1f) Projectile.velocity.Y = 0f;
             Projectile.velocity *= 0.75f;*/

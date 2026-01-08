@@ -82,4 +82,31 @@ namespace VanillaModding.Common.GlobalNPCs
                 return;
         }
     }
+
+    internal class DiceNPC : GlobalNPC
+    {
+        public override bool InstancePerEntity => true;
+
+        /// <summary>
+        /// NPC, currently rolling a Dice
+        /// </summary>
+        public bool rolling;
+        /// <summary>
+        /// Has any existing Debuff/buff 
+        /// </summary>
+        public bool hasAnyDiceEffect;
+        /// <summary>
+        /// Dice number that has been rolled
+        /// </summary>
+        public int DiceMult;
+        /// <summary>
+        /// Total rolls, also used for dice incremental chance of death outcome.
+        /// </summary>
+        public int totalRolls;
+
+        public override void AI(NPC npc)
+        {
+            base.AI(npc);
+        }
+    }
 }

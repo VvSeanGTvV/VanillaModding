@@ -14,6 +14,7 @@ using VanillaModding.Common;
 using VanillaModding.Common.Systems;
 using VanillaModding.Content.Buffs;
 using VanillaModding.Content.Projectiles.DiceProjectile;
+using VanillaModding.Content.Projectiles.MightyScythe;
 using VanillaModding.Content.Projectiles.PhasicWarpEjector;
 using VanillaModding.Content.Projectiles.Tizona;
 
@@ -68,11 +69,27 @@ namespace VanillaModding.Content.Items.Consumable
             itemGroup = ContentSamples.CreativeHelper.ItemGroup.BuffPotion;
         }
 
+        public override bool AltFunctionUse(Player player)
+        {
+            return true;
+        }
+
         public override bool CanUseItem(Player player)
         {
             // This is to prevent multi Dice Buff
             VanillaModdingPlayer modPlayer = player.GetModPlayer<VanillaModdingPlayer>();
-            return !modPlayer.hasAnyDiceEffect && !modPlayer.rolling;
+            bool throwable = false;
+            if (player.altFunctionUse == 2)
+            {
+                throwable = true;
+                Item.shoot = ModContent.ProjectileType<DiceThrowableProjectile>();
+            }
+            else
+            {
+                Item.shoot = ModContent.ProjectileType<DiceProjectile>();
+            }
+
+            return throwable || (!modPlayer.hasAnyDiceEffect && !modPlayer.rolling);
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
@@ -96,7 +113,5 @@ namespace VanillaModding.Content.Items.Consumable
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.Register();
         }
-
-        
     }
 }

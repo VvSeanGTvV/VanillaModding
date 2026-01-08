@@ -355,6 +355,7 @@ Mods: {
 			BoringArrow.DisplayName: Boring Arrow
 			RedFish.DisplayName: Red Fish
 			FishTrout.DisplayName: Fish Trout
+			DiceThrowableProjectile.DisplayName: Dice Throwable Projectile
 		}
 	}
 }

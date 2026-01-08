@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.ModLoader;
 
-namespace VanillaModding.Content
+namespace VanillaModding.Common
 {
     internal class VanillaModdingPlayer : ModPlayer
     {

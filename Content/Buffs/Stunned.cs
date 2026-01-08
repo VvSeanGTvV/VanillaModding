@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
+using VanillaModding.Common;
 using VanillaModding.Common.GlobalNPCs;
 
 namespace VanillaModding.Content.Buffs

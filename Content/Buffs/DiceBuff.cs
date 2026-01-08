@@ -9,6 +9,8 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using VanillaModding.Common;
+using VanillaModding.Common.GlobalNPCs;
 using VanillaModding.Content.Items.Consumable;
 
 namespace VanillaModding.Content.Buffs
@@ -33,6 +35,15 @@ namespace VanillaModding.Content.Buffs
             player.statLifeMax2 += modPlayer.DiceMult * modPlayer.DiceMult * modPlayer.DiceMult; // Grant a +10 * dice = Life boost to the player while the buff is active.
             player.statManaMax2 += modPlayer.DiceMult * modPlayer.DiceMult * modPlayer.DiceMult; // Grant a +10 * dice = Mana boost to the player while the buff is active.
             //Logging.PublicLogger.Info($"Buff is active. Current Dice Multiplier: {modPlayer.DiceMult}");
+        }
+
+        public override void Update(NPC npc, ref int buffIndex)
+        {
+            DiceNPC modNPC = npc.GetGlobalNPC<DiceNPC>();
+            modNPC.hasAnyDiceEffect = true;
+            npc.defense += modNPC.DiceMult + modNPC.DiceMult; // Grant a +10 * dice = Defense boost to the player while the buff is active.
+            npc.lifeMax += modNPC.DiceMult * modNPC.DiceMult * modNPC.DiceMult; // Grant a +10 * dice = Life boost to the player while the buff is active.
+            //base.Update(npc, ref buffIndex);
         }
     }
 
@@ -62,6 +73,19 @@ namespace VanillaModding.Content.Buffs
                 player.DelBuff(buffIndex);
                 buffIndex--;
             }
+        }
+
+        public override void Update(NPC npc, ref int buffIndex)
+        {
+            DiceNPC modNPC = npc.GetGlobalNPC<DiceNPC>();
+            modNPC.hasAnyDiceEffect = true;
+            npc.defense -= modNPC.DiceMult + modNPC.DiceMult; // Grant a +10 * dice = Defense boost to the player while the buff is active.
+            npc.lifeMax = modNPC.DiceMult * modNPC.DiceMult * modNPC.DiceMult; // Grant a +10 * dice = Life boost to the player while the buff is active.
+            if (npc.lifeMax < 1)
+            {
+                npc.StrikeInstantKill();
+            }
+            //base.Update(npc, ref buffIndex);
         }
     }
 }
