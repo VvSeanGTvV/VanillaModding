@@ -103,10 +103,5 @@ namespace VanillaModding.Common.GlobalNPCs
         /// Total rolls, also used for dice incremental chance of death outcome.
         /// </summary>
         public int totalRolls;
-
-        public override void AI(NPC npc)
-        {
-            base.AI(npc);
-        }
     }
 }

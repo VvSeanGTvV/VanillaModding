@@ -74,22 +74,25 @@ namespace VanillaModding.Content.Items.Consumable
             return true;
         }
 
+        bool throwable = false;
         public override bool CanUseItem(Player player)
         {
             // This is to prevent multi Dice Buff
             VanillaModdingPlayer modPlayer = player.GetModPlayer<VanillaModdingPlayer>();
-            bool throwable = false;
+            
             if (player.altFunctionUse == 2)
             {
                 throwable = true;
                 Item.shoot = ModContent.ProjectileType<DiceThrowableProjectile>();
+                Item.damage = 1;
+                return true;
             }
             else
             {
                 Item.shoot = ModContent.ProjectileType<DiceProjectile>();
+                Item.damage = 0;
+                return !modPlayer.hasAnyDiceEffect && !modPlayer.rolling;
             }
-
-            return throwable || (!modPlayer.hasAnyDiceEffect && !modPlayer.rolling);
         }
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
@@ -97,7 +100,7 @@ namespace VanillaModding.Content.Items.Consumable
             BadLuckDeath = this.GetLocalization("BadLuckDeath").WithFormatArgs(player.name);
             RanOutofHealth = this.GetLocalization("RanOutofHealth").WithFormatArgs(player.name);
 
-            Projectile.NewProjectile(source, player.MountedCenter, velocity, ModContent.ProjectileType<DiceProjectile>(), damage, knockback / 2, player.whoAmI);
+            Projectile.NewProjectile(source, player.MountedCenter, velocity, type, damage, knockback / 2, player.whoAmI, throwable ? 0 : 1);
             return false;
         }
 

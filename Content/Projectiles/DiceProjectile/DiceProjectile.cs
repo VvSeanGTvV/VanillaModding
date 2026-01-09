@@ -63,13 +63,15 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
         public override void AI()
         {
             timer++;
-            bool npcMode = Projectile.ai[0] == 1;
+            bool playerMode = Projectile.ai[0] == 1;
+
+            //Main.NewText($"{Projectile.ai[0]} + {Projectile.ai[1]}");
             Player player = Main.player[Projectile.owner];
-            NPC npc = Main.npc[Projectile.owner];
+            NPC npc = Main.npc[(int)Projectile.ai[1]];
 
             if (player == null && npc == null) Projectile.Kill();
-            Vector2 top = (player != null && !npcMode) ? player.Top : npc.Top;
-            if (!npcMode)
+            Vector2 top = (player != null && playerMode) ? player.Top : npc.Top;
+            if (playerMode)
             {
                 VanillaModdingPlayer modPlayer = player.GetModPlayer<VanillaModdingPlayer>();
                 bool hasAnyEffect = player.HasBuff(ModContent.BuffType<DiceBuff>()) || player.HasBuff(ModContent.BuffType<DiceDebuff>());

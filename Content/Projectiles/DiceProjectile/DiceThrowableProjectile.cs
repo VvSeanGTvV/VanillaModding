@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
+using VanillaModding.Common.GlobalNPCs;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace VanillaModding.Content.Projectiles.DiceProjectile
@@ -29,8 +30,8 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
             Projectile.penetrate = 1;
             Projectile.timeLeft = 60 * 5;
             Projectile.alpha = 0;
-            Projectile.ignoreWater = false; // Does the projectile's speed be influenced by water?
-            Projectile.tileCollide = false; // Can the projectile collide with tiles?
+            Projectile.ignoreWater = true; // Does the projectile's speed be influenced by water?
+            Projectile.tileCollide = true; // Can the projectile collide with tiles?
             Projectile.scale = 1f;
             Projectile.light = 1f;
             //Projectile.extraUpdates = 1; // Set to above 0 if you want the projectile to update multiple time in a frame
@@ -51,8 +52,19 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
 
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            Projectile.NewProjectile(target.GetSource_FromAI(), target.Center, Vector2.Zero, ModContent.ProjectileType<DiceProjectile>(), 0, 0, target.whoAmI, 1);
+            Projectile.NewProjectile(target.GetSource_FromAI(), target.Center, Vector2.Zero, ModContent.ProjectileType<DiceProjectile>(), 0, 0, -1, 0, target.whoAmI);
             base.ModifyHitNPC(target, ref modifiers);
+        }
+
+        public override bool? CanHitNPC(NPC target)
+        {
+            bool hittable = true;
+            DiceNPC modNPC = target.GetGlobalNPC<DiceNPC>();
+            if (modNPC != null)
+            {
+                hittable = !modNPC.rolling;
+            }
+            return hittable;
         }
     }
 }
