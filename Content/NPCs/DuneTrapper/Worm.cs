@@ -9,6 +9,7 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
+using VanillaModding.Common.Systems;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace VanillaModding.Content.NPCs.DuneTrapper
@@ -169,6 +170,12 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
         /// Enabling this variable, also causes to not use HeadAI Movements function. Requiring you to make your own movements.
         /// </summary>
         public bool UseCustomAI { get; set; }
+
+        /// <summary>
+        /// Drop in center of the worm. (usually been used on mechanical worm). 
+        /// The <see cref="PreKill"/> is modified upon setting this true.
+        /// </summary>
+        public bool CenterDrop { get; set; }
 
         /// <summary>
         /// The maximum distance in <b>pixels</b> within which the NPC will use tile collision, if <see cref="CanFly"/> returns <see langword="false"/>.<br/>
@@ -588,6 +595,18 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
                 NPC.netUpdate = true;
         }
 
+        public override bool PreKill()
+        {
+            if (CenterDrop)
+            {
+                // This is basically drops on the center of the worm, All related flags will go here.
+                NPCLoot_Center(NPC.target, this.Type, BodyType, TailType);
+                NPC.SetEventFlagCleared(ref DownedBossSystem.downedDuneTrapper, -1);
+                this.OnKill();
+            }
+            return !CenterDrop;
+        }
+
 
         /// <summary>
         /// Spawns Loot on the middle segment of the worm, nearest to the player. 
@@ -626,8 +645,6 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             DoDeathEvents_DropBossPotionsAndHearts(ref typeName);
             DoDeathEvents_CelebrateBossDeath(typeName);
             NPC.position = vector;
-
-            
         }
 
         //TML: Added 'typeName' parameter.

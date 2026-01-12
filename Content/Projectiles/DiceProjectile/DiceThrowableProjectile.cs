@@ -62,7 +62,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
             DiceNPC modNPC = target.GetGlobalNPC<DiceNPC>();
             if (modNPC != null)
             {
-                hittable = !modNPC.rolling;
+                hittable = !modNPC.rolling; // always never give another roll if an NPC is rolling.
             }
             return hittable;
         }

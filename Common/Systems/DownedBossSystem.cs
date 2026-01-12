@@ -15,11 +15,17 @@ namespace VanillaModding.Common.Systems
         /// Denotes whether or not the Dune Trapper has been defeated at least once in the current world.
         /// </summary>
         public static bool downedDuneTrapper = false;
+        /// <summary>
+        /// Denotes whether or not the LobotomyGod has been defeated at least once in current world.
+        /// </summary>
+        public static bool downedLobotomyGod = false;
+
         // public static bool downedOtherBoss = false;
 
         public override void ClearWorld()
         {
             downedDuneTrapper = false;
+            downedLobotomyGod = false;
             // downedOtherBoss = false;
         }
 
@@ -40,13 +46,14 @@ namespace VanillaModding.Common.Systems
         public override void LoadWorldData(TagCompound tag)
         {
             downedDuneTrapper = tag.ContainsKey("downedDuneTrapper");
+            downedLobotomyGod = tag.ContainsKey("downedLobotomyGod");
             // downedOtherBoss = tag.ContainsKey("downedOtherBoss");
         }
 
         public override void NetSend(BinaryWriter writer)
         {
             // Order of parameters is important and has to match that of NetReceive
-            writer.WriteFlags(downedDuneTrapper/*, downedOtherBoss*/);
+            writer.WriteFlags(downedDuneTrapper, downedLobotomyGod /*, downedOtherBoss*/);
             // WriteFlags supports up to 8 entries, if you have more than 8 flags to sync, call WriteFlags again.
 
             // If you need to send a large number of flags, such as a flag per item type or something similar, BitArray can be used to efficiently send them. See Utils.SendBitArray documentation.
@@ -55,7 +62,7 @@ namespace VanillaModding.Common.Systems
         public override void NetReceive(BinaryReader reader)
         {
             // Order of parameters is important and has to match that of NetSend
-            reader.ReadFlags(out downedDuneTrapper/*, out downedOtherBoss*/);
+            reader.ReadFlags(out downedDuneTrapper, out downedLobotomyGod /*, out downedOtherBoss*/);
             // ReadFlags supports up to 8 entries, if you have more than 8 flags to sync, call ReadFlags again.
         }
     }

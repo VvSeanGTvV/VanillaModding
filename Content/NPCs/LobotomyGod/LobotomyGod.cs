@@ -342,6 +342,12 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
             NPC.rotation = MathHelper.Lerp(NPC.rotation, targetRotation, swaySpeed);
         }
 
+        public override bool PreKill()
+        {
+            NPC.SetEventFlagCleared(ref DownedBossSystem.downedLobotomyGod, -1);
+            return base.PreKill();
+        }
+
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
             Vector2 position = NPC.Center - Main.screenPosition;

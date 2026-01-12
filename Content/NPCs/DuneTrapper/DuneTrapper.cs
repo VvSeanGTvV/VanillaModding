@@ -27,8 +27,6 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 
         public override int TailType => ModContent.NPCType<DuneTrapperTail>();
 
-        bool spawnInit;
-
         public static LocalizedText BestiaryText
         {
             get; private set;
@@ -253,21 +251,14 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             }
         }
 
-        public override void OnKill()
-        {
-            
-
-            //NPC.SetEventFlagCleared(ref DownedBossSystem.downedDuneTrapper, -1);
-        }
-
-        public override bool PreKill()
+        /*public override bool PreKill()
         {
 
             NPCLoot_Center(NPC.target, this.Type, BodyType, TailType);
             NPC.SetEventFlagCleared(ref DownedBossSystem.downedDuneTrapper, -1);
             this.OnKill();
             return false;
-        }
+        }*/
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
