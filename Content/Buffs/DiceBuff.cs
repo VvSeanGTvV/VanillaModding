@@ -20,6 +20,8 @@ namespace VanillaModding.Content.Buffs
         public static readonly int DefenseBonus = 10;
         public static readonly int LifeBonus = 10;
         public static readonly int ManaBonus = 10;
+
+        private int NPClifeMaxDef = 0, NPCdefMaxDef = 0;
         public override LocalizedText Description => base.Description.WithFormatArgs(0);
 
         public override void SetStaticDefaults()
@@ -39,10 +41,16 @@ namespace VanillaModding.Content.Buffs
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            DiceNPC modNPC = npc.GetGlobalNPC<DiceNPC>();
+            VanillaModdingNPC modNPC = npc.GetGlobalNPC<VanillaModdingNPC>();
             modNPC.hasAnyDiceEffect = true;
-            npc.defense += modNPC.DiceMult + modNPC.DiceMult; // Grant a +10 * dice = Defense boost to the player while the buff is active.
-            npc.lifeMax += modNPC.DiceMult * modNPC.DiceMult * modNPC.DiceMult; // Grant a +10 * dice = Life boost to the player while the buff is active.
+
+            if (NPClifeMaxDef == 0 || NPCdefMaxDef == 0)
+            {
+                NPClifeMaxDef = npc.lifeMax;
+                NPCdefMaxDef = npc.defense;
+            }
+            npc.defense = NPCdefMaxDef + (modNPC.DiceMult + modNPC.DiceMult); // Grant a +10 * dice = Defense boost to the player while the buff is active.
+            npc.lifeMax = NPClifeMaxDef + (modNPC.DiceMult * modNPC.DiceMult * modNPC.DiceMult); // Grant a +10 * dice = Life boost to the player while the buff is active.
             //base.Update(npc, ref buffIndex);
         }
     }
@@ -54,6 +62,7 @@ namespace VanillaModding.Content.Buffs
         public static readonly int ManaBonus = 10;
         public override LocalizedText Description => base.Description.WithFormatArgs(0);
 
+        private int NPClifeMaxDef = 0, NPCdefMaxDef = 0;
         public override void SetStaticDefaults()
         {
             Main.pvpBuff[Type] = true; // This buff can be applied by other players in Pvp, so we need this to be true.
@@ -77,10 +86,16 @@ namespace VanillaModding.Content.Buffs
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            DiceNPC modNPC = npc.GetGlobalNPC<DiceNPC>();
+            VanillaModdingNPC modNPC = npc.GetGlobalNPC<VanillaModdingNPC>();
             modNPC.hasAnyDiceEffect = true;
-            npc.defense -= modNPC.DiceMult + modNPC.DiceMult; // Grant a +10 * dice = Defense boost to the player while the buff is active.
-            npc.lifeMax = modNPC.DiceMult * modNPC.DiceMult * modNPC.DiceMult; // Grant a +10 * dice = Life boost to the player while the buff is active.
+
+            if(NPClifeMaxDef == 0 || NPCdefMaxDef == 0)
+            {
+                NPClifeMaxDef = npc.lifeMax;
+                NPCdefMaxDef = npc.defense;
+            }
+            npc.defense = NPCdefMaxDef - (modNPC.DiceMult + modNPC.DiceMult); // Grant a +10 * dice = Defense boost to the player while the buff is active.
+            npc.lifeMax = NPClifeMaxDef - (modNPC.DiceMult * modNPC.DiceMult * modNPC.DiceMult); // Grant a +10 * dice = Life boost to the player while the buff is active.
             if (npc.lifeMax < 1)
             {
                 npc.StrikeInstantKill();

@@ -152,7 +152,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
             } 
             else
             {
-                DiceNPC modNPC = npc.GetGlobalNPC<DiceNPC>();
+                VanillaModdingNPC modNPC = npc.GetGlobalNPC<VanillaModdingNPC>();
                 bool hasAnyEffect = npc.HasBuff(ModContent.BuffType<DiceBuff>()) || npc.HasBuff(ModContent.BuffType<DiceDebuff>());
                 if (timer <= maxRollTime)
                 {

@@ -83,7 +83,7 @@ namespace VanillaModding.Common.GlobalNPCs
         }
     }
 
-    internal class DiceNPC : GlobalNPC
+    internal class VanillaModdingNPC : GlobalNPC
     {
         public override bool InstancePerEntity => true;
 
@@ -103,5 +103,20 @@ namespace VanillaModding.Common.GlobalNPCs
         /// Total rolls, also used for dice incremental chance of death outcome.
         /// </summary>
         public int totalRolls;
+
+        /// <summary>
+        /// Adjustable by any buffs.
+        /// </summary>
+        public int statLifeMax2;
+
+        /// <summary>
+        /// Adjustable by any buffs.
+        /// </summary>
+        public int statDefenseMax2;
+
+        public override void AI(NPC npc)
+        {
+            base.AI(npc);
+        }
     }
 }

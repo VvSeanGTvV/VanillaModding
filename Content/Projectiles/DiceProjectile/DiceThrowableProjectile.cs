@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
+using VanillaModding.Common;
 using VanillaModding.Common.GlobalNPCs;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -59,12 +60,23 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
         public override bool? CanHitNPC(NPC target)
         {
             bool hittable = true;
-            DiceNPC modNPC = target.GetGlobalNPC<DiceNPC>();
+            VanillaModdingNPC modNPC = target.GetGlobalNPC<VanillaModdingNPC>();
             if (modNPC != null)
             {
                 hittable = !modNPC.rolling; // always never give another roll if an NPC is rolling.
             }
             return hittable;
+        }
+
+        public override bool CanHitPvp(Player target)
+        {
+            bool hittable = true;
+            VanillaModdingPlayer modPlayer = target.GetModPlayer<VanillaModdingPlayer>();
+            if (modPlayer != null)
+            {
+                hittable = !modPlayer.rolling; // always never give another roll if an NPC is rolling.
+            }
+            return base.CanHitPvp(target) && hittable;
         }
     }
 }
