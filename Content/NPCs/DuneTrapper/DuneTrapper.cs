@@ -124,7 +124,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             // If you want the segment length to be constant, set these two properties to the same value
             MinSegmentLength = 48;
             MaxSegmentLength = MinSegmentLength;
-            UseCustomAI = true;
+            UseCustomAI = true; CenterDrop = true;
             CommonWormInit(this);
         }
 

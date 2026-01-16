@@ -218,7 +218,7 @@ Mods: {
 
 			Dice: {
 				DisplayName: D I C E
-				Tooltip: Roll at your own risk
+				Tooltip: Usable, if your lucky. It's also throwable! Disintegrated upon death rolls.
 				BadLuckDeath: "{0} has rolled a death outcome"
 				RanOutofHealth: "{0} seem to have ran out of maximum health"
 			}
@@ -355,7 +355,7 @@ Mods: {
 			BoringArrow.DisplayName: Boring Arrow
 			RedFish.DisplayName: Red Fish
 			FishTrout.DisplayName: Fish Trout
-			DiceThrowableProjectile.DisplayName: Dice Throwable Projectile
+			DiceThrowableProjectile.DisplayName: Thrown Dice
 		}
 	}
 }

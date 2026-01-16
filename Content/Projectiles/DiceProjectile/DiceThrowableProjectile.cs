@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Common;
 using VanillaModding.Common.GlobalNPCs;
@@ -51,9 +52,27 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
             Projectile.rotation += MathHelper.ToRadians(15f) * Projectile.direction;
         }
 
+        public override void OnKill(int timeLeft)
+        {
+            // Icy Blue Fire Dust spawn
+            for (int i = 0; i < 40; i++)
+            {
+                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.IceTorch, 0f, 0f, 100, default, 3f);
+                dust.noGravity = true;
+                dust.velocity *= 5f;
+                dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.IceTorch, 0f, 0f, 100, default, 2f);
+                dust.velocity *= 3f;
+            }
+
+            if (Projectile.owner == Main.myPlayer)
+            {
+                Item.NewItem(Projectile.GetSource_DropAsItem(), (int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height, (int)Projectile.ai[1]);
+            }
+        }
+
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            Projectile.NewProjectile(target.GetSource_FromAI(), target.Center, Vector2.Zero, ModContent.ProjectileType<DiceProjectile>(), 0, 0, -1, 0, target.whoAmI);
+            Projectile.NewProjectile(target.GetSource_FromAI(), target.Center, Vector2.Zero, ModContent.ProjectileType<DiceProjectile>(), 0, 0, -1, target.whoAmI, Projectile.ai[1]);
             base.ModifyHitNPC(target, ref modifiers);
         }
 

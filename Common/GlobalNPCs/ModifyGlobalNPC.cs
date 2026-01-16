@@ -105,17 +105,37 @@ namespace VanillaModding.Common.GlobalNPCs
         public int totalRolls;
 
         /// <summary>
-        /// Adjustable by any buffs.
+        /// Adjustable Life Max by any buffs.
         /// </summary>
         public int statLifeMax2;
-
         /// <summary>
-        /// Adjustable by any buffs.
+        /// Adjustable Defense by any buffs.
         /// </summary>
         public int statDefenseMax2;
 
+        /// <summary>
+        /// Not adjustable usually never meant to be adjusted at all times.
+        /// </summary>
+        private int statLifeMax = -1, statDefense = -1;
+
+        public override bool PreAI(NPC npc)
+        {
+            if (statLifeMax <= 0) statLifeMax = npc.lifeMax;
+            if (statDefense <= 0) statDefense = npc.defense;
+            return base.PreAI(npc);
+        }
+
+        public override void ResetEffects(NPC npc)
+        {
+            statLifeMax2 = 0;
+            statDefenseMax2 = 0;
+            base.ResetEffects(npc);
+        }
+
         public override void AI(NPC npc)
         {
+            npc.defense = statDefense + statDefenseMax2;
+            npc.lifeMax = statLifeMax + statLifeMax2;
             base.AI(npc);
         }
     }

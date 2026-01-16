@@ -63,11 +63,11 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
         public override void AI()
         {
             timer++;
-            bool playerMode = Projectile.ai[0] == 1;
+            bool playerMode = Projectile.ai[0] == 1 && Projectile.owner != -1;
 
             //Main.NewText($"{Projectile.ai[0]} + {Projectile.ai[1]}");
             Player player = Main.player[Projectile.owner];
-            NPC npc = Main.npc[(int)Projectile.ai[1]];
+            NPC npc = Main.npc[(int)Projectile.ai[0]];
 
             if (player == null && npc == null) Projectile.Kill();
             Vector2 top = (player != null && playerMode) ? player.Top : npc.Top;
@@ -146,7 +146,11 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
                 else
                 {
                     bfti++;
-                    if (bfti >= buffLast || !hasAnyEffect) Projectile.Kill();
+                    if (bfti >= buffLast || !hasAnyEffect)
+                    {
+                        Item.NewItem(Projectile.GetSource_DropAsItem(), (int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height, (int)Projectile.ai[1]);
+                        Projectile.Kill();
+                    }
                 }
                 if (!player.active || player.dead) Projectile.Kill();
             } 
@@ -201,13 +205,14 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
                         npc.StrikeInstantKill();
                         once = true;
 
+                        // Smoke
                         for (int i = 0; i < 20; i++)
                         {
                             Dust dust = Dust.NewDustDirect(npc.position, npc.width, npc.height, DustID.Smoke, 0f, 0f, 100, default, 2f);
                             dust.velocity *= 1.4f;
                         }
 
-                        // Fire Dust spawn
+                        // Icy Blue Fire Dust spawn
                         for (int i = 0; i < 40; i++)
                         {
                             Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.IceTorch, 0f, 0f, 100, default, 3f);
@@ -225,7 +230,11 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
                 else
                 {
                     bfti++;
-                    if (bfti >= buffLast || !hasAnyEffect) Projectile.Kill();
+                    if (bfti >= buffLast || !hasAnyEffect)
+                    {
+                        Item.NewItem(Projectile.GetSource_DropAsItem(), (int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height, (int)Projectile.ai[1]);
+                        Projectile.Kill();
+                    }
                 }
                 if (!npc.active) Projectile.Kill();
             }

@@ -52,7 +52,7 @@ namespace VanillaModding.Content.Items.Consumable
             Item.useAnimation = 30;
             Item.useTime = 30;
             Item.useStyle = ItemUseStyleID.Swing;
-            //Item.consumable = true;
+            Item.consumable = true;
 
             // Gun Properties
             Item.shoot = ModContent.ProjectileType<DiceProjectile>(); // For some reason, all the guns in the vanilla source have this.
@@ -100,7 +100,7 @@ namespace VanillaModding.Content.Items.Consumable
             BadLuckDeath = this.GetLocalization("BadLuckDeath").WithFormatArgs(player.name);
             RanOutofHealth = this.GetLocalization("RanOutofHealth").WithFormatArgs(player.name);
 
-            Projectile.NewProjectile(source, player.MountedCenter, velocity, type, damage, knockback / 2, player.whoAmI, throwable ? 0 : 1);
+            Projectile.NewProjectile(source, player.MountedCenter, velocity, type, damage, knockback / 2, player.whoAmI, throwable ? 0 : 1, ModContent.ItemType<Dice>());
             return false;
         }
 
