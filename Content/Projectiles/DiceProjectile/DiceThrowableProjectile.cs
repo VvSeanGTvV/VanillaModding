@@ -41,6 +41,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
         }
 
         double d;
+        bool f = true;
         public override void AI()
         {
             d += 0.1d;
@@ -64,7 +65,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
                 dust.velocity *= 3f;
             }
 
-            if (Projectile.owner == Main.myPlayer)
+            if (Projectile.owner == Main.myPlayer && f)
             {
                 Item.NewItem(Projectile.GetSource_DropAsItem(), (int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height, (int)Projectile.ai[1]);
             }
@@ -72,6 +73,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
 
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
+            f = false;
             Projectile.NewProjectile(target.GetSource_FromAI(), target.Center, Vector2.Zero, ModContent.ProjectileType<DiceProjectile>(), 0, 0, -1, target.whoAmI, Projectile.ai[1]);
             base.ModifyHitNPC(target, ref modifiers);
         }
