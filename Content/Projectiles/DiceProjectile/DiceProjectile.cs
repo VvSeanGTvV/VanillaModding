@@ -69,6 +69,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
             Player player = Main.player[Projectile.owner];
             NPC npc = Main.npc[(int)Projectile.ai[0]];
 
+            bool deathByDice = false;
             if (player == null && npc == null) Projectile.Kill();
             Vector2 top = (player != null && playerMode) ? player.Top : npc.Top;
             if (playerMode)
@@ -114,11 +115,13 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
                     {
                         modPlayer.DiceMult = mult + 1;
                         player.AddBuff(ModContent.BuffType<DiceDebuff>(), buffLast * modPlayer.totalRolls);
+                        if (Math.Max(player.statLifeMax2 - modPlayer.DiceMult * modPlayer.DiceMult, 0) <= 0) deathByDice = true;
                         once = true;
                         SoundEngine.PlaySound(SoundID.Item40, Projectile.position);
                     }
                     if (diceType == 3)
                     {
+                        deathByDice = true;
                         player.KillMe(PlayerDeathReason.ByCustomReason(Dice.BadLuckDeath.ToNetworkText()), player.statLifeMax2 * 2, 0);
                         once = true;
 
@@ -152,7 +155,11 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
                         Projectile.Kill();
                     }
                 }
-                if (!player.active || player.dead) Projectile.Kill();
+                if (!player.active || player.dead)
+                {
+                    if (!deathByDice) Item.NewItem(Projectile.GetSource_DropAsItem(), (int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height, (int)Projectile.ai[1]);
+                    Projectile.Kill();
+                }
             } 
             else
             {
@@ -197,11 +204,13 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
                     {
                         modNPC.DiceMult = mult + 1;
                         npc.AddBuff(ModContent.BuffType<DiceDebuff>(), buffLast * modNPC.totalRolls);
+                        if (npc.lifeMax - (modNPC.DiceMult * modNPC.DiceMult * modNPC.DiceMult) <= 0) deathByDice = true;
                         once = true;
                         SoundEngine.PlaySound(SoundID.Item40, Projectile.position);
                     }
                     if (diceType == 3)
                     {
+                        deathByDice = true;
                         npc.StrikeInstantKill();
                         once = true;
 
@@ -236,7 +245,11 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
                         Projectile.Kill();
                     }
                 }
-                if (!npc.active) Projectile.Kill();
+                if (!npc.active)
+                {
+                    if (!deathByDice) Item.NewItem(Projectile.GetSource_DropAsItem(), (int)Projectile.position.X, (int)Projectile.position.Y, Projectile.width, Projectile.height, (int)Projectile.ai[1]);
+                    Projectile.Kill();
+                }
             }
 
             Projectile.position = top - new Vector2(Projectile.width / 2, Projectile.height + 15f);

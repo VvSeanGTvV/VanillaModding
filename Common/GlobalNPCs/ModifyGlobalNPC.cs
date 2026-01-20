@@ -90,11 +90,11 @@ namespace VanillaModding.Common.GlobalNPCs
         /// <summary>
         /// NPC, currently rolling a Dice
         /// </summary>
-        public bool rolling;
+        public bool rolling = false;
         /// <summary>
         /// Has any existing Debuff/buff 
         /// </summary>
-        public bool hasAnyDiceEffect;
+        public bool hasAnyDiceEffect = false;
         /// <summary>
         /// Dice number that has been rolled
         /// </summary>
@@ -129,6 +129,8 @@ namespace VanillaModding.Common.GlobalNPCs
         {
             statLifeMax2 = 0;
             statDefenseMax2 = 0;
+            rolling = false;
+            hasAnyDiceEffect = false;
             base.ResetEffects(npc);
         }
 

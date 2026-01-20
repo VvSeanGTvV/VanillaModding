@@ -86,7 +86,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
             {
                 hittable = !modNPC.rolling; // always never give another roll if an NPC is rolling.
             }
-            return hittable;
+            return hittable ? base.CanHitNPC(target) : false;
         }
 
         public override bool CanHitPvp(Player target)
