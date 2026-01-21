@@ -48,11 +48,13 @@ namespace VanillaModding.External.AI
                     // The DistanceSquared function returns a squared distance between 2 points, skipping relatively expensive square root calculations
                     float sqrDistanceToTarget = Vector2.DistanceSquared(target.Center, projectile.Center);
 
+                    if (filter != null && filter(target))
+                        continue;
                     // Check if it is within the radius
                     if (sqrDistanceToTarget < sqrMaxDetectDistance)
                     {
                         sqrMaxDetectDistance = sqrDistanceToTarget;
-                        if (filter != null && filter(closestNPC)) closestNPC = target; else if (filter == null) closestNPC = target;
+                        closestNPC = target;
                     }
                 }
             }
