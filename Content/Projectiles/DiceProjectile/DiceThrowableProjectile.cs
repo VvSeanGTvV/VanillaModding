@@ -54,13 +54,11 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
             if (Projectile.velocity.Y > 32f) Projectile.velocity.Y = 32f;
             Projectile.rotation += MathHelper.ToRadians(15f) * Projectile.direction;
 
-            NPC closest = AdvAI.FindClosestNPC(50f, Projectile, npc => {
-                var v = npc.GetGlobalNPC<VanillaModdingNPC>();
-                return !v.rolling && !v.hasAnyDiceEffect;
-            });
+            NPC closest = AdvAI.FindClosestNPC(50f, Projectile);
             if (closest != null)
             {
-                if (closest.getRect().Intersects(Projectile.getRect()))
+                var d = closest.GetGlobalNPC<VanillaModdingNPC>();
+                if (closest.getRect().Intersects(Projectile.getRect()) && !d.rolling && !d.hasAnyDiceEffect)
                 {
                     f = false;
                     Projectile.NewProjectile(closest.GetSource_FromAI(), closest.Center, Vector2.Zero, ModContent.ProjectileType<DiceProjectile>(), 0, 0, -1, closest.whoAmI, Projectile.ai[1]);

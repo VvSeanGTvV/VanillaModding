@@ -130,7 +130,6 @@ namespace VanillaModding.Common.GlobalNPCs
             statLifeMax2 = 0;
             statDefenseMax2 = 0;
             hasAnyDiceEffect = false;
-            rolling = false;
             base.ResetEffects(npc);
         }
 

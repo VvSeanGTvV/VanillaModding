@@ -44,8 +44,6 @@ namespace VanillaModding.External.AI
                 NPC target = Main.npc[k];
                 if (target.CanBeChasedBy())
                 {
-                    if (filter != null && !filter(target))
-                        continue;
 
                     // The DistanceSquared function returns a squared distance between 2 points, skipping relatively expensive square root calculations
                     float sqrDistanceToTarget = Vector2.DistanceSquared(target.Center, projectile.Center);
@@ -54,7 +52,7 @@ namespace VanillaModding.External.AI
                     if (sqrDistanceToTarget < sqrMaxDetectDistance)
                     {
                         sqrMaxDetectDistance = sqrDistanceToTarget;
-                        closestNPC = target;
+                        if (filter != null && filter(closestNPC)) closestNPC = target; else if (filter == null) closestNPC = target;
                     }
                 }
             }
