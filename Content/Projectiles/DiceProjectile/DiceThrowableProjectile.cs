@@ -16,6 +16,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
 {
     internal class DiceThrowableProjectile : ModProjectile
     {
+
         public override void SetStaticDefaults()
         {
             Main.projFrames[Type] = 6 * 1;
@@ -34,7 +35,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
             Projectile.alpha = 0;
             Projectile.ignoreWater = true; // Does the projectile's speed be influenced by water?
             Projectile.tileCollide = true; // Can the projectile collide with tiles?
-            Projectile.scale = 1f;
+            Projectile.scale = 1.15f;
             Projectile.light = 1f;
             //Projectile.extraUpdates = 1; // Set to above 0 if you want the projectile to update multiple time in a frame
             //AIType = ProjectileID.Bullet; // Act exactly like default Bullet
@@ -80,23 +81,17 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
 
         public override bool? CanHitNPC(NPC target)
         {
-            bool hittable = true;
+            bool hittable;
             VanillaModdingNPC modNPC = target.GetGlobalNPC<VanillaModdingNPC>();
-            if (modNPC != null)
-            {
-                hittable = !modNPC.rolling; // always never give another roll if an NPC is rolling.
-            }
-            return hittable ? base.CanHitNPC(target) : false;
+            hittable = !modNPC.rolling; // always never give another roll if an NPC is rolling.
+            return hittable;
         }
 
         public override bool CanHitPvp(Player target)
         {
-            bool hittable = true;
+            bool hittable;
             VanillaModdingPlayer modPlayer = target.GetModPlayer<VanillaModdingPlayer>();
-            if (modPlayer != null)
-            {
-                hittable = !modPlayer.rolling; // always never give another roll if an NPC is rolling.
-            }
+            hittable = !modPlayer.rolling; // always never give another roll if an NPC is rolling.
             return base.CanHitPvp(target) && hittable;
         }
     }

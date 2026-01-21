@@ -63,9 +63,9 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
         public override void AI()
         {
             timer++;
-            bool playerMode = Projectile.ai[0] == 1 && Projectile.owner != -1;
+            bool playerMode = Projectile.owner != -1;
 
-            //Main.NewText($"{Projectile.ai[0]} + {Projectile.ai[1]}");
+            Main.NewText($"{Projectile.ai[0]} + {Projectile.owner}");
             Player player = Main.player[Projectile.owner];
             NPC npc = Main.npc[(int)Projectile.ai[0]];
 

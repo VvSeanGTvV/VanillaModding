@@ -84,7 +84,8 @@ namespace VanillaModding.Content.Items.Consumable
             {
                 throwable = true;
                 Item.shoot = ModContent.ProjectileType<DiceThrowableProjectile>();
-                Item.damage = 1;
+                Item.damage = 5;
+                Item.knockBack = 1;
                 return true;
             }
             else
