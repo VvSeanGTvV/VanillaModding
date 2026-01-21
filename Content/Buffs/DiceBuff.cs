@@ -25,6 +25,7 @@ namespace VanillaModding.Content.Buffs
         public override void SetStaticDefaults()
         {
             Main.buffNoSave[Type] = true;
+            Main.pvpBuff[Type] = true;
         }
 
         public override void Update(Player player, ref int buffIndex)
@@ -40,7 +41,6 @@ namespace VanillaModding.Content.Buffs
         public override void Update(NPC npc, ref int buffIndex)
         {
             VanillaModdingNPC modNPC = npc.GetGlobalNPC<VanillaModdingNPC>();
-            modNPC.hasAnyDiceEffect = true;
 
             modNPC.statDefenseMax2 = (modNPC.DiceMult + modNPC.DiceMult); // Grant a +10 * dice = Defense boost to the player while the buff is active.
             modNPC.statLifeMax2 = (modNPC.DiceMult * modNPC.DiceMult * modNPC.DiceMult); // Grant a +10 * dice = Life boost to the player while the buff is active.
@@ -78,7 +78,7 @@ namespace VanillaModding.Content.Buffs
         public override void Update(NPC npc, ref int buffIndex)
         {
             VanillaModdingNPC modNPC = npc.GetGlobalNPC<VanillaModdingNPC>();
-            modNPC.hasAnyDiceEffect = true;
+            //modNPC.hasAnyDiceEffect = true;
 
             modNPC.statDefenseMax2 = -(modNPC.DiceMult + modNPC.DiceMult); // Grant a +10 * dice = Defense boost to the player while the buff is active.
             modNPC.statLifeMax2 = -(modNPC.DiceMult * modNPC.DiceMult * modNPC.DiceMult); // Grant a +10 * dice = Life boost to the player while the buff is active.

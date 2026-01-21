@@ -77,10 +77,10 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
             // Icy Blue Fire Dust spawn
             for (int i = 0; i < 40; i++)
             {
-                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.IceTorch, 0f, 0f, 100, default, 3f);
+                Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.IceTorch, Projectile.velocity.X/2, 0f, 100, default, 3f);
                 dust.noGravity = true;
                 dust.velocity *= 5f;
-                dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.IceTorch, 0f, 0f, 100, default, 2f);
+                dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.IceTorch, Projectile.velocity.X/2, 0f, 100, default, 2f);
                 dust.velocity *= 3f;
             }
 

@@ -204,7 +204,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
                     {
                         modNPC.DiceMult = mult + 1;
                         npc.AddBuff(ModContent.BuffType<DiceDebuff>(), buffLast * modNPC.totalRolls);
-                        if (npc.lifeMax - (modNPC.DiceMult * modNPC.DiceMult * modNPC.DiceMult) <= 0) deathByDice = true;
+                        if (npc.lifeMax - (modNPC.DiceMult * modNPC.DiceMult * modNPC.DiceMult) < 1) deathByDice = true;
                         once = true;
                         SoundEngine.PlaySound(SoundID.Item40, Projectile.position);
                     }

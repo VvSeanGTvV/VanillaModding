@@ -12,6 +12,7 @@ using VanillaModding.Content.Items.Ammo;
 using VanillaModding.Content.Items.Weapon.Ranged;
 using Microsoft.Xna.Framework;
 using VanillaModding.Content.Items.Consumable;
+using VanillaModding.Content.Buffs;
 
 namespace VanillaModding.Common.GlobalNPCs
 {
@@ -129,12 +130,13 @@ namespace VanillaModding.Common.GlobalNPCs
         {
             statLifeMax2 = 0;
             statDefenseMax2 = 0;
-            hasAnyDiceEffect = false;
+            //hasAnyDiceEffect = false;
             base.ResetEffects(npc);
         }
 
         public override void AI(NPC npc)
         {
+            hasAnyDiceEffect = npc.HasBuff<DiceBuff>() || npc.HasBuff<DiceDebuff>();
             npc.defense = statDefense + statDefenseMax2;
             npc.lifeMax = statLifeMax + statLifeMax2;
             base.AI(npc);

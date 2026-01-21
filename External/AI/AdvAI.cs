@@ -14,23 +14,23 @@ namespace VanillaModding.External.AI
     internal class AdvAI
     {
         /// <summary>
-        /// Find the closest NPC by distance. Using via: Projectile.
+        /// Find the closest <see cref="NPC"/> by distance. Using via: <see cref="Projectile"/>.
         /// </summary>
-        /// <param name="maxDetectDistance"> Maximum distance to detect a nearby NPC </param>
-        /// <param name="projectile"> The Projectile acting as radar </param>
-        /// <returns> NPC closest to Projectile </returns>
+        /// <param name="maxDetectDistance"> Maximum distance that projectile can see. </param>
+        /// <param name="projectile"> Projectile acting as radar or sonar. </param>
+        /// <returns> <see cref="NPC"/> closest to Projectile </returns>
         public static NPC FindClosestNPC(float maxDetectDistance, Projectile projectile)
         {   
             return FindClosestNPC(maxDetectDistance, projectile, null);
         }
 
         /// <summary>
-        /// Find the closest NPC by distance. Using via: Projectile w/ Filter.
+        /// Find the closest <see cref="NPC"/> by distance. Using via: <see cref="Projectile"/> w/ Filter.
         /// </summary>
-        /// <param name="maxDetectDistance"> Maximum distance to detect a nearby NPC </param>
-        /// <param name="projectile"> The Projectile acting as radar </param>
-        /// <param name="filter"> Filters any NPC </param>
-        /// <returns> NPC closest to Projectile </returns>
+        /// <param name="maxDetectDistance"> Maximum distance that projectile can see. </param>
+        /// <param name="projectile"> Projectile acting as radar or sonar. </param>
+        /// <param name="filter"> If returns true, ignore the NPC entirely and go to next one. </param>
+        /// <returns> <see cref="NPC"/> closest to Projectile </returns>
         public static NPC FindClosestNPC(float maxDetectDistance, Projectile projectile, Func<NPC, bool> filter = null)
         {
             NPC closestNPC = null;
@@ -50,6 +50,7 @@ namespace VanillaModding.External.AI
 
                     if (filter != null && filter(target))
                         continue;
+
                     // Check if it is within the radius
                     if (sqrDistanceToTarget < sqrMaxDetectDistance)
                     {
@@ -63,12 +64,24 @@ namespace VanillaModding.External.AI
         }
 
         /// <summary>
-        /// Find the closest Player by distance. Using via: Projectile.
+        /// Find the closest <see cref="Player"/> by distance. Using via: <see cref="Projectile"/>.
         /// </summary>
-        /// <param name="maxDetectDistance"></param>
-        /// <param name="projectile"></param>
-        /// <returns></returns>
+        /// <param name="maxDetectDistance"> Maximum distance that projectile can see. </param>
+        /// <param name="projectile"> Projectile acting as radar or sonar. </param>
+        /// <returns><see cref="Player"/> closest to Projectile.</returns>
         public static Player FindClosestPlayer(float maxDetectDistance, Projectile projectile)
+        {
+            return FindClosestPlayer(maxDetectDistance, projectile, null);
+        }
+
+        /// <summary>
+        /// Find the closest <see cref="Player"/> by distance. Using via: <see cref="Projectile"/>.
+        /// </summary>
+        /// <param name="maxDetectDistance"> Maximum distance that projectile can see. </param>
+        /// <param name="projectile"> Projectile acting as radar or sonar. </param>
+        /// <param name="filter"> If returns true, ignore the Player entirely and go to next one. </param>
+        /// <returns><see cref="Player"/> closest to Projectile.</returns>
+        public static Player FindClosestPlayer(float maxDetectDistance, Projectile projectile, Func<Player, bool> filter = null)
         {
             Player closestNPC = null;
 
@@ -83,6 +96,9 @@ namespace VanillaModding.External.AI
                 // The DistanceSquared function returns a squared distance between 2 points, skipping relatively expensive square root calculations
                 float sqrDistanceToTarget = Vector2.DistanceSquared(target.Center, projectile.Center);
 
+                if (filter != null && filter(target))
+                    continue;
+
                 // Check if it is within the radius
                 if (sqrDistanceToTarget < sqrMaxDetectDistance)
                 {
@@ -95,7 +111,7 @@ namespace VanillaModding.External.AI
         }
 
         /// <summary>
-        /// Find the closest Player by distance. Using via: Projectile.
+        /// Find the closest <see cref="Player"/> by distance. Using via: <see cref="Projectile"/>.
         /// </summary>
         /// <param name="maxDetectDistance"></param>
         /// <param name="projectile"></param>
@@ -129,10 +145,10 @@ namespace VanillaModding.External.AI
         /// <summary>
         /// Basic Animation Projectile function.
         /// </summary>
-        /// <param name="startFrame"></param>
-        /// <param name="finalFrame"></param>
-        /// <param name="frameSpeed"></param>
-        /// <param name="projectile"></param>
+        /// <param name="startFrame"> The start of the frame. </param>
+        /// <param name="finalFrame"> The end of the frame. (loops back to <paramref name="startFrame"/>). </param>
+        /// <param name="frameSpeed"> How fast is the animation </param>
+        /// <param name="projectile"> This Projectile. </param>
         public static void FrameAnimate(int startFrame, int finalFrame, int frameSpeed, Projectile projectile)
         {
             projectile.frameCounter++;
@@ -151,9 +167,9 @@ namespace VanillaModding.External.AI
         /// <summary>
         /// Basic Projectile Explosion function.
         /// </summary>
-        /// <param name="range"></param>
-        /// <param name="projectile"></param>
-        /// <param name="damage"></param>
+        /// <param name="range"> How large is the explosion. </param>
+        /// <param name="projectile"> This Projectile. </param>
+        /// <param name="damage"> How much damage does the explosion does. </param>
         public static void Explode(Projectile projectile, int range, int damage)
         {
             int def0 = 250;
