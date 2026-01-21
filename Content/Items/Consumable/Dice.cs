@@ -101,7 +101,7 @@ namespace VanillaModding.Content.Items.Consumable
             BadLuckDeath = this.GetLocalization("BadLuckDeath").WithFormatArgs(player.name);
             RanOutofHealth = this.GetLocalization("RanOutofHealth").WithFormatArgs(player.name);
 
-            Projectile.NewProjectile(source, player.MountedCenter, velocity, type, damage, knockback / 2, player.whoAmI, throwable ? 0 : 1, ModContent.ItemType<Dice>());
+            Projectile.NewProjectile(source, player.MountedCenter, velocity, type, damage, knockback / 2, player.whoAmI, throwable ? 0 : -1, ModContent.ItemType<Dice>());
             return false;
         }
 

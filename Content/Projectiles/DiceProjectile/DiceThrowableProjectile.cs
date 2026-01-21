@@ -10,6 +10,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Common;
 using VanillaModding.Common.GlobalNPCs;
+using VanillaModding.External.AI;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace VanillaModding.Content.Projectiles.DiceProjectile
@@ -52,6 +53,20 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
 
             if (Projectile.velocity.Y > 32f) Projectile.velocity.Y = 32f;
             Projectile.rotation += MathHelper.ToRadians(15f) * Projectile.direction;
+
+            NPC closest = AdvAI.FindClosestNPC(50f, Projectile, npc => {
+                var v = npc.GetGlobalNPC<VanillaModdingNPC>();
+                return !v.rolling && !v.hasAnyDiceEffect;
+            });
+            if (closest != null)
+            {
+                if (closest.getRect().Intersects(Projectile.getRect()))
+                {
+                    f = false;
+                    Projectile.NewProjectile(closest.GetSource_FromAI(), closest.Center, Vector2.Zero, ModContent.ProjectileType<DiceProjectile>(), 0, 0, -1, closest.whoAmI, Projectile.ai[1]);
+                    Projectile.Kill();
+                }
+            }
         }
 
         public override void OnKill(int timeLeft)
@@ -72,19 +87,17 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
             }
         }
 
-        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
-        {
-            f = false;
-            Projectile.NewProjectile(target.GetSource_FromAI(), target.Center, Vector2.Zero, ModContent.ProjectileType<DiceProjectile>(), 0, 0, -1, target.whoAmI, Projectile.ai[1]);
-            base.ModifyHitNPC(target, ref modifiers);
-        }
-
         public override bool? CanHitNPC(NPC target)
         {
             bool hittable;
             VanillaModdingNPC modNPC = target.GetGlobalNPC<VanillaModdingNPC>();
             hittable = !modNPC.rolling; // always never give another roll if an NPC is rolling.
-            return hittable;
+            return hittable ? null : false;
+        }
+
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+            return Collision.CanHit(Projectile.position, projHitbox.Width, projHitbox.Height, targetHitbox.Center(), 1, 1);
         }
 
         public override bool CanHitPvp(Player target)

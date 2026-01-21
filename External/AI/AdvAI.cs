@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
@@ -15,10 +16,22 @@ namespace VanillaModding.External.AI
         /// <summary>
         /// Find the closest NPC by distance. Using via: Projectile.
         /// </summary>
-        /// <param name="maxDetectDistance"></param>
-        /// <param name="projectile"></param>
-        /// <returns></returns>
+        /// <param name="maxDetectDistance"> Maximum distance to detect a nearby NPC </param>
+        /// <param name="projectile"> The Projectile acting as radar </param>
+        /// <returns> NPC closest to Projectile </returns>
         public static NPC FindClosestNPC(float maxDetectDistance, Projectile projectile)
+        {   
+            return FindClosestNPC(maxDetectDistance, projectile, null);
+        }
+
+        /// <summary>
+        /// Find the closest NPC by distance. Using via: Projectile w/ Filter.
+        /// </summary>
+        /// <param name="maxDetectDistance"> Maximum distance to detect a nearby NPC </param>
+        /// <param name="projectile"> The Projectile acting as radar </param>
+        /// <param name="filter"> Filters any NPC </param>
+        /// <returns> NPC closest to Projectile </returns>
+        public static NPC FindClosestNPC(float maxDetectDistance, Projectile projectile, Func<NPC, bool> filter = null)
         {
             NPC closestNPC = null;
 
@@ -29,15 +42,11 @@ namespace VanillaModding.External.AI
             for (int k = 0; k < Main.maxNPCs; k++)
             {
                 NPC target = Main.npc[k];
-                // Check if NPC able to be targeted. It means that NPC is
-                // 1. active (alive)
-                // 2. chaseable (e.g. not a cultist archer)
-                // 3. max life bigger than 5 (e.g. not a critter)
-                // 4. can take damage (e.g. moonlord core after all it's parts are downed)
-                // 5. hostile (!friendly)
-                // 6. not immortal (e.g. not a target dummy)
                 if (target.CanBeChasedBy())
                 {
+                    if (filter != null && !filter(target))
+                        continue;
+
                     // The DistanceSquared function returns a squared distance between 2 points, skipping relatively expensive square root calculations
                     float sqrDistanceToTarget = Vector2.DistanceSquared(target.Center, projectile.Center);
 
