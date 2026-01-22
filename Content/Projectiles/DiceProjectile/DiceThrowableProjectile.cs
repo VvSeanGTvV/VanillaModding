@@ -98,11 +98,6 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
             return hittable ? null : false;
         }
 
-        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-        {
-            return Collision.CanHit(Projectile.position, projHitbox.Width, projHitbox.Height, targetHitbox.Center(), 1, 1);
-        }
-
         public override bool CanHitPvp(Player target)
         {
             bool hittable;
