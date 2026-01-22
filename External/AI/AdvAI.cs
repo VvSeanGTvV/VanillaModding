@@ -13,25 +13,15 @@ namespace VanillaModding.External.AI
 {
     internal class AdvAI
     {
-        /// <summary>
-        /// Find the closest <see cref="NPC"/> by distance. Using via: <see cref="Projectile"/>.
-        /// </summary>
-        /// <param name="maxDetectDistance"> Maximum distance that projectile can see. </param>
-        /// <param name="projectile"> Projectile acting as radar or sonar. </param>
-        /// <returns> <see cref="NPC"/> closest to Projectile </returns>
-        public static NPC FindClosestNPC(float maxDetectDistance, Projectile projectile)
-        {   
-            return FindClosestNPC(maxDetectDistance, projectile, null);
-        }
 
         /// <summary>
-        /// Find the closest <see cref="NPC"/> by distance. Using via: <see cref="Projectile"/> w/ Filter.
+        /// Find the closest enemy <see cref="NPC"/> by distance, from the point vector in <paramref name="center"/>.
         /// </summary>
         /// <param name="maxDetectDistance"> Maximum distance that projectile can see. </param>
-        /// <param name="projectile"> Projectile acting as radar or sonar. </param>
-        /// <param name="filter"> If returns true, ignore the NPC entirely and go to next one. </param>
+        /// <param name="center"> the point of position acting as radar or sonar. </param>
+        /// <param name="filter"> <para> defaults to null for no filter use. If returns true, ignore the NPC entirely and go to next one. </para></param>
         /// <returns> <see cref="NPC"/> closest to Projectile </returns>
-        public static NPC FindClosestNPC(float maxDetectDistance, Projectile projectile, Func<NPC, bool> filter = null)
+        public static NPC FindClosestNPC(float maxDetectDistance, Vector2 center, Func<NPC, bool> filter = null)
         {
             NPC closestNPC = null;
 
@@ -46,7 +36,7 @@ namespace VanillaModding.External.AI
                 {
 
                     // The DistanceSquared function returns a squared distance between 2 points, skipping relatively expensive square root calculations
-                    float sqrDistanceToTarget = Vector2.DistanceSquared(target.Center, projectile.Center);
+                    float sqrDistanceToTarget = Vector2.DistanceSquared(target.Center, center);
 
                     if (filter != null && filter(target))
                         continue;
@@ -64,24 +54,13 @@ namespace VanillaModding.External.AI
         }
 
         /// <summary>
-        /// Find the closest <see cref="Player"/> by distance. Using via: <see cref="Projectile"/>.
+        /// Find the closest <see cref="Player"/> by distance, from the point vector in <paramref name="center"/>.
         /// </summary>
         /// <param name="maxDetectDistance"> Maximum distance that projectile can see. </param>
-        /// <param name="projectile"> Projectile acting as radar or sonar. </param>
+        /// <param name="center"> the point of position acting as radar or sonar. </param>
+        /// <param name="filter"> <para> defaults to null for no filter use. If returns true, ignore the Player entirely and go to next one. </para></param>
         /// <returns><see cref="Player"/> closest to Projectile.</returns>
-        public static Player FindClosestPlayer(float maxDetectDistance, Projectile projectile)
-        {
-            return FindClosestPlayer(maxDetectDistance, projectile, null);
-        }
-
-        /// <summary>
-        /// Find the closest <see cref="Player"/> by distance. Using via: <see cref="Projectile"/>.
-        /// </summary>
-        /// <param name="maxDetectDistance"> Maximum distance that projectile can see. </param>
-        /// <param name="projectile"> Projectile acting as radar or sonar. </param>
-        /// <param name="filter"> If returns true, ignore the Player entirely and go to next one. </param>
-        /// <returns><see cref="Player"/> closest to Projectile.</returns>
-        public static Player FindClosestPlayer(float maxDetectDistance, Projectile projectile, Func<Player, bool> filter = null)
+        public static Player FindClosestPlayer(float maxDetectDistance, Vector2 center, Func<Player, bool> filter = null)
         {
             Player closestNPC = null;
 
@@ -94,42 +73,10 @@ namespace VanillaModding.External.AI
                 Player target = Main.player[k];
 
                 // The DistanceSquared function returns a squared distance between 2 points, skipping relatively expensive square root calculations
-                float sqrDistanceToTarget = Vector2.DistanceSquared(target.Center, projectile.Center);
+                float sqrDistanceToTarget = Vector2.DistanceSquared(target.Center, center);
 
                 if (filter != null && filter(target))
                     continue;
-
-                // Check if it is within the radius
-                if (sqrDistanceToTarget < sqrMaxDetectDistance)
-                {
-                    sqrMaxDetectDistance = sqrDistanceToTarget;
-                    closestNPC = target;
-                }
-            }
-
-            return closestNPC;
-        }
-
-        /// <summary>
-        /// Find the closest <see cref="Player"/> by distance. Using via: <see cref="Projectile"/>.
-        /// </summary>
-        /// <param name="maxDetectDistance"></param>
-        /// <param name="projectile"></param>
-        /// <returns></returns>
-        public static Player FindClosestPlayerNPC(float maxDetectDistance, NPC projectile)
-        {
-            Player closestNPC = null;
-
-            // Using squared values in distance checks will let us skip square root calculations, drastically improving this method's speed.
-            float sqrMaxDetectDistance = maxDetectDistance * maxDetectDistance;
-
-            // Loop through all NPCs(max always 200)
-            for (int k = 0; k < Main.maxPlayers; k++)
-            {
-                Player target = Main.player[k];
-
-                // The DistanceSquared function returns a squared distance between 2 points, skipping relatively expensive square root calculations
-                float sqrDistanceToTarget = Vector2.DistanceSquared(target.Center, projectile.Center);
 
                 // Check if it is within the radius
                 if (sqrDistanceToTarget < sqrMaxDetectDistance)

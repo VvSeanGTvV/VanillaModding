@@ -54,7 +54,7 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
 
             // Trying to find NPC closest to the projectile
             Player closestPlayer = null;
-            closestPlayer = AdvAI.FindClosestPlayerNPC(maxDetectRadius, NPC);
+            closestPlayer = AdvAI.FindClosestPlayer(maxDetectRadius, NPC.Center);
 
             NPC.rotation = NPC.velocity.ToRotation() - MathHelper.PiOver2;
             if (closestPlayer == null)

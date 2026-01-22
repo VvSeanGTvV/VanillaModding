@@ -54,7 +54,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
             if (Projectile.velocity.Y > 32f) Projectile.velocity.Y = 32f;
             Projectile.rotation += MathHelper.ToRadians(15f) * Projectile.direction;
 
-            NPC closest = AdvAI.FindClosestNPC(50f, Projectile, npc =>
+            NPC closest = AdvAI.FindClosestNPC(50f, Projectile.Center, npc =>
             {
                 if (npc == null) return false;
                 var f = npc.GetGlobalNPC<VanillaModdingNPC>();

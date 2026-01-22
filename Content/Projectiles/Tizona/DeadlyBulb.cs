@@ -59,7 +59,7 @@ namespace VanillaModding.Content.Projectiles.Tizona
                 Projectile.light = 0.5f;
                 if (Projectile.ai[0] < 0) 
                 {
-                    NPC closestNPC = AdvAI.FindClosestNPC(512f, Projectile);
+                    NPC closestNPC = AdvAI.FindClosestNPC(512f, Projectile.Center);
                     if (closestNPC == null)
                         return;
                     Projectile.velocity = -Vector2.Lerp(-Projectile.velocity, (Projectile.Center - closestNPC.Center).SafeNormalize(Vector2.Zero) * 20f, 0.0025f);
@@ -70,7 +70,7 @@ namespace VanillaModding.Content.Projectiles.Tizona
             }
             else
             {
-                NPC closestNPC = AdvAI.FindClosestNPC(512f, Projectile);
+                NPC closestNPC = AdvAI.FindClosestNPC(512f, Projectile.Center);
                 if (closestNPC == null)
                     return;
                 Projectile.velocity = -Vector2.Lerp(-Projectile.velocity, (Projectile.Center - closestNPC.Center).SafeNormalize(Vector2.Zero) * 20f, 0.0025f);

@@ -52,7 +52,7 @@ namespace VanillaModding.Content.Pets.SandTrapperPet
                 return;
             }
             float maxVelocity = 10f;
-            NPC closestNPC = AdvAI.FindClosestNPC(512f, Projectile);
+            NPC closestNPC = AdvAI.FindClosestNPC(512f, Projectile.Center);
 
             if (closestNPC != null) BombRushBehavior(closestNPC.Center, maxVelocity * 4f); else GeneralBehavior(owner, maxVelocity);
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
@@ -165,7 +165,7 @@ namespace VanillaModding.Content.Pets.SandTrapperPet
 
         public override void AI()
         {
-            NPC closestNPC = AdvAI.FindClosestNPC(256f, Projectile);
+            NPC closestNPC = AdvAI.FindClosestNPC(256f, Projectile.Center);
             if (Projectile.ai[0] == 0 || !Main.projectile[(int)Projectile.ai[0]].active || Main.projectile[(int)Projectile.ai[0]] == null)
             {
                 Projectile.active = false;
