@@ -32,11 +32,11 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
             Projectile.friendly = true; // Can the projectile deal damage to enemies?
             Projectile.DamageType = DamageClass.Magic; // Is the projectile shoot by a ranged weapon?
             Projectile.penetrate = 1;
-            Projectile.timeLeft = 60 * 5;
+            Projectile.timeLeft = 60 * 15;
             Projectile.alpha = 0;
-            Projectile.ignoreWater = true; // Does the projectile's speed be influenced by water?
+            Projectile.ignoreWater = false; // Does the projectile's speed be influenced by water?
             Projectile.tileCollide = true; // Can the projectile collide with tiles?
-            Projectile.scale = 1.15f;
+            Projectile.scale = 1.05f;
             Projectile.light = 1f;
             //Projectile.extraUpdates = 1; // Set to above 0 if you want the projectile to update multiple time in a frame
             //AIType = ProjectileID.Bullet; // Act exactly like default Bullet

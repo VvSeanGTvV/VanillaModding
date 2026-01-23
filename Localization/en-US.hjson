@@ -313,6 +313,7 @@ Mods: {
 			TheChosenOne.DisplayName: The Chosen One
 			LobotomyGod.DisplayName: Logodomy
 			LobotomyExtremeDemonNPC.DisplayName: Homing Lobotomy Extreme Demon
+			RedFish.DisplayName: Red Fish
 		}
 
 		Projectiles: {
