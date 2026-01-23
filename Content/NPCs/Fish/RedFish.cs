@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Common.Systems;
+
 using VanillaModding.External.AI;
 
 namespace VanillaModding.Content.NPCs.Fish
@@ -25,17 +26,19 @@ namespace VanillaModding.Content.NPCs.Fish
             NPC.width = 30;
             NPC.height = 22;
 
-            NPC.damage = 35;
-            NPC.defense = 20;
+            NPC.defense = 5;
             NPC.lifeMax = 45000;
+            NPC.friendly = true;
+            NPC.catchItem = ModContent.ItemType<Items.Weapon.Throwable.Redfish.RedFish>();
 
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
 
-            NPC.noGravity = true;
-            NPC.noTileCollide = true;
+            NPC.noGravity = false;
+            NPC.noTileCollide = false;
             NPC.value = Item.buyPrice(0, 0, 0, 10);
             NPC.aiStyle = -1;
+
         }
 
         public override void AI()
@@ -47,15 +50,10 @@ namespace VanillaModding.Content.NPCs.Fish
 
                 // Vertical bobbing
                 float bobAmount = (float)Math.Sin(bobTimer) * 0.6f;
-                NPC.velocity.Y = bobAmount;
+                NPC.velocity = new Microsoft.Xna.Framework.Vector2(NPC.spriteDirection * 1.2f, bobAmount);
 
-                // Gentle horizontal movement
-                NPC.velocity.X = NPC.spriteDirection * 1.2f;
-
-                if (NPC.collideX)
-                {
-                    FlipFish();
-                }
+                if (NPC.collideY) bobTimer = 0;
+                if (NPC.collideX) FlipFish();
             }
         }
 
@@ -75,7 +73,7 @@ namespace VanillaModding.Content.NPCs.Fish
 
             // Frame
             NPC.frameCounter++;
-            if (NPC.frameCounter >= 10)
+            if (NPC.frameCounter >= 30)
             {
                 NPC.frame.Y += frameHeight;
                 NPC.frameCounter = 0;
