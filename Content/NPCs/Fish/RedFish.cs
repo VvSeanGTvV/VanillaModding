@@ -1,4 +1,5 @@
 ﻿using Humanizer;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +16,22 @@ namespace VanillaModding.Content.NPCs.Fish
 {
     internal class RedFish : ModNPC
     {
+        // Sway Related NPC
+        float maxSwayRotation = 0.2f; // Maximum rotation in radians (~11.5 degrees)
+        float swaySpeed = 0.1f; // How quickly the rotation adjusts
+
+        // Timer Related NPC
+        private float bobTimer;
+
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[Type] = 4;
+            Main.npcCatchable[Type] = true;
+            NPCID.Sets.CountsAsCritter[Type] = true;
+            NPCID.Sets.TakesDamageFromHostilesWithoutBeingFriendly[Type] = true;
         }
 
-        private float bobTimer;
+        
         public override void SetDefaults()
         {
             NPC.width = 30;
@@ -28,7 +39,7 @@ namespace VanillaModding.Content.NPCs.Fish
 
             NPC.defense = 5;
             NPC.lifeMax = 45000;
-            NPC.friendly = true;
+            //NPC.friendly = true;
             NPC.catchItem = ModContent.ItemType<Items.Weapon.Throwable.Redfish.RedFish>();
 
             NPC.HitSound = SoundID.NPCHit1;
@@ -41,48 +52,61 @@ namespace VanillaModding.Content.NPCs.Fish
 
         }
 
+        int timerTile = 0;
+        int si = 0;
+        bool once;
         public override void AI()
         {
+            si = (NPC.wet) ? 0 : 2;
             if (NPC.wet)
             {
-                FindFrame(NPC.height);
                 bobTimer += 0.05f;
+                float bobAmount = (float)Math.Sin(bobTimer) * 0.5f;
+                if (Collision.SolidCollision(new Vector2(NPC.Center.X, NPC.Bottom.Y), NPC.width, NPC.height)) bobAmount = -1;
+                if (Collision.SolidCollision(new Vector2(NPC.position.X + (NPC.spriteDirection * 4), NPC.position.Y), NPC.width, NPC.height)) FlipFish(); else if (once) timerTile++;
 
-                // Vertical bobbing
-                float bobAmount = (float)Math.Sin(bobTimer) * 0.6f;
-                NPC.velocity = new Microsoft.Xna.Framework.Vector2(NPC.spriteDirection * 1.2f, bobAmount);
-
-                if (NPC.collideY) bobTimer = 0;
-                if (NPC.collideX) FlipFish();
+                if (timerTile >= 60 * 3)
+                {
+                    timerTile = 0;
+                    once = false;
+                }
+                NPC.velocity = new Vector2(NPC.spriteDirection * 1.2f, bobAmount);
+            } 
+            else
+            {
+                if (Collision.SolidCollision(new Vector2(NPC.Center.X, NPC.Bottom.Y - (NPC.height/2)), NPC.width, NPC.height)) 
+                {
+                    NPC.velocity.X = Main.rand.NextFloat(-1f, 1f) * 1.8f;
+                    float targetRotation = NPC.velocity.X * 0.05f;
+                    targetRotation = MathHelper.Clamp(targetRotation, -maxSwayRotation, maxSwayRotation);
+                    NPC.rotation = MathHelper.Lerp(NPC.rotation, targetRotation, swaySpeed);
+                    NPC.velocity.Y = -4f;
+                };
             }
         }
 
         private void FlipFish()
         {
-            NPC.direction *= -1;
-            NPC.spriteDirection = NPC.direction;
+            once = true;
+            NPC.spriteDirection = -NPC.spriteDirection;
             NPC.velocity.X *= -1;
+            NPC.velocity.Y = -1;
         }
 
         public override void FindFrame(int frameHeight)
         {
-            // This NPC animates with a simple "go from start frame to final frame, and loop back to start frame" rule
-            // In this case: First stage: 0-1-2-0-1-2, Second stage: 3-4-5-3-4-5, 5 being "total frame count - 1"
-            int startFrame = 0;
-            int finalFrame = 1;
+            int startFrame = si;
+            int finalFrame = si + 1;
 
             // Frame
-            NPC.frameCounter++;
-            if (NPC.frameCounter >= 30)
+            NPC.frameCounter += 0.5f;
+            if (NPC.frameCounter > 2.5f)
             {
                 NPC.frame.Y += frameHeight;
                 NPC.frameCounter = 0;
             }
 
-            if (NPC.frame.Y > finalFrame * frameHeight)
-            {
-                NPC.frame.Y = startFrame * frameHeight;
-            }
+            if (NPC.frame.Y > finalFrame * frameHeight) NPC.frame.Y = startFrame * frameHeight;
         }
     }
 }
