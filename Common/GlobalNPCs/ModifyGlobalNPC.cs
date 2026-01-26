@@ -119,6 +119,9 @@ namespace VanillaModding.Common.GlobalNPCs
         /// </summary>
         private int statLifeMax = -1, statDefense = -1;
 
+
+        public int aggroTo = 0;
+
         public override bool PreAI(NPC npc)
         {
             if (statLifeMax <= 0) statLifeMax = npc.lifeMax;
@@ -140,6 +143,18 @@ namespace VanillaModding.Common.GlobalNPCs
             npc.defense = statDefense + statDefenseMax2;
             npc.lifeMax = statLifeMax + statLifeMax2;
             base.AI(npc);
+        }
+
+        public override void OnHitByItem(NPC npc, Player player, Item item, NPC.HitInfo hit, int damageDone)
+        {
+            aggroTo = player.whoAmI;
+            base.OnHitByItem(npc, player, item, hit, damageDone);
+        }
+
+        public override void OnHitByProjectile(NPC npc, Projectile projectile, NPC.HitInfo hit, int damageDone)
+        {
+            if (projectile.owner >= 0) aggroTo = projectile.owner;
+            base.OnHitByProjectile(npc, projectile, hit, damageDone);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Humanizer;
 using Microsoft.Xna.Framework;
+using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Common.GlobalNPCs;
 using VanillaModding.Common.Systems;
 
 using VanillaModding.External.AI;
@@ -82,6 +84,27 @@ namespace VanillaModding.Content.NPCs.Fish
                     NPC.rotation = MathHelper.Lerp(NPC.rotation, targetRotation, swaySpeed);
                     NPC.velocity.Y = -4f;
                 };
+            }
+
+            int aggroTo = NPC.GetGlobalNPC<VanillaModdingNPC>().aggroTo;
+            if (aggroTo > 0)
+            {
+                var nearPlayer = AdvAI.FindClosestPlayer(50f, NPC.position, plr => plr.whoAmI != aggroTo);
+                if (nearPlayer != null)
+                {
+                    Vector2 start = NPC.Center;
+                    Vector2 end = nearPlayer.Center;
+
+                    float gravity = 0.3f;
+                    float time = 0.45f;
+
+                    Vector2 delta = end - start;
+                    float vx = delta.X / time;
+                    float vy = (delta.Y / time) - (gravity * time / 2f);
+                    Vector2 init = new Vector2(vx, vy);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, init, ModContent.ProjectileType<Projectiles.FishProjectile.RedFish>(), 10, 6, -1, Type);
+                    NPC.active = false;
+                }
             }
         }
 

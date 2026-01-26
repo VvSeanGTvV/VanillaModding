@@ -36,6 +36,7 @@ namespace VanillaModding.Content.Projectiles.FishProjectile
 
         public override void AI()
         {
+            
             Projectile.velocity.Y = Projectile.velocity.Y + 0.3f; // 0.1f for arrow gravity, 0.4f for knife gravity
 
             if (Projectile.velocity.Y > 32f) Projectile.velocity.Y = 32f;
