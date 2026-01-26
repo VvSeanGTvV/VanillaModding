@@ -74,7 +74,7 @@ namespace VanillaModding.Content.NPCs.Fish
             } 
             else
             {
-                if (Collision.SolidCollision(new Vector2(NPC.Center.X, NPC.Bottom.Y - (NPC.height/2)), NPC.width, NPC.height)) 
+                if (NPC.velocity.Y == 0f) 
                 {
                     NPC.velocity.X = Main.rand.NextFloat(-1f, 1f) * 1.8f;
                     float targetRotation = NPC.velocity.X * 0.05f;

@@ -275,7 +275,7 @@ Mods: {
 
 			FishTrout: {
 				DisplayName: Fish Trout
-				Tooltip: ""
+				Tooltip: Diabolical knockback. Don't ask why.
 			}
 		}
 

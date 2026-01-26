@@ -14,15 +14,15 @@ namespace VanillaModding.Content.Items.Weapon.Melee
     {
         public override void SetDefaults()
         {
-            Item.damage = 257;
+            Item.damage = 147;
 
             Item.DamageType = DamageClass.Melee;
 
             Item.width = 64;
             Item.height = 28;
 
-            Item.useTime = 60 * 8;
-            Item.useAnimation = 60 * 8;
+            Item.useTime = 60 * 2;
+            Item.useAnimation = 60 * 1;
 
             Item.useStyle = ItemUseStyleID.Swing;
             Item.value = Item.sellPrice(0, 6, 0, 0);
@@ -46,5 +46,8 @@ namespace VanillaModding.Content.Items.Weapon.Melee
 
             return false;
         }
+
+        public override bool? CanHitNPC(Player player, NPC target) => false;
+        public override bool CanHitPvp(Player player, Player target) => false;
     }
 }
