@@ -10,6 +10,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Common.Systems;
+using VanillaModding.Content.NPCs.DuneTrapper;
 
 namespace VanillaModding.Content.Projectiles.FishProjectile
 {
@@ -36,7 +37,11 @@ namespace VanillaModding.Content.Projectiles.FishProjectile
 
         public override void AI()
         {
-            
+            if (Projectile.ai[0] > 0)
+            {
+                Projectile.friendly = false;
+                Projectile.hostile = true;
+            }
             Projectile.velocity.Y = Projectile.velocity.Y + 0.3f; // 0.1f for arrow gravity, 0.4f for knife gravity
 
             if (Projectile.velocity.Y > 32f) Projectile.velocity.Y = 32f;
@@ -61,6 +66,10 @@ namespace VanillaModding.Content.Projectiles.FishProjectile
 
         public override void OnKill(int timeLeft)
         {
+            if (Projectile.ai[0] > 0)
+            {
+                if (Main.netMode != NetmodeID.MultiplayerClient) NPC.NewNPC(Projectile.GetSource_FromAI(), Projectile.position.X, Projectile.position.Y, Projectile.ai[0]);
+            }
             SoundEngine.PlaySound(SoundID.NPCHit25, Projectile.position);
         }
     }
