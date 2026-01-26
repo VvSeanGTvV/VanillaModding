@@ -31,6 +31,7 @@ namespace VanillaModding.Content.NPCs.Fish
             Main.npcCatchable[Type] = true;
             NPCID.Sets.CountsAsCritter[Type] = true;
             NPCID.Sets.TakesDamageFromHostilesWithoutBeingFriendly[Type] = true;
+            NPCID.Sets.TownCritter[Type] = true;
         }
 
         
@@ -106,7 +107,7 @@ namespace VanillaModding.Content.NPCs.Fish
                     Vector2 delta = end - start;
                     float vx = delta.X / time;
                     float vy = (delta.Y / time) - (gravity * time / 2f);
-                    Vector2 init = new Vector2(vx / 20f, vy / 5f);
+                    Vector2 init = new Vector2(vx / 20f, vy / 15f);
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, init, ModContent.ProjectileType<Projectiles.FishProjectile.RedFish>(), 10, 6, -1, Type, aggroTo+1, NPC.life);
                     NPC.active = false;
                 }
