@@ -68,7 +68,7 @@ namespace VanillaModding.Content.Projectiles.FishProjectile
         {
             if (Projectile.ai[0] > 0)
             {
-                if (Main.netMode != NetmodeID.MultiplayerClient) NPC.NewNPC(Projectile.GetSource_FromAI(), Projectile.position.X, Projectile.position.Y, Projectile.ai[0]);
+                if (Main.netMode != NetmodeID.MultiplayerClient) NPC.NewNPC(Projectile.GetSource_FromAI(), (int)Projectile.position.X, (int)Projectile.position.Y, (int)Projectile.ai[0], ai0: Projectile.ai[1], ai1: Projectile.ai[2]);
             }
             SoundEngine.PlaySound(SoundID.NPCHit25, Projectile.position);
         }

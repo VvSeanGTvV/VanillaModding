@@ -119,8 +119,10 @@ namespace VanillaModding.Common.GlobalNPCs
         /// </summary>
         private int statLifeMax = -1, statDefense = -1;
 
-
-        public int aggroTo = 0;
+        /// <summary>
+        /// Aggressive to a specific Player, useful for any critters that wants to become hostile upon hit.
+        /// </summary>
+        public int aggroTo = -1;
 
         public override bool PreAI(NPC npc)
         {
@@ -142,6 +144,18 @@ namespace VanillaModding.Common.GlobalNPCs
             hasAnyDiceEffect = npc.HasBuff<DiceBuff>() || npc.HasBuff<DiceDebuff>();
             npc.defense = statDefense + statDefenseMax2;
             npc.lifeMax = statLifeMax + statLifeMax2;
+
+
+            // Checking if that aggro number is actually valid and not some junk data or dead person.
+            if (aggroTo >= 0)
+            {
+                Player aggroToPlayer = Main.player[aggroTo];
+                if (aggroToPlayer != null)
+                {
+                    if (aggroToPlayer.dead || !aggroToPlayer.active) aggroTo = -1;
+                }
+                else aggroTo = -1;
+            }
             base.AI(npc);
         }
 

@@ -59,6 +59,11 @@ namespace VanillaModding.Content.NPCs.Fish
         bool once;
         public override void AI()
         {
+            if (NPC.ai[0] > 0)
+            {
+                NPC.GetGlobalNPC<VanillaModdingNPC>().aggroTo = (int)NPC.ai[0] - 1;
+                NPC.life = (int)NPC.ai[1];
+            }
             si = (NPC.wet) ? 0 : 2;
             if (NPC.wet)
             {
@@ -87,9 +92,10 @@ namespace VanillaModding.Content.NPCs.Fish
             }
 
             int aggroTo = NPC.GetGlobalNPC<VanillaModdingNPC>().aggroTo;
-            if (aggroTo > 0)
+            if (aggroTo >= 0)
             {
-                var nearPlayer = AdvAI.FindClosestPlayer(50f, NPC.position, plr => plr.whoAmI != aggroTo);
+                //Main.NewText($"aaa {aggroTo}");
+                var nearPlayer = AdvAI.FindClosestPlayer(125f, NPC.position, plr => plr.whoAmI != aggroTo);
                 if (nearPlayer != null)
                 {
                     Vector2 start = NPC.Center;
@@ -102,7 +108,7 @@ namespace VanillaModding.Content.NPCs.Fish
                     float vx = delta.X / time;
                     float vy = (delta.Y / time) - (gravity * time / 2f);
                     Vector2 init = new Vector2(vx, vy);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, init, ModContent.ProjectileType<Projectiles.FishProjectile.RedFish>(), 10, 6, -1, Type);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, init/10f, ModContent.ProjectileType<Projectiles.FishProjectile.RedFish>(), 10, 6, -1, Type, aggroTo+1, NPC.life);
                     NPC.active = false;
                 }
             }
