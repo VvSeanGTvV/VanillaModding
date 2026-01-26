@@ -41,7 +41,6 @@ namespace VanillaModding.Content.NPCs.Fish
 
             NPC.defense = 5;
             NPC.lifeMax = 45000;
-            //NPC.friendly = true;
             NPC.catchItem = ModContent.ItemType<Items.Weapon.Throwable.Redfish.RedFish>();
 
             NPC.HitSound = SoundID.NPCHit1;
@@ -95,8 +94,8 @@ namespace VanillaModding.Content.NPCs.Fish
             if (aggroTo >= 0)
             {
                 //Main.NewText($"aaa {aggroTo}");
-                var nearPlayer = AdvAI.FindClosestPlayer(125f, NPC.position, plr => plr.whoAmI != aggroTo);
-                if (nearPlayer != null)
+                var nearPlayer = AdvAI.FindClosestPlayer(175f, NPC.position, plr => plr.whoAmI != aggroTo);
+                if (nearPlayer != null && (nearPlayer.Center.Distance(NPC.Center) > 100f))
                 {
                     Vector2 start = NPC.Center;
                     Vector2 end = nearPlayer.Center;
@@ -107,8 +106,8 @@ namespace VanillaModding.Content.NPCs.Fish
                     Vector2 delta = end - start;
                     float vx = delta.X / time;
                     float vy = (delta.Y / time) - (gravity * time / 2f);
-                    Vector2 init = new Vector2(vx, vy);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, init/10f, ModContent.ProjectileType<Projectiles.FishProjectile.RedFish>(), 10, 6, -1, Type, aggroTo+1, NPC.life);
+                    Vector2 init = new Vector2(vx / 20f, vy / 5f);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, init, ModContent.ProjectileType<Projectiles.FishProjectile.RedFish>(), 10, 6, -1, Type, aggroTo+1, NPC.life);
                     NPC.active = false;
                 }
             }
