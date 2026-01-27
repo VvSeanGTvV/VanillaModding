@@ -28,8 +28,6 @@ namespace VanillaModding.Content.Projectiles.FishProjectile
             Projectile.timeLeft = 600;
             Projectile.alpha = 0;
             Projectile.light = 0f;
-            Projectile.ignoreWater = false;
-            Projectile.tileCollide = true;
 
             //AIType = ProjectileID.Bullet; // Act exactly like default Bullet
 
@@ -37,11 +35,6 @@ namespace VanillaModding.Content.Projectiles.FishProjectile
 
         public override void AI()
         {
-            if (Projectile.ai[0] > 0)
-            {
-                Projectile.friendly = false;
-                Projectile.hostile = true;
-            }
             Projectile.velocity.Y = Projectile.velocity.Y + 0.3f; // 0.1f for arrow gravity, 0.4f for knife gravity
 
             if (Projectile.velocity.Y > 32f) Projectile.velocity.Y = 32f;
@@ -66,10 +59,6 @@ namespace VanillaModding.Content.Projectiles.FishProjectile
 
         public override void OnKill(int timeLeft)
         {
-            if (Projectile.ai[0] > 0)
-            {
-                if (Main.netMode != NetmodeID.MultiplayerClient) NPC.NewNPC(Projectile.GetSource_FromAI(), (int)Projectile.position.X, (int)Projectile.position.Y, (int)Projectile.ai[0], ai0: Projectile.ai[1], ai1: Projectile.ai[2]);
-            }
             SoundEngine.PlaySound(SoundID.NPCHit25, Projectile.position);
         }
     }

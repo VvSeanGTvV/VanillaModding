@@ -313,7 +313,11 @@ Mods: {
 			TheChosenOne.DisplayName: The Chosen One
 			LobotomyGod.DisplayName: Logodomy
 			LobotomyExtremeDemonNPC.DisplayName: Homing Lobotomy Extreme Demon
-			RedFish.DisplayName: Red Fish
+
+			RedFish: {
+				DisplayName: Red Fish
+				Bestiary: Neutral, likes to swim around aimlessly. Doesn't like being bothered.
+			}
 		}
 
 		Projectiles: {

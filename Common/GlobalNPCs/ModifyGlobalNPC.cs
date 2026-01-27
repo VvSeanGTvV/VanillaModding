@@ -123,6 +123,10 @@ namespace VanillaModding.Common.GlobalNPCs
         /// Aggressive to a specific Player, useful for any critters that wants to become hostile upon hit.
         /// </summary>
         public int aggroTo = -1;
+        /// <summary>
+        /// Been Attacked recently.
+        /// </summary>
+        public bool attacked = false;
 
         public override bool PreAI(NPC npc)
         {
@@ -161,13 +165,20 @@ namespace VanillaModding.Common.GlobalNPCs
 
         public override void OnHitByItem(NPC npc, Player player, Item item, NPC.HitInfo hit, int damageDone)
         {
+            attacked = true;
             aggroTo = player.whoAmI;
+            
             base.OnHitByItem(npc, player, item, hit, damageDone);
         }
 
         public override void OnHitByProjectile(NPC npc, Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
-            if (projectile.owner >= 0) aggroTo = projectile.owner;
+            if (projectile.owner >= 0)
+            {
+                attacked = true;
+                aggroTo = projectile.owner;
+            }
+            
             base.OnHitByProjectile(npc, projectile, hit, damageDone);
         }
     }
