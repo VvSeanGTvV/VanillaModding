@@ -47,6 +47,8 @@ namespace VanillaModding.Content.NPCs.Fish
 
             // The frog is immune to confused
             NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Confused] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.Burning] = true;
+            NPCID.Sets.SpecificDebuffImmunity[Type][BuffID.FlameWhipEnemyDebuff] = true;
             BestiaryText = this.GetLocalization("Bestiary");
         }
 
@@ -55,7 +57,7 @@ namespace VanillaModding.Content.NPCs.Fish
             // We can use AddRange instead of calling Add multiple times in order to add multiple items at once
             bestiaryEntry.Info.AddRange(new IBestiaryInfoElement[] {
 				// Sets the spawning conditions of this NPC that is listed in the bestiary.
-				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Ocean,
+				BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Surface,
 				//BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Caverns,
 
 				// Sets the description of this NPC that is listed in the bestiary.
@@ -72,12 +74,12 @@ namespace VanillaModding.Content.NPCs.Fish
             NPC.height = 22;
 
             NPC.damage = 0;
-            NPC.defense = 0;
-            NPC.lifeMax = 15000;
+            NPC.defense = 100;
+            NPC.lifeMax = 10;
             NPC.catchItem = ModContent.ItemType<Items.Weapon.Throwable.Redfish.RedFish>();
 
-            NPC.HitSound = SoundID.NPCHit1;
-            NPC.DeathSound = SoundID.NPCDeath1;
+            NPC.HitSound = SoundID.NPCHit25;
+            NPC.DeathSound = SoundID.NPCDeath28;
 
             NPC.noGravity = false;
             NPC.noTileCollide = false;
@@ -163,6 +165,24 @@ namespace VanillaModding.Content.NPCs.Fish
                 NPC.rotation += MathHelper.ToRadians(15f) * NPC.spriteDirection;
                 if ((NPC.velocity.Y > 0 && NPC.wet) || NPC.velocity.Y == 0) YeetMode = false;
             }
+        }
+
+        public override void ModifyHitByItem(Player player, Item item, ref NPC.HitModifiers modifiers)
+        {
+            modifiers.FinalDamage *= 0.5f;
+            base.ModifyHitByItem(player, item, ref modifiers);
+        }
+
+        public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
+        {
+            modifiers.FinalDamage *= 0.5f;
+            base.ModifyHitByProjectile(projectile, ref modifiers);
+        }
+
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            modifiers.FinalDamage *= 0.5f;
+            base.ModifyHitNPC(target, ref modifiers);
         }
 
         private void FlipFish()
