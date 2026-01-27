@@ -74,12 +74,12 @@ namespace VanillaModding.Content.NPCs.Fish
             NPC.height = 22;
 
             NPC.damage = 0;
-            NPC.defense = 100;
-            NPC.lifeMax = 10;
+            NPC.defense = int.MaxValue;
+            NPC.lifeMax = 5;
             NPC.catchItem = ModContent.ItemType<Items.Weapon.Throwable.Redfish.RedFish>();
 
-            NPC.HitSound = SoundID.NPCHit25;
-            NPC.DeathSound = SoundID.NPCDeath28;
+            //NPC.HitSound = SoundID.NPCHit25;
+            //NPC.DeathSound = SoundID.NPCDeath28;
 
             NPC.noGravity = false;
             NPC.noTileCollide = false;
@@ -90,7 +90,7 @@ namespace VanillaModding.Content.NPCs.Fish
 
         int timerTile = 0;
         int si = 0;
-        bool once, YeetMode;
+        bool once, twice, YeetMode;
         public override void AI()
         {
             if (!YeetMode) 
@@ -150,6 +150,19 @@ namespace VanillaModding.Content.NPCs.Fish
                 }
             }
 
+            if (aggroTo >= 0) 
+            {
+                NPC.GetGlobalNPC<VanillaModdingNPC>().statLifeMax2 = 15000 - 5;
+                if (!twice)
+                {
+                    twice = true;
+                    NPC.life = 15000;
+                }
+            } else if (aggroTo <= -1)
+            {
+                NPC.GetGlobalNPC<VanillaModdingNPC>().statLifeMax2 = 0;
+            }
+
             if (YeetMode)
             {
                 var nearPlayer = AdvAI.FindClosestPlayer(225f, NPC.position, plr => plr.whoAmI != aggroTo);
@@ -165,24 +178,6 @@ namespace VanillaModding.Content.NPCs.Fish
                 NPC.rotation += MathHelper.ToRadians(15f) * NPC.spriteDirection;
                 if ((NPC.velocity.Y > 0 && NPC.wet) || NPC.velocity.Y == 0) YeetMode = false;
             }
-        }
-
-        public override void ModifyHitByItem(Player player, Item item, ref NPC.HitModifiers modifiers)
-        {
-            modifiers.FinalDamage *= 0.5f;
-            base.ModifyHitByItem(player, item, ref modifiers);
-        }
-
-        public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
-        {
-            modifiers.FinalDamage *= 0.5f;
-            base.ModifyHitByProjectile(projectile, ref modifiers);
-        }
-
-        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
-        {
-            modifiers.FinalDamage *= 0.5f;
-            base.ModifyHitNPC(target, ref modifiers);
         }
 
         private void FlipFish()
