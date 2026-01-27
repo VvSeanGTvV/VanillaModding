@@ -152,15 +152,18 @@ namespace VanillaModding.Content.NPCs.Fish
 
             if (aggroTo >= 0) 
             {
-                NPC.GetGlobalNPC<VanillaModdingNPC>().statLifeMax2 = 15000 - 5;
+                //NPC.GetGlobalNPC<VanillaModdingNPC>().statLifeMax2 = 15000 - NPC.GetGlobalNPC<VanillaModdingNPC>().statLifeMax;
                 if (!twice)
                 {
                     twice = true;
+                    NPC.lifeMax = 15000;
                     NPC.life = 15000;
+                    NPC.defense = 0;
                 }
             } else if (aggroTo <= -1)
             {
-                NPC.GetGlobalNPC<VanillaModdingNPC>().statLifeMax2 = 0;
+                NPC.lifeMax = 5;
+                NPC.defense = int.MaxValue;
             }
 
             if (YeetMode)

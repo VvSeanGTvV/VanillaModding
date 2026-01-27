@@ -114,10 +114,9 @@ namespace VanillaModding.Common.GlobalNPCs
         /// </summary>
         public int statDefenseMax2;
 
-        /// <summary>
         /// Not adjustable usually never meant to be adjusted at all times.
-        /// </summary>
-        private int statLifeMax = -1, statDefense = -1;
+        public int statLifeMax { get; private set; }
+        public int statDefense { get; private set; }
 
         /// <summary>
         /// Aggressive to a specific Player, useful for any critters that wants to become hostile upon hit.
@@ -130,8 +129,8 @@ namespace VanillaModding.Common.GlobalNPCs
 
         public override bool PreAI(NPC npc)
         {
-            if (statLifeMax <= 0) statLifeMax = npc.lifeMax;
-            if (statDefense <= 0) statDefense = npc.defense;
+            if (statLifeMax <= 0 || (statLifeMax != npc.lifeMax && statLifeMax2 == 0)) statLifeMax = npc.lifeMax;
+            if (statDefense <= 0 || (statDefense != npc.defense && statDefenseMax2 == 0)) statDefense = npc.defense;
             return base.PreAI(npc);
         }
 
@@ -141,6 +140,13 @@ namespace VanillaModding.Common.GlobalNPCs
             statDefenseMax2 = 0;
             //hasAnyDiceEffect = false;
             base.ResetEffects(npc);
+        }
+
+        public override void PostAI(NPC npc)
+        {
+            if ((statLifeMax != npc.lifeMax && statLifeMax2 == 0)) statLifeMax = npc.lifeMax;
+            if ((statDefense != npc.defense && statDefenseMax2 == 0)) statDefense = npc.defense;
+            base.PostAI(npc);
         }
 
         public override void AI(NPC npc)
