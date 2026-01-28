@@ -30,24 +30,19 @@ Mods: {
 
 			NotFriendlyDrone: {
 				FriendlyName: Not Friendly Guy
-				Description: Many Delivery Drones killed. Dude, they are just trying to deliver packages to you!
+				Description: Too many delivery drones been killed. Since when you this evil?
 			}
 		}
 
 		Items: {
 			BasicSword: {
-				DisplayName: Dirt Sword
+				DisplayName: Dirt Sword (Legacy)
 				Tooltip: Dirt with a silver blade attached.
-			}
-
-			DebugProjectile: {
-				DisplayName: Debug Projectile
-				Tooltip: ""
 			}
 
 			LobotomyThrowable: {
 				DisplayName: Normal Lobotomy Disc
-				Tooltip: Light Disc but you... converted to Lobotomy mode.
+				Tooltip: A converted Light disc.
 			}
 
 			ExtremeLobotomyThrowable: {
@@ -61,7 +56,7 @@ Mods: {
 			}
 
 			MightyScytheOld: {
-				DisplayName: Soul Scythe
+				DisplayName: Soul Scythe (Legacy)
 				Tooltip: Old Copyrighted stuff
 			}
 
@@ -126,12 +121,12 @@ Mods: {
 			}
 
 			HeartCanister: {
-				DisplayName: Heart Canister
+				DisplayName: Heart Canister (Legacy)
 				Tooltip: Increases maximum life by {0}
 			}
 
 			DiamondCanister: {
-				DisplayName: Diamond Heart Canister
+				DisplayName: Diamond Heart Canister (Legacy)
 				Tooltip: Increases maximum life by {0}
 			}
 
@@ -168,7 +163,7 @@ Mods: {
 
 			PhasicWarpEjector: {
 				DisplayName: Phasic Disc Ejector
-				Tooltip: Launches a explosive land mine.
+				Tooltip: Launches an Phasic disc.
 			}
 
 			Tonbogiri: {
@@ -260,12 +255,12 @@ Mods: {
 
 			LogodomyShard: {
 				DisplayName: Logodomy Shard
-				Tooltip: ""
+				Tooltip: from, the Lobodomy God. Just a shattered piece.
 			}
 
 			Cantaloupe: {
 				DisplayName: Cantaloupe
-				Tooltip: ""
+				Tooltip: what
 			}
 
 			RedFish: {
@@ -307,7 +302,7 @@ Mods: {
 
 			DeliveryDrone: {
 				DisplayName: Delivery Drone
-				Bestiary: It's your friendly drone! Delivers random items to you! It's fragile, explosive upon contact, and retreat on damage.
+				Bestiary: It's your own friendly drone! Delivers some random item that is dependent on your progression (not modded progress sadly) It is fragile, so best to keep the air clear of debris. Retreats if low on HP, but drops the package nonetheless.
 			}
 
 			TheChosenOne.DisplayName: The Chosen One
@@ -315,8 +310,8 @@ Mods: {
 			LobotomyExtremeDemonNPC.DisplayName: Homing Lobotomy Extreme Demon
 
 			RedFish: {
-				DisplayName: Red Fish
-				Bestiary: Neutral, likes to swim around aimlessly. Doesn't like being bothered.
+				DisplayName: Redfish
+				Bestiary: A seemingly ordinary red fish, until bothered by attacking it.
 			}
 		}
 

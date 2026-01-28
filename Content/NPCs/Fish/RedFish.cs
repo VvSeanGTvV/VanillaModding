@@ -136,7 +136,7 @@ namespace VanillaModding.Content.NPCs.Fish
                     Vector2 start = NPC.Center;
                     Vector2 end = nearPlayer.Center;
 
-                    float speed = 24f; // adjust for how hard it launches
+                    float speed = 12f; // adjust for how hard it launches
 
                     Vector2 direction = end - start;
                     direction.Normalize();
@@ -171,11 +171,15 @@ namespace VanillaModding.Content.NPCs.Fish
                 var nearPlayer = AdvAI.FindClosestPlayer(225f, NPC.position, plr => plr.whoAmI != aggroTo);
                 if (nearPlayer != null && NPC.getRect().Intersects(nearPlayer.getRect()))
                 {
-
-                    nearPlayer.velocity.X += NPC.velocity.X;
-                    nearPlayer.velocity.Y += NPC.velocity.Y * 0.5f;
-                    NPC.velocity.X = 0;
                     double d = nearPlayer.Hurt(PlayerDeathReason.ByNPC(NPC.whoAmI), 157, NPC.spriteDirection);
+                    if (!nearPlayer.onHitDodge)
+                    {
+                        nearPlayer.velocity.X += NPC.velocity.X;
+                        nearPlayer.velocity.Y += NPC.velocity.Y;
+                        NPC.velocity.X = -NPC.velocity.X;
+                        NPC.velocity.Y -= 5f;
+                    }
+                    
                     if (d > 0) SoundEngine.PlaySound(VanillaModdingSoundID.FishHit, NPC.position);
                 }
                 NPC.GetGlobalNPC<VanillaModdingNPC>().attacked = false;
