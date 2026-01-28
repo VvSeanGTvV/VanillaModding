@@ -83,7 +83,7 @@ namespace VanillaModding.Content.NPCs.Fish
 
             NPC.noGravity = false;
             NPC.noTileCollide = false;
-            NPC.value = Item.buyPrice(0, 0, 0, 10);
+            NPC.value = Item.buyPrice(0, 10, 0, 5);
             NPC.aiStyle = -1;
 
         }

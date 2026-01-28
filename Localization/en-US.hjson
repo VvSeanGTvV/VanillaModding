@@ -41,12 +41,12 @@ Mods: {
 			}
 
 			LobotomyThrowable: {
-				DisplayName: Normal Lobotomy Disc
+				DisplayName: Normal Lobotomy Disc (Legacy)
 				Tooltip: A converted Light disc.
 			}
 
 			ExtremeLobotomyThrowable: {
-				DisplayName: Homing Lobotomy Disc
+				DisplayName: Homing Lobotomy Disc (Legacy)
 				Tooltip: You made it a bit angrier than Happy.
 			}
 
@@ -264,7 +264,7 @@ Mods: {
 			}
 
 			RedFish: {
-				DisplayName: Red Fish
+				DisplayName: Redfish
 				Tooltip: Insanity knockback. Don't ask why.
 			}
 
@@ -302,7 +302,7 @@ Mods: {
 
 			DeliveryDrone: {
 				DisplayName: Delivery Drone
-				Bestiary: It's your own friendly drone! Delivers some random item that is dependent on your progression (not modded progress sadly) It is fragile, so best to keep the air clear of debris. Retreats if low on HP, but drops the package nonetheless.
+				Bestiary: It's your own friendly drone! Delivers some random item that is dependent on your progression (not modded progress sadly). It is fragile, so best to keep the air clear of debris. Retreats if low on HP, but drops the package nonetheless.
 			}
 
 			TheChosenOne.DisplayName: The Chosen One

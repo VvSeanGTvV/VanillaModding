@@ -1,8 +1,9 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Content.Items.Weapon.Throwable.Lobotomy;
 
-namespace VanillaModding.Content.Items.Weapon.Throwable.Lobotomy
+namespace VanillaModding.Content.Items.Weapon.Magic
 {
     public class ExtremeLobotomyThrowable : ModItem
     {
@@ -25,6 +26,7 @@ namespace VanillaModding.Content.Items.Weapon.Throwable.Lobotomy
             Item.height = 16;
             Item.maxStack = 1;
             //Item.UseSound = LobotomyNormal.SoundEpic();
+            Item.mana = 4;
             Item.useAnimation = 25;
             Item.useTime = 25;
             Item.noUseGraphic = true;
