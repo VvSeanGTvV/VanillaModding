@@ -115,7 +115,7 @@ namespace VanillaModding.Common.GlobalNPCs
         public int statDefenseMax2;
 
         /// Not adjustable usually never meant to be adjusted at all times.
-        public int statLifeMax { get; private set; }
+        public int defLifeMax { get; private set; }
         public int statDefense { get; private set; }
 
         /// <summary>
@@ -127,11 +127,11 @@ namespace VanillaModding.Common.GlobalNPCs
         /// </summary>
         public bool attacked = false;
 
-        public override bool PreAI(NPC npc)
+        public override void SetDefaults(NPC npc)
         {
-            if (statLifeMax <= 0 || (statLifeMax != npc.lifeMax && statLifeMax2 == 0)) statLifeMax = npc.lifeMax;
-            if (statDefense <= 0 || (statDefense != npc.defense && statDefenseMax2 == 0)) statDefense = npc.defense;
-            return base.PreAI(npc);
+            base.SetDefaults(npc);
+
+            defLifeMax = npc.lifeMax;
         }
 
         public override void ResetEffects(NPC npc)
@@ -144,7 +144,18 @@ namespace VanillaModding.Common.GlobalNPCs
 
         public override void PostAI(NPC npc)
         {
-            if ((statLifeMax != npc.lifeMax && statLifeMax2 == 0)) statLifeMax = npc.lifeMax;
+            int newLifeMax = defLifeMax + statLifeMax2;
+            bool changableFromLifeMax = newLifeMax > 0;
+
+            if (npc.lifeMax != newLifeMax && changableFromLifeMax)
+            {
+                float lifeRatio = (float)npc.life / npc.lifeMax;
+                npc.lifeMax = newLifeMax;
+                npc.life = (int)(npc.lifeMax * lifeRatio);
+            }
+            if (defLifeMax != npc.lifeMax && !changableFromLifeMax) defLifeMax = npc.lifeMax;
+
+            npc.defense = npc.defDefense + statDefenseMax2;
             if ((statDefense != npc.defense && statDefenseMax2 == 0)) statDefense = npc.defense;
             base.PostAI(npc);
         }
@@ -152,8 +163,7 @@ namespace VanillaModding.Common.GlobalNPCs
         public override void AI(NPC npc)
         {
             hasAnyDiceEffect = npc.HasBuff<DiceBuff>() || npc.HasBuff<DiceDebuff>();
-            npc.defense = statDefense + statDefenseMax2;
-            npc.lifeMax = statLifeMax + statLifeMax2;
+            
 
 
             // Checking if that aggro number is actually valid and not some junk data or dead person.

@@ -41,7 +41,6 @@ namespace VanillaModding.Content.Buffs
         public override void Update(NPC npc, ref int buffIndex)
         {
             VanillaModdingNPC modNPC = npc.GetGlobalNPC<VanillaModdingNPC>();
-
             modNPC.statDefenseMax2 = (modNPC.DiceMult + modNPC.DiceMult); // Grant a +10 * dice = Defense boost to the player while the buff is active.
             modNPC.statLifeMax2 = (modNPC.DiceMult * modNPC.DiceMult * modNPC.DiceMult); // Grant a +10 * dice = Life boost to the player while the buff is active.
             //base.Update(npc, ref buffIndex);
