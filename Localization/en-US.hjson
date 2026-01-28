@@ -122,12 +122,12 @@ Mods: {
 
 			HeartCanister: {
 				DisplayName: Heart Canister (Legacy)
-				Tooltip: Increases maximum life by {0}
+				Tooltip: Increases maximum life by {0} (this is not useful anymore).
 			}
 
 			DiamondCanister: {
 				DisplayName: Diamond Heart Canister (Legacy)
-				Tooltip: Increases maximum life by {0}
+				Tooltip: Increases maximum life by {0} (this is not useful anymore).
 			}
 
 			KoboldDynamiteBackpack: {
