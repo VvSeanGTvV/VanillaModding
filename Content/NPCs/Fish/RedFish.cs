@@ -171,6 +171,7 @@ namespace VanillaModding.Content.NPCs.Fish
                 var nearPlayer = AdvAI.FindClosestPlayer(225f, NPC.position, plr => plr.whoAmI != aggroTo);
                 if (nearPlayer != null && NPC.getRect().Intersects(nearPlayer.getRect()))
                 {
+
                     nearPlayer.velocity.X += NPC.velocity.X;
                     nearPlayer.velocity.Y += NPC.velocity.Y * 0.5f;
                     NPC.velocity.X = 0;

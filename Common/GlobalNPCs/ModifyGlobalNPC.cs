@@ -116,7 +116,6 @@ namespace VanillaModding.Common.GlobalNPCs
 
         /// Not adjustable usually never meant to be adjusted at all times.
         public int defLifeMax { get; private set; }
-        public int statDefense { get; private set; }
 
         /// <summary>
         /// Aggressive to a specific Player, useful for any critters that wants to become hostile upon hit.
@@ -145,7 +144,7 @@ namespace VanillaModding.Common.GlobalNPCs
         public override void PostAI(NPC npc)
         {
             int newLifeMax = defLifeMax + statLifeMax2;
-            bool changableFromLifeMax = newLifeMax > 0;
+            bool changableFromLifeMax = statLifeMax2 != 0;
 
             if (npc.lifeMax != newLifeMax && changableFromLifeMax)
             {
@@ -155,16 +154,16 @@ namespace VanillaModding.Common.GlobalNPCs
             }
             if (defLifeMax != npc.lifeMax && !changableFromLifeMax) defLifeMax = npc.lifeMax;
 
-            npc.defense = npc.defDefense + statDefenseMax2;
-            if ((statDefense != npc.defense && statDefenseMax2 == 0)) statDefense = npc.defense;
+            //Main.NewText($"d:{npc.defense}");
+            int newDefense = npc.defense + statDefenseMax2;
+            bool changableFromDefense = statDefenseMax2 != 0;
+            if (npc.defense != newDefense && changableFromDefense) npc.defense = npc.defDefense + statDefenseMax2;
             base.PostAI(npc);
         }
 
         public override void AI(NPC npc)
         {
             hasAnyDiceEffect = npc.HasBuff<DiceBuff>() || npc.HasBuff<DiceDebuff>();
-            
-
 
             // Checking if that aggro number is actually valid and not some junk data or dead person.
             if (aggroTo >= 0)
