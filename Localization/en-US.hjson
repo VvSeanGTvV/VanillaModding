@@ -132,7 +132,7 @@ Mods: {
 
 			PlatinumCanister: {
 				DisplayName: Life Diamond Canister
-				Tooltip: Permanently increases maximum life by 20
+				Tooltip: Permanently increases maximum life by 10
 			}
 
 			KoboldDynamiteBackpack: {
