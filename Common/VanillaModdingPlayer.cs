@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria;
 using Terraria.ModLoader;
 
 namespace VanillaModding.Common
 {
     internal class VanillaModdingPlayer : ModPlayer
     {
+        // This is Life/Mana modification related thing.
+        public int PlatinumCanister;
+
         // This variable is for D I C E item.
         /// <summary>
         /// Player, currently rolling a Dice
@@ -40,6 +45,16 @@ namespace VanillaModding.Common
             stunned = false;
         }
 
+        public override void ModifyMaxStats(out StatModifier health, out StatModifier mana)
+        {
+            health = StatModifier.Default;
+            health.Base = PlatinumCanister * Content.Items.Consumable.Life.PlatinumCanister.LifePerFruit;
+            // Alternatively:  health = StatModifier.Default with { Base = exampleLifeFruits * ExampleLifeFruit.LifePerFruit };
+            mana = StatModifier.Default;
+            //mana.Base = exampleManaCrystals * ExampleManaCrystal.ManaPerCrystal;
+            // Alternatively:  mana = StatModifier.Default with { Base = exampleManaCrystals * ExampleManaCrystal.ManaPerCrystal };
+        }
+
         /// <summary>
         /// Resets the entire DICE stats for the player.
         /// Useful, once a player dies to properly reset.
@@ -68,6 +83,41 @@ namespace VanillaModding.Common
         {
             ResetDice();
             base.OnRespawn();
+        }
+
+        public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
+        {
+            ModPacket packet = Mod.GetPacket();
+            packet.Write((byte)VanillaModding.MessageType.VMTStatIncreasePlayerSync);
+            packet.Write((byte)Player.whoAmI);
+            packet.Write((byte)PlatinumCanister);
+            //packet.Write((byte)exampleManaCrystals);
+            packet.Send(toWho, fromWho);
+        }
+
+        // Called in ExampleMod.Networking.cs
+        public void ReceivePlayerSync(BinaryReader reader)
+        {
+            PlatinumCanister = reader.ReadByte();
+            //exampleManaCrystals = reader.ReadByte();
+        }
+
+        public override void CopyClientState(ModPlayer targetCopy)
+        {
+            VanillaModdingPlayer clone = (VanillaModdingPlayer)targetCopy;
+            clone.PlatinumCanister = PlatinumCanister;
+            //clone.exampleManaCrystals = exampleManaCrystals;
+        }
+
+        public override void SendClientChanges(ModPlayer clientPlayer)
+        {
+            VanillaModdingPlayer clone = (VanillaModdingPlayer)clientPlayer;
+
+            if (PlatinumCanister != clone.PlatinumCanister)
+            {
+                // This example calls SyncPlayer to send all the data for this ModPlayer when any change is detected, but if you are dealing with a large amount of data you should try to be more efficient and use custom packets to selectively send only specific data that has changed.
+                SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
+            }
         }
     }
 }

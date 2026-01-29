@@ -272,6 +272,11 @@ Mods: {
 				DisplayName: Fish Trout
 				Tooltip: Diabolical knockback. Don't ask why.
 			}
+
+			PlatinumCanister: {
+				DisplayName: Platinum Canister
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
