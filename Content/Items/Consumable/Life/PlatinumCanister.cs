@@ -14,7 +14,7 @@ namespace VanillaModding.Content.Items.Consumable.Life
     internal class PlatinumCanister : ModItem
     {
         public static readonly int MaxPlatinumCanister = 10;
-        public static readonly int LifePerFruit = 15;
+        public static readonly int LifePerFruit = 20;
 
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(LifePerFruit, MaxPlatinumCanister);
 
@@ -57,7 +57,7 @@ namespace VanillaModding.Content.Items.Consumable.Life
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.PlatinumBar, 10);
+            recipe.AddIngredient(ItemID.PlatinumBar, 20);
             recipe.AddIngredient(ItemID.LifeFruit, 1);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.Register();

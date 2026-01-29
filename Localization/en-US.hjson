@@ -130,6 +130,11 @@ Mods: {
 				Tooltip: Increases maximum life by {0} (this is not useful anymore).
 			}
 
+			PlatinumCanister: {
+				DisplayName: Life Diamond Canister
+				Tooltip: Permanently increases maximum life by 20
+			}
+
 			KoboldDynamiteBackpack: {
 				DisplayName: Dynamite Backpack
 				Tooltip: Explodes upon the player's death. One time use.
@@ -271,11 +276,6 @@ Mods: {
 			FishTrout: {
 				DisplayName: Fish Trout
 				Tooltip: Diabolical knockback. Don't ask why.
-			}
-
-			PlatinumCanister: {
-				DisplayName: Platinum Canister
-				Tooltip: ""
 			}
 		}
 
