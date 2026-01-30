@@ -10,7 +10,7 @@ namespace VanillaModding.Content.Items.Weapon.Throwable.Lobotomy
         public override void SetStaticDefaults()
         {
             //ItemID.Sets.ItemsThatCountAsBombsForDemolitionistToSpawn[Type] = true;
-            //Item.ResearchUnlockCount = 99;
+            Item.ResearchUnlockCount = 5;
         }
 
         public override void SetDefaults()
@@ -24,15 +24,16 @@ namespace VanillaModding.Content.Items.Weapon.Throwable.Lobotomy
             Item.DamageType = DamageClass.Ranged;
             Item.width = 16;
             Item.height = 16;
-            Item.maxStack = 1;
+            Item.maxStack = 5;
             //Item.UseSound = LobotomyNormal.SoundEpic();
             Item.useAnimation = 15;
             Item.useTime = 15;
             Item.noUseGraphic = true;
             Item.noMelee = true;
             Item.autoReuse = true;
+            Item.consumable = true;
             Item.value = Item.sellPrice(0, 5, 25, 0);
-            Item.rare = ItemRarityID.Master;
+            Item.rare = ItemRarityID.LightPurple;
         }
 
         public override void AddRecipes()
@@ -40,9 +41,9 @@ namespace VanillaModding.Content.Items.Weapon.Throwable.Lobotomy
             Recipe recipe = CreateRecipe();
             //recipe.AddIngredient(ItemID.SoulofSight, 15);
             recipe.AddIngredient(ModContent.ItemType<LogodomyShard>(), 35);
-            recipe.AddIngredient(ItemID.SoulofLight, 5);
+            recipe.AddIngredient(ItemID.SoulofLight, 10);
             recipe.AddIngredient(ItemID.LightDisc, 1);
-            recipe.AddTile(TileID.LunarCraftingStation);
+            recipe.AddTile(TileID.TinkerersWorkbench);
             recipe.Register();
         }
     }

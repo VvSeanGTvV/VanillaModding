@@ -34,11 +34,11 @@ namespace VanillaModding.Content.Items.Consumable.Life
             Item.useTurn = true;
             Item.maxStack = Item.CommonMaxStack;
 
-            Item.useStyle = ItemUseStyleID.EatFood;
+            Item.useStyle = ItemUseStyleID.HoldUp;
             Item.consumable = true;
             Item.noMelee = true;
 
-            Item.value = Item.sellPrice(gold: 1, silver: 80);
+            Item.value = Item.sellPrice(gold: 2, silver: 80);
             Item.rare = ItemRarityID.LightRed;
             //Item.expert = true;
 
