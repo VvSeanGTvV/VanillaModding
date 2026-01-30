@@ -130,9 +130,14 @@ Mods: {
 				Tooltip: Increases maximum life by {0} (this is not useful anymore).
 			}
 
-			PlatinumCanister: {
-				DisplayName: Life Diamond Canister
-				Tooltip: Permanently increases maximum life by 10
+			MythrilCanister: {
+				DisplayName: Mythril Life Canister
+				Tooltip: Permanently increases maximum life by {0}
+			}
+
+			OrichalcumCanister: {
+				DisplayName: Orichalcum Life Canister
+				Tooltip: Permanently increases maximum life by {0}
 			}
 
 			KoboldDynamiteBackpack: {

@@ -12,12 +12,12 @@ using VanillaModding.Common;
 
 namespace VanillaModding.Content.Items.Consumable.Life
 {
-    internal class PlatinumCanister : ModItem
+    internal class MythrilCanister : ModItem
     {
-        public static readonly int MaxPlatinumCanister = 10;
-        public static readonly int LifePerFruit = 20;
+        public static readonly int MaxDiamondHeart = 20;
+        public static readonly int LifePerFruit = 15;
 
-        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(LifePerFruit, MaxPlatinumCanister);
+        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(LifePerFruit, MaxDiamondHeart);
 
         public override void SetStaticDefaults()
         {
@@ -39,7 +39,7 @@ namespace VanillaModding.Content.Items.Consumable.Life
             Item.noMelee = true;
 
             Item.value = Item.sellPrice(gold: 1, silver: 80);
-            Item.rare = ItemRarityID.Lime;
+            Item.rare = ItemRarityID.LightRed;
             //Item.expert = true;
 
             Item.UseSound = SoundID.Item2;
@@ -56,7 +56,7 @@ namespace VanillaModding.Content.Items.Consumable.Life
         {
             // Moving the exampleLifeFruits check from CanUseItem to here allows this example fruit to still "be used" like Life Fruit can be
             // when at the max allowed, but it will just play the animation and not affect the player's max life
-            if (player.GetModPlayer<VanillaModdingPlayer>().PlatinumCanister >= MaxPlatinumCanister)
+            if (player.GetModPlayer<VanillaModdingPlayer>().DiamondHeart >= MaxDiamondHeart)
             {
                 // Returning null will make the item not be consumed
                 return null;
@@ -66,7 +66,7 @@ namespace VanillaModding.Content.Items.Consumable.Life
             player.UseHealthMaxIncreasingItem(LifePerFruit);
 
             // This field tracks how many of the example fruit have been consumed
-            player.GetModPlayer<VanillaModdingPlayer>().PlatinumCanister++;
+            player.GetModPlayer<VanillaModdingPlayer>().DiamondHeart++;
 
             return true;
         }
@@ -74,11 +74,11 @@ namespace VanillaModding.Content.Items.Consumable.Life
         // Please see Content/ExampleRecipes.cs for a detailed explanation of recipe creation.
         public override void AddRecipes()
         {
-            Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.PlatinumBar, 20);
-            recipe.AddIngredient(ItemID.LifeFruit, 1);
-            recipe.AddTile(TileID.MythrilAnvil);
-            recipe.Register();
+            CreateRecipe()
+                .AddIngredient(ItemID.MythrilBar, 20)
+                .AddIngredient(ItemID.Diamond, 5)
+                .AddTile(TileID.MythrilAnvil)
+                .Register();
         }
     }
 }

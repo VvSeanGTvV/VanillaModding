@@ -29,7 +29,7 @@ namespace VanillaModding.Common.ResourceOverlay
 
             bool drawingBarsPanels = CompareAssets(asset, barsFolder + "HP_Panel_Middle");
 
-            int exampleFruits = Main.LocalPlayer.GetModPlayer<VanillaModdingPlayer>().PlatinumCanister;
+            int exampleFruits = Main.LocalPlayer.GetModPlayer<VanillaModdingPlayer>().DiamondHeart;
 
             // Life resources are drawn over in groups of two
             if (context.resourceNumber >= 1 * exampleFruits)

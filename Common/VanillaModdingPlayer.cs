@@ -12,7 +12,7 @@ namespace VanillaModding.Common
     internal class VanillaModdingPlayer : ModPlayer
     {
         // This is Life/Mana modification related thing.
-        public int PlatinumCanister;
+        public int DiamondHeart;
 
         // This variable is for D I C E item.
         /// <summary>
@@ -48,7 +48,7 @@ namespace VanillaModding.Common
         public override void ModifyMaxStats(out StatModifier health, out StatModifier mana)
         {
             health = StatModifier.Default;
-            health.Base = PlatinumCanister * Content.Items.Consumable.Life.PlatinumCanister.LifePerFruit;
+            health.Base = DiamondHeart * Content.Items.Consumable.Life.MythrilCanister.LifePerFruit;
             // Alternatively:  health = StatModifier.Default with { Base = exampleLifeFruits * ExampleLifeFruit.LifePerFruit };
             mana = StatModifier.Default;
             //mana.Base = exampleManaCrystals * ExampleManaCrystal.ManaPerCrystal;
@@ -90,7 +90,7 @@ namespace VanillaModding.Common
             ModPacket packet = Mod.GetPacket();
             packet.Write((byte)VanillaModding.MessageType.VMTStatIncreasePlayerSync);
             packet.Write((byte)Player.whoAmI);
-            packet.Write((byte)PlatinumCanister);
+            packet.Write((byte)DiamondHeart);
             //packet.Write((byte)exampleManaCrystals);
             packet.Send(toWho, fromWho);
         }
@@ -98,14 +98,14 @@ namespace VanillaModding.Common
         // Called in ExampleMod.Networking.cs
         public void ReceivePlayerSync(BinaryReader reader)
         {
-            PlatinumCanister = reader.ReadByte();
+            DiamondHeart = reader.ReadByte();
             //exampleManaCrystals = reader.ReadByte();
         }
 
         public override void CopyClientState(ModPlayer targetCopy)
         {
             VanillaModdingPlayer clone = (VanillaModdingPlayer)targetCopy;
-            clone.PlatinumCanister = PlatinumCanister;
+            clone.DiamondHeart = DiamondHeart;
             //clone.exampleManaCrystals = exampleManaCrystals;
         }
 
@@ -113,7 +113,7 @@ namespace VanillaModding.Common
         {
             VanillaModdingPlayer clone = (VanillaModdingPlayer)clientPlayer;
 
-            if (PlatinumCanister != clone.PlatinumCanister)
+            if (DiamondHeart != clone.DiamondHeart)
             {
                 // This example calls SyncPlayer to send all the data for this ModPlayer when any change is detected, but if you are dealing with a large amount of data you should try to be more efficient and use custom packets to selectively send only specific data that has changed.
                 SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
