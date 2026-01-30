@@ -32,7 +32,7 @@ namespace VanillaModding.Common.ResourceOverlay
             int exampleFruits = Main.LocalPlayer.GetModPlayer<VanillaModdingPlayer>().PlatinumCanister;
 
             // Life resources are drawn over in groups of two
-            if (context.resourceNumber >= 2 * exampleFruits)
+            if (context.resourceNumber >= 1 * exampleFruits)
                 return;
 
             // NOTE: CompareAssets is defined below this method's body

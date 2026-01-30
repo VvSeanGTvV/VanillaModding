@@ -15,7 +15,7 @@ namespace VanillaModding.Content.Items.Consumable.Life
     internal class PlatinumCanister : ModItem
     {
         public static readonly int MaxPlatinumCanister = 10;
-        public static readonly int LifePerFruit = 10;
+        public static readonly int LifePerFruit = 20;
 
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(LifePerFruit, MaxPlatinumCanister);
 
@@ -26,11 +26,11 @@ namespace VanillaModding.Content.Items.Consumable.Life
 
         public override void SetDefaults()
         {
-            int width = 32; int height = 18;
+            int width = 30; int height = 18;
             Item.Size = new Vector2(width, height);
 
             Item.useTime = Item.useAnimation = 17;
-            Item.holdStyle = ItemHoldStyleID.HoldFront;
+            //Item.holdStyle = ItemHoldStyleID.HoldFront;
             Item.useTurn = true;
             Item.maxStack = Item.CommonMaxStack;
 
@@ -39,7 +39,7 @@ namespace VanillaModding.Content.Items.Consumable.Life
             Item.noMelee = true;
 
             Item.value = Item.sellPrice(gold: 1, silver: 80);
-            Item.rare = ItemRarityID.Orange;
+            Item.rare = ItemRarityID.Lime;
             //Item.expert = true;
 
             Item.UseSound = SoundID.Item2;
