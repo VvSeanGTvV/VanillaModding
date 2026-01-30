@@ -44,53 +44,90 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
         }
 
         int penetrateLeft = 3;
+        int timer = 0;
         public override void AI()
         {
-            Projectile.timeLeft = 2;
+            
             //Projectile.penetrate = -1;
             Projectile.rotation += MathHelper.ToRadians(15f) * Projectile.direction;
-            Player owner = Main.player[Projectile.owner];
 
-            Vector2 directionToPlayer = owner.Center - Projectile.Center;
-            float distance = directionToPlayer.Length();
-            if (distance >= 500f) Projectile.ai[0] = 1f;
-            if (Projectile.ai[0] >= 1f)
+            if (Projectile.ai[0] >= 0)
             {
-                Projectile.tileCollide = false;
+                Projectile.timeLeft = 2;
+                Player owner = Main.player[Projectile.owner];
 
-                float returnSpeed = 14f;
-                float inertia = 20f;        
-
-                // Kill when close enough
-                if (distance < 20f)
+                Vector2 directionToPlayer = owner.Center - Projectile.Center;
+                float distance = directionToPlayer.Length();
+                if (distance >= 550f) Projectile.ai[0] = 1f;
+                if (Projectile.ai[0] >= 1f)
                 {
-                    Item.NewItem(Projectile.GetSource_FromAI(), Projectile.position, ModContent.ItemType<LobotomyThrowable>());
-                    Projectile.Kill();
-                    return;
+                    Projectile.tileCollide = false;
+
+                    float returnSpeed = 14f;
+                    float inertia = 20f;
+
+                    // Kill when close enough
+                    if (distance < 20f)
+                    {
+                        //Item.NewItem(Projectile.GetSource_FromAI(), Projectile.position, ModContent.ItemType<LobotomyThrowable>());
+                        Projectile.Kill();
+                        return;
+                    }
+
+                    directionToPlayer.Normalize();
+                    directionToPlayer *= returnSpeed;
+
+                    Projectile.velocity = (Projectile.velocity * (inertia - 1) + directionToPlayer) / inertia;
+                    timer++;
+                    if (timer >= 5)
+                    {
+                        Projectile.damage++;
+                        timer = 0;
+                    }
                 }
-
-                directionToPlayer.Normalize();
-                directionToPlayer *= returnSpeed;
-
-                Projectile.velocity = (Projectile.velocity * (inertia - 1) + directionToPlayer) / inertia;
+                //Projectile.damage += 1;
             }
-            //Projectile.damage += 1;
+            else
+            {
+                if (Projectile.ai[0] == -1)
+                {
+                    Projectile.penetrate = penetrateLeft;
+                    Projectile.ai[0]--;
+                }
+            }
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            penetrateLeft--;
-            if (penetrateLeft <= 0) Projectile.ai[0] = 1f;
+            if (Projectile.ai[0] >= 0)
+            {
+                penetrateLeft--;
+                if (penetrateLeft <= 0) Projectile.ai[0] = 1f;
+            }
+            else
+            {
+                Projectile.penetrate--;
+            }
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             // If collide with tile, reduce the penetrate.
             // So the projectile can reflect at most 5 times
-            penetrateLeft--;
-            if (penetrateLeft <= 0)
+            if (Projectile.ai[0] >= 0)
             {
-                Projectile.ai[0] = 1f;
+                penetrateLeft--;
+                if (penetrateLeft <= 0) Projectile.ai[0] = 1f;
+            }
+            else
+            {
+                Projectile.penetrate--;
+            }
+
+            int p = (Projectile.ai[0] >= 0) ? penetrateLeft : Projectile.penetrate; 
+            if (p <= 0)
+            {
+                if (Projectile.ai[0] >= 0) Projectile.ai[0] = 1f; else Projectile.Kill();
             }
             else
             {

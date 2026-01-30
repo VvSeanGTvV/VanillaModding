@@ -24,14 +24,13 @@ namespace VanillaModding.Content.Items.Weapon.Throwable.Lobotomy
             Item.DamageType = DamageClass.Ranged;
             Item.width = 16;
             Item.height = 16;
-            Item.maxStack = 5;
+            Item.maxStack = 1;
             //Item.UseSound = LobotomyNormal.SoundEpic();
             Item.useAnimation = 15;
             Item.useTime = 15;
             Item.noUseGraphic = true;
             Item.noMelee = true;
             Item.autoReuse = true;
-            Item.consumable = true;
             Item.value = Item.sellPrice(0, 5, 25, 0);
             Item.rare = ItemRarityID.LightPurple;
         }
