@@ -41,13 +41,13 @@ Mods: {
 			}
 
 			LobotomyThrowable: {
-				DisplayName: Normal Lobotomy Disc (Legacy)
+				DisplayName: Lobotomy Disc
 				Tooltip: A converted Light disc.
 			}
 
 			ExtremeLobotomyThrowable: {
-				DisplayName: Homing Lobotomy Disc (Legacy)
-				Tooltip: You made it a bit angrier than Happy.
+				DisplayName: Homing Lobotomy
+				Tooltip: Explodes to three Lobotomy disc on impact.
 			}
 
 			MightyScythe: {

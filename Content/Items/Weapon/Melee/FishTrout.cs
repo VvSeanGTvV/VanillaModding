@@ -21,7 +21,7 @@ namespace VanillaModding.Content.Items.Weapon.Melee
             Item.width = 64;
             Item.height = 28;
 
-            Item.useTime = 60 * 2;
+            Item.useTime = 60 * 1;
             Item.useAnimation = 60 * 1;
 
             Item.useStyle = ItemUseStyleID.Swing;

@@ -198,7 +198,8 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                             projectileType,
                             10,
                             5f,
-                            -1
+                            -1,
+                            NPC.whoAmI
                         );
                     }
                     timesSpawned++;
@@ -238,7 +239,8 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                             projectileType,
                             10,
                             5f,
-                            -1
+                            -1,
+                            NPC.whoAmI
                         );
                     }
                     timesSpawned++;

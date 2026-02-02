@@ -30,8 +30,8 @@ namespace VanillaModding.Content.Items.Consumable
             Item.maxStack = Item.CommonMaxStack;
             Item.value = Item.buyPrice(gold: 25);
             Item.rare = ItemRarityID.Yellow;
-            Item.useAnimation = 20;
-            Item.useTime = 20;
+            Item.useAnimation = 40;
+            Item.useTime = 40;
             Item.useStyle = ItemUseStyleID.HoldUp;
             Item.consumable = true;
             Item.noUseGraphic = true;
