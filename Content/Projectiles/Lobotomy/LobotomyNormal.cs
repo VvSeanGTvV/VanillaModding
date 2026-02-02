@@ -51,9 +51,9 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             //Projectile.penetrate = -1;
             Projectile.rotation += MathHelper.ToRadians(15f) * Projectile.direction;
 
+            Projectile.timeLeft = 2;
             if (Projectile.ai[0] >= 0)
             {
-                Projectile.timeLeft = 2;
                 Player owner = Main.player[Projectile.owner];
 
                 Vector2 directionToPlayer = owner.Center - Projectile.Center;

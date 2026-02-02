@@ -29,7 +29,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             Projectile.friendly = false; // Can the projectile deal damage to enemies?
             Projectile.hostile = true; // Can the projectile deal damage to the player?
             Projectile.DamageType = DamageClass.Ranged; // Is the projectile shoot by a ranged weapon?
-            Projectile.penetrate = 1; // How many monsters the projectile can penetrate. (OnTileCollide below also decrements penetrate for bounces as well)
+            Projectile.penetrate = -1; // How many monsters the projectile can penetrate. (OnTileCollide below also decrements penetrate for bounces as well)
             Projectile.timeLeft = 600; // The live time for the projectile (60 = 1 second, so 600 is 10 seconds)
             Projectile.alpha = 0; // The transparency of the projectile, 255 for completely transparent. (aiStyle 1 quickly fades the projectile in) Make sure to delete this if you aren't using an aiStyle that fades in. You'll wonder why your projectile is invisible.
             Projectile.light = 0f; // How much light emit around the projectile
@@ -41,22 +41,68 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
 
         }
 
+        
+        int penetrateLeft = 1;
+        bool returnBack = false;
         public override void AI()
         {
-            Projectile.position.X += 0.15f;
             Projectile.rotation += MathHelper.ToRadians(15f) * Projectile.direction;
             Projectile.localAI[0]++;
             if (Projectile.localAI[0] % 120 == 0) Projectile.damage += 1;
+
+            NPC owner = Main.npc[(int)Projectile.ai[0]];
+
+            Vector2 directionToPlayer = owner.Center - Projectile.Center;
+            float distance = directionToPlayer.Length();
+
+            returnBack = (distance >= 550f);
+            if (!returnBack)
+            {
+                Projectile.position.X += 0.15f;
+            } 
+            else
+            {
+                Projectile.timeLeft = 2;
+
+
+                Projectile.tileCollide = false;
+
+                float returnSpeed = 14f;
+                float inertia = 20f;
+
+                // Kill when close enough
+                if (distance < 20f)
+                {
+                    //Item.NewItem(Projectile.GetSource_FromAI(), Projectile.position, ModContent.ItemType<LobotomyThrowable>());
+                    Projectile.Kill();
+                    return;
+                }
+
+                directionToPlayer.Normalize();
+                directionToPlayer *= returnSpeed;
+
+                Projectile.velocity = (Projectile.velocity * (inertia - 1) + directionToPlayer) / inertia;
+            }
+            
+        }
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            penetrateLeft--;
+            if (penetrateLeft <= 0)
+            {
+                returnBack = true;
+            }
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
         {
             // If collide with tile, reduce the penetrate.
             // So the projectile can reflect at most 5 times
-            Projectile.penetrate--;
-            if (Projectile.penetrate <= 0)
+            penetrateLeft--;
+            if (penetrateLeft <= 0)
             {
-                Projectile.Kill();
+                returnBack = true;
             }
             else
             {
