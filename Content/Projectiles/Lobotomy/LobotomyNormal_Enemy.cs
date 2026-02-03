@@ -37,7 +37,6 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             Projectile.tileCollide = true; // Can the projectile collide with tiles?
             Projectile.extraUpdates = 1; // Set to above 0 if you want the projectile to update multiple time in a frame
             Projectile.scale = 0.75f;
-            //AIType = ProjectileID.Bullet; // Act exactly like default Bullet
 
         }
 
@@ -55,14 +54,15 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             Vector2 directionToPlayer = owner.Center - Projectile.Center;
             float distance = directionToPlayer.Length();
 
+            Projectile.timeLeft = 2;
             returnBack = (distance >= 550f);
             if (!returnBack)
             {
-                Projectile.position.X += 0.15f;
+                Projectile.position.X += 0.35f;
             } 
             else
             {
-                Projectile.timeLeft = 2;
+               
 
 
                 Projectile.tileCollide = false;
