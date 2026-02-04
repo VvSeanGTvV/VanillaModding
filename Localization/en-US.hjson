@@ -282,6 +282,11 @@ Mods: {
 				DisplayName: Fish Trout
 				Tooltip: Diabolical knockback. Don't ask why.
 			}
+
+			LuminiteHeart: {
+				DisplayName: Luminite Heart
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {

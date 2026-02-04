@@ -10,10 +10,11 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 
-namespace VanillaModding.Common.ResourceOverlay
+namespace VanillaModding.Common.ResourceOverlay.DiamondHeart
 {
-    internal class VanillaLifeOverlay : ModResourceOverlay
+    internal class DiamondHeartOverlay : ModResourceOverlay
     {
+        string whereHeart = "VanillaModding/Common/ResourceOverlay/DiamondHeart";
         // This field is used to cache vanilla assets used in the CompareAssets helper method further down in this file
         private Dictionary<string, Asset<Texture2D>> vanillaAssetCache = new();
 
@@ -77,7 +78,7 @@ namespace VanillaModding.Common.ResourceOverlay
             // Draw over the Classic / Fancy hearts
             // "context" contains information used to draw the resource
             // If you want to draw directly on top of the vanilla hearts, just replace the texture and have the context draw the new texture
-            context.texture = heartTexture ??= ModContent.Request<Texture2D>("VanillaModding/Common/ResourceOverlay/ClassicLifeOverlay");
+            context.texture = heartTexture ??= ModContent.Request<Texture2D>($"{whereHeart}/ClassicLifeOverlay");
             context.Draw();
         }
 
@@ -127,7 +128,7 @@ namespace VanillaModding.Common.ResourceOverlay
 
             // "context" contains information used to draw the resource
             // If you want to draw directly on top of the vanilla hearts, just replace the texture and have the context draw the new texture
-            context.texture = fancyPanelTexture ??= ModContent.Request<Texture2D>("VanillaModding/Common/ResourceOverlay/FancyLifeOverlay_Panel");
+            context.texture = fancyPanelTexture ??= ModContent.Request<Texture2D>($"{whereHeart}/FancyLifeOverlay_Panel");
             // Due to the replacement texture and the vanilla texture having different dimensions, the source needs to also be modified
             context.source = context.texture.Frame();
             context.position += positionOffset;
@@ -139,7 +140,7 @@ namespace VanillaModding.Common.ResourceOverlay
             // Draw over the Bars life bars
             // "context" contains information used to draw the resource
             // If you want to draw directly on top of the vanilla bars, just replace the texture and have the context draw the new texture
-            context.texture = barsFillingTexture ??= ModContent.Request<Texture2D>("VanillaModding/Common/ResourceOverlay/BarsLifeOverlay_Fill");
+            context.texture = barsFillingTexture ??= ModContent.Request<Texture2D>($"{whereHeart}/BarsLifeOverlay_Fill");
             context.Draw();
         }
 
@@ -150,7 +151,7 @@ namespace VanillaModding.Common.ResourceOverlay
             // Draw over the Bars middle life panels
             // "context" contains information used to draw the resource
             // If you want to draw directly on top of the vanilla bar panels, just replace the texture and have the context draw the new texture
-            context.texture = barsPanelTexture ??= ModContent.Request<Texture2D>("VanillaModding/Common/ResourceOverlay/BarsLifeOverlay_Panel");
+            context.texture = barsPanelTexture ??= ModContent.Request<Texture2D>($"{whereHeart}/BarsLifeOverlay_Panel");
             // Due to the replacement texture and the vanilla texture having different heights, the source needs to also be modified
             context.source = context.texture.Frame();
             // The original position refers to the entire panel slice.

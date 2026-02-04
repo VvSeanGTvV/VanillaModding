@@ -12,7 +12,8 @@ namespace VanillaModding.Common
     internal class VanillaModdingPlayer : ModPlayer
     {
         // This is Life/Mana modification related thing.
-        public int DiamondHeart;
+        public int DiamondHeart, MaxDiamondHeart = 20;
+        public int LunarHeart, MaxLunarHeart = 20;
 
         // This variable is for D I C E item.
         /// <summary>
@@ -49,6 +50,7 @@ namespace VanillaModding.Common
         {
             health = StatModifier.Default;
             health.Base = DiamondHeart * Content.Items.Consumable.Life.MythrilCanister.LifePerFruit;
+            health.Base = LunarHeart * Content.Items.Consumable.Life.LuminiteHeart.LifePerFruit;
             // Alternatively:  health = StatModifier.Default with { Base = exampleLifeFruits * ExampleLifeFruit.LifePerFruit };
             mana = StatModifier.Default;
             //mana.Base = exampleManaCrystals * ExampleManaCrystal.ManaPerCrystal;
@@ -91,6 +93,7 @@ namespace VanillaModding.Common
             packet.Write((byte)VanillaModding.MessageType.VMTStatIncreasePlayerSync);
             packet.Write((byte)Player.whoAmI);
             packet.Write((byte)DiamondHeart);
+            packet.Write((byte)LunarHeart);
             //packet.Write((byte)exampleManaCrystals);
             packet.Send(toWho, fromWho);
         }
@@ -99,6 +102,7 @@ namespace VanillaModding.Common
         public void ReceivePlayerSync(BinaryReader reader)
         {
             DiamondHeart = reader.ReadByte();
+            LunarHeart = reader.ReadByte();
             //exampleManaCrystals = reader.ReadByte();
         }
 
@@ -106,6 +110,7 @@ namespace VanillaModding.Common
         {
             VanillaModdingPlayer clone = (VanillaModdingPlayer)targetCopy;
             clone.DiamondHeart = DiamondHeart;
+            clone.LunarHeart = LunarHeart;
             //clone.exampleManaCrystals = exampleManaCrystals;
         }
 
@@ -114,6 +119,12 @@ namespace VanillaModding.Common
             VanillaModdingPlayer clone = (VanillaModdingPlayer)clientPlayer;
 
             if (DiamondHeart != clone.DiamondHeart)
+            {
+                // This example calls SyncPlayer to send all the data for this ModPlayer when any change is detected, but if you are dealing with a large amount of data you should try to be more efficient and use custom packets to selectively send only specific data that has changed.
+                SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
+            }
+
+            if (LunarHeart != clone.LunarHeart)
             {
                 // This example calls SyncPlayer to send all the data for this ModPlayer when any change is detected, but if you are dealing with a large amount of data you should try to be more efficient and use custom packets to selectively send only specific data that has changed.
                 SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);

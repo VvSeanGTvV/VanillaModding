@@ -14,12 +14,11 @@ namespace VanillaModding.Content.Items.Consumable.Life
 {
     internal class LuminiteHeart : ModItem
     {
-        public static readonly int MaxLuminiteHeart = 20;
         public static readonly int LifePerFruit = 5;
 
         public override void SetDefaults()
         {
-            int width = 30; int height = 18;
+            int width = 22; int height = 22;
             Item.Size = new Vector2(width, height);
 
             Item.useTime = Item.useAnimation = 17;
@@ -32,11 +31,44 @@ namespace VanillaModding.Content.Items.Consumable.Life
             Item.noMelee = true;
 
             Item.value = Item.sellPrice(gold: 10, silver: 80);
-            Item.rare = ItemRarityID.LightRed;
+            Item.rare = ItemRarityID.Red;
             //Item.expert = true;
 
             Item.UseSound = SoundID.Item2;
             //Item.CloneDefaults(ItemID.LifeFruit);
+        }
+
+        public override bool CanUseItem(Player player)
+        {
+            // This check prevents this item from being used before vanilla health upgrades are maxed out.
+            return player.ConsumedLifeCrystals == Player.LifeCrystalMax && player.ConsumedLifeFruit == Player.LifeFruitMax 
+                && player.GetModPlayer<VanillaModdingPlayer>().DiamondHeart >= player.GetModPlayer<VanillaModdingPlayer>().MaxDiamondHeart;
+        }
+
+        public override bool? UseItem(Player player)
+        {
+            // Moving the exampleLifeFruits check from CanUseItem to here allows this example fruit to still "be used" like Life Fruit can be
+            // when at the max allowed, but it will just play the animation and not affect the player's max life
+            if (player.GetModPlayer<VanillaModdingPlayer>().LunarHeart >= player.GetModPlayer<VanillaModdingPlayer>().MaxLunarHeart)
+            {
+                // Returning null will make the item not be consumed
+                return null;
+            }
+
+            // This method handles permanently increasing the player's max health and displaying the green heal text
+            player.UseHealthMaxIncreasingItem(LifePerFruit);
+
+            // This field tracks how many of the example fruit have been consumed
+            player.GetModPlayer<VanillaModdingPlayer>().LunarHeart++;
+
+            return true;
+        }
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+                .AddIngredient(ItemID.LunarBar, 20)
+                .AddTile(TileID.LunarCraftingStation)
+                .Register();
         }
     }
 }

@@ -14,10 +14,9 @@ namespace VanillaModding.Content.Items.Consumable.Life
 {
     internal class OrichalcumCanister : ModItem
     {
-        public static readonly int MaxDiamondHeart = MythrilCanister.MaxDiamondHeart;
         public static readonly int LifePerFruit = MythrilCanister.LifePerFruit;
 
-        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(LifePerFruit, MaxDiamondHeart);
+        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(LifePerFruit);
 
         public override void SetStaticDefaults()
         {
@@ -56,7 +55,7 @@ namespace VanillaModding.Content.Items.Consumable.Life
         {
             // Moving the exampleLifeFruits check from CanUseItem to here allows this example fruit to still "be used" like Life Fruit can be
             // when at the max allowed, but it will just play the animation and not affect the player's max life
-            if (player.GetModPlayer<VanillaModdingPlayer>().DiamondHeart >= MaxDiamondHeart)
+            if (player.GetModPlayer<VanillaModdingPlayer>().DiamondHeart >= player.GetModPlayer<VanillaModdingPlayer>().MaxDiamondHeart)
             {
                 // Returning null will make the item not be consumed
                 return null;
