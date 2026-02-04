@@ -14,7 +14,7 @@ namespace VanillaModding.Content.Items.Consumable.Life
 {
     internal class MythrilCanister : ModItem
     {
-        public static readonly int LifePerFruit = 15;
+        public static readonly int LifePerFruit = 10;
 
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(LifePerFruit);
 
@@ -76,6 +76,7 @@ namespace VanillaModding.Content.Items.Consumable.Life
             CreateRecipe()
                 .AddIngredient(ItemID.MythrilBar, 20)
                 .AddIngredient(ItemID.Diamond, 5)
+                .AddIngredient(ItemID.LifeCrystal, 1)
                 .AddTile(TileID.MythrilAnvil)
                 .Register();
         }

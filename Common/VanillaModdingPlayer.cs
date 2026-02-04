@@ -48,9 +48,12 @@ namespace VanillaModding.Common
 
         public override void ModifyMaxStats(out StatModifier health, out StatModifier mana)
         {
-            health = StatModifier.Default;
-            health.Base = DiamondHeart * Content.Items.Consumable.Life.MythrilCanister.LifePerFruit;
-            health.Base = LunarHeart * Content.Items.Consumable.Life.LuminiteHeart.LifePerFruit;
+            health = StatModifier.Default with { 
+                Base = 
+                DiamondHeart * Content.Items.Consumable.Life.MythrilCanister.LifePerFruit + 
+                LunarHeart * Content.Items.Consumable.Life.LuminiteHeart.LifePerFruit 
+            };
+
             // Alternatively:  health = StatModifier.Default with { Base = exampleLifeFruits * ExampleLifeFruit.LifePerFruit };
             mana = StatModifier.Default;
             //mana.Base = exampleManaCrystals * ExampleManaCrystal.ManaPerCrystal;

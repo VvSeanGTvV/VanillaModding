@@ -9,12 +9,15 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using VanillaModding.Common;
+using VanillaModding.Content.Items.Materials;
 
 namespace VanillaModding.Content.Items.Consumable.Life
 {
     internal class LuminiteHeart : ModItem
     {
-        public static readonly int LifePerFruit = 5;
+        public static readonly int LifePerFruit = 10;
+
+        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(LifePerFruit);
 
         public override void SetDefaults()
         {
@@ -67,6 +70,7 @@ namespace VanillaModding.Content.Items.Consumable.Life
         {
             CreateRecipe()
                 .AddIngredient(ItemID.LunarBar, 20)
+                .AddIngredient(ModContent.ItemType<SoulofBlight>(), 5)
                 .AddTile(TileID.LunarCraftingStation)
                 .Register();
         }

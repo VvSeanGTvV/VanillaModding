@@ -15,6 +15,7 @@ using Terraria.ModLoader;
 using VanillaModding.Common.Systems;
 using VanillaModding.Content.Items.Consumable.BossBags;
 using VanillaModding.Content.Items.Materials;
+using VanillaModding.Content.Items.Weapon.Magic;
 using VanillaModding.Content.NPCs.DuneTrapper;
 using VanillaModding.Content.NPCs.Ocram.Ocram_Minions;
 using VanillaModding.Content.Projectiles.Lobotomy;
@@ -447,6 +448,8 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
             // This part is not required for a boss and is just showcasing some advanced stuff you can do with drop rules to control how items spawn
             // We make 12-15 ExampleItems spawn randomly in all directions, like the lunar pillar fragments. Hereby we need the DropOneByOne rule,
             // which requires these parameters to be defined
+            npcLoot.Add(ItemDropRule.MasterModeDropOnAllPlayers(ModContent.ItemType<ExtremeLobotomyThrowable>(), 16));
+
             LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
             int itemType = ModContent.ItemType<LogodomyShard>();
             int itemType2 = ItemID.SoulofFlight;

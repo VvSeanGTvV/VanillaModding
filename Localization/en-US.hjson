@@ -42,12 +42,12 @@ Mods: {
 
 			LobotomyThrowable: {
 				DisplayName: Lobotomy Disc
-				Tooltip: A converted Light disc.
+				Tooltip: Screams 'Fire in da hole' on every throw
 			}
 
 			ExtremeLobotomyThrowable: {
 				DisplayName: Homing Lobotomy
-				Tooltip: Explodes to three Lobotomy disc on impact.
+				Tooltip: Homes to a nearby npc to explode three more and returns back.
 			}
 
 			MightyScythe: {
@@ -137,6 +137,11 @@ Mods: {
 
 			OrichalcumCanister: {
 				DisplayName: Orichalcum Life Canister
+				Tooltip: Permanently increases maximum life by {0}
+			}
+
+			LuminiteHeart: {
+				DisplayName: Lunar Life Crystal
 				Tooltip: Permanently increases maximum life by {0}
 			}
 
@@ -281,11 +286,6 @@ Mods: {
 			FishTrout: {
 				DisplayName: Fish Trout
 				Tooltip: Diabolical knockback. Don't ask why.
-			}
-
-			LuminiteHeart: {
-				DisplayName: Luminite Heart
-				Tooltip: ""
 			}
 		}
 

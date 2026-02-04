@@ -76,6 +76,7 @@ namespace VanillaModding.Content.Items.Consumable.Life
             CreateRecipe()
                 .AddIngredient(ItemID.OrichalcumBar, 20)
                 .AddIngredient(ItemID.Diamond, 5)
+                .AddIngredient(ItemID.LifeCrystal, 1)
                 .AddTile(TileID.MythrilAnvil)
                 .Register();
         }
