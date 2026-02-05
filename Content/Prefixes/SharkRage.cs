@@ -40,8 +40,6 @@ namespace VanillaModding.Content.Prefixes
         {
             damageMult *= 1f + 0.05f * Power;
             shootSpeedMult *= 1f + 0.15f * Power;
-            manaMult *= 1f + 0.15f * Power;
-            useTimeMult *= 1f - (useTimeMult / 5f) * Power;
         }
 
         // Modify the cost of items with this modifier with this function.
@@ -54,6 +52,7 @@ namespace VanillaModding.Content.Prefixes
         public override void Apply(Item item)
         {
             item.rare = ItemRarityID.Blue;
+            item.useTime = (int)Math.Floor(item.useTime / 5f);
         }
 
         // This prefix doesn't affect any non-standard stats, so these additional tooltiplines aren't actually necessary, but this pattern can be followed for a prefix that does affect other stats.
