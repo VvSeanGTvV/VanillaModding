@@ -63,19 +63,28 @@ namespace VanillaModding.Common
             // Alternatively:  mana = StatModifier.Default with { Base = exampleManaCrystals * ExampleManaCrystal.ManaPerCrystal };
         }
 
+        int prefixHolding;
         public override void PostUpdate()
         {
             Player myPlayer = Main.LocalPlayer;
-            int prefixHolding = myPlayer.HeldItem.prefix;
+            prefixHolding = myPlayer.HeldItem.prefix;
             //if (prefixHolding == ModContent.PrefixType<Burning>()) myPlayer.AddBuff(BuffID.Burning, 60);
             base.PostUpdate();
         }
 
         public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
         {
-            int prefixHolding = item.prefix;
-            if (prefixHolding == ModContent.PrefixType<Spicy>()) target.AddBuff(BuffID.Burning, 120);
+            if (prefixHolding == ModContent.PrefixType<Spicy>()) target.AddBuff(BuffID.Burning, 320);
             base.ModifyHitNPCWithItem(item, target, ref modifiers);
+        }
+
+        public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
+        {
+            if (proj.DamageType == DamageClass.Melee)
+            {
+                if (prefixHolding == ModContent.PrefixType<Spicy>()) target.AddBuff(BuffID.Burning, 320);
+            }
+            base.ModifyHitNPCWithProj(proj, target, ref modifiers);
         }
 
         /// <summary>
