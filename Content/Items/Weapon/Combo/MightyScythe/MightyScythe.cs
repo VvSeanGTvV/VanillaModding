@@ -140,5 +140,12 @@ namespace VanillaModding.Content.Items.Weapon.Combo.MightyScythe
             
             return false;
         }
+
+        public override bool MeleePrefix()
+        => true;
+        public override bool MagicPrefix()
+        => true;
+        public override bool RangedPrefix()
+        => false;
     }
 }

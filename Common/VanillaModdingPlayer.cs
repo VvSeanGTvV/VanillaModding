@@ -74,7 +74,7 @@ namespace VanillaModding.Common
 
         public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
         {
-            if (prefixHolding == ModContent.PrefixType<Spicy>()) target.AddBuff(BuffID.Burning, 320);
+            if (prefixHolding == ModContent.PrefixType<Spicy>()) target.AddBuff(BuffID.OnFire, 320);
             base.ModifyHitNPCWithItem(item, target, ref modifiers);
         }
 
@@ -82,7 +82,7 @@ namespace VanillaModding.Common
         {
             if (proj.DamageType == DamageClass.Melee)
             {
-                if (prefixHolding == ModContent.PrefixType<Spicy>()) target.AddBuff(BuffID.Burning, 320);
+                if (prefixHolding == ModContent.PrefixType<Spicy>()) target.AddBuff(BuffID.OnFire, 320);
             }
             base.ModifyHitNPCWithProj(proj, target, ref modifiers);
         }

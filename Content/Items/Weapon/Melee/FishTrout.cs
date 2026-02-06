@@ -49,5 +49,12 @@ namespace VanillaModding.Content.Items.Weapon.Melee
 
         public override bool? CanHitNPC(Player player, NPC target) => false;
         public override bool CanHitPvp(Player player, Player target) => false;
+
+        public override bool MeleePrefix()
+        => true;
+        public override bool MagicPrefix()
+        => false;
+        public override bool RangedPrefix()
+        => false;
     }
 }
