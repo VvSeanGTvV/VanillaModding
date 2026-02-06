@@ -39,7 +39,7 @@ namespace VanillaModding.Content.Prefixes
         public override void SetStats(ref float damageMult, ref float knockbackMult, ref float useTimeMult, ref float scaleMult, ref float shootSpeedMult, ref float manaMult, ref int critBonus)
         {
             damageMult *= 1f + 0.215f * Power;
-            shootSpeedMult *= 1f + 0.35f * Power;
+            shootSpeedMult *= 1f + 0.135f * Power;
             useTimeMult *= 1f - 0.55f * Power;
         }
 
@@ -52,8 +52,8 @@ namespace VanillaModding.Content.Prefixes
         // This is used to modify most other stats of items which have this modifier.
         public override void Apply(Item item)
         {
-            item.rare += 2;
-            item.mana += 2;
+            item.rare += 1;
+            item.mana += (int)(Math.Floor(Power) + 1);
             //item.useTime = (int)Math.Floor(item.useTime / 8f);
         }
 

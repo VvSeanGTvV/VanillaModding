@@ -5,7 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.ID;
+using Terraria.Map;
 using Terraria.ModLoader;
+using VanillaModding.Content.Prefixes;
 
 namespace VanillaModding.Common
 {
@@ -58,6 +61,21 @@ namespace VanillaModding.Common
             mana = StatModifier.Default;
             //mana.Base = exampleManaCrystals * ExampleManaCrystal.ManaPerCrystal;
             // Alternatively:  mana = StatModifier.Default with { Base = exampleManaCrystals * ExampleManaCrystal.ManaPerCrystal };
+        }
+
+        public override void PostUpdate()
+        {
+            Player myPlayer = Main.LocalPlayer;
+            int prefixHolding = myPlayer.HeldItem.prefix;
+            //if (prefixHolding == ModContent.PrefixType<Burning>()) myPlayer.AddBuff(BuffID.Burning, 60);
+            base.PostUpdate();
+        }
+
+        public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
+        {
+            int prefixHolding = item.prefix;
+            if (prefixHolding == ModContent.PrefixType<Spicy>()) target.AddBuff(BuffID.Burning, 120);
+            base.ModifyHitNPCWithItem(item, target, ref modifiers);
         }
 
         /// <summary>
