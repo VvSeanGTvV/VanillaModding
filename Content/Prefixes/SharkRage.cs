@@ -13,7 +13,7 @@ namespace VanillaModding.Content.Prefixes
     internal class SharkRage : ModPrefix
     {
         // We declare a custom *virtual* property here, so that another type, ExampleDerivedPrefix, could override it and change the effective power for itself.
-        public virtual float Power => 2f;
+        public virtual float Power => 1f;
 
         // Change your category this way, defaults to PrefixCategory.Custom. Affects which items can get this prefix.
         public override PrefixCategory Category => PrefixCategory.AnyWeapon;
@@ -24,7 +24,7 @@ namespace VanillaModding.Content.Prefixes
         // Note: if you use PrefixCategory.Custom, actually use ModItem.ChoosePrefix instead.
         public override float RollChance(Item item)
         {
-            return 5f;
+            return 10f;
         }
 
         // Determines if it can roll at all.
@@ -38,21 +38,23 @@ namespace VanillaModding.Content.Prefixes
         // Damage Multiplier, Knockback Multiplier, Use Time Multiplier, Scale Multiplier (Size), Shoot Speed Multiplier, Mana Multiplier (Mana cost), Crit Bonus.
         public override void SetStats(ref float damageMult, ref float knockbackMult, ref float useTimeMult, ref float scaleMult, ref float shootSpeedMult, ref float manaMult, ref int critBonus)
         {
-            damageMult *= 1f + 0.05f * Power;
-            shootSpeedMult *= 1f + 0.15f * Power;
+            damageMult *= 1f + 0.215f * Power;
+            shootSpeedMult *= 1f + 0.35f * Power;
+            useTimeMult *= 1f - 0.55f * Power;
         }
 
         // Modify the cost of items with this modifier with this function.
         public override void ModifyValue(ref float valueMult)
         {
-            valueMult *= 1f + 0.05f * Power;
+            valueMult *= 1f + 0.075f * Power;
         }
 
         // This is used to modify most other stats of items which have this modifier.
         public override void Apply(Item item)
         {
-            item.rare = ItemRarityID.Blue;
-            item.useTime = (int)Math.Floor(item.useTime / 5f);
+            item.rare += 2;
+            item.mana += 2;
+            //item.useTime = (int)Math.Floor(item.useTime / 8f);
         }
 
         // This prefix doesn't affect any non-standard stats, so these additional tooltiplines aren't actually necessary, but this pattern can be followed for a prefix that does affect other stats.

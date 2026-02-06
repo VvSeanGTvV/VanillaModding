@@ -376,7 +376,7 @@ Mods: {
 		Prefixes: {
 			SharkRage: {
 				AdditionalTooltip: A insanity speed buff.
-				DisplayName: Shark Rage
+				DisplayName: Raging
 			}
 
 			PowerTooltip: "{0:+0;-#} Power"
