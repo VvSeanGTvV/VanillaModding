@@ -63,28 +63,29 @@ namespace VanillaModding.Common
             // Alternatively:  mana = StatModifier.Default with { Base = exampleManaCrystals * ExampleManaCrystal.ManaPerCrystal };
         }
 
-        int prefixHolding;
+        DamageClass currentClass;
+        int currentPrefix;
         public override void PostUpdate()
         {
             Player myPlayer = Main.LocalPlayer;
-            prefixHolding = myPlayer.HeldItem.prefix;
-            //if (prefixHolding == ModContent.PrefixType<Burning>()) myPlayer.AddBuff(BuffID.Burning, 60);
+            currentPrefix = myPlayer.HeldItem.prefix;
+
+            currentClass = myPlayer.HeldItem.DamageType;
+            if (currentPrefix == ModContent.PrefixType<Hot>()) myPlayer.AddBuff(BuffID.Burning, 60);
             base.PostUpdate();
         }
 
-        public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            if (prefixHolding == ModContent.PrefixType<Spicy>()) target.AddBuff(BuffID.OnFire, 320);
-            base.ModifyHitNPCWithItem(item, target, ref modifiers);
-        }
-
-        public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
-        {
-            if (proj.DamageType == DamageClass.Melee)
+            if (currentClass == DamageClass.Melee ||
+                currentClass == DamageClass.MeleeNoSpeed ||
+                currentClass == DamageClass.SummonMeleeSpeed
+                )
             {
-                if (prefixHolding == ModContent.PrefixType<Spicy>()) target.AddBuff(BuffID.OnFire, 320);
+                if (currentPrefix == ModContent.PrefixType<Spicy>()) target.AddBuff(BuffID.OnFire, 3 * 60);
+                if (currentPrefix == ModContent.PrefixType<Hot>()) target.AddBuff(BuffID.OnFire, 6 * 60);
             }
-            base.ModifyHitNPCWithProj(proj, target, ref modifiers);
+            base.ModifyHitNPC(target, ref modifiers);
         }
 
         /// <summary>

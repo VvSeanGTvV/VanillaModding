@@ -12,18 +12,22 @@ namespace VanillaModding.Content.Prefixes
 {
     internal class Spicy : ModPrefix
     {
-        // We declare a custom *virtual* property here, so that another type, ExampleDerivedPrefix, could override it and change the effective power for itself.
+        
         public virtual float Power => 1f;
+        public virtual int tier => 0;
 
-        // Change your category this way, defaults to PrefixCategory.Custom. Affects which items can get this prefix.
-        public override PrefixCategory Category => PrefixCategory.Melee;
+        public override PrefixCategory Category => PrefixCategory.AnyWeapon;
         public override float RollChance(Item item)
         {
-            return 4f + Power;
+            return 4f + Power + tier;
         }
         public override bool CanRoll(Item item)
         {
-            return true;
+            DamageClass currentClass = item.DamageType;
+            return (currentClass == DamageClass.Melee ||
+                currentClass == DamageClass.MeleeNoSpeed ||
+                currentClass == DamageClass.SummonMeleeSpeed
+                );
         }
 
         // Use this function to modify these stats for items which have this prefix:
@@ -31,7 +35,7 @@ namespace VanillaModding.Content.Prefixes
         public override void SetStats(ref float damageMult, ref float knockbackMult, ref float useTimeMult, ref float scaleMult, ref float shootSpeedMult, ref float manaMult, ref int critBonus)
         {
             //damageMult *= 1f + 0.0414f * Power;
-            useTimeMult *= 1f - 0.115f * Power;
+            useTimeMult *= 1f - 0.135f * Power;
             //knockbackMult *= 1f + 0.0414f * Power;
             critBonus += (int)Power*2;
         }
@@ -40,6 +44,12 @@ namespace VanillaModding.Content.Prefixes
         public override void ModifyValue(ref float valueMult)
         {
             valueMult *= 1f + 0.0215f * Power;
+        }
+
+        public override void Apply(Item item)
+        {
+            item.rare += tier;
+            base.Apply(item);
         }
     }
 }

@@ -93,6 +93,11 @@ namespace VanillaModding.Content.Items.Weapon.Combo.MightyScythe
             );
         }
 
+        public override bool WeaponPrefix()
+        {
+            return base.WeaponPrefix();
+        }
+
         public override bool AltFunctionUse(Player player)
         {
             return true;
