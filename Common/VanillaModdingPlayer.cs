@@ -73,6 +73,8 @@ namespace VanillaModding.Common
             currentClass = myPlayer.HeldItem.DamageType;
             if (currentPrefix == ModContent.PrefixType<Hot>()) myPlayer.AddBuff(BuffID.Burning, 60);
             base.PostUpdate();
+
+            
         }
 
         public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)

@@ -8,7 +8,7 @@ namespace VanillaModding.Content.Prefixes
 {
     internal class Hot : Spicy
     {
-        public override float Power => base.Power + 1;
+        public override float Power => base.Power + 2.15f;
         public override int tier => 1;
     }
 }
