@@ -74,7 +74,7 @@ namespace VanillaModding.Common
             currentPrefix = myPlayer.HeldItem.prefix;
 
             currentClass = myPlayer.HeldItem.DamageType;
-            if (currentPrefix == ModContent.PrefixType<Hot>()) myPlayer.AddBuff(BuffID.Burning, 60);
+            if (currentPrefix == ModContent.PrefixType<Hot>()) myPlayer.AddBuff(BuffID.Burning, 2);
             base.PostUpdate();
         }
 
@@ -93,19 +93,29 @@ namespace VanillaModding.Common
 
         public override bool Shoot(Item item, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            //Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, Main.MouseWorld.X, Main.MouseWorld.Y);
-            return base.Shoot(item, source, position, velocity, type, damage, knockback);
+            Player myPlayer = Main.LocalPlayer;
+            bool hasEffects = 
+                (currentPrefix == ModContent.PrefixType<Spicy>()) || 
+                (currentPrefix == ModContent.PrefixType<Hot>());
+            bool isMelee =
+                (currentClass == DamageClass.Melee ||
+               currentClass == DamageClass.MeleeNoSpeed ||
+               currentClass == DamageClass.SummonMeleeSpeed
+               );
+            if (hasEffects && isMelee) Projectile.NewProjectile(source, position, velocity, type, damage, knockback, myPlayer.whoAmI, ai2:currentPrefix);
+            return !hasEffects || !isMelee;
         }
 
         public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
         {
+            DamageClass currentClass = proj.DamageType;
             if (currentClass == DamageClass.Melee ||
                currentClass == DamageClass.MeleeNoSpeed ||
                currentClass == DamageClass.SummonMeleeSpeed
                )
             {
-                if (currentPrefix == ModContent.PrefixType<Spicy>()) target.AddBuff(BuffID.OnFire, 3 * 60);
-                if (currentPrefix == ModContent.PrefixType<Hot>()) target.AddBuff(BuffID.OnFire, 6 * 60);
+                if (proj.ai[2] == ModContent.PrefixType<Spicy>()) target.AddBuff(BuffID.OnFire, 3 * 60);
+                if (proj.ai[2] == ModContent.PrefixType<Hot>()) target.AddBuff(BuffID.OnFire, 6 * 60);
             }
             base.ModifyHitNPCWithProj(proj, target, ref modifiers);
         }
