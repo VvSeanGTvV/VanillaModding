@@ -1,14 +1,17 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Map;
 using Terraria.ModLoader;
 using VanillaModding.Content.Prefixes;
+using VanillaModding.Content.Projectiles.MightyScythe.MightyProjectile;
 
 namespace VanillaModding.Common
 {
@@ -73,21 +76,38 @@ namespace VanillaModding.Common
             currentClass = myPlayer.HeldItem.DamageType;
             if (currentPrefix == ModContent.PrefixType<Hot>()) myPlayer.AddBuff(BuffID.Burning, 60);
             base.PostUpdate();
-
-            
         }
 
-        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
         {
             if (currentClass == DamageClass.Melee ||
-                currentClass == DamageClass.MeleeNoSpeed ||
-                currentClass == DamageClass.SummonMeleeSpeed
-                )
+               currentClass == DamageClass.MeleeNoSpeed ||
+               currentClass == DamageClass.SummonMeleeSpeed
+               )
             {
                 if (currentPrefix == ModContent.PrefixType<Spicy>()) target.AddBuff(BuffID.OnFire, 3 * 60);
                 if (currentPrefix == ModContent.PrefixType<Hot>()) target.AddBuff(BuffID.OnFire, 6 * 60);
             }
-            base.ModifyHitNPC(target, ref modifiers);
+            base.ModifyHitNPCWithItem(item, target, ref modifiers);
+        }
+
+        public override bool Shoot(Item item, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            //Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, Main.MouseWorld.X, Main.MouseWorld.Y);
+            return base.Shoot(item, source, position, velocity, type, damage, knockback);
+        }
+
+        public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
+        {
+            if (currentClass == DamageClass.Melee ||
+               currentClass == DamageClass.MeleeNoSpeed ||
+               currentClass == DamageClass.SummonMeleeSpeed
+               )
+            {
+                if (currentPrefix == ModContent.PrefixType<Spicy>()) target.AddBuff(BuffID.OnFire, 3 * 60);
+                if (currentPrefix == ModContent.PrefixType<Hot>()) target.AddBuff(BuffID.OnFire, 6 * 60);
+            }
+            base.ModifyHitNPCWithProj(proj, target, ref modifiers);
         }
 
         /// <summary>
