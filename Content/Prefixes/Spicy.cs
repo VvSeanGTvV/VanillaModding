@@ -34,8 +34,8 @@ namespace VanillaModding.Content.Prefixes
         // Damage Multiplier, Knockback Multiplier, Use Time Multiplier, Scale Multiplier (Size), Shoot Speed Multiplier, Mana Multiplier (Mana cost), Crit Bonus.
         public override void SetStats(ref float damageMult, ref float knockbackMult, ref float useTimeMult, ref float scaleMult, ref float shootSpeedMult, ref float manaMult, ref int critBonus)
         {
-            //damageMult *= 1f + 0.0414f * Power;
-            useTimeMult *= 1f - 0.135f * Power;
+            //damageMult *= 1f + 0.0244f * Power;
+            useTimeMult *= 1f - 0.115f * Power;
             //knockbackMult *= 1f + 0.0414f * Power;
             critBonus += (int)Power*2;
         }
@@ -43,7 +43,7 @@ namespace VanillaModding.Content.Prefixes
         // Modify the cost of items with this modifier with this function.
         public override void ModifyValue(ref float valueMult)
         {
-            valueMult *= 1f + 0.0215f * Power;
+            valueMult *= 1f + 0.0335f * Power;
         }
 
         public override IEnumerable<TooltipLine> GetTooltipLines(Item item)
