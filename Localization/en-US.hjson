@@ -380,9 +380,17 @@ Mods: {
 			}
 
 			PowerTooltip: "{0:+0;-#} Power"
-			Burning.DisplayName: Hot
-			Spicy.DisplayName: Spicy
-			Hot.DisplayName: Hot
+
+			Hot: {
+				NegativeEffects: -Too Hot
+				AddonEffects: +Burning on Hit
+				DisplayName: Hot
+			}
+
+			Spicy: {
+				AddonEffects: +Burning on Hit
+				DisplayName: Spicy
+			}
 		}
 	}
 }

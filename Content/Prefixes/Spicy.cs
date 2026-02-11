@@ -12,7 +12,7 @@ namespace VanillaModding.Content.Prefixes
 {
     internal class Spicy : ModPrefix
     {
-        
+        public LocalizedText AddonEffects => this.GetLocalization(nameof(AddonEffects));
         public virtual float Power => 1f;
         public virtual int tier => 0;
 
@@ -44,6 +44,15 @@ namespace VanillaModding.Content.Prefixes
         public override void ModifyValue(ref float valueMult)
         {
             valueMult *= 1f + 0.0215f * Power;
+        }
+
+        public override IEnumerable<TooltipLine> GetTooltipLines(Item item)
+        {
+            // This localization is not shared with the inherited classes. ExamplePrefix and ExampleDerivedPrefix have their own translations for this line.
+            yield return new TooltipLine(Mod, "PrefixWeaponAwesomeDescription", AddonEffects.Value)
+            {
+                IsModifier = true,
+            };
         }
 
         public override void Apply(Item item)
