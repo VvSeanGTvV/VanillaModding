@@ -72,21 +72,48 @@ namespace VanillaModding.Common
         {
             Player myPlayer = Main.LocalPlayer;
             currentPrefix = myPlayer.HeldItem.prefix;
-
             currentClass = myPlayer.HeldItem.DamageType;
-            if (currentPrefix == ModContent.PrefixType<Hot>()) myPlayer.AddBuff(BuffID.Burning, 2);
+
+            if (currentPrefix == ModContent.PrefixType<Colossal>())
+            {
+                myPlayer.AddBuff(BuffID.Slow, 2);
+            }
             base.PostUpdate();
+        
+        
+        
+        }
+
+        public override void PostUpdateMiscEffects()
+        {
+            Player myPlayer = Main.LocalPlayer;
+            if (currentPrefix == ModContent.PrefixType<Colossal>())
+            {
+                myPlayer.moveSpeed *= 0.35f;
+            }
+            base.PostUpdateMiscEffects();
+        }
+        public override void PostUpdateRunSpeeds()
+        {
+            Player myPlayer = Main.LocalPlayer;
+            if (currentPrefix == ModContent.PrefixType<Colossal>())
+            {
+                myPlayer.maxRunSpeed *= 0.15f;
+                myPlayer.accRunSpeed *= 0.5f;
+            }
+            base.PostUpdateRunSpeeds();
         }
 
         public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
         {
+            DamageClass currentClass = item.DamageType;
+            int currentPrefix = item.prefix;
             if (currentClass == DamageClass.Melee ||
                currentClass == DamageClass.MeleeNoSpeed ||
                currentClass == DamageClass.SummonMeleeSpeed
                )
             {
-                if (currentPrefix == ModContent.PrefixType<Spicy>()) target.AddBuff(BuffID.OnFire, 3 * 60);
-                if (currentPrefix == ModContent.PrefixType<Hot>()) target.AddBuff(BuffID.OnFire, 6 * 60);
+                if (currentPrefix == ModContent.PrefixType<Spiky>()) target.AddBuff(BuffID.Bleeding, 5 * 60);
             }
             base.ModifyHitNPCWithItem(item, target, ref modifiers);
         }
@@ -94,9 +121,12 @@ namespace VanillaModding.Common
         public override bool Shoot(Item item, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             Player myPlayer = Main.LocalPlayer;
-            bool hasEffects = 
-                (currentPrefix == ModContent.PrefixType<Spicy>()) || 
-                (currentPrefix == ModContent.PrefixType<Hot>());
+
+            DamageClass currentClass = item.DamageType;
+            int currentPrefix = item.prefix;
+            bool hasEffects =
+                (currentPrefix == ModContent.PrefixType<Spiky>())
+                ;
             bool isMelee =
                 (currentClass == DamageClass.Melee ||
                currentClass == DamageClass.MeleeNoSpeed ||
@@ -108,15 +138,7 @@ namespace VanillaModding.Common
 
         public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
         {
-            DamageClass currentClass = proj.DamageType;
-            if (currentClass == DamageClass.Melee ||
-               currentClass == DamageClass.MeleeNoSpeed ||
-               currentClass == DamageClass.SummonMeleeSpeed
-               )
-            {
-                if (proj.ai[2] == ModContent.PrefixType<Spicy>()) target.AddBuff(BuffID.OnFire, 3 * 60);
-                if (proj.ai[2] == ModContent.PrefixType<Hot>()) target.AddBuff(BuffID.OnFire, 6 * 60);
-            }
+            if (proj.ai[2] == ModContent.PrefixType<Spiky>()) target.AddBuff(BuffID.Bleeding, 5 * 60);
             base.ModifyHitNPCWithProj(proj, target, ref modifiers);
         }
 

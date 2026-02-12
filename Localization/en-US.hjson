@@ -381,15 +381,14 @@ Mods: {
 
 			PowerTooltip: "{0:+0;-#} Power"
 
-			Hot: {
-				NegativeEffects: -Too Hot
-				AddonEffects: +Burning on Hit
-				DisplayName: Hot
+			Spiky: {
+				AddonEffects: +Bleeding on Hit
+				DisplayName: Spiky
 			}
 
-			Spicy: {
-				AddonEffects: +Burning on Hit
-				DisplayName: Spicy
+			Colossal: {
+				NegativeEffects: -Slowed to a crawl
+				DisplayName: Colossal
 			}
 		}
 	}

@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
-using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace VanillaModding.Content.Prefixes
 {
-    internal class Spicy : ModPrefix
+    internal class Spiky : ModPrefix
     {
         public LocalizedText AddonEffects => this.GetLocalization(nameof(AddonEffects));
         public virtual float Power => 1f;
@@ -24,20 +23,17 @@ namespace VanillaModding.Content.Prefixes
         public override bool CanRoll(Item item)
         {
             DamageClass currentClass = item.DamageType;
-            return (currentClass == DamageClass.Melee ||
-                currentClass == DamageClass.MeleeNoSpeed ||
-                currentClass == DamageClass.SummonMeleeSpeed
-                );
+            return currentClass == DamageClass.SummonMeleeSpeed;
         }
 
         // Use this function to modify these stats for items which have this prefix:
         // Damage Multiplier, Knockback Multiplier, Use Time Multiplier, Scale Multiplier (Size), Shoot Speed Multiplier, Mana Multiplier (Mana cost), Crit Bonus.
         public override void SetStats(ref float damageMult, ref float knockbackMult, ref float useTimeMult, ref float scaleMult, ref float shootSpeedMult, ref float manaMult, ref int critBonus)
         {
-            //damageMult *= 1f + 0.0244f * Power;
-            useTimeMult *= 1f - 0.115f * Power;
+            damageMult *= 1f + 0.0324f * Power;
+            useTimeMult *= 1f + 0.122f * Power;
             //knockbackMult *= 1f + 0.0414f * Power;
-            critBonus += (int)Power*2;
+            critBonus += (int)Power * 3;
         }
 
         // Modify the cost of items with this modifier with this function.
