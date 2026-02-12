@@ -31,9 +31,9 @@ namespace VanillaModding.Content.Prefixes
         public override void SetStats(ref float damageMult, ref float knockbackMult, ref float useTimeMult, ref float scaleMult, ref float shootSpeedMult, ref float manaMult, ref int critBonus)
         {
             damageMult *= 1f + 0.0324f * Power;
-            useTimeMult *= 1f + 0.122f * Power;
+            useTimeMult *= 1f + 0.0342f * Power;
             //knockbackMult *= 1f + 0.0414f * Power;
-            critBonus += (int)Power * 3;
+            critBonus += (int)Power * 1;
         }
 
         // Modify the cost of items with this modifier with this function.

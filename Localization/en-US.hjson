@@ -382,12 +382,16 @@ Mods: {
 			PowerTooltip: "{0:+0;-#} Power"
 
 			Spiky: {
-				AddonEffects: +Bleeding on Hit
+				AddonEffects: +Causes Bleeding
 				DisplayName: Spiky
+			}
+			Venomous: {
+				AddonEffects: +Poison Tipped
+				DisplayName: Venomous
 			}
 
 			Colossal: {
-				NegativeEffects: -Slowed to a crawl
+				NegativeEffects: -Crippled
 				DisplayName: Colossal
 			}
 		}

@@ -79,9 +79,6 @@ namespace VanillaModding.Common
                 myPlayer.AddBuff(BuffID.Slow, 2);
             }
             base.PostUpdate();
-        
-        
-        
         }
 
         public override void PostUpdateMiscEffects()
@@ -113,9 +110,7 @@ namespace VanillaModding.Common
                currentClass == DamageClass.MeleeNoSpeed ||
                currentClass == DamageClass.SummonMeleeSpeed
                )
-            {
-                if (currentPrefix == ModContent.PrefixType<Spiky>()) target.AddBuff(BuffID.Bleeding, 5 * 60);
-            }
+                ApplyEffectsFromPrefix((int)currentPrefix, target);
             base.ModifyHitNPCWithItem(item, target, ref modifiers);
         }
 
@@ -126,7 +121,8 @@ namespace VanillaModding.Common
             DamageClass currentClass = item.DamageType;
             int currentPrefix = item.prefix;
             bool hasEffects =
-                (currentPrefix == ModContent.PrefixType<Spiky>())
+                (currentPrefix == ModContent.PrefixType<Spiky>()) ||
+                (currentPrefix == ModContent.PrefixType<Venomous>())
                 ;
             bool isMelee =
                 (currentClass == DamageClass.Melee ||
@@ -139,8 +135,14 @@ namespace VanillaModding.Common
 
         public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
         {
-            if (proj.ai[2] == ModContent.PrefixType<Spiky>()) target.AddBuff(BuffID.Bleeding, 5 * 60);
+            ApplyEffectsFromPrefix((int)proj.ai[2], target);
             base.ModifyHitNPCWithProj(proj, target, ref modifiers);
+        }
+
+        public void ApplyEffectsFromPrefix(int prefix, NPC target)
+        {
+            if (prefix == ModContent.PrefixType<Spiky>()) target.AddBuff(BuffID.Bleeding, 5 * 60);
+            if (prefix == ModContent.PrefixType<Venomous>()) target.AddBuff(BuffID.Poisoned, 8 * 60);
         }
 
         /// <summary>
