@@ -31,8 +31,8 @@ namespace VanillaModding.Content.Prefixes
         {
             scaleMult *= 1f + 0.55f * Power;
             damageMult *= 1f + 0.651f * Power;
-            useTimeMult *= 1f + 0.622f * Power;
-            knockbackMult *= 1f + 0.214f * Power;
+            useTimeMult *= 1f + 0.652f * Power;
+            knockbackMult *= 1f + 0.314f * Power;
             critBonus += (int)Power * 5;
         }
 
