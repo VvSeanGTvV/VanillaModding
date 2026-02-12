@@ -93,6 +93,7 @@ namespace VanillaModding.Common
             }
             base.PostUpdateMiscEffects();
         }
+
         public override void PostUpdateRunSpeeds()
         {
             Player myPlayer = Main.LocalPlayer;
