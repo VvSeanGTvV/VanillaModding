@@ -42,7 +42,7 @@ namespace VanillaModding.Common.ResourceOverlay
 		/// </summary>
 		public static bool CanDrawCursor(Item item)
         {
-            return !_lastMouseInterface && !_lastMouseText && item.ModItem is testcursor;
+            return item.ModItem is testcursor;
         }
 
         protected override bool DrawSelf()
