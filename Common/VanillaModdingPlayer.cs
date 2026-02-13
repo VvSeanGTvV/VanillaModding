@@ -86,7 +86,7 @@ namespace VanillaModding.Common
             Player myPlayer = Main.LocalPlayer;
             if (currentPrefix == ModContent.PrefixType<Colossal>())
             {
-                myPlayer.moveSpeed *= 0.35f;
+                myPlayer.moveSpeed *= 0.85f;
             }
             base.PostUpdateMiscEffects();
         }
@@ -96,7 +96,7 @@ namespace VanillaModding.Common
             Player myPlayer = Main.LocalPlayer;
             if (currentPrefix == ModContent.PrefixType<Colossal>())
             {
-                myPlayer.maxRunSpeed *= 0.15f;
+                myPlayer.maxRunSpeed *= 0.25f;
                 myPlayer.accRunSpeed *= 0.5f;
             }
             base.PostUpdateRunSpeeds();

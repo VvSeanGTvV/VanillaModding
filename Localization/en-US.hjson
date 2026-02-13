@@ -287,6 +287,11 @@ Mods: {
 				DisplayName: Fish Trout
 				Tooltip: Diabolical knockback. Don't ask why.
 			}
+
+			testcursor: {
+				DisplayName: testcursor
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
@@ -385,6 +390,7 @@ Mods: {
 				AddonEffects: +Causes Bleeding
 				DisplayName: Spiky
 			}
+
 			Venomous: {
 				AddonEffects: +Poison Tipped
 				DisplayName: Toxic
