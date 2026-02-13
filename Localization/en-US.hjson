@@ -387,7 +387,7 @@ Mods: {
 			}
 			Venomous: {
 				AddonEffects: +Poison Tipped
-				DisplayName: Venomous
+				DisplayName: Toxic
 			}
 
 			Colossal: {
