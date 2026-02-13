@@ -10,11 +10,11 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 
-namespace VanillaModding.Common.ResourceOverlay.DiamondHeart
+namespace VanillaModding.Common.UI.ResourceOverlay.LunarHeart
 {
     internal class LunarHeartOverlay : ModResourceOverlay
     {
-        string whereHeart = "VanillaModding/Common/ResourceOverlay/LunarHeart";
+        string whereHeart = "VanillaModding/Common/UI/ResourceOverlay/LunarHeart";
         // This field is used to cache vanilla assets used in the CompareAssets helper method further down in this file
         private Dictionary<string, Asset<Texture2D>> vanillaAssetCache = new();
 

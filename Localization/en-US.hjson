@@ -255,17 +255,17 @@ Mods: {
 
 			OutrageousBuildersClubHardHat: {
 				DisplayName: Outrageous Builders Club Hard Hat
-				Tooltip: This hard hat is a nod reference to the Roblox's Builders Club membership.
+				Tooltip: "'Part of the Roblox Builders Club'"
 			}
 
 			BuildersClubHardHat: {
 				DisplayName: Builders Club Hard Hat
-				Tooltip: This hard hat is a nod reference to the Roblox's Builders Club membership.
+				Tooltip: "'Part of the Roblox Builders Club'"
 			}
 
 			TurboBuildersClubHardHat: {
 				DisplayName: Turbo Builders Club Hard Hat
-				Tooltip: This hard hat is a nod reference to the Roblox's Builders Club membership.
+				Tooltip: T"'Part of the Roblox Builders Club'"
 			}
 
 			LogodomyShard: {
@@ -291,6 +291,16 @@ Mods: {
 			testcursor: {
 				DisplayName: testcursor
 				Tooltip: ""
+			}
+
+			AlanCursor: {
+				DisplayName: Alan's Cursor
+				Tooltip:
+					'''
+					'My name is Alan Becker!'
+					Allow Clicker Class to burn!
+					Increases your max minions by {0}
+					'''
 			}
 		}
 

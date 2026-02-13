@@ -17,9 +17,17 @@ namespace VanillaModding.Common
 {
     internal class VanillaModdingPlayer : ModPlayer
     {
+        // Cursor related variables
+        public bool overrideCursor = false;
+        public int cursorItem = 0;
+
         // This is Life/Mana modification related thing.
         public int DiamondHeart, MaxDiamondHeart = 20;
         public int LunarHeart, MaxLunarHeart = 20;
+
+        // Held Item of prefix and class
+        int currentPrefix = 0;
+        DamageClass currentClass = null;
 
         // This variable is for D I C E item.
         /// <summary>
@@ -52,6 +60,13 @@ namespace VanillaModding.Common
             stunned = false;
         }
 
+        public override void PreUpdate()
+        {
+            overrideCursor = false;
+            cursorItem = 0;
+            base.PreUpdate();
+        }
+
         public override void ModifyMaxStats(out StatModifier health, out StatModifier mana)
         {
             health = StatModifier.Default with { 
@@ -66,14 +81,15 @@ namespace VanillaModding.Common
             // Alternatively:  mana = StatModifier.Default with { Base = exampleManaCrystals * ExampleManaCrystal.ManaPerCrystal };
         }
 
-        DamageClass currentClass;
-        int currentPrefix;
+        
         public override void PostUpdate()
         {
             Player myPlayer = Main.LocalPlayer;
+
             currentPrefix = myPlayer.HeldItem.prefix;
             currentClass = myPlayer.HeldItem.DamageType;
 
+            // Buffs related to prefixes
             if (currentPrefix == ModContent.PrefixType<Colossal>())
             {
                 myPlayer.AddBuff(BuffID.Slow, 2);

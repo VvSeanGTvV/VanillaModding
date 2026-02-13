@@ -10,9 +10,9 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.UI;
-using VanillaModding.Content.Items.Weapon.Summoner.Clicker;
+using VanillaModding.Content.Items.Accessories.Clicker;
 
-namespace VanillaModding.Common.ResourceOverlay
+namespace VanillaModding.Common.UI
 {
     internal class CursorUI : InterfaceResource
     {
@@ -40,14 +40,16 @@ namespace VanillaModding.Common.ResourceOverlay
         /// <summary>
 		/// Helper method that determines when the cursor can be drawn/replaced
 		/// </summary>
-		public static bool CanDrawCursor(Item item)
+		public static bool CanDrawCursor(Player player)
         {
-            return item.ModItem is testcursor;
+            VanillaModdingPlayer modPlayer = player.GetModPlayer<VanillaModdingPlayer>();
+            return modPlayer.overrideCursor;
         }
 
         protected override bool DrawSelf()
         {
             Player player = Main.LocalPlayer;
+            VanillaModdingPlayer modPlayer = player.GetModPlayer<VanillaModdingPlayer>();
 
             // Don't draw if the player is dead or a ghost
             if (player.dead || player.ghost)
@@ -58,17 +60,17 @@ namespace VanillaModding.Common.ResourceOverlay
             Asset<Texture2D> borderAsset;
             Texture2D borderTexture;
             Texture2D texture;
-            Item item = player.HeldItem;
-            int itemType = item.type;
+            //Item item = player.HeldItem;
+            int itemType = modPlayer.cursorItem;
 
-            if (!CanDrawCursor(item))
+            if (!CanDrawCursor(player))
             {
                 return true;
             }
 
             // Actual cursor
             ModItem getCursor = ModContent.GetModItem(itemType);
-            texture = TextureAssets.Item[itemType].Value;
+            texture = (Texture2D)ModContent.Request<Texture2D>($"{nameof(VanillaModding)}/Common/UI/CursorAsset/{getCursor.Name}".Replace(@"\", "/"));//(Texture2D)ModContent.Request<Texture2D>($"{nameof(VanillaModding) + "/" + (getCursor.Texture + "_cursor").Replace(@"\", "/")}");
             /*String pathBorder = nameof(VanillaModding) + "/" + (getCursor.Texture + "_border").Replace(@"\", "/");
             Texture2D borderTexture = (Texture2D)ModContent.Request<Texture2D>($"{pathBorder}", AssetRequestMode.ImmediateLoad).Value;
             Rectangle borderFrame = borderTexture.Frame(1, 1);
@@ -92,7 +94,8 @@ namespace VanillaModding.Common.ResourceOverlay
 
         public override int GetInsertIndex(List<GameInterfaceLayer> layers)
         {
-            return layers.FindIndex(layer => layer.Active && layer.Name.Equals("Vanilla: Cursor"));
+            //return layers.FindIndex(layer => layer.Active && layer.Name.Equals("Vanilla: Cursor"));
+            return layers.FindIndex(layer => layer.Active && layer.Name.Equals("Vanilla: Mouse Text"));
         }
     }
 }

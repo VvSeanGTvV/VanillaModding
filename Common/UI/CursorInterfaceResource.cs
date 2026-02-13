@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Terraria.ModLoader;
 using Terraria.UI;
 
-namespace VanillaModding.Common.ResourceOverlay
+namespace VanillaModding.Common.UI
 {
     [Autoload(true, Side = ModSide.Client)]
     internal class CursorInterfaceResource : ModSystem

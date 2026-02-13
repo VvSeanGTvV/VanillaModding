@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria.UI;
 
-namespace VanillaModding.Common.ResourceOverlay
+namespace VanillaModding.Common.UI
 {
     public abstract class InterfaceResource : GameInterfaceLayer
     {

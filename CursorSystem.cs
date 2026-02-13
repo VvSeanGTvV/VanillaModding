@@ -11,15 +11,15 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.UI;
-using VanillaModding.Common.ResourceOverlay;
-using VanillaModding.Content.Items.Weapon.Summoner.Clicker;
+using VanillaModding.Common.UI;
+using VanillaModding.Content.Items.Accessories.Clicker;
 
 namespace VanillaModding
 {
     [Autoload(true, Side = ModSide.Client)]
     internal class CursorSystem : ModSystem
     {
-        bool hasCursor = false;
+        bool hasCursor = false, goingonce;
         private GameTime _lastUpdateUIGameTime;
         private static FieldInfo mouseTextCacheField;
         private static FieldInfo isValidField;
@@ -38,11 +38,12 @@ namespace VanillaModding
             if (Main.cursorOverride == -1)
             {
                 Player player = Main.LocalPlayer;
-                if (CursorUI.CanDrawCursor(player.HeldItem))
+                if (CursorUI.CanDrawCursor(player))
                 {
                     hasCursor = true;
                     for (int i = 0; i < layers.Count; i++)
                     {
+                        if (!goingonce) Logging.PublicLogger.Debug(layers[i].Name);
                         if (layers[i].Name.Equals("Vanilla: Cursor"))
                         {
                             //This only removes the default cursor, see DetourSecondCursor for the second one
@@ -51,6 +52,7 @@ namespace VanillaModding
                             break;
                         }
                     }
+                    goingonce = true;
                 }
             }
         }
@@ -58,6 +60,7 @@ namespace VanillaModding
         public override void OnModLoad()
         {
             On_Main.DrawInterface_36_Cursor += DetourSecondCursor;
+            On_Main.DrawMouseOver += DetourSecondCursorMouseOver;
             try
             {
                 /*
@@ -84,6 +87,23 @@ namespace VanillaModding
             base.OnModLoad();
         }
 
+        private void DetourSecondCursorMouseOver(On_Main.orig_DrawMouseOver orig, Main self)
+        {
+            //This is used to detour the second cursor draw which happens on NPC mouseover in DrawInterface_41 after Main.instance._mouseTextCache.valid is true
+            if (!reflectionFailed && CursorUI.detourSecondCursorDraw)
+            {
+                CursorUI.detourSecondCursorDraw = false;
+
+                var mouseTextCache = mouseTextCacheField.GetValue(Main.instance);
+                object isValid = isValidField.GetValue(mouseTextCache);
+                if (isValid is bool valid && valid)
+                {
+                    return;
+                }
+            }
+            orig(self);
+        }
+
         private static void DetourSecondCursor(On_Main.orig_DrawInterface_36_Cursor orig)
         {
             //This is used to detour the second cursor draw which happens on NPC mouseover in DrawInterface_41 after Main.instance._mouseTextCache.valid is true
@@ -98,7 +118,7 @@ namespace VanillaModding
                     return;
                 }
             }
-
+            
             orig();
         }
     }
