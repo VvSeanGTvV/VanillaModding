@@ -10,14 +10,20 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Map;
 using Terraria.ModLoader;
+using VanillaModding.Common.UI;
+using VanillaModding.Content.DamageClasses;
+using VanillaModding.Content.Items;
 using VanillaModding.Content.Prefixes;
 using VanillaModding.Content.Projectiles.MightyScythe.MightyProjectile;
+using VanillaModding.External.AI;
+using static Terraria.NPC;
 
 namespace VanillaModding.Common
 {
     internal class VanillaModdingPlayer : ModPlayer
     {
         // Cursor related variables
+        Vector2? cursorPosition;
         public bool overrideCursor = false;
         public int cursorItem = 0;
 
@@ -81,7 +87,13 @@ namespace VanillaModding.Common
             // Alternatively:  mana = StatModifier.Default with { Base = exampleManaCrystals * ExampleManaCrystal.ManaPerCrystal };
         }
 
-        
+        /// <summary>
+        /// A helper function to check if player is on PVP, but if this Player on team, check the other player if not same team and on PVP.
+        /// </summary>
+        /// <param name="other"> other player to Check </param>
+        /// <returns></returns>
+        public bool isPlayerPVP(Player other) => (other.hostile && Player.team != 0) || (Player.team != other.team && other.hostile);
+
         public override void PostUpdate()
         {
             Player myPlayer = Main.LocalPlayer;
@@ -93,6 +105,35 @@ namespace VanillaModding.Common
             if (currentPrefix == ModContent.PrefixType<Colossal>())
             {
                 myPlayer.AddBuff(BuffID.Slow, 2);
+            }
+
+            if (Main.mouseLeft && Main.mouseLeftRelease && CursorUI.ValidCursorConditions(myPlayer, ModContent.GetModItem(cursorItem)) && ModContent.GetModItem(cursorItem) is ClickerItem item)
+            {
+                NPC nearNPC = AdvAI.FindClosestNPC(5f * 16f, Main.MouseWorld, npc => npc.CanBeChasedBy());
+                Player nearPlayer = AdvAI.FindClosestPlayer(5f * 16f, Main.MouseWorld, player => isPlayerPVP(player) && player.active && !player.dead);
+                if (nearNPC != null)
+                {
+                    Main.NewText($"Item: {item.Name}, Range: {item.range}, {myPlayer.position.DistanceSQ(Main.MouseWorld)}");
+
+                    bool crit = Main.rand.Next(100) < myPlayer.GetTotalCritChance(item.Item.DamageType);
+                    myPlayer.ApplyDamageToNPC(nearNPC, item.Item.damage, item.Item.knockBack, myPlayer.direction, crit, item.Item.DamageType);
+                    foreach (var buffData in item.Buffs)
+                    {
+                        nearNPC.AddBuff(buffData.Item1, buffData.Item2);
+                    }
+                }
+                if (nearPlayer != null)
+                {
+                    Main.NewText($"Item: {item.Name}, Range: {item.range}, {myPlayer.position.DistanceSQ(Main.MouseWorld)}");
+
+                    bool crit = Main.rand.Next(100) < myPlayer.GetTotalCritChance(item.Item.DamageType);
+                    nearPlayer.Hurt(Terraria.DataStructures.PlayerDeathReason.ByCustomReason($"{myPlayer.name} used {item.Name} on {nearPlayer.name}"), item.Item.damage, myPlayer.direction, true);
+                    myPlayer.ApplyDamageToNPC(nearNPC, item.Item.damage, item.Item.knockBack, myPlayer.direction, crit, item.Item.DamageType);
+                    foreach (var buffData in item.Buffs)
+                    {
+                        nearPlayer.AddBuff(buffData.Item1, buffData.Item2);
+                    }
+                }
             }
             base.PostUpdate();
         }

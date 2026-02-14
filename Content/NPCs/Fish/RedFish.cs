@@ -130,7 +130,7 @@ namespace VanillaModding.Content.NPCs.Fish
             if (aggroTo >= 0 && !YeetMode)
             {
                 
-                var nearPlayer = AdvAI.FindClosestPlayer(225f, NPC.position, plr => plr.whoAmI != aggroTo);
+                var nearPlayer = AdvAI.FindClosestPlayer(225f, NPC.position, plr => plr.whoAmI == aggroTo);
                 if (nearPlayer != null && ((nearPlayer.Center.Distance(NPC.Center) > 125f) || NPC.GetGlobalNPC<VanillaModdingNPC>().attacked))
                 {
                     Vector2 start = NPC.Center;
@@ -168,7 +168,7 @@ namespace VanillaModding.Content.NPCs.Fish
 
             if (YeetMode)
             {
-                var nearPlayer = AdvAI.FindClosestPlayer(225f, NPC.position, plr => plr.whoAmI != aggroTo);
+                var nearPlayer = AdvAI.FindClosestPlayer(225f, NPC.position, plr => plr.whoAmI == aggroTo);
                 if (nearPlayer != null && NPC.getRect().Intersects(nearPlayer.getRect()))
                 {
                     double d = nearPlayer.Hurt(PlayerDeathReason.ByNPC(NPC.whoAmI), 157, NPC.spriteDirection);

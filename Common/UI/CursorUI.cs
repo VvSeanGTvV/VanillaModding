@@ -10,6 +10,7 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 using Terraria.UI;
+using VanillaModding.Content.Items;
 using VanillaModding.Content.Items.Accessories.Clicker;
 
 namespace VanillaModding.Common.UI
@@ -44,6 +45,12 @@ namespace VanillaModding.Common.UI
         {
             VanillaModdingPlayer modPlayer = player.GetModPlayer<VanillaModdingPlayer>();
             return modPlayer.overrideCursor;
+        }
+
+        public static bool ValidCursorConditions(Player player, ModItem item)
+        {
+            
+            return !player.dead && !player.ghost && !_lastMouseInterface && !_lastMouseText && item is ClickerItem clicker && player.position.DistanceSQ(Main.MouseWorld) <= clicker.range * clicker.range;
         }
 
         protected override bool DrawSelf()
@@ -85,7 +92,7 @@ namespace VanillaModding.Common.UI
             Vector2 borderPosition = Main.MouseScreen;
             // Actual cursor is not drawn in the top left of the border but a bit offset, have to add/substract origins here
             Vector2 position = Main.MouseScreen - origin + origin / 2;
-            Main.spriteBatch.Draw(texture, position, frame, color, 0f, Vector2.Zero, _clickerScale, SpriteEffects.FlipHorizontally, 0f);
+            Main.spriteBatch.Draw(texture, position, frame, color, 0f, Vector2.Zero, _clickerScale, SpriteEffects.FlipHorizontally, 0);
 
             detourSecondCursorDraw = true;
 
@@ -94,8 +101,13 @@ namespace VanillaModding.Common.UI
 
         public override int GetInsertIndex(List<GameInterfaceLayer> layers)
         {
-            //return layers.FindIndex(layer => layer.Active && layer.Name.Equals("Vanilla: Cursor"));
-            return layers.FindIndex(layer => layer.Active && layer.Name.Equals("Vanilla: Mouse Text"));
+            string [] layerNames = new string[]
+            {
+                "Vanilla: Cursor", // Cursor drawn ontop of everything except for Mouse_Text
+                "Vanilla: Mouse Over", // Cursor drawn ontop of everything and top for Mouse_Text and etc.
+            };
+            return layers.FindIndex(layer => layer.Active && layer.Name.Equals("Vanilla: Interface Logic 4"));
+            //return layers.FindIndex(layer => layer.Active && layer.Name.Equals("Vanilla: Mouse Text"));
         }
     }
 }

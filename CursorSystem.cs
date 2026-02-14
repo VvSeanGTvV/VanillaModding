@@ -33,7 +33,6 @@ namespace VanillaModding
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             CursorInterfaceResource.AddInterfaceLayers(layers);
-            hasCursor = false;
             //Remove Mouse Cursor
             if (Main.cursorOverride == -1)
             {
@@ -41,18 +40,13 @@ namespace VanillaModding
                 if (CursorUI.CanDrawCursor(player))
                 {
                     hasCursor = true;
-                    for (int i = 0; i < layers.Count; i++)
+                    GameInterfaceLayer cursorLayer = layers.FirstOrDefault(layer => layer.Name.Equals("Vanilla: Cursor"));
+                    cursorLayer.Active = false;
+                    /*for (int i = 0; i < layers.Count; i++)
                     {
                         if (!goingonce) Logging.PublicLogger.Debug(layers[i].Name);
-                        if (layers[i].Name.Equals("Vanilla: Cursor"))
-                        {
-                            //This only removes the default cursor, see DetourSecondCursor for the second one
-                            layers[i].Active = false;
-                            //layers.RemoveAt(i); //Do not remove layers, mods with no defensive code cause this to break/delete all UI
-                            break;
-                        }
                     }
-                    goingonce = true;
+                    goingonce = true;*/
                 }
             }
         }
@@ -60,7 +54,7 @@ namespace VanillaModding
         public override void OnModLoad()
         {
             On_Main.DrawInterface_36_Cursor += DetourSecondCursor;
-            On_Main.DrawMouseOver += DetourSecondCursorMouseOver;
+            On_Main.DrawCursor += DrawCursor;
             try
             {
                 /*
@@ -87,7 +81,7 @@ namespace VanillaModding
             base.OnModLoad();
         }
 
-        private void DetourSecondCursorMouseOver(On_Main.orig_DrawMouseOver orig, Main self)
+        private static void DrawCursor(On_Main.orig_DrawCursor orig, Vector2 bonus, bool smart)
         {
             //This is used to detour the second cursor draw which happens on NPC mouseover in DrawInterface_41 after Main.instance._mouseTextCache.valid is true
             if (!reflectionFailed && CursorUI.detourSecondCursorDraw)
@@ -101,7 +95,8 @@ namespace VanillaModding
                     return;
                 }
             }
-            orig(self);
+
+            orig(bonus, smart);
         }
 
         private static void DetourSecondCursor(On_Main.orig_DrawInterface_36_Cursor orig)

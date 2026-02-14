@@ -52,7 +52,7 @@ namespace VanillaModding.Common.UI
             {
                 foreach (var resource in Resources)
                 {
-                    int layer = resource.GetInsertIndex(layers);
+                    int layer = resource.GetInsertIndex(layers)+1;
                     if (layer != -1)
                     {
                         layers.Insert(layer, resource);

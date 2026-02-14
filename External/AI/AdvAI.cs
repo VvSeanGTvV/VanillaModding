@@ -19,7 +19,7 @@ namespace VanillaModding.External.AI
         /// </summary>
         /// <param name="maxDetectDistance"> Maximum distance that projectile can see. </param>
         /// <param name="center"> the point of position acting as radar or sonar. </param>
-        /// <param name="filter"> <para> defaults to null for no filter use. If returns true, ignore the NPC entirely and go to next one. </para></param>
+        /// <param name="filter"> <para> defaults to null for no filter use. If returns false, ignore the NPC entirely and go to next one. </para></param>
         /// <returns> <see cref="NPC"/> closest to Projectile </returns>
         public static NPC FindClosestNPC(float maxDetectDistance, Vector2 center, Func<NPC, bool> filter = null)
         {
@@ -38,7 +38,7 @@ namespace VanillaModding.External.AI
                     // The DistanceSquared function returns a squared distance between 2 points, skipping relatively expensive square root calculations
                     float sqrDistanceToTarget = Vector2.DistanceSquared(target.Center, center);
 
-                    if (filter != null && filter(target))
+                    if (filter != null && !filter(target))
                         continue;
 
                     // Check if it is within the radius
@@ -58,7 +58,7 @@ namespace VanillaModding.External.AI
         /// </summary>
         /// <param name="maxDetectDistance"> Maximum distance that projectile can see. </param>
         /// <param name="center"> the point of position acting as radar or sonar. </param>
-        /// <param name="filter"> <para> defaults to null for no filter use. If returns true, ignore the Player entirely and go to next one. </para></param>
+        /// <param name="filter"> <para> defaults to null for no filter use. If returns false, ignore the Player entirely and go to next one. </para></param>
         /// <returns><see cref="Player"/> closest to Projectile.</returns>
         public static Player FindClosestPlayer(float maxDetectDistance, Vector2 center, Func<Player, bool> filter = null)
         {
@@ -75,7 +75,7 @@ namespace VanillaModding.External.AI
                 // The DistanceSquared function returns a squared distance between 2 points, skipping relatively expensive square root calculations
                 float sqrDistanceToTarget = Vector2.DistanceSquared(target.Center, center);
 
-                if (filter != null && filter(target))
+                if (filter != null && !filter(target))
                     continue;
 
                 // Check if it is within the radius

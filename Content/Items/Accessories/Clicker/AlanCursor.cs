@@ -4,21 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using VanillaModding.Common;
+using VanillaModding.Content.DamageClasses;
 
 namespace VanillaModding.Content.Items.Accessories.Clicker
 {
-    internal class AlanCursor : ModItem
+    internal class AlanCursor : ClickerItem
     {
         int incrementMaxMinions = 2;
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(incrementMaxMinions);
         public override void SetDefaults()
         {
+            range = 650f;
+            Item.DamageType = ModContent.GetInstance<Click>();
+            Item.damage = 50;
             Item.width = 46;
             Item.height = 52;
             Item.accessory = true;
+            Buffs.Add((BuffID.Burning, 60 * 5));
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)

@@ -411,5 +411,7 @@ Mods: {
 				DisplayName: Colossal
 			}
 		}
+
+		DamageClasses.Click.DisplayName: click damage
 	}
 }

@@ -1,9 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria;
+using Terraria.GameInput;
 using Terraria.UI;
 
 namespace VanillaModding.Common.UI
@@ -28,6 +31,7 @@ namespace VanillaModding.Common.UI
         {
             ClickerGaugeOffset = 0;
         }
+
 
         public InterfaceResource(string name, InterfaceScaleType scaleType) : base(name, scaleType) { }
         public abstract int GetInsertIndex(List<GameInterfaceLayer> layers);

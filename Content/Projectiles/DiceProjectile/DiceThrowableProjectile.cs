@@ -58,7 +58,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
             {
                 if (npc == null) return false;
                 var f = npc.GetGlobalNPC<VanillaModdingNPC>();
-                return f.rolling || f.hasAnyDiceEffect;
+                return !(f.rolling || f.hasAnyDiceEffect);
             });
             if (closest != null)
             {
