@@ -23,7 +23,6 @@ namespace VanillaModding.Common
     internal class VanillaModdingPlayer : ModPlayer
     {
         // Cursor related variables
-        Vector2? cursorPosition;
         public bool overrideCursor = false;
         public int cursorItem = 0;
 
@@ -53,6 +52,7 @@ namespace VanillaModding.Common
         /// </summary>
         public int totalRolls;
 
+        // Buffs Variables
         /// <summary>
         /// has been stunned by the Stunned debuff
         /// </summary>
@@ -94,29 +94,21 @@ namespace VanillaModding.Common
         /// <returns></returns>
         public bool isPlayerPVP(Player other) => (other.hostile && Player.team != 0) || (Player.team != other.team && other.hostile);
 
-        public override void PostUpdate()
+        public void UpdateCursorDamage(Player myPlayer)
         {
-            Player myPlayer = Main.LocalPlayer;
-
-            currentPrefix = myPlayer.HeldItem.prefix;
-            currentClass = myPlayer.HeldItem.DamageType;
-
-            // Buffs related to prefixes
-            if (currentPrefix == ModContent.PrefixType<Colossal>())
-            {
-                myPlayer.AddBuff(BuffID.Slow, 2);
-            }
-
-            if (Main.mouseLeft && Main.mouseLeftRelease && CursorUI.ValidCursorConditions(myPlayer, ModContent.GetModItem(cursorItem)) && ModContent.GetModItem(cursorItem) is ClickerItem item)
+            if (Main.mouseLeft && (ModContent.GetModItem(cursorItem).Item.autoReuse || Main.mouseLeftRelease) && ModContent.GetModItem(cursorItem) != null && CursorUI.ValidCursorConditions(myPlayer, ModContent.GetModItem(cursorItem)) && ModContent.GetModItem(cursorItem) is ClickerItem item)
             {
                 NPC nearNPC = AdvAI.FindClosestNPC(5f * 16f, Main.MouseWorld, npc => npc.CanBeChasedBy());
                 Player nearPlayer = AdvAI.FindClosestPlayer(5f * 16f, Main.MouseWorld, player => isPlayerPVP(player) && player.active && !player.dead);
                 if (nearNPC != null)
                 {
-                    Main.NewText($"Item: {item.Name}, Range: {item.range}, {myPlayer.position.DistanceSQ(Main.MouseWorld)}");
+                    bool crit = Main.rand.Next() < myPlayer.GetTotalCritChance(item.Item.DamageType) / 100f;
+                    StatModifier damageModifier = myPlayer.GetTotalDamage(item.Item.DamageType);
+                    float finalDamage = damageModifier.ApplyTo(item.Item.damage);
 
-                    bool crit = Main.rand.Next(100) < myPlayer.GetTotalCritChance(item.Item.DamageType);
-                    myPlayer.ApplyDamageToNPC(nearNPC, item.Item.damage, item.Item.knockBack, myPlayer.direction, crit, item.Item.DamageType);
+                    Main.NewText($"Item: {item.Name}, Range: {item.range}, {myPlayer.position.DistanceSQ(Main.MouseWorld)}, DamageB/F/M/A: {damageModifier.Base}:{damageModifier.Flat}:{damageModifier.Multiplicative}:{damageModifier.Additive}, DamageF: {finalDamage}");
+
+                    myPlayer.ApplyDamageToNPC(nearNPC, (int)finalDamage, item.Item.knockBack, myPlayer.direction, crit, item.Item.DamageType, true);
                     foreach (var buffData in item.Buffs)
                     {
                         nearNPC.AddBuff(buffData.Item1, buffData.Item2);
@@ -135,6 +127,22 @@ namespace VanillaModding.Common
                     }
                 }
             }
+        }
+
+        public override void PostUpdate()
+        {
+            Player myPlayer = Main.LocalPlayer;
+
+            currentPrefix = myPlayer.HeldItem.prefix;
+            currentClass = myPlayer.HeldItem.DamageType;
+
+            // Buffs related to prefixes
+            if (currentPrefix == ModContent.PrefixType<Colossal>())
+            {
+                myPlayer.AddBuff(BuffID.Slow, 2);
+            }
+
+            UpdateCursorDamage(myPlayer);
             base.PostUpdate();
         }
 
@@ -144,6 +152,11 @@ namespace VanillaModding.Common
             if (currentPrefix == ModContent.PrefixType<Colossal>())
             {
                 myPlayer.moveSpeed *= 0.85f;
+            }
+
+            if (stunned)
+            {
+                myPlayer.moveSpeed *= 0f;
             }
             base.PostUpdateMiscEffects();
         }
@@ -156,7 +169,20 @@ namespace VanillaModding.Common
                 myPlayer.maxRunSpeed *= 0.25f;
                 myPlayer.accRunSpeed *= 0.5f;
             }
+            if (stunned)
+            {
+                myPlayer.maxRunSpeed *= 0f;
+                myPlayer.accRunSpeed *= 0f;
+                myPlayer.dashTime = 0;
+                myPlayer.controlJump = false;
+            }
             base.PostUpdateRunSpeeds();
+        }
+
+        public override void OnHitByProjectile(Projectile proj, Player.HurtInfo hurtInfo)
+        {
+            if (proj.ai[2] != 0 && !(proj.owner <= -1)) ApplyEffectsFromPrefix((int)proj.ai[2], Main.LocalPlayer);
+            base.OnHitByProjectile(proj, hurtInfo);
         }
 
         public override void ModifyHitNPCWithItem(Item item, NPC target, ref NPC.HitModifiers modifiers)
@@ -169,6 +195,12 @@ namespace VanillaModding.Common
                )
                 ApplyEffectsFromPrefix((int)currentPrefix, target);
             base.ModifyHitNPCWithItem(item, target, ref modifiers);
+        }
+
+        public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
+        {
+            ApplyEffectsFromPrefix((int)proj.ai[2], target);
+            base.ModifyHitNPCWithProj(proj, target, ref modifiers);
         }
 
         public override bool Shoot(Item item, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
@@ -190,16 +222,24 @@ namespace VanillaModding.Common
             return !hasEffects || !isMelee;
         }
 
-        public override void ModifyHitNPCWithProj(Projectile proj, NPC target, ref NPC.HitModifiers modifiers)
+        /// <summary>
+        /// A Helper function to apply prefix related effects on the target, used for both Projectile and Item hit.
+        /// </summary>
+        /// <param name="prefix"> Prefix Modifier </param>
+        /// <param name="target"> Victim </param>
+        public void ApplyEffectsFromPrefix(int prefix, Entity target)
         {
-            ApplyEffectsFromPrefix((int)proj.ai[2], target);
-            base.ModifyHitNPCWithProj(proj, target, ref modifiers);
-        }
-
-        public void ApplyEffectsFromPrefix(int prefix, NPC target)
-        {
-            if (prefix == ModContent.PrefixType<Spiky>()) target.AddBuff(BuffID.Bleeding, 5 * 60);
-            if (prefix == ModContent.PrefixType<Venomous>()) target.AddBuff(BuffID.Poisoned, 8 * 60);
+            if (target == null) return;
+            if (target is NPC npc)
+            {
+                 if (prefix == ModContent.PrefixType<Spiky>()) npc.AddBuff(BuffID.Bleeding, 5 * 60);
+                 if (prefix == ModContent.PrefixType<Venomous>()) npc.AddBuff(BuffID.Poisoned, 8 * 60);
+            }
+            if (target is Player player)
+            {
+                if (prefix == ModContent.PrefixType<Spiky>()) player.AddBuff(BuffID.Bleeding, 5 * 60);
+                if (prefix == ModContent.PrefixType<Venomous>()) player.AddBuff(BuffID.Poisoned, 8 * 60);
+            }
         }
 
         /// <summary>

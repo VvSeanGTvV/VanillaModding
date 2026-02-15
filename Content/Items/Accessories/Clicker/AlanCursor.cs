@@ -21,6 +21,7 @@ namespace VanillaModding.Content.Items.Accessories.Clicker
             range = 650f;
             Item.DamageType = ModContent.GetInstance<Click>();
             Item.damage = 50;
+            Item.knockBack = 1f;
             Item.width = 46;
             Item.height = 52;
             Item.accessory = true;

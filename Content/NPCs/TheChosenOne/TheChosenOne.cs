@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Humanizer;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Mono.Cecil;
 using System;
 using System.Collections.Generic;
@@ -9,6 +11,7 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Common.Systems;
 using VanillaModding.Content.Projectiles.OcramProjectile;
 using VanillaModding.Content.Projectiles.RedSolidLaser;
 
@@ -18,7 +21,7 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
     {
         public override void SetStaticDefaults()
         {
-            Main.npcFrameCount[Type] = 11;
+            Main.npcFrameCount[Type] = 12;
             NPCID.Sets.TrailCacheLength[Type] = 10;
             NPCID.Sets.TrailingMode[Type] = 0;
 
@@ -66,13 +69,13 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
 
             if (!Main.dedServ)
             {
-                Music = MusicID.OtherworldlyBoss1; //MusicLoader.GetMusicSlot(Mod, "Music/Ocram");
+                Music = VanillaModdingMusicID.TheChosenOne;
             }
             //ScaleStats();
         }
 
         int stg = 0, timer = 0, timer1 = 0;
-        bool onStand = true, battleStart = false, onGround;
+        bool onStand = true, battleStart = false, onGround, lunaticFinish, prepDash;
         int Frame = 0;
         public override void AI()
         {
@@ -110,7 +113,7 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
                 {
                     if (NPC.velocity.Y > -0.1f && NPC.velocity.Y < 0.1f) NPC.velocity.Y = 0f;
                     NPC.velocity.Y *= 0.95f;
-                    if (Frame < 4)
+                    if (Frame < 3)
                     {
                         int frameSpeed = 2;
                         NPC.frameCounter += 0.5f;
@@ -124,10 +127,13 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
 
                 if (timer > 60 * 3.25f) FirstStage();
                 battleStart = true;
+                NPC.noTileCollide = true;
             }
+
+            //Main.NewText($"STG: {stg} Timer: {timer} Timer1: {timer1} Frame: {Frame} Laser0: {laser0} Laser1: {laser1}", Color.White);
         }
 
-        int laser0 = -1, laser1 = -1;
+        int laser0 = -1, laser1 = -1, lunaticOrb = -1, dashCount = 3;
         float angle = -1f;
         public void FirstStage()
         {
@@ -156,7 +162,7 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
                     angle += 0.25f;
                     if (Frame < 8)
                     {
-                        
+
                         Frame = 7 + (int)Math.Round(angle);
                         /*int frameSpeed = 2;
                         NPC.frameCounter += 0.5f;
@@ -185,16 +191,107 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
                 else if (timer1 < 10)
                 {
                     Frame = 3;
-                } 
+                }
                 else
                 {
                     Frame = 6;
                 }
-            } 
-            if (stg == 1)
-            {
-
             }
+            else if (stg == 1)
+            {
+                if (timer1 < 60)
+                {
+                    Frame = 2;
+                    NPC.frameCounter = 0;
+                }
+                else
+                {
+                    int frameSpeed = 2;
+                    NPC.frameCounter += 0.5f;
+                    if (NPC.frameCounter > frameSpeed && Frame < 6 && !lunaticFinish)
+                    {
+                        Frame++;
+                        NPC.frameCounter = 0;
+                    }
+                    if (NPC.frameCounter > frameSpeed && Frame > 3 && lunaticFinish)
+                    {
+                        Frame--;
+                        NPC.frameCounter = 0;
+                    }
+                    if (Frame >= 6)
+                    {
+
+                        if (Main.netMode != NetmodeID.MultiplayerClient && lunaticOrb == -1) lunaticOrb = Projectile.NewProjectile(source, NPC.Center + new Vector2(0, -(NPC.height / 2 + 65f)), Vector2.Zero, ProjectileID.CultistBossLightningOrb, 50, 8, -1);
+                        if (lunaticOrb != -1)
+                        {
+                            if (!Main.projectile[lunaticOrb].active) lunaticFinish = true;
+                        }
+                    }
+                    if (Frame <= 4 && lunaticFinish)
+                    {
+                        stg++;
+                        Frame = 4;
+                        lunaticOrb = -1;
+                        timer1 = 0;
+                        lunaticFinish = false;
+                    }
+                }
+            }
+            else if (stg == 2)
+            {
+                NPC.TargetClosest(true);
+                if (!prepDash)
+                {
+                    timer1 = 0;
+                    float yMargin = 20f; // tolerance in pixels
+
+                    float playerY = Main.player[NPC.target].Center.Y;
+                    float npcY = NPC.Center.Y;
+                    float desiredVelocityY = (playerY - NPC.Center.Y) * 0.1f;
+
+                    // Smooth velocity
+                    NPC.velocity.Y = MathHelper.Lerp(NPC.velocity.Y, desiredVelocityY, 0.1f);
+                    prepDash = Math.Abs(playerY - npcY) <= yMargin;
+                }
+                else
+                {
+                    if (timer1 > 30 && dashCount > 0)
+                    {
+                        float dashSpeed = 32f;
+
+                        // Dash horizontally toward player
+                        float direction = Math.Sign(Main.player[NPC.target].Center.X - NPC.Center.X);
+
+                        NPC.velocity.X = direction * dashSpeed;
+                        dashCount--;
+                        timer1 = 0;
+                        prepDash = false;
+                    }
+                    else if (timer1 > 30 && dashCount <= 0)
+                    {
+                        stg++;
+                        Frame = 0;
+                        timer1 = 0;
+                        prepDash = false;
+                    }
+                }
+            }
+        }
+
+        public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            Texture2D texture = ModContent.Request<Texture2D>(Texture).Value;
+            SpriteEffects effects = (NPC.spriteDirection == -1) ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            Vector2 origin = new(texture.Width / 2, texture.Height / Main.npcFrameCount[NPC.type] / 2);
+            Vector2 curPosition = new Vector2(NPC.position.X - Main.screenPosition.X + NPC.width / 2 - texture.Width * NPC.scale / 2f + origin.X * NPC.scale, NPC.position.Y - Main.screenPosition.Y + NPC.height - texture.Height * NPC.scale / Main.npcFrameCount[NPC.type] + 4f + origin.Y * NPC.scale);
+            for (int i = 1; i < NPC.oldPos.Length; i++)
+            {
+                Color color = Lighting.GetColor((int)(NPC.position.X + NPC.width * 0.5) / 16, (int)((NPC.position.Y + NPC.height * 0.5) / 16.0));
+                color = NPC.GetAlpha(color);
+                color *= (NPC.oldPos.Length - i) / 15f;
+                Main.spriteBatch.Draw(texture, curPosition - NPC.velocity * i * 0.5f, new Rectangle?(NPC.frame), color * 0.25f, NPC.rotation, origin, NPC.scale, effects, 0f);
+            }
+            return true;
         }
 
         public override void FindFrame(int frameHeight)

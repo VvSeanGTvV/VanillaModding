@@ -48,8 +48,7 @@ namespace VanillaModding.Common.UI
         }
 
         public static bool ValidCursorConditions(Player player, ModItem item)
-        {
-            
+        {     
             return !player.dead && !player.ghost && !_lastMouseInterface && !_lastMouseText && item is ClickerItem clicker && player.position.DistanceSQ(Main.MouseWorld) <= clicker.range * clicker.range;
         }
 
@@ -67,17 +66,20 @@ namespace VanillaModding.Common.UI
             Asset<Texture2D> borderAsset;
             Texture2D borderTexture;
             Texture2D texture;
-            //Item item = player.HeldItem;
-            int itemType = modPlayer.cursorItem;
+            Item item = player.HeldItem;
+            int itemType = item.ModItem is ClickerItem ? item.type : modPlayer.cursorItem;
 
-            if (!CanDrawCursor(player))
+            ModItem getCursor = ModContent.GetModItem(itemType);
+            if (getCursor == null) return true;
+            Asset<Texture2D> cursorAsset = ModContent.Request<Texture2D>($"{nameof(VanillaModding)}/Common/UI/CursorAsset/{getCursor.Name}".Replace(@"\", "/"));//(Texture2D)ModContent.Request<Texture2D>($"{nameof(VanillaModding) + "/" + (getCursor.Texture + "_cursor").Replace(@"\", "/")}");
+            if (!CanDrawCursor(player) || !cursorAsset.IsLoaded)
             {
                 return true;
             }
 
             // Actual cursor
-            ModItem getCursor = ModContent.GetModItem(itemType);
-            texture = (Texture2D)ModContent.Request<Texture2D>($"{nameof(VanillaModding)}/Common/UI/CursorAsset/{getCursor.Name}".Replace(@"\", "/"));//(Texture2D)ModContent.Request<Texture2D>($"{nameof(VanillaModding) + "/" + (getCursor.Texture + "_cursor").Replace(@"\", "/")}");
+            texture = cursorAsset.Value;
+
             /*String pathBorder = nameof(VanillaModding) + "/" + (getCursor.Texture + "_border").Replace(@"\", "/");
             Texture2D borderTexture = (Texture2D)ModContent.Request<Texture2D>($"{pathBorder}", AssetRequestMode.ImmediateLoad).Value;
             Rectangle borderFrame = borderTexture.Frame(1, 1);

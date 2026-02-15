@@ -23,5 +23,6 @@ namespace VanillaModding.Common.Systems
         public static readonly int NowhereHome = LoadMusic("NowhereHome");
         public static readonly int Boss1Mindustry = LoadMusic("Boss1");
         public static readonly int Ocram = LoadMusic("Ocram");
+        public static readonly int TheChosenOne = LoadMusic("TheChosenOne");
     }
 }
