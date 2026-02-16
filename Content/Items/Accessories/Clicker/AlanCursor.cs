@@ -18,22 +18,18 @@ namespace VanillaModding.Content.Items.Accessories.Clicker
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(incrementMaxMinions);
         public override void SetDefaults()
         {
-            range = 650f;
             Item.DamageType = ModContent.GetInstance<Click>();
-            Item.damage = 50;
-            Item.knockBack = 1f;
             Item.width = 46;
             Item.height = 52;
             Item.accessory = true;
+            Item.rare = ItemRarityID.Expert;
             Buffs.Add((BuffID.Burning, 60 * 5));
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.maxMinions += incrementMaxMinions;
-            VanillaModdingPlayer modPlayer = player.GetModPlayer<VanillaModdingPlayer>();
-            modPlayer.overrideCursor = true;
-            modPlayer.cursorItem = Type;
+            UpdateCursorStats(player);
         }
     }
 }

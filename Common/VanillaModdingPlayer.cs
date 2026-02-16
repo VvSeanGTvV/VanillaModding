@@ -24,7 +24,14 @@ namespace VanillaModding.Common
     {
         // Cursor related variables
         public bool overrideCursor = false;
-        public int cursorItem = 0;
+        public int cursorItem = -1;
+        /// <summary>
+        /// Range of the cursor, can be adjusted by accessories or buffs, used for checking if the cursor can hit the target or not.
+        /// </summary>
+        public float cursorRange = 0;
+        public int cursorDamageTotal = 0;
+        public float cursorKnockbackTotal = 0;
+        public List<(int, int)> stackedCursorBuff = new List<(int, int)>();
 
         // This is Life/Mana modification related thing.
         public int DiamondHeart, MaxDiamondHeart = 20;
@@ -69,7 +76,11 @@ namespace VanillaModding.Common
         public override void PreUpdate()
         {
             overrideCursor = false;
-            cursorItem = 0;
+            cursorItem = -1;
+
+            stackedCursorBuff.Clear();
+            cursorDamageTotal = 0;
+            cursorRange = cursorKnockbackTotal = 0;
             base.PreUpdate();
         }
 
@@ -96,7 +107,14 @@ namespace VanillaModding.Common
 
         public void UpdateCursorDamage(Player myPlayer)
         {
-            if (Main.mouseLeft && (ModContent.GetModItem(cursorItem).Item.autoReuse || Main.mouseLeftRelease) && ModContent.GetModItem(cursorItem) != null && CursorUI.ValidCursorConditions(myPlayer, ModContent.GetModItem(cursorItem)) && ModContent.GetModItem(cursorItem) is ClickerItem item)
+            int cursor = myPlayer.HeldItem.ModItem != null && myPlayer.HeldItem.ModItem is ClickerItem ? myPlayer.HeldItem.type : cursorItem;
+            if (myPlayer.HeldItem.ModItem != null && myPlayer.HeldItem.ModItem is ClickerItem heldCursor)
+            {
+                cursorRange = heldCursor.range;
+                cursorDamageTotal = heldCursor.Item.damage;
+                cursorKnockbackTotal = heldCursor.Item.knockBack;
+            }
+            if (ModContent.GetModItem(cursor) != null && Main.mouseLeft && (ModContent.GetModItem(cursor).Item.autoReuse || Main.mouseLeftRelease)  && CursorUI.ValidCursorConditions(myPlayer, ModContent.GetModItem(cursor), cursorRange) && ModContent.GetModItem(cursor) is ClickerItem item)
             {
                 NPC nearNPC = AdvAI.FindClosestNPC(5f * 16f, Main.MouseWorld, npc => npc.CanBeChasedBy());
                 Player nearPlayer = AdvAI.FindClosestPlayer(5f * 16f, Main.MouseWorld, player => isPlayerPVP(player) && player.active && !player.dead);
@@ -104,30 +122,32 @@ namespace VanillaModding.Common
                 {
                     bool crit = Main.rand.Next() < myPlayer.GetTotalCritChance(item.Item.DamageType) / 100f;
                     StatModifier damageModifier = myPlayer.GetTotalDamage(item.Item.DamageType);
-                    float finalDamage = damageModifier.ApplyTo(item.Item.damage);
+                    float finalDamage = damageModifier.ApplyTo(cursorDamageTotal);
 
-                    Main.NewText($"Item: {item.Name}, Range: {item.range}, {myPlayer.position.DistanceSQ(Main.MouseWorld)}, DamageB/F/M/A: {damageModifier.Base}:{damageModifier.Flat}:{damageModifier.Multiplicative}:{damageModifier.Additive}, DamageF: {finalDamage}");
+                    //Main.NewText($"Item: {item.Name}, Range: {item.range}, {myPlayer.position.DistanceSQ(Main.MouseWorld)}, DamageB/F/M/A: {damageModifier.Base}:{damageModifier.Flat}:{damageModifier.Multiplicative}:{damageModifier.Additive}, DamageF: {finalDamage}");
 
-                    myPlayer.ApplyDamageToNPC(nearNPC, (int)finalDamage, item.Item.knockBack, myPlayer.direction, crit, item.Item.DamageType, true);
-                    foreach (var buffData in item.Buffs)
+                    myPlayer.ApplyDamageToNPC(nearNPC, (int)finalDamage, cursorKnockbackTotal, myPlayer.direction, crit, item.Item.DamageType, true);
+                    foreach (var buffData in stackedCursorBuff)
                     {
                         nearNPC.AddBuff(buffData.Item1, buffData.Item2);
                     }
                 }
                 if (nearPlayer != null)
                 {
-                    Main.NewText($"Item: {item.Name}, Range: {item.range}, {myPlayer.position.DistanceSQ(Main.MouseWorld)}");
+                    //Main.NewText($"Item: {item.Name}, Range: {item.range}, {myPlayer.position.DistanceSQ(Main.MouseWorld)}");
 
                     bool crit = Main.rand.Next(100) < myPlayer.GetTotalCritChance(item.Item.DamageType);
-                    nearPlayer.Hurt(Terraria.DataStructures.PlayerDeathReason.ByCustomReason($"{myPlayer.name} used {item.Name} on {nearPlayer.name}"), item.Item.damage, myPlayer.direction, true);
-                    myPlayer.ApplyDamageToNPC(nearNPC, item.Item.damage, item.Item.knockBack, myPlayer.direction, crit, item.Item.DamageType);
-                    foreach (var buffData in item.Buffs)
+                    nearPlayer.Hurt(Terraria.DataStructures.PlayerDeathReason.ByCustomReason($"{myPlayer.name} used {item.Name} on {nearPlayer.name}"), cursorDamageTotal, myPlayer.direction, true);
+                    //myPlayer.ApplyDamageToNPC(nearNPC, item.Item.damage, item.Item.knockBack, myPlayer.direction, crit, item.Item.DamageType);
+                    foreach (var buffData in stackedCursorBuff)
                     {
                         nearPlayer.AddBuff(buffData.Item1, buffData.Item2);
                     }
                 }
             }
         }
+
+        
 
         public override void PostUpdate()
         {

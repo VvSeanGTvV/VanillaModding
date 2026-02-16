@@ -17,7 +17,7 @@ namespace VanillaModding.Content.DamageClasses
 
             return new StatInheritanceData(
                 damageInheritance: 1f,
-                critChanceInheritance: 0.75f,
+                critChanceInheritance: 0.55f,
                 attackSpeedInheritance: 0f,
                 armorPenInheritance: 0.44f,
                 knockbackInheritance: 1f
@@ -28,7 +28,7 @@ namespace VanillaModding.Content.DamageClasses
         {
             // This method lets you set default statistical modifiers for your example damage class.
             // Here, we'll make our example damage class have more critical strike chance and armor penetration than normal.
-            player.GetCritChance<Click>() += 2;
+            player.GetCritChance<Click>() += 2f;
             player.GetArmorPenetration<Click>() += 2;
             player.GetDamage<Click>() += 1f;
             player.GetKnockback<Click>() += 1f;

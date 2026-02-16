@@ -265,7 +265,7 @@ Mods: {
 
 			TurboBuildersClubHardHat: {
 				DisplayName: Turbo Builders Club Hard Hat
-				Tooltip: T"'Part of the Roblox Builders Club'"
+				Tooltip: "'Part of the Roblox Builders Club'"
 			}
 
 			LogodomyShard: {
@@ -301,6 +301,21 @@ Mods: {
 					Allow Clicker Class to burn!
 					Increases your max minions by {0}
 					'''
+			}
+
+			RTSoft: {
+				DisplayName: RT Soft
+				Tooltip: "'Once a Growtopian'"
+			}
+
+			BaseCursor: {
+				DisplayName: Base Cursor
+				Tooltip: ""
+			}
+
+			Bunnynator: {
+				DisplayName: Bunnynator
+				Tooltip: ""
 			}
 		}
 
@@ -386,6 +401,7 @@ Mods: {
 			RedFish.DisplayName: Red Fish
 			FishTrout.DisplayName: Fish Trout
 			DiceThrowableProjectile.DisplayName: Thrown Dice
+			OrangeLaser.DisplayName: Orange Laser
 		}
 
 		Prefixes: {

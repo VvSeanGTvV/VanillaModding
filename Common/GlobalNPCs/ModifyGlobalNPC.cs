@@ -13,6 +13,8 @@ using VanillaModding.Content.Items.Weapon.Ranged;
 using Microsoft.Xna.Framework;
 using VanillaModding.Content.Items.Consumable;
 using VanillaModding.Content.Buffs;
+using VanillaModding.Content.Items.Weapon.Magic;
+using VanillaModding.Content.Items.Accessories.Vanity;
 
 namespace VanillaModding.Common.GlobalNPCs
 {
@@ -21,11 +23,11 @@ namespace VanillaModding.Common.GlobalNPCs
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
             // Blood Moon
-            if (npc.type == NPCID.BloodZombie || npc.type == NPCID.Drippler) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyScythe>(), 2));
-            if (npc.type == NPCID.GoblinShark || npc.type == NPCID.BloodEelHead) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyScythe>(), 10));
-            if (npc.type == NPCID.BloodNautilus) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyScythe>(), 50));
+            if (npc.type == NPCID.BloodZombie || npc.type == NPCID.Drippler) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyScythe>(), 75));
+            if (npc.type == NPCID.GoblinShark || npc.type == NPCID.BloodEelHead) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyScythe>(), 60));
+            if (npc.type == NPCID.BloodNautilus) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyScythe>(), 45));
 
-            if (npc.type == NPCID.MartianSaucerCore) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<PhasicWarpEjector>(), 25));
+            if (npc.type == NPCID.MartianSaucerCore) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<PhasicWarpEjector>(), 55));
             //base.ModifyNPCLoot(npc, npcLoot);
 
         }
@@ -39,6 +41,11 @@ namespace VanillaModding.Common.GlobalNPCs
 
             if (shop.NpcType == NPCID.Mechanic)
                 shop.Add(ModContent.ItemType<HappyPackage>(), Condition.DownedMechBossAny);
+
+            if (shop.NpcType == NPCID.TravellingMerchant)
+                shop.Add(ModContent.ItemType<RTSoft>());
+            /*if (shop.NpcType == NPCID.BestiaryGirl)
+                shop.Add(ModContent.ItemType<Bunnynator>());*/
         }
     }
 

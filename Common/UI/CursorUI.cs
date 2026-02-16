@@ -44,12 +44,12 @@ namespace VanillaModding.Common.UI
 		public static bool CanDrawCursor(Player player)
         {
             VanillaModdingPlayer modPlayer = player.GetModPlayer<VanillaModdingPlayer>();
-            return modPlayer.overrideCursor;
+            return modPlayer.overrideCursor && modPlayer.cursorItem != -1 && !player.dead && !player.ghost && player.active;
         }
 
-        public static bool ValidCursorConditions(Player player, ModItem item)
+        public static bool ValidCursorConditions(Player player, ModItem item, float range = 0)
         {     
-            return !player.dead && !player.ghost && !_lastMouseInterface && !_lastMouseText && item is ClickerItem clicker && player.position.DistanceSQ(Main.MouseWorld) <= clicker.range * clicker.range;
+            return !player.dead && !player.ghost && !_lastMouseInterface && !_lastMouseText && item is ClickerItem clicker && player.position.DistanceSQ(Main.MouseWorld) <= (range <= 0 ? range * range : clicker.range * clicker.range);
         }
 
         protected override bool DrawSelf()
@@ -71,8 +71,16 @@ namespace VanillaModding.Common.UI
 
             ModItem getCursor = ModContent.GetModItem(itemType);
             if (getCursor == null) return true;
-            Asset<Texture2D> cursorAsset = ModContent.Request<Texture2D>($"{nameof(VanillaModding)}/Common/UI/CursorAsset/{getCursor.Name}".Replace(@"\", "/"));//(Texture2D)ModContent.Request<Texture2D>($"{nameof(VanillaModding) + "/" + (getCursor.Texture + "_cursor").Replace(@"\", "/")}");
-            if (!CanDrawCursor(player) || !cursorAsset.IsLoaded)
+
+
+            Asset<Texture2D>? cursorAsset = null;
+
+            if (ModContent.HasAsset($"{nameof(VanillaModding)}/Common/UI/CursorAsset/{getCursor.Name}".Replace(@"\", "/")))
+                cursorAsset = ModContent.Request<Texture2D>(
+                    $"{nameof(VanillaModding)}/Common/UI/CursorAsset/{getCursor.Name}".Replace(@"\", "/"),
+                    ReLogic.Content.AssetRequestMode.AsyncLoad);
+
+            if (!CanDrawCursor(player) || cursorAsset == null || !cursorAsset.IsLoaded)
             {
                 return true;
             }
@@ -103,11 +111,6 @@ namespace VanillaModding.Common.UI
 
         public override int GetInsertIndex(List<GameInterfaceLayer> layers)
         {
-            string [] layerNames = new string[]
-            {
-                "Vanilla: Cursor", // Cursor drawn ontop of everything except for Mouse_Text
-                "Vanilla: Mouse Over", // Cursor drawn ontop of everything and top for Mouse_Text and etc.
-            };
             return layers.FindIndex(layer => layer.Active && layer.Name.Equals("Vanilla: Interface Logic 4"));
             //return layers.FindIndex(layer => layer.Active && layer.Name.Equals("Vanilla: Mouse Text"));
         }
