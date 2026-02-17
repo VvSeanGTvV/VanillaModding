@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,6 +30,7 @@ namespace VanillaModding.Content.Items
         /// <para/> by default it is set to <see langword="false"/>
         /// </summary>
         public bool multiAccessoryClicker = false;
+        public bool hasCustomCursor = false;
 
         public override bool CanAccessoryBeEquippedWith(Item equippedItem, Item incomingItem, Player player)
         {
@@ -38,11 +41,16 @@ namespace VanillaModding.Content.Items
             return base.CanAccessoryBeEquippedWith(equippedItem, incomingItem, player);
         }
 
+        /// <summary>
+        /// A update function for Clicker class.
+        /// </summary>
+        /// <param name="player"> Player </param>
+        /// <param name="hasCustomCursor"> Has a custom texture</param>
         public void UpdateCursorStats(Player player)
         {
             VanillaModdingPlayer cursorPlayer = player.GetModPlayer<VanillaModdingPlayer>();
-            cursorPlayer.overrideCursor = true;
-            if (ModContent.HasAsset($"{nameof(VanillaModding)}/Common/UI/CursorAsset/{Name}".Replace(@"\", "/"))) cursorPlayer.cursorItem = Type;
+            cursorPlayer.overrideCursor = hasCustomCursor;
+            if (hasCustomCursor) cursorPlayer.cursorItem = Type;
             cursorPlayer.cursorRange += range;
             cursorPlayer.cursorDamageTotal += Item.damage;
 

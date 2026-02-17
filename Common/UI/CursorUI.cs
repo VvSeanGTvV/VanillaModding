@@ -67,7 +67,7 @@ namespace VanillaModding.Common.UI
             Texture2D borderTexture;
             Texture2D texture;
             Item item = player.HeldItem;
-            int itemType = item.ModItem is ClickerItem ? item.type : modPlayer.cursorItem;
+            int itemType = item.ModItem is ClickerItem clik && clik.hasCustomCursor ? item.type : modPlayer.cursorItem;
 
             ModItem getCursor = ModContent.GetModItem(itemType);
             if (getCursor == null) return true;
