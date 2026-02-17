@@ -37,7 +37,7 @@ namespace VanillaModding.Content.Items
         {
             if (incomingItem.accessory && incomingItem.ModItem is ClickerItem i && equippedItem.ModItem is ClickerItem o)
             {
-                return i.multiAccessoryClicker;
+                return i.multiAccessoryClicker && i.Type != o.Type;
             }
             return base.CanAccessoryBeEquippedWith(equippedItem, incomingItem, player);
         }
@@ -46,7 +46,7 @@ namespace VanillaModding.Content.Items
         {
             VanillaModdingPlayer cursorPlayer = player.GetModPlayer<VanillaModdingPlayer>();
             cursorPlayer.overrideCursor = true;
-            if (ModContent.HasAsset($"{nameof(VanillaModding)}/Common/UI/CursorAsset/{Item.Name}".Replace(@"\", "/"))) cursorPlayer.cursorItem = Type;
+            if (ModContent.HasAsset($"{nameof(VanillaModding)}/Common/UI/CursorAsset/{this.Name}".Replace(@"\", "/"))) cursorPlayer.cursorItem = Type;
             cursorPlayer.cursorRange += range;
             cursorPlayer.cursorDamageTotal += Item.damage;
 

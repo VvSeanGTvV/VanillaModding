@@ -266,11 +266,12 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
                         dashCount--;
                         timer1 = 0;
                         prepDash = false;
+                        Frame = 12;
                     }
                     else if (timer1 > 30 && dashCount <= 0)
                     {
                         stg++;
-                        Frame = 0;
+                        Frame = 4;
                         timer1 = 0;
                         prepDash = false;
                     }
