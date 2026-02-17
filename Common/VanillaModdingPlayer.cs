@@ -107,7 +107,8 @@ namespace VanillaModding.Common
 
         public void UpdateCursorDamage(Player myPlayer)
         {
-            int cursor = myPlayer.HeldItem.ModItem != null && myPlayer.HeldItem.ModItem is ClickerItem ? myPlayer.HeldItem.type : cursorItem;
+            int cursor = myPlayer.HeldItem.ModItem != null && myPlayer.HeldItem.ModItem is ClickerItem ? myPlayer.HeldItem.type : -1;
+            if (cursor <= -1) return;
             if (myPlayer.HeldItem.ModItem != null && myPlayer.HeldItem.ModItem is ClickerItem heldCursor)
             {
                 cursorRange = heldCursor.range;

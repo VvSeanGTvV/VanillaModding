@@ -18,6 +18,7 @@ namespace VanillaModding.Content.Items.Accessories.Clicker
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(incrementMaxMinions);
         public override void SetDefaults()
         {
+            multiAccessoryClicker = true;
             Item.DamageType = ModContent.GetInstance<Click>();
             Item.width = 46;
             Item.height = 52;

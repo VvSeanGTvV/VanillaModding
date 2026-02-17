@@ -75,12 +75,8 @@ namespace VanillaModding.Common.UI
 
             Asset<Texture2D>? cursorAsset = null;
 
-            if (ModContent.HasAsset($"{nameof(VanillaModding)}/Common/UI/CursorAsset/{getCursor.Name}".Replace(@"\", "/")))
-                cursorAsset = ModContent.Request<Texture2D>(
-                    $"{nameof(VanillaModding)}/Common/UI/CursorAsset/{getCursor.Name}".Replace(@"\", "/"),
-                    ReLogic.Content.AssetRequestMode.AsyncLoad);
-
-            if (!CanDrawCursor(player) || cursorAsset == null || !cursorAsset.IsLoaded)
+            bool hasTexture = ModContent.RequestIfExists($"{nameof(VanillaModding)}/Common/UI/CursorAsset/{getCursor.Name}".Replace(@"\", "/"), out cursorAsset);
+            if (!CanDrawCursor(player) || !hasTexture || cursorAsset == null || !cursorAsset.IsLoaded)
             {
                 return true;
             }
