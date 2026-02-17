@@ -211,5 +211,16 @@ namespace VanillaModding.Content.NPCs.Fish
 
             if (NPC.frame.Y > finalFrame * frameHeight) NPC.frame.Y = startFrame * frameHeight;
         }
+
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+        {
+            if (spawnInfo.Water &&                 // Must be in water
+                !spawnInfo.Invasion)
+            {
+                return 0.35f;
+            }
+
+            return 0f;
+        }
     }
 }

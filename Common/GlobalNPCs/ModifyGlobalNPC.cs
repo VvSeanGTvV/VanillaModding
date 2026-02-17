@@ -15,6 +15,7 @@ using VanillaModding.Content.Items.Consumable;
 using VanillaModding.Content.Buffs;
 using VanillaModding.Content.Items.Weapon.Magic;
 using VanillaModding.Content.Items.Accessories.Vanity;
+using VanillaModding.Content.Items.Armor.Vanity;
 
 namespace VanillaModding.Common.GlobalNPCs
 {
@@ -42,8 +43,15 @@ namespace VanillaModding.Common.GlobalNPCs
             if (shop.NpcType == NPCID.Mechanic)
                 shop.Add(ModContent.ItemType<HappyPackage>(), Condition.DownedMechBossAny);
 
-            if (shop.NpcType == NPCID.TravellingMerchant)
-                shop.Add(ModContent.ItemType<RTSoft>());
+            if (shop.NpcType == NPCID.Merchant)
+                shop.Add(ModContent.ItemType<RTSoft>(), Condition.PreHardmode);
+
+            if (shop.NpcType == NPCID.Demolitionist)
+            {
+                shop.Add(ModContent.ItemType<BuildersClubHardHat>(), Condition.PreHardmode);
+                shop.Add(ModContent.ItemType<TurboBuildersClubHardHat>(), Condition.Hardmode);
+                shop.Add(ModContent.ItemType<OutrageousBuildersClubHardHat>(), Condition.DownedMoonLord);
+            }
             /*if (shop.NpcType == NPCID.BestiaryGirl)
                 shop.Add(ModContent.ItemType<Bunnynator>());*/
         }

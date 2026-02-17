@@ -315,7 +315,7 @@ Mods: {
 
 			Bunnynator: {
 				DisplayName: Bunnynator
-				Tooltip: ""
+				Tooltip: Turns any critter to bunny!
 			}
 		}
 

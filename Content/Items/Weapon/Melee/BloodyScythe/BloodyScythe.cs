@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Content.Projectiles.BloodyScythe;
@@ -19,7 +20,7 @@ namespace VanillaModding.Content.Items.Weapon.Melee.BloodyScythe
 
         public override void SetDefaults()
         {
-            Item.damage = 59;
+            Item.damage = 49;
 
             Item.DamageType = DamageClass.Melee;
             Item.shootSpeed = 8f;
@@ -38,6 +39,7 @@ namespace VanillaModding.Content.Items.Weapon.Melee.BloodyScythe
             Item.autoReuse = true;
 
             Item.knockBack = 6;
+            Item.value = Item.sellPrice(0, 1, 5, 0);
         }
     }
 }

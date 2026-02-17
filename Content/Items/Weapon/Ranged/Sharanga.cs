@@ -20,7 +20,7 @@ namespace VanillaModding.Content.Items.Weapon.Ranged
             Item.width = 24; 
             Item.height = 48; 
             Item.scale = 0.95f;
-            Item.rare = ItemRarityID.Pink; 
+            Item.rare = ItemRarityID.Lime; 
 
             // Use Properties
             Item.useTime = 22; // The item's use time in ticks (60 ticks == 1 second.)
@@ -41,6 +41,7 @@ namespace VanillaModding.Content.Items.Weapon.Ranged
             Item.shoot = ModContent.ProjectileType<SpectralArrow>(); // For some reason, all the guns in the vanilla source have this.
             Item.shootSpeed = 16f; // The speed of the projectile (measured in pixels per frame.)
             Item.useAmmo = AmmoID.Arrow; // The "ammo Id" of the ammo item that this weapon uses. Ammo IDs are magic numbers that usually correspond to the item id of one item that most commonly represent the ammo type.
+            Item.value = Item.sellPrice(0, 3, 0, 0);
         }
 
         public override void AddRecipes()

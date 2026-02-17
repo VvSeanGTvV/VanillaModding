@@ -22,7 +22,7 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
         public override void SetStaticDefaults()
         {
             //NPCID.Sets.CultistIsResistantTo[Projectile.type] = true; // Make the cultist resistant to this projectile, as it's resistant to all homing projectiles.
-            NPCID.Sets.TrailCacheLength[NPC.type] = 25; // The length of old position to be recorded
+            NPCID.Sets.TrailCacheLength[NPC.type] = 10; // The length of old position to be recorded
             NPCID.Sets.TrailingMode[NPC.type] = 3; // The recording mode
         }
 

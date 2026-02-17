@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria.Audio;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Content.Items.Ammo;
@@ -31,7 +32,7 @@ namespace VanillaModding.Content.Items.Weapon.Ranged
             Item.height = 32; // Hitbox height of the item.
             Item.scale = 0.85f;
             Item.rare = ItemRarityID.Yellow; // The color that the item's name will be in-game.
-            Item.value = 6000;
+            Item.value = Item.sellPrice(0, 5, 0, 0);
 
             // Use Properties
             Item.useTime = 20; // The item's use time in ticks (60 ticks == 1 second.)
