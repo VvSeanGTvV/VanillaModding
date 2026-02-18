@@ -78,21 +78,31 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
         int stg = 0, timer = 0, timer1 = 0, fromWhoAmI = -1;
         bool onStand = true, battleStart = false, onGround = false, lunaticFinish, prepDash, isClone;
         int Frame = 0;
+        List<int> aliveClone = new List<int>();
         public override void AI()
         {
             isClone = NPC.ai[2] > 0;
             if (isClone)
             {
-                fromWhoAmI = (int)NPC.ai[1];
+                if (fromWhoAmI == -1)
+                {
+                    NPC.lifeMax = NPC.lifeMax / 200;
+                    NPC.life = NPC.life / 200;
+                    NPC.defense = NPC.defense / 20;
+                    NPC.boss = false;
+                    fromWhoAmI = (int)NPC.ai[1];
+                    stg = (int)NPC.ai[0];
+                }
                 if (!Main.npc[fromWhoAmI].active) NPC.active = false;
                 onStand = onGround = false;
-                stg = (int)NPC.ai[0];
                 FirstStage();
 
                 NPC.scale = 0.85f;
-                NPC.immortal = true;
+                NPC.immortal = NPC.ai[2] == 1;
                 battleStart = true;
                 NPC.noTileCollide = true;
+                if (NPC.velocity.Y > -0.1f && NPC.velocity.Y < 0.1f) NPC.velocity.Y = 0f;
+                NPC.velocity.Y *= 0.95f;
                 return;
             }
 
@@ -147,37 +157,82 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
                 NPC.noTileCollide = true;
             }
 
+            if (AFK)
+            {
+                bool stillAliveClone = false;
+                foreach (int item in aliveClone)
+                {
+                    NPC npcClone = Main.npc[item];
+                    if (npcClone.active && npcClone.life > 0) stillAliveClone = true;
+                    if (stillAliveClone) break;
+                }
+
+                float playerY = Main.player[NPC.target].Center.Y;
+                float playerX = Main.player[NPC.target].Center.X;
+                float xMargin = 80f; // tolerance in pixels
+                float yMargin = 80f; // tolerance in pixels
+
+                float npcX = NPC.Center.X;
+                float npcY = NPC.Center.Y;
+                float desiredVelocityX = (playerX - NPC.Center.X) * 0.1f;
+                float desiredVelocityY = ((playerY - NPC.height - 50f) - NPC.Center.Y) * 0.1f;
+
+                // Smooth velocity
+                NPC.velocity.X = MathHelper.Lerp(NPC.velocity.X, desiredVelocityX, 0.1f);
+                NPC.velocity.Y = MathHelper.Lerp(NPC.velocity.Y, desiredVelocityY, 0.1f);
+
+                Frame = 2;
+                stg = 0;
+                AFK = stillAliveClone;
+                if (alpha > 0) alpha *= 0.95f;
+                if (alpha < 0.25f) alpha = 0.25f;
+            }
+            NPC.damage = (!AFK) ? NPC.defDamage : 0;
+            NPC.dontTakeDamage = AFK;
             //Main.NewText($"STG: {stg} Timer: {timer} Timer1: {timer1} Frame: {Frame} Laser0: {laser0} Laser1: {laser1}", Color.White);
         }
 
         public void finishClone()
         {
-            if (!isClone && Main.rand.NextBool()) CreateClone();
-            fromWhoAmI = -1;
-            if (isClone) NPC.active = false;
+            if (isClone && NPC.ai[2] == 1)
+            {
+                fromWhoAmI = -1;
+                NPC.active = false;
+            }
         }
         
-        public void CreateClone()
+        /// <summary>
+        /// Creates a clone of itself.
+        /// </summary>
+        /// <param name="stg"> what stage it runs on </param>
+        /// <param name="Offset"> Offset spawning the clone </param>
+        /// <param name="cloneType"> 1 = Temporary | 2 = Attached Clone </param>
+        public void CreateClone(int stg, Vector2 Offset, int cloneType = 1)
         {
+            if (isClone) return;
             var source = NPC.GetSource_FromAI();
-            int clone = NPC.NewNPC(source, (int)NPC.Center.X, (int)NPC.Center.Y, Type, ai0: Main.rand.Next(0, stg), ai1: NPC.whoAmI, ai2: 1);
+            int clone = NPC.NewNPC(source, (int)(NPC.Center.X + Offset.X), (int)(NPC.Center.Y + Offset.Y), Type, ai0: stg, ai1: NPC.whoAmI, ai2: cloneType);
             if (clone != Main.maxNPCs)
             {
                 Main.npc[clone].velocity = Vector2.Zero;
                 Main.npc[clone].netUpdate = true;
             }
+            if (cloneType == 2) aliveClone.Add(clone);
         }
 
         int dashStart = 3, dashCount = 0, dashTimer = 0;
         int laser0 = -1, laser1 = -1, lunaticOrb = -1;
-        float angle = -1f, dashF = 0f;
-        bool OnDash = false;
+        float angle = -1f, dashF = 0f, alpha = 1f;
+        bool OnDash = false, alreadyDash = false, AFK;
         public void FirstStage()
         {
+            NPC.TargetClosest(true);
             var source = NPC.GetSource_FromAI();
+            if (AFK) return;
 
+            alpha = 1f;
             timer1++;
-            if (stg != 2) dashCount = dashStart;
+            if (!alreadyDash) dashCount = dashStart;
             if (stg == 0)
             {
                 if (timer1 > 20)
@@ -279,14 +334,13 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
             }
             else if (stg == 2)
             {
-                NPC.TargetClosest(true);
                 float playerY = Main.player[NPC.target].Center.Y;
                 if (dashCount > 0)
                 {
                     if (!prepDash)
                     {
                         dashTimer = 0;
-                        float yMargin = 20f; // tolerance in pixels
+                        float yMargin = 80f; // tolerance in pixels
 
                         float npcY = NPC.Center.Y;
                         float desiredVelocityY = (playerY - NPC.Center.Y) * 0.1f;
@@ -303,9 +357,8 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
                     {
                         if (timer1 > 30)
                         {
-
                             float dashSpeed = 48f;
-
+                            alreadyDash = true;
                             // Dash horizontally toward player
                             float direction = Math.Sign(Main.player[NPC.target].Center.X - NPC.Center.X);
                             dashTimer++;
@@ -332,16 +385,39 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
                     Frame = 4;
                     timer1 = 0;
                     prepDash = false;
+                    alreadyDash = false;
                 }
             }
             else if (stg == 3)
             {
+
                 if (timer1 <= 1) NPC.velocity.Y = -15f; else NPC.velocity.Y *= 0.95f;
                 if (NPC.velocity.Y > -0.1f && NPC.velocity.Y < 0.1f)
                 {
-                    stg = 0;
+                    if (isClone || Main.rand.NextBool()) stg = 0; else stg++;
                     NPC.velocity.Y = 0f;
                 }
+            }
+            else if (stg == 4)
+            {
+                if (!AFK)
+                {
+                    float playerX = Main.player[NPC.target].Center.X;
+                    float xMargin = 80f; // tolerance in pixels
+
+                    float npcX = NPC.Center.X;
+                    float desiredVelocityX = (playerX - NPC.Center.X) * 0.1f;
+
+                    // Smooth velocity
+                    NPC.velocity.X = MathHelper.Lerp(NPC.velocity.X, desiredVelocityX, 0.1f);
+                    if (Math.Abs(playerX - npcX) <= xMargin)
+                    {
+                        AFK = true;
+                        CreateClone(2, new Vector2(-250, 350), 2);
+                        CreateClone(2, new Vector2(250, 350), 2);
+                    }
+                }
+                
             }
         }
 
@@ -358,7 +434,9 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
                 color *= (NPC.oldPos.Length - i) / 15f;
                 Main.spriteBatch.Draw(texture, curPosition - NPC.velocity * i * 0.5f, new Rectangle?(NPC.frame), color * 0.25f, NPC.rotation, origin, NPC.scale, effects, 0f);
             }
-            return true;
+
+            Main.spriteBatch.Draw(texture, curPosition, NPC.frame, drawColor * alpha, NPC.rotation, origin, NPC.scale, effects, 0f);
+            return false;
         }
 
         public override void FindFrame(int frameHeight)
