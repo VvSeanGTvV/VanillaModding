@@ -16,6 +16,7 @@ using VanillaModding.Content.Buffs;
 using VanillaModding.Content.Items.Weapon.Magic;
 using VanillaModding.Content.Items.Accessories.Vanity;
 using VanillaModding.Content.Items.Armor.Vanity;
+using VanillaModding.Content.Items.Materials;
 
 namespace VanillaModding.Common.GlobalNPCs
 {
@@ -51,6 +52,10 @@ namespace VanillaModding.Common.GlobalNPCs
                 shop.Add(ModContent.ItemType<BuildersClubHardHat>(), Condition.PreHardmode);
                 shop.Add(ModContent.ItemType<TurboBuildersClubHardHat>(), Condition.Hardmode);
                 shop.Add(ModContent.ItemType<OutrageousBuildersClubHardHat>(), Condition.DownedMoonLord);
+            }
+            if (shop.NpcType == NPCID.Clothier)
+            {
+                shop.Add(ModContent.ItemType<WhiteThread>());
             }
             /*if (shop.NpcType == NPCID.BestiaryGirl)
                 shop.Add(ModContent.ItemType<Bunnynator>());*/

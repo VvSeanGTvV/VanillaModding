@@ -17,6 +17,7 @@ using VanillaModding.Content.Projectiles.RedSolidLaser;
 
 namespace VanillaModding.Content.NPCs.TheChosenOne
 {
+    [AutoloadBossHead]
     internal class TheChosenOne : ModNPC
     {
         public override void SetStaticDefaults()
@@ -243,50 +244,56 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
             {
                 NPC.TargetClosest(true);
                 float playerY = Main.player[NPC.target].Center.Y;
-                if (!prepDash)
+                if (dashCount > 0)
                 {
-                    dashTimer = 0;
-                    float yMargin = 20f; // tolerance in pixels
-                    
-                    float npcY = NPC.Center.Y;
-                    float desiredVelocityY = (playerY - NPC.Center.Y) * 0.1f;
-
-                    // Smooth velocity
-                    NPC.velocity.Y = MathHelper.Lerp(NPC.velocity.Y, desiredVelocityY, 0.1f);
-                    NPC.velocity.X = 0;
-                    prepDash = (Math.Abs(playerY - npcY) <= yMargin); timer1 = 0;
-                    Frame = 4;
-                    OnDash = false;
-                    NPC.spriteDirection = (NPC.Center.X < Main.player[NPC.target].Center.X) ? 1 : -1;
-                }
-                else
-                {
-                    if (timer1 > 30 && dashCount >= 0)
+                    if (!prepDash)
                     {
-                        
-                        float dashSpeed = 32f;
+                        dashTimer = 0;
+                        float yMargin = 20f; // tolerance in pixels
 
-                        // Dash horizontally toward player
-                        float direction = Math.Sign(Main.player[NPC.target].Center.X - NPC.Center.X);
-                        dashTimer++;
-                        if (!OnDash)
-                        {
-                            dashF = direction;
-                            OnDash = true;
-                            dashCount--;
-                        }
-                        NPC.velocity.X = dashF * dashSpeed;
-                        Frame = 11;
-                        if (dashTimer > 15) prepDash = false;
-                    }
-                    else if (timer1 > 30 && dashCount < 0)
-                    {
-                        NPC.velocity = Vector2.Zero;
-                        stg++;
+                        float npcY = NPC.Center.Y;
+                        float desiredVelocityY = (playerY - NPC.Center.Y) * 0.1f;
+
+                        // Smooth velocity
+                        NPC.velocity.Y = MathHelper.Lerp(NPC.velocity.Y, desiredVelocityY, 0.1f);
+                        NPC.velocity.X = 0;
+                        prepDash = (Math.Abs(playerY - npcY) <= yMargin); timer1 = 0;
                         Frame = 4;
-                        timer1 = 0;
-                        prepDash = false;
+                        OnDash = false;
+                        NPC.spriteDirection = (NPC.Center.X < Main.player[NPC.target].Center.X) ? 1 : -1;
                     }
+                    else
+                    {
+                        if (timer1 > 30)
+                        {
+
+                            float dashSpeed = 48f;
+
+                            // Dash horizontally toward player
+                            float direction = Math.Sign(Main.player[NPC.target].Center.X - NPC.Center.X);
+                            dashTimer++;
+                            if (!OnDash)
+                            {
+                                dashF = direction;
+                                OnDash = true;
+                            }
+                            NPC.velocity.X = dashF * dashSpeed;
+                            Frame = 11;
+                            if (dashTimer > 15)
+                            {
+                                dashCount--;
+                                prepDash = false;
+                            }
+                        }
+                    }
+                }
+                if (timer1 > 30 && dashCount <= 0)
+                {
+                    NPC.velocity = Vector2.Zero;
+                    stg++;
+                    Frame = 4;
+                    timer1 = 0;
+                    prepDash = false;
                 }
             }
             else if (stg == 3)

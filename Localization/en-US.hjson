@@ -85,6 +85,11 @@ Mods: {
 				Tooltip: Summons Dune Trapper
 			}
 
+			ChosenOneSummon: {
+				DisplayName: Pen
+				Tooltip: Summons The Chosen One
+			}
+
 			HornOPlenty: {
 				DisplayName: Horn o' Plenty
 				Tooltip: It is filled with the inexhaustible gifts of celebratory fruits.
@@ -316,6 +321,11 @@ Mods: {
 			Bunnynator: {
 				DisplayName: Bunnynator
 				Tooltip: Turns any critter to bunny!
+			}
+
+			WhiteThread: {
+				DisplayName: White Thread
+				Tooltip: ""
 			}
 		}
 
