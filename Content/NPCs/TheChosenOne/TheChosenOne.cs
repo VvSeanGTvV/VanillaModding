@@ -75,11 +75,27 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
             //ScaleStats();
         }
 
-        int stg = 0, timer = 0, timer1 = 0;
-        bool onStand = true, battleStart = false, onGround, lunaticFinish, prepDash;
+        int stg = 0, timer = 0, timer1 = 0, fromWhoAmI = -1;
+        bool onStand = true, battleStart = false, onGround = false, lunaticFinish, prepDash, isClone;
         int Frame = 0;
         public override void AI()
         {
+            isClone = NPC.ai[2] > 0;
+            if (isClone)
+            {
+                fromWhoAmI = (int)NPC.ai[1];
+                if (!Main.npc[fromWhoAmI].active) NPC.active = false;
+                onStand = onGround = false;
+                stg = (int)NPC.ai[0];
+                FirstStage();
+
+                NPC.scale = 0.85f;
+                NPC.immortal = true;
+                battleStart = true;
+                NPC.noTileCollide = true;
+                return;
+            }
+
             onGround = false;
             if (onStand)
             {
@@ -133,6 +149,25 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
 
             //Main.NewText($"STG: {stg} Timer: {timer} Timer1: {timer1} Frame: {Frame} Laser0: {laser0} Laser1: {laser1}", Color.White);
         }
+
+        public void finishClone()
+        {
+            if (!isClone && Main.rand.NextBool()) CreateClone();
+            fromWhoAmI = -1;
+            if (isClone) NPC.active = false;
+        }
+        
+        public void CreateClone()
+        {
+            var source = NPC.GetSource_FromAI();
+            int clone = NPC.NewNPC(source, (int)NPC.Center.X, (int)NPC.Center.Y, Type, ai0: Main.rand.Next(0, stg), ai1: NPC.whoAmI, ai2: 1);
+            if (clone != Main.maxNPCs)
+            {
+                Main.npc[clone].velocity = Vector2.Zero;
+                Main.npc[clone].netUpdate = true;
+            }
+        }
+
         int dashStart = 3, dashCount = 0, dashTimer = 0;
         int laser0 = -1, laser1 = -1, lunaticOrb = -1;
         float angle = -1f, dashF = 0f;
@@ -182,6 +217,7 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
                         NPC.frameCounter += 0.5f;
                         if (NPC.frameCounter > frameSpeed)
                         {
+                            finishClone();
                             stg++;
                             if (laser0 != -1) Main.projectile[laser0].Kill();
                             if (laser1 != -1) Main.projectile[laser1].Kill();
@@ -232,6 +268,7 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
                     }
                     if (Frame <= 4 && lunaticFinish)
                     {
+                        finishClone();
                         stg++;
                         Frame = 4;
                         lunaticOrb = -1;
@@ -289,6 +326,7 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
                 }
                 if (timer1 > 30 && dashCount <= 0)
                 {
+                    finishClone();
                     NPC.velocity = Vector2.Zero;
                     stg++;
                     Frame = 4;

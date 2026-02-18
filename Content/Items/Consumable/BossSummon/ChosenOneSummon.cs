@@ -81,7 +81,7 @@ namespace VanillaModding.Content.Items.Consumable.BossSummon
                 .AddIngredient(ModContent.ItemType<WhiteThread>(), 3)
                 .AddIngredient(ItemID.BlackThread, 1)
                 .AddIngredient(ItemID.Silk, 5)
-                .AddIngredient(ItemID.SoulBottleFright, 1)
+                .AddIngredient(ItemID.SoulofFright, 1)
                 .AddIngredient(ItemID.SoulofFlight, 1)
                 .AddIngredient(ItemID.SoulofMight, 1)
                 .AddIngredient(ItemID.SoulofSight, 1)
