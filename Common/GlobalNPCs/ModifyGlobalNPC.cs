@@ -17,6 +17,7 @@ using VanillaModding.Content.Items.Weapon.Magic;
 using VanillaModding.Content.Items.Accessories.Vanity;
 using VanillaModding.Content.Items.Armor.Vanity;
 using VanillaModding.Content.Items.Materials;
+using VanillaModding.Content.Items.Accessories.Book;
 
 namespace VanillaModding.Common.GlobalNPCs
 {
@@ -29,9 +30,11 @@ namespace VanillaModding.Common.GlobalNPCs
             if (npc.type == NPCID.GoblinShark || npc.type == NPCID.BloodEelHead) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyScythe>(), 60));
             if (npc.type == NPCID.BloodNautilus) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyScythe>(), 45));
 
+            // Martian Invasion
             if (npc.type == NPCID.MartianSaucerCore) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<PhasicWarpEjector>(), 55));
-            //base.ModifyNPCLoot(npc, npcLoot);
 
+            // Solar Eclispe
+            if (npc.type == NPCID.Vampire) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BookofBelial>(), 50));
         }
 
         public override void ModifyShop(NPCShop shop)
