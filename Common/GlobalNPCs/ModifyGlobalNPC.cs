@@ -18,26 +18,50 @@ using VanillaModding.Content.Items.Accessories.Vanity;
 using VanillaModding.Content.Items.Armor.Vanity;
 using VanillaModding.Content.Items.Materials;
 using VanillaModding.Content.Items.Accessories.Book;
+using VanillaModding.Content.NPCs.Fish;
 
 namespace VanillaModding.Common.GlobalNPCs
 {
     internal class ModifyGlobalNPC : GlobalNPC
     {
+        Conditions.NotExpert notExpert = new Conditions.NotExpert();
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
-            // Blood Moon
-            if (npc.type == NPCID.BloodZombie || npc.type == NPCID.Drippler) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyScythe>(), 75));
-            if (npc.type == NPCID.GoblinShark || npc.type == NPCID.BloodEelHead) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyScythe>(), 60));
-            if (npc.type == NPCID.BloodNautilus) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyScythe>(), 45));
+            switch (npc.type)
+            {
+                // Blood Moon
+                case NPCID.BloodZombie:
+                case NPCID.Drippler:
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyScythe>(), 45));
+                    break;
 
-            // Martian Invasion
-            if (npc.type == NPCID.MartianSaucerCore) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<PhasicWarpEjector>(), 55));
+                case NPCID.GoblinShark:
+                case NPCID.BloodEelHead:
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyScythe>(), 30));
+                    break;
 
-            // Solar Eclispe
-            if (npc.type == NPCID.Vampire) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BookofBelial>(), 50));
+                case NPCID.BloodNautilus:
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyScythe>(), 10));
+                    break;
 
-            // Boss
-            if (npc.type == NPCID.DukeFishron) npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<BookofLeviathanLock>(), 75, 45));
+                // Martian Invasion
+                case NPCID.MartianSaucerCore:
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<PhasicWarpEjector>(), 10));
+                    break;
+
+                // Solar Eclipse
+                case NPCID.Vampire:
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BookofBelial>(), 50));
+                    break;
+
+                // Boss
+                case NPCID.DukeFishron:
+                    npcLoot.Add(ItemDropRule.ByCondition(
+                        notExpert,
+                        ModContent.ItemType<BookofLeviathanLock>(),
+                        10));
+                    break;
+            }
         }
 
         public override void ModifyShop(NPCShop shop)
@@ -202,6 +226,18 @@ namespace VanillaModding.Common.GlobalNPCs
                 else aggroTo = -1;
             }
             base.AI(npc);
+        }
+
+        public override void ModifyHitByItem(NPC npc, Player player, Item item, ref NPC.HitModifiers modifiers)
+        {
+            if (npc.type == ModContent.NPCType<RedFish>() && !attacked) modifiers.FinalDamage *= 0;
+            base.ModifyHitByItem(npc, player, item, ref modifiers);
+        }
+
+        public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
+        {
+            if (npc.type == ModContent.NPCType<RedFish>() && !attacked) modifiers.FinalDamage *= 0;
+            base.ModifyHitByProjectile(npc, projectile, ref modifiers);
         }
 
         public override void OnHitByItem(NPC npc, Player player, Item item, NPC.HitInfo hit, int damageDone)
