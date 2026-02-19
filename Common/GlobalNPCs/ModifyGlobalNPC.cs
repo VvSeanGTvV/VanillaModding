@@ -35,6 +35,9 @@ namespace VanillaModding.Common.GlobalNPCs
 
             // Solar Eclispe
             if (npc.type == NPCID.Vampire) npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BookofBelial>(), 50));
+
+            // Boss
+            if (npc.type == NPCID.DukeFishron) npcLoot.Add(ItemDropRule.NormalvsExpert(ModContent.ItemType<BookofLeviathanLock>(), 75, 45));
         }
 
         public override void ModifyShop(NPCShop shop)

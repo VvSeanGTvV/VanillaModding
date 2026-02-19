@@ -336,6 +336,21 @@ Mods: {
 					Increases all damage class by {0}%
 					'''
 			}
+
+			BookofLeviathan: {
+				DisplayName: Book Of Leviathan
+				Tooltip:
+					'''
+					'Melee & Painless'
+					Immunity to Bleeding and Feral Bites
+					Increases melee damage class by {0}%
+					'''
+			}
+
+			BookofLeviathanLock: {
+				DisplayName: Book Of Leviathan (Locked)
+				Tooltip: It's locked, unbothered.
+			}
 		}
 
 		NPCs: {

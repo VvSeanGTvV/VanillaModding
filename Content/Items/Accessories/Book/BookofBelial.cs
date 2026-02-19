@@ -12,7 +12,7 @@ namespace VanillaModding.Content.Items.Accessories.Book
 {
     internal class BookofBelial : ModItem
     {
-        public float damageBonus = 1.50f;
+        public float damageBonus = 1.325f;
 
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(Math.Floor((damageBonus - 1f) * 1000f)/10f);
         public override void SetDefaults()
@@ -21,6 +21,7 @@ namespace VanillaModding.Content.Items.Accessories.Book
             Item.height = 30;
             Item.accessory = true;
             Item.rare = ItemRarityID.Pink;
+            Item.value = Item.sellPrice(gold: 2, silver: 10);
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)
