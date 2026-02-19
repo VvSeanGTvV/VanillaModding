@@ -235,6 +235,7 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
             if (!alreadyDash) dashCount = dashStart;
             if (stg == 0)
             {
+                NPC.velocity.X = 0;
                 if (timer1 > 20)
                 {
                     Vector2 direction = Vector2.UnitY * 10f; // Adjust speed as needed
@@ -293,6 +294,7 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
             }
             else if (stg == 1)
             {
+                NPC.velocity.X = 0;
                 if (timer1 < 60)
                 {
                     Frame = 2;

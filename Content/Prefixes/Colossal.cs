@@ -18,7 +18,7 @@ namespace VanillaModding.Content.Prefixes
         public override PrefixCategory Category => PrefixCategory.Melee;
         public override float RollChance(Item item)
         {
-            return 4f + Power + tier;
+            return 3f + Power + tier;
         }
         public override bool CanRoll(Item item)
         {
@@ -39,7 +39,7 @@ namespace VanillaModding.Content.Prefixes
         // Modify the cost of items with this modifier with this function.
         public override void ModifyValue(ref float valueMult)
         {
-            valueMult *= 1f + 0.0335f * Power;
+            valueMult *= 1f + 0.0435f * Power;
         }
 
         public override IEnumerable<TooltipLine> GetTooltipLines(Item item)

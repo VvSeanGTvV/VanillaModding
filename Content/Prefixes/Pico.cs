@@ -9,43 +9,43 @@ using Terraria.ModLoader;
 
 namespace VanillaModding.Content.Prefixes
 {
-    internal class Spiky : ModPrefix
+    internal class Pico : ModPrefix
     {
-        public LocalizedText AddonEffects => this.GetLocalization(nameof(AddonEffects));
+        public LocalizedText PositiveEffects => this.GetLocalization(nameof(PositiveEffects));
         public virtual float Power => 1f;
-        public virtual int tier => 0;
+        public virtual int tier => -1;
 
-        public override PrefixCategory Category => PrefixCategory.AnyWeapon;
+        public override PrefixCategory Category => PrefixCategory.Melee;
         public override float RollChance(Item item)
         {
             return 2f + Power + tier;
         }
         public override bool CanRoll(Item item)
         {
-            DamageClass currentClass = item.DamageType;
-            return currentClass == DamageClass.SummonMeleeSpeed;
+            return true;
         }
 
         // Use this function to modify these stats for items which have this prefix:
         // Damage Multiplier, Knockback Multiplier, Use Time Multiplier, Scale Multiplier (Size), Shoot Speed Multiplier, Mana Multiplier (Mana cost), Crit Bonus.
         public override void SetStats(ref float damageMult, ref float knockbackMult, ref float useTimeMult, ref float scaleMult, ref float shootSpeedMult, ref float manaMult, ref int critBonus)
         {
-            damageMult *= 1f + 0.0324f * Power;
-            useTimeMult *= 1f + 0.0342f * Power;
-            //knockbackMult *= 1f + 0.0414f * Power;
-            critBonus += (int)Power * 1;
+            scaleMult *= 1f - 0.422f * Power;
+            damageMult *= 1f - 0.711f * Power;
+            useTimeMult *= 1f - 0.762f * Power;
+            knockbackMult *= 1f - 0.414f * Power;
+            //critBonus -= (int)Power * 2;
         }
 
         // Modify the cost of items with this modifier with this function.
         public override void ModifyValue(ref float valueMult)
         {
-            valueMult *= 1f + 0.0335f * Power;
+            valueMult *= 1f - 0.0335f * Power;
         }
 
         public override IEnumerable<TooltipLine> GetTooltipLines(Item item)
         {
             // This localization is not shared with the inherited classes. ExamplePrefix and ExampleDerivedPrefix have their own translations for this line.
-            yield return new TooltipLine(Mod, "PrefixWeaponAwesomeDescription", AddonEffects.Value)
+            yield return new TooltipLine(Mod, "PrefixWeaponAwesomeDescription", PositiveEffects.Value)
             {
                 IsModifier = true,
             };

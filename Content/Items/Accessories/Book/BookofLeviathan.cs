@@ -13,7 +13,7 @@ namespace VanillaModding.Content.Items.Accessories.Book
 {
     internal class BookofLeviathan : ModItem
     {
-        public float damageBonus = 1.66f;
+        public float damageBonus = 1.50f;
 
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(Math.Floor((damageBonus - 1f) * 1000f) / 10f);
         public override void SetDefaults()
@@ -32,12 +32,20 @@ namespace VanillaModding.Content.Items.Accessories.Book
             player.GetDamage(DamageClass.Melee) *= damageBonus;
         }
 
+        public override bool CanAccessoryBeEquippedWith(Item equippedItem, Item incomingItem, Player player)
+        {
+            if (
+                equippedItem.type == ModContent.ItemType<BookSatanicBible>()
+                ) return false;
+            return base.CanAccessoryBeEquippedWith(equippedItem, incomingItem, player);
+        }
+
         public override void AddRecipes()
         {
             CreateRecipe()
                 .AddIngredient(ItemID.GoldenKey, 1)
                 .AddIngredient(ModContent.ItemType<BookofLeviathanLock>(), 1)
-                .AddTile(TileID.Anvils)
+                .AddTile(TileID.WorkBenches)
                 .Register();
         }
     }

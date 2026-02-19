@@ -41,6 +41,9 @@ namespace VanillaModding.Common
         int currentPrefix = 0;
         DamageClass currentClass = null;
 
+        // Accessories Bool
+        public bool accSatanicBible = false;
+
         // This variable is for D I C E item.
         /// <summary>
         /// Player, currently rolling a Dice
@@ -73,7 +76,7 @@ namespace VanillaModding.Common
             stunned = false;
         }
 
-        public override void PreUpdate()
+        public void ResetCursorStat()
         {
             overrideCursor = false;
             cursorItem = -1;
@@ -81,6 +84,17 @@ namespace VanillaModding.Common
             stackedCursorBuff.Clear();
             cursorDamageTotal = 0;
             cursorRange = cursorKnockbackTotal = 0;
+        }
+
+        public void ResetBool()
+        {
+            accSatanicBible = false;
+        }
+
+        public override void PreUpdate()
+        {
+            ResetBool();
+            ResetCursorStat();
             base.PreUpdate();
         }
 
@@ -148,7 +162,20 @@ namespace VanillaModding.Common
             }
         }
 
-        
+        public override void OnHurt(Player.HurtInfo info)
+        {
+            if (accSatanicBible)
+            {
+                Entity from = null;
+                info.DamageSource.TryGetCausingEntity(out from);
+
+                for (int i = 0; i < 15; i++)
+                    if (Main.rand.NextBool())
+                        Projectile.NewProjectile(Player.GetSource_FromAI(), Player.position, new Vector2(Main.rand.NextFloat(-10f, 10f), Main.rand.NextFloat(-10f, 10f)), ProjectileID.CursedFlameFriendly, 50, 1, Main.myPlayer);
+
+            }
+            base.OnHurt(info);
+        }
 
         public override void PostUpdate()
         {

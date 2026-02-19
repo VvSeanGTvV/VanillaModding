@@ -351,6 +351,19 @@ Mods: {
 				DisplayName: Book Of Leviathan (Locked)
 				Tooltip: It's locked, unbothered.
 			}
+
+			BookSatanicBible: {
+				DisplayName: Book Satanic Bible
+				Tooltip:
+					'''
+					'Two Times, Big Buffs'
+					Forced Player's Health to {2}
+					Immunity to Bleeding and Feral Bites
+					Increases Mana by {3} + Maximum Health / 10 (before forced modification)
+					Increases Defense by {1} + Maximum Health / 10 (before forced modification)
+					Increases all damage class by {0}% * Maximum Health / 10 (before forced modification)
+					'''
+			}
 		}
 
 		NPCs: {
@@ -459,6 +472,11 @@ Mods: {
 			Colossal: {
 				NegativeEffects: -Crippled
 				DisplayName: Colossal
+			}
+
+			Pico: {
+				PositiveEffects: +Feather Light
+				DisplayName: Pico
 			}
 		}
 

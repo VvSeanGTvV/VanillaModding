@@ -24,6 +24,7 @@ namespace VanillaModding.Common.GlobalNPCs
 {
     internal class ModifyGlobalNPC : GlobalNPC
     {
+        public override bool InstancePerEntity => true;
         Conditions.NotExpert notExpert = new Conditions.NotExpert();
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
         {
@@ -121,7 +122,7 @@ namespace VanillaModding.Common.GlobalNPCs
 
                 npc.velocity = new Vector2(0, 6);
                 npc.frameCounter = 0;
-                npc.noGravity = false;
+                //npc.noGravity = false; *this feels wrong.
                 return false;
             }
             return base.PreAI(npc);
