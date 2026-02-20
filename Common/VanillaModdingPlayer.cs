@@ -13,6 +13,7 @@ using Terraria.ModLoader;
 using VanillaModding.Common.UI;
 using VanillaModding.Content.DamageClasses;
 using VanillaModding.Content.Items;
+using VanillaModding.Content.Items.Accessories.Book;
 using VanillaModding.Content.Prefixes;
 using VanillaModding.Content.Projectiles.MightyScythe.MightyProjectile;
 using VanillaModding.External.AI;
@@ -131,7 +132,7 @@ namespace VanillaModding.Common
             }
             if (ModContent.GetModItem(cursor) != null && Main.mouseLeft && (ModContent.GetModItem(cursor).Item.autoReuse || Main.mouseLeftRelease)  && CursorUI.ValidCursorConditions(myPlayer, ModContent.GetModItem(cursor), cursorRange) && ModContent.GetModItem(cursor) is ClickerItem item)
             {
-                NPC nearNPC = AdvAI.FindClosestNPC(5f * 16f, Main.MouseWorld, npc => npc.CanBeChasedBy());
+                NPC nearNPC = AdvAI.FindClosestNPC(5f * 16f, Main.MouseWorld);
                 Player nearPlayer = AdvAI.FindClosestPlayer(5f * 16f, Main.MouseWorld, player => isPlayerPVP(player) && player.active && !player.dead);
                 if (nearNPC != null)
                 {
@@ -171,7 +172,11 @@ namespace VanillaModding.Common
 
                 for (int i = 0; i < 15; i++)
                     if (Main.rand.NextBool())
-                        Projectile.NewProjectile(Player.GetSource_FromAI(), Player.position, new Vector2(Main.rand.NextFloat(-10f, 10f), Main.rand.NextFloat(-10f, 10f)), ProjectileID.CursedFlameFriendly, 50, 1, Main.myPlayer);
+                        Projectile.NewProjectile(Player.GetSource_FromAI(), Player.position, new Vector2(Main.rand.NextFloat(-10f, 10f), Main.rand.NextFloat(-10f, 10f)), ProjectileID.CursedFlameFriendly, BookSatanicBible.cursedflameDMG, 1, Main.myPlayer);
+
+                for (int i = 0; i < 15; i++)
+                    if (Main.rand.NextBool())
+                        Projectile.NewProjectile(Player.GetSource_FromAI(), Player.position, new Vector2(Main.rand.NextFloat(-10f, 10f), Main.rand.NextFloat(-10f, 10f)), ProjectileID.BookOfSkullsSkull, BookSatanicBible.skeletonDMG, 1, Main.myPlayer);
 
             }
             base.OnHurt(info);

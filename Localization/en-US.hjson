@@ -337,6 +337,11 @@ Mods: {
 					'''
 			}
 
+			Bombarchist: {
+				DisplayName: Magical Happy Bomb
+				Tooltip: Creates happy bombs, and deadly.
+			}
+
 			BookofLeviathan: {
 				DisplayName: Book Of Leviathan
 				Tooltip:
@@ -356,12 +361,13 @@ Mods: {
 				DisplayName: Book Satanic Bible
 				Tooltip:
 					'''
-					'Two Times, Big Buffs'
-					Forced Player's Health to {2}
+					'Usable Accessory... but at what cost?'
+					Forced Player's Health to {1}
 					Immunity to Bleeding and Feral Bites
-					Increases Mana by {3} + Maximum Health / 10 (before forced modification)
-					Increases Defense by {1} + Maximum Health / 10 (before forced modification)
-					Increases all damage class by {0}% * Maximum Health / 10 (before forced modification)
+					Increases Mana by {2} + Maximum Health / {3} (before forced modification)
+					Increases all damage class by {0}% * Maximum Health / {3} (before forced modification)
+					Explodes Cursed Flames upon contact, dealing {4} damage to nearby enemies
+					Explodes Skull upon contact, dealing {5} damage to nearby enemies
 					'''
 			}
 		}
@@ -449,6 +455,7 @@ Mods: {
 			FishTrout.DisplayName: Fish Trout
 			DiceThrowableProjectile.DisplayName: Thrown Dice
 			OrangeLaser.DisplayName: Orange Laser
+			BombarchistProj.DisplayName: Bombarchist Proj
 		}
 
 		Prefixes: {

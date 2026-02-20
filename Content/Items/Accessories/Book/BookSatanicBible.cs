@@ -14,11 +14,14 @@ namespace VanillaModding.Content.Items.Accessories.Book
     internal class BookSatanicBible : ModItem
     {
         public float damageBonus = 1.66f;
-        public int forcedHealth = 2;
-        public int defenseBonus = 5;
-        public int manaBonus = 20;
+        public int forcedHealth = 1;
+        public int manaBonus = 50;
+        public int div = 25;
 
-        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(Math.Floor((damageBonus - 1f) * 1000f) / 10f, defenseBonus, forcedHealth, manaBonus);
+        public static int cursedflameDMG = 15;
+        public static int skeletonDMG = 120;
+
+        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(Math.Floor((damageBonus - 1f) * 1000f) / 10f, forcedHealth, manaBonus, div, cursedflameDMG, skeletonDMG);
         public LocalizedText defaultTooltip;
         public override void SetDefaults()
         {
@@ -32,12 +35,11 @@ namespace VanillaModding.Content.Items.Accessories.Book
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.statDefense += (player.statLifeMax / 10) + defenseBonus;
             player.buffImmune[BuffID.Bleeding] = true;
             player.buffImmune[BuffID.Rabies] = true;
-            player.GetDamage(DamageClass.Generic) *= (damageBonus + (player.statLifeMax / 10));
+            player.GetDamage(DamageClass.Generic) *= (damageBonus + (player.statLifeMax / div));
 
-            player.statManaMax2 += (player.statLifeMax / 10) + manaBonus;
+            player.statManaMax2 += (player.statLifeMax / div) + manaBonus;
             player.statLifeMax2 -= (player.statLifeMax - forcedHealth);
             VanillaModdingPlayer VMP = player.GetModPlayer<VanillaModdingPlayer>();
             VMP.accSatanicBible = true;

@@ -33,16 +33,16 @@ namespace VanillaModding.Common.GlobalNPCs
                 // Blood Moon
                 case NPCID.BloodZombie:
                 case NPCID.Drippler:
-                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyScythe>(), 45));
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyScythe>(), 20));
                     break;
 
                 case NPCID.GoblinShark:
                 case NPCID.BloodEelHead:
-                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyScythe>(), 30));
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyScythe>(), 10));
                     break;
 
                 case NPCID.BloodNautilus:
-                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyScythe>(), 10));
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BloodyScythe>(), 5));
                     break;
 
                 // Martian Invasion
@@ -52,7 +52,12 @@ namespace VanillaModding.Common.GlobalNPCs
 
                 // Solar Eclipse
                 case NPCID.Vampire:
-                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BookofBelial>(), 50));
+                case NPCID.VampireBat:
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<BookofBelial>(), 6));
+                    break;
+
+                case NPCID.Clown:
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Bombarchist>(), 10));
                     break;
 
                 // Boss
