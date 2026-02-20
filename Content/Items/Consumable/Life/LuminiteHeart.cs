@@ -69,7 +69,7 @@ namespace VanillaModding.Content.Items.Consumable.Life
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.LunarBar, 20)
+                .AddIngredient(ItemID.LunarBar, 10)
                 .AddIngredient(ModContent.ItemType<SoulofBlight>(), 5)
                 .AddTile(TileID.LunarCraftingStation)
                 .Register();

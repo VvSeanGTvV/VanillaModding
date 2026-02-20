@@ -74,8 +74,8 @@ namespace VanillaModding.Content.Items.Consumable.Life
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.MythrilBar, 20)
-                .AddIngredient(ItemID.Diamond, 5)
+                .AddIngredient(ItemID.MythrilBar, 10)
+                .AddIngredient(ItemID.Diamond, 1)
                 .AddIngredient(ItemID.LifeCrystal, 1)
                 .AddTile(TileID.MythrilAnvil)
                 .Register();

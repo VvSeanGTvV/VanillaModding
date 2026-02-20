@@ -411,6 +411,8 @@ Mods: {
 				DisplayName: Redfish
 				Bestiary: A seemingly ordinary red fish, until bothered by attacking it.
 			}
+
+			Fatso.DisplayName: Fatso
 		}
 
 		Projectiles: {
