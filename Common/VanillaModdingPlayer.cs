@@ -356,13 +356,7 @@ namespace VanillaModding.Common
         {
             VanillaModdingPlayer clone = (VanillaModdingPlayer)clientPlayer;
 
-            if (DiamondHeart != clone.DiamondHeart)
-            {
-                // This example calls SyncPlayer to send all the data for this ModPlayer when any change is detected, but if you are dealing with a large amount of data you should try to be more efficient and use custom packets to selectively send only specific data that has changed.
-                SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
-            }
-
-            if (LunarHeart != clone.LunarHeart)
+            if (DiamondHeart != clone.DiamondHeart || LunarHeart != clone.LunarHeart)
             {
                 // This example calls SyncPlayer to send all the data for this ModPlayer when any change is detected, but if you are dealing with a large amount of data you should try to be more efficient and use custom packets to selectively send only specific data that has changed.
                 SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
