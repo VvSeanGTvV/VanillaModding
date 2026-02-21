@@ -338,8 +338,8 @@ Mods: {
 			}
 
 			Bombarchist: {
-				DisplayName: Magical Happy Bomb
-				Tooltip: Creates happy bombs, and deadly.
+				DisplayName: Hapomarchist
+				Tooltip: Raining happy bombs, and deadly.
 			}
 
 			BookofLeviathan: {
