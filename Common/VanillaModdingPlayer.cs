@@ -10,6 +10,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.Map;
 using Terraria.ModLoader;
+using Terraria.ModLoader.IO;
 using VanillaModding.Common.UI;
 using VanillaModding.Content.DamageClasses;
 using VanillaModding.Content.Items;
@@ -361,6 +362,18 @@ namespace VanillaModding.Common
                 // This example calls SyncPlayer to send all the data for this ModPlayer when any change is detected, but if you are dealing with a large amount of data you should try to be more efficient and use custom packets to selectively send only specific data that has changed.
                 SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
             }
+        }
+
+        public override void SaveData(TagCompound tag)
+        {
+            tag["diamondHeart"] = DiamondHeart;
+            tag["lunarHeart"] = LunarHeart;
+        }
+
+        public override void LoadData(TagCompound tag)
+        {
+            DiamondHeart = tag.GetInt("diamondHeart");
+            LunarHeart = tag.GetInt("lunarHeart");
         }
     }
 }
