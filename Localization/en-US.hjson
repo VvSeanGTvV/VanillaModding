@@ -18,7 +18,12 @@ Mods: {
 
 			Stunned: {
 				DisplayName: Stunned
-				Description: I can't move.
+				Description: You are immobilized!
+			}
+
+			FeralCured: {
+				DisplayName: Feral Cured
+				Description: Increased damage, Increased life regen, Immune related to most Feral Bites side effects
 			}
 		}
 
@@ -373,17 +378,17 @@ Mods: {
 
 			FeralCure_Potion: {
 				DisplayName: Feral Cure Potion
-				Tooltip: Cures you from Feral bites
+				Tooltip: Cures you from Feral Bites, if you had any
 			}
 
 			AetherPylon: {
 				DisplayName: Aether Pylon
-				Tooltip: 
-				'''
-				Teleport to another pylon when two villagers are nearby
-				You can only place one per type in the matching biome
-				'ported to 1.4.4.9, idk u tell me'
-				'''
+				Tooltip:
+					'''
+					Teleport to another pylon when two villagers are nearby
+					You can only place one per type in the matching biome
+					'ported to 1.4.4.9, idk u tell me'
+					'''
 			}
 		}
 

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Content.Buffs;
 
 namespace VanillaModding.Content.Items.Consumable.Healing
 {
@@ -24,7 +25,6 @@ namespace VanillaModding.Content.Items.Consumable.Healing
             //Item.potionDelay = 2100;
             //Item.potion = true;
 
-            Item.consumable = true;
             Item.useStyle = ItemUseStyleID.DrinkLiquid;
             Item.consumable = true;
             Item.noMelee = true;
@@ -58,14 +58,15 @@ namespace VanillaModding.Content.Items.Consumable.Healing
 
         public override bool? UseItem(Player player)
         {
-            if (player.HasBuff(BuffID.Rabies)) player.ClearBuff(BuffID.Rabies);
-            return base.UseItem(player);
+            if (player.HasBuff(BuffID.Rabies))
+            {
+                player.AddBuff(ModContent.BuffType<FeralCured>(), player.buffTime[player.FindBuffIndex(BuffID.Rabies)] / 2);
+                player.ClearBuff(BuffID.Rabies);
+            }
+            return true;
         }
 
-        public override bool CanUseItem(Player player)
-        {
-            if (player.HasBuff(BuffID.Rabies)) return true;
-            return false;
-        }
+        public override bool CanUseItem(Player player) 
+            => (player.HasBuff(BuffID.Rabies) && !player.HasBuff<FeralCured>());
     }
 }
