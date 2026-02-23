@@ -22,9 +22,6 @@ namespace VanillaModding.Content.Items.Consumable.Healing
             Item.useTurn = true;
             Item.maxStack = Item.CommonMaxStack;
 
-            //Item.potionDelay = 2100;
-            //Item.potion = true;
-
             Item.useStyle = ItemUseStyleID.DrinkLiquid;
             Item.consumable = true;
             Item.noMelee = true;

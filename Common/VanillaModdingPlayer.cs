@@ -34,6 +34,7 @@ namespace VanillaModding.Common
         public int cursorDamageTotal = 0;
         public float cursorKnockbackTotal = 0;
         public List<(int, int)> stackedCursorBuff = new List<(int, int)>();
+        public int clicksTotal; //How much it has clicked
 
         // This is Life/Mana modification related thing.
         public int DiamondHeart, MaxDiamondHeart = 20;
@@ -125,6 +126,8 @@ namespace VanillaModding.Common
         {
             int cursor = myPlayer.HeldItem.ModItem != null && myPlayer.HeldItem.ModItem is ClickerItem ? myPlayer.HeldItem.type : -1;
             if (cursor <= -1) return;
+
+            if (Main.mouseLeft && (ModContent.GetModItem(cursor).Item.autoReuse || Main.mouseLeftRelease)) clicksTotal++;
             if (myPlayer.HeldItem.ModItem != null && myPlayer.HeldItem.ModItem is ClickerItem heldCursor)
             {
                 cursorRange = heldCursor.range;
@@ -366,12 +369,14 @@ namespace VanillaModding.Common
 
         public override void SaveData(TagCompound tag)
         {
+            tag["clicksTotal"] = clicksTotal;
             tag["diamondHeart"] = DiamondHeart;
             tag["lunarHeart"] = LunarHeart;
         }
 
         public override void LoadData(TagCompound tag)
         {
+            clicksTotal = tag.GetInt("clicksTotal");
             DiamondHeart = tag.GetInt("diamondHeart");
             LunarHeart = tag.GetInt("lunarHeart");
         }
