@@ -370,6 +370,16 @@ Mods: {
 					Explodes Skull upon contact, dealing {5} damage to nearby enemies
 					'''
 			}
+
+			FeralCure_Potion: {
+				DisplayName: Feral Cure Potion
+				Tooltip: Cures you from Feral bites
+			}
+
+			AetherPylon: {
+				DisplayName: Aether Pylon
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
@@ -503,5 +513,6 @@ Mods: {
 		}
 
 		DamageClasses.Click.DisplayName: click damage
+		Tiles.AetherPylonTile.MapEntry: Aether Pylon Tile
 	}
 }
