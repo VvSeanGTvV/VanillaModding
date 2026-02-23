@@ -378,7 +378,12 @@ Mods: {
 
 			AetherPylon: {
 				DisplayName: Aether Pylon
-				Tooltip: ""
+				Tooltip: 
+				'''
+				Teleport to another pylon when two villagers are nearby
+				You can only place one per type in the matching biome
+				'ported to 1.4.4.9, idk u tell me'
+				'''
 			}
 		}
 
@@ -423,13 +428,13 @@ Mods: {
 			}
 
 			Fatso: {
-				DisplayName: Fatso
+				DisplayName: Cat
 
 				TownNPCMood: {
-					Content: I am content.
-					NoHome: I hate not having a home.
-					FarFromHome: I am too far from home.
-					LoveSpace: I love having so much space.
+					Content: I AM, oh wait this is for testing.
+					NoHome: *intensely sad purrs*
+					FarFromHome: *sad purrs*
+					LoveSpace: *happy purrs*
 					DislikeCrowded: I dislike how crowded I am.
 					HateCrowded: I hate how crowded I am.
 					LikeNPC_Princess: I like {NPCName}.
