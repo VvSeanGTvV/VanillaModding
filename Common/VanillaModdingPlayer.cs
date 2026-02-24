@@ -37,7 +37,7 @@ namespace VanillaModding.Common
         public float cursorKnockbackTotal = 0;
         public List<(int, int)> stackedCursorBuff = new List<(int, int)>();
         public int clicksTotal, clicksPerSecond, clicksThisSecond;
-        public bool isClicking;
+        public bool isClicking, holdingCursor;
 
         // DPS METER 60ROLL
         private int[] clickBuffer = new int[60];
@@ -83,6 +83,11 @@ namespace VanillaModding.Common
         /// </summary>
         public bool stunned;
 
+        public override void RefreshInfoAccessoriesFromTeamPlayers(Player otherPlayer)
+        {
+            if (otherPlayer.GetModPlayer<VanillaModdingPlayer>().showClicksTotal) showClicksTotal = true;
+        }
+
         #region reset functions
         // The ResetEffects hook is important for buffs to work correctly.
         // It resets the effects applied by your buff when it expires.
@@ -94,6 +99,7 @@ namespace VanillaModding.Common
 
         public void ResetCursorStat()
         {
+            holdingCursor = false;
             overrideCursor = false;
             cursorItem = -1;
 
@@ -113,12 +119,6 @@ namespace VanillaModding.Common
             showClicksTotal = false;
         }
         #endregion
-
-
-        public override void RefreshInfoAccessoriesFromTeamPlayers(Player otherPlayer)
-        {
-            if (otherPlayer.GetModPlayer<VanillaModdingPlayer>().showClicksTotal) showClicksTotal = true;
-        }
 
         public override void PreUpdate()
         {
@@ -152,7 +152,7 @@ namespace VanillaModding.Common
         {
             int cursor = myPlayer.HeldItem.ModItem != null && myPlayer.HeldItem.ModItem is ClickerItem ? myPlayer.HeldItem.type : -1;
             if (cursor <= -1) return;
-
+            holdingCursor = true;
             if (myPlayer.HeldItem.ModItem != null && myPlayer.HeldItem.ModItem is ClickerItem heldCursor)
             {
                 cursorRange = heldCursor.range;
@@ -166,8 +166,8 @@ namespace VanillaModding.Common
                 isClicking = true;
                 clickBuffer[clickbufferIndex]++;
                 clicksTotal++;
-                NPC nearNPC = AdvAI.FindClosestNPC(5f * 16f, Main.MouseWorld, npc => !npc.dontTakeDamage && !npc.townNPC);
-                Player nearPlayer = AdvAI.FindClosestPlayer(5f * 16f, Main.MouseWorld, player => isPlayerPVP(player) && player.active && !player.dead);
+                NPC nearNPC = AdvAI.FindClosestNPC(2 * 16f, Main.MouseWorld, npc => !npc.dontTakeDamage && !npc.townNPC);
+                Player nearPlayer = AdvAI.FindClosestPlayer(2 * 16f, Main.MouseWorld, player => isPlayerPVP(player) && player.active && !player.dead);
                 if (nearNPC != null)
                 {
                     bool crit = Main.rand.Next() < myPlayer.GetTotalCritChance(item.Item.DamageType) / 100f;
@@ -252,18 +252,41 @@ namespace VanillaModding.Common
             base.PostUpdate();
         }
 
+        float cursorFade = 0f;
+        float lastRange;
+        bool validRange;
         public override void DrawPlayer(Camera camera)
         {
-            /*if (Player.HeldItem.ModItem is ClickerItem clicker)
+            cursorFade = MathHelper.Lerp(cursorFade, holdingCursor ? 1f : 0f, 0.0424f);
+            if (Player.HeldItem.ModItem is ClickerItem clicker)
             {
-                float range = clicker.range;
-                DrawHelper.DrawCircleOutline(
-                    Player.Center,
-                    range,
-                    Color.White * 0.6f,
-                    2f
-                );
-            }*/
+                validRange = CursorUI.ValidCursorConditions(Player, ModContent.GetModItem(clicker.Type), cursorRange);
+                lastRange = cursorRange;
+            }
+            else
+            {
+                validRange = false;
+            }
+
+            Color baseColor = validRange ? Color.White : Color.Red;
+
+            float circleAlpha = 0.5f * cursorFade;
+            float gridAlpha = 0.3f * cursorFade;
+            DrawHelper.DrawDashedCircle(
+                Player.Center,
+                lastRange * cursorFade,
+                120,
+                1,
+                baseColor * circleAlpha,
+                4f
+            );
+            DrawHelper.DrawGridInsideCircle(
+                Player.Center,
+                lastRange * cursorFade,
+                16,
+                baseColor * gridAlpha,
+                2f
+            );
         }
 
         public override void PostUpdateMiscEffects()

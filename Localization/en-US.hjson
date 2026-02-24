@@ -395,6 +395,21 @@ Mods: {
 				DisplayName: Mouse
 				Tooltip: Displays your click per second
 			}
+
+			EbonwoodCursor: {
+				DisplayName: Ebonwood Cursor
+				Tooltip: ""
+			}
+
+			PearlwoodCursor: {
+				DisplayName: Pearlwood Cursor
+				Tooltip: ""
+			}
+
+			WoodCursor: {
+				DisplayName: Wood Cursor
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {

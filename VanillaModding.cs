@@ -8,6 +8,6 @@ namespace VanillaModding
 {
 	public partial class VanillaModding : Mod
 	{
-        
+
     }
 }
