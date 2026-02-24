@@ -254,7 +254,7 @@ namespace VanillaModding.Common
 
         public override void DrawPlayer(Camera camera)
         {
-            if (Player.HeldItem.ModItem is ClickerItem clicker)
+            /*if (Player.HeldItem.ModItem is ClickerItem clicker)
             {
                 float range = clicker.range;
                 DrawHelper.DrawCircleOutline(
@@ -263,7 +263,7 @@ namespace VanillaModding.Common
                     Color.White * 0.6f,
                     2f
                 );
-            }
+            }*/
         }
 
         public override void PostUpdateMiscEffects()
