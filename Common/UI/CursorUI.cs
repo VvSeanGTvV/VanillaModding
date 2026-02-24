@@ -48,8 +48,31 @@ namespace VanillaModding.Common.UI
         }
 
         public static bool ValidCursorConditions(Player player, ModItem item, float range = 0)
-        {     
-            return !player.dead && !player.ghost && !_lastMouseInterface && !_lastMouseText && item is ClickerItem clicker && player.position.DistanceSQ(Main.MouseWorld) <= (range <= 0 ? range * range : clicker.range * clicker.range);
+        {
+            if (player.dead || player.ghost || _lastMouseInterface || _lastMouseText)
+                return false;
+
+            if (item is not ClickerItem clicker)
+                return false;
+
+            float actualRange = range <= 0 ? clicker.range : range;
+
+            // Distance check (squared for performance)
+            bool inRange = Vector2.DistanceSquared(player.Center, Main.MouseWorld)
+                           <= actualRange * actualRange;
+
+            if (!inRange)
+                return false;
+
+            // Line of sight check
+            bool hasLineOfSight = Collision.CanHitLine(
+                player.Center,
+                0, 0,
+                Main.MouseWorld,
+                0, 0
+            );
+
+            return hasLineOfSight;
         }
 
         protected override bool DrawSelf()

@@ -29,5 +29,43 @@ namespace VanillaModding.External.Draw
             Main.EntitySpriteDraw(value, drawpos, null, color2, (float)Math.PI / 2f + rotation, origin, vector * 0.6f, dir);
             Main.EntitySpriteDraw(value, drawpos, null, color2, 0f + rotation, origin, vector2 * 0.6f, dir);
         }
+
+        public static void DrawCircleOutline(Vector2 center, float radius, Color color, float thickness = 2f)
+        {
+            Texture2D pixel = TextureAssets.MagicPixel.Value;
+
+            int segments = (int)(radius * 0.75f);
+            segments = Math.Max(segments, 40);
+
+            float increment = MathHelper.TwoPi / segments;
+
+            for (int i = 0; i < segments; i++)
+            {
+                float angle = increment * i;
+
+                Vector2 outer = center + angle.ToRotationVector2() * radius;
+                Vector2 nextOuter = center + (angle + increment).ToRotationVector2() * radius;
+
+                Vector2 diff = nextOuter - outer;
+
+                float rotation = diff.ToRotation();
+                float length = diff.Length();
+
+                // Offset so thickness is centered on circle
+                Vector2 origin = new Vector2(0f, 0.5f);
+
+                Main.spriteBatch.Draw(
+                    pixel,
+                    outer - Main.screenPosition,
+                    null,
+                    color,
+                    rotation,
+                    origin,
+                    new Vector2(length, thickness),
+                    SpriteEffects.None,
+                    0f
+                );
+            }
+        }
     }
 }

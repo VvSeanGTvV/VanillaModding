@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.Map;
 using Terraria.ModLoader;
@@ -18,6 +19,7 @@ using VanillaModding.Content.Items.Accessories.Book;
 using VanillaModding.Content.Prefixes;
 using VanillaModding.Content.Projectiles.MightyScythe.MightyProjectile;
 using VanillaModding.External.AI;
+using VanillaModding.External.Draw;
 using static Terraria.NPC;
 
 namespace VanillaModding.Common
@@ -248,6 +250,20 @@ namespace VanillaModding.Common
             UpdateCursorDamage(myPlayer);
             ClickPerSecond();
             base.PostUpdate();
+        }
+
+        public override void DrawPlayer(Camera camera)
+        {
+            if (Player.HeldItem.ModItem is ClickerItem clicker)
+            {
+                float range = clicker.range;
+                DrawHelper.DrawCircleOutline(
+                    Player.Center,
+                    range,
+                    Color.White * 0.6f,
+                    2f
+                );
+            }
         }
 
         public override void PostUpdateMiscEffects()
