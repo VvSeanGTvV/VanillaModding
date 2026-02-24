@@ -34,7 +34,12 @@ namespace VanillaModding.Common
         public int cursorDamageTotal = 0;
         public float cursorKnockbackTotal = 0;
         public List<(int, int)> stackedCursorBuff = new List<(int, int)>();
-        public int clicksTotal; //How much it has clicked
+        public int clicksTotal, clicksPerSecond, clicksThisSecond;
+        public bool isClicking;
+
+        // DPS METER 60ROLL
+        private int[] clickBuffer = new int[60];
+        private int clickbufferIndex = 0;
 
         // This is Life/Mana modification related thing.
         public int DiamondHeart, MaxDiamondHeart = 20;
@@ -44,8 +49,13 @@ namespace VanillaModding.Common
         int currentPrefix = 0;
         DamageClass currentClass = null;
 
+        // Info Displays
+        public bool showClicksTotal = false;
+
         // Accessories Bool
         public bool accSatanicBible = false;
+        public bool accMouse = false;
+        public bool accClickerEmblem = false;
 
         // This variable is for D I C E item.
         /// <summary>
@@ -71,6 +81,7 @@ namespace VanillaModding.Common
         /// </summary>
         public bool stunned;
 
+        #region reset functions
         // The ResetEffects hook is important for buffs to work correctly.
         // It resets the effects applied by your buff when it expires.
         public override void ResetEffects()
@@ -86,12 +97,25 @@ namespace VanillaModding.Common
 
             stackedCursorBuff.Clear();
             cursorDamageTotal = 0;
+            isClicking = false;
             cursorRange = cursorKnockbackTotal = 0;
         }
 
         public void ResetBool()
         {
             accSatanicBible = false;
+        }
+
+        public override void ResetInfoAccessories()
+        {
+            showClicksTotal = false;
+        }
+        #endregion
+
+
+        public override void RefreshInfoAccessoriesFromTeamPlayers(Player otherPlayer)
+        {
+            if (otherPlayer.GetModPlayer<VanillaModdingPlayer>().showClicksTotal) showClicksTotal = true;
         }
 
         public override void PreUpdate()
@@ -127,16 +151,20 @@ namespace VanillaModding.Common
             int cursor = myPlayer.HeldItem.ModItem != null && myPlayer.HeldItem.ModItem is ClickerItem ? myPlayer.HeldItem.type : -1;
             if (cursor <= -1) return;
 
-            if (Main.mouseLeft && (ModContent.GetModItem(cursor).Item.autoReuse || Main.mouseLeftRelease)) clicksTotal++;
             if (myPlayer.HeldItem.ModItem != null && myPlayer.HeldItem.ModItem is ClickerItem heldCursor)
             {
                 cursorRange = heldCursor.range;
                 cursorDamageTotal = heldCursor.Item.damage;
                 cursorKnockbackTotal = heldCursor.Item.knockBack;
+                
             }
+
             if (ModContent.GetModItem(cursor) != null && Main.mouseLeft && (ModContent.GetModItem(cursor).Item.autoReuse || Main.mouseLeftRelease)  && CursorUI.ValidCursorConditions(myPlayer, ModContent.GetModItem(cursor), cursorRange) && ModContent.GetModItem(cursor) is ClickerItem item)
             {
-                NPC nearNPC = AdvAI.FindClosestNPC(5f * 16f, Main.MouseWorld);
+                isClicking = true;
+                clickBuffer[clickbufferIndex]++;
+                clicksTotal++;
+                NPC nearNPC = AdvAI.FindClosestNPC(5f * 16f, Main.MouseWorld, npc => !npc.dontTakeDamage && !npc.townNPC);
                 Player nearPlayer = AdvAI.FindClosestPlayer(5f * 16f, Main.MouseWorld, player => isPlayerPVP(player) && player.active && !player.dead);
                 if (nearNPC != null)
                 {
@@ -165,6 +193,24 @@ namespace VanillaModding.Common
                     }
                 }
             }
+        }
+
+        public void ClickPerSecond()
+        {
+            // Move to next tick
+            clickbufferIndex++;
+            if (clickbufferIndex >= 60)
+                clickbufferIndex = 0;
+
+            // Clear the new slot for this tick
+            clickBuffer[clickbufferIndex] = 0;
+
+            // Recalculate CPS (sum of last 60 ticks)
+            int total = 0;
+            for (int i = 0; i < 60; i++)
+                total += clickBuffer[i];
+
+            if (isClicking) clicksPerSecond = total;
         }
 
         public override void OnHurt(Player.HurtInfo info)
@@ -200,6 +246,7 @@ namespace VanillaModding.Common
             }
 
             UpdateCursorDamage(myPlayer);
+            ClickPerSecond();
             base.PostUpdate();
         }
 

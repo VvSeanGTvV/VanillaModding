@@ -57,7 +57,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             if (isEnemy)
                 closestPlayer = AdvAI.FindClosestPlayer(maxDetectRadius, Projectile.Center);
             else
-                closestNPC = AdvAI.FindClosestNPC(maxDetectRadius, Projectile.Center);
+                closestNPC = AdvAI.FindClosestNPC(maxDetectRadius, Projectile.Center, npc => npc.CanBeChasedBy());
 
             Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
             if ((closestNPC == null && !isEnemy) || (closestPlayer == null && isEnemy))

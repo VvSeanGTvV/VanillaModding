@@ -19,6 +19,7 @@ using VanillaModding.Content.Items.Armor.Vanity;
 using VanillaModding.Content.Items.Materials;
 using VanillaModding.Content.Items.Accessories.Book;
 using VanillaModding.Content.NPCs.Fish;
+using VanillaModding.Content.Items.Accessories.Clicker;
 
 namespace VanillaModding.Common.GlobalNPCs
 {
@@ -72,33 +73,41 @@ namespace VanillaModding.Common.GlobalNPCs
 
         public override void ModifyShop(NPCShop shop)
         {
-            if (shop.NpcType == NPCID.Cyborg)
+            switch (shop.NpcType)
             {
-                shop.Add<PhasicDisc_Ammo>();
-            }
+                case NPCID.Cyborg:
+                    shop.Add<PhasicDisc_Ammo>();
+                    break;
 
-            if (shop.NpcType == NPCID.Mechanic)
-                shop.Add(ModContent.ItemType<HappyPackage>(), Condition.DownedMechBossAny);
+                case NPCID.Mechanic:
+                    shop.Add(ModContent.ItemType<HappyPackage>(), Condition.DownedMechBossAny);
+                    break;
 
-            if (shop.NpcType == NPCID.Merchant)
-                shop.Add(ModContent.ItemType<RTSoft>(), Condition.PreHardmode);
+                // case NPCID.Merchant:
+                //    shop.Add(ModContent.ItemType<RTSoft>(), Condition.PreHardmode);
+                //    break;
 
-            if (shop.NpcType == NPCID.Demolitionist)
-            {
-                shop.Add(ModContent.ItemType<BuildersClubHardHat>(), Condition.PreHardmode);
-                shop.Add(ModContent.ItemType<TurboBuildersClubHardHat>(), Condition.Hardmode);
-                shop.Add(ModContent.ItemType<OutrageousBuildersClubHardHat>(), Condition.DownedMoonLord);
+                case NPCID.Demolitionist:
+                    shop.Add(ModContent.ItemType<BuildersClubHardHat>(), Condition.PreHardmode);
+                    shop.Add(ModContent.ItemType<TurboBuildersClubHardHat>(), Condition.Hardmode);
+                    shop.Add(ModContent.ItemType<OutrageousBuildersClubHardHat>(), Condition.DownedMoonLord);
+                    break;
+
+                case NPCID.Clothier:
+                    shop.Add(ModContent.ItemType<WhiteThread>());
+                    break;
+
+                // case NPCID.BestiaryGirl:
+                //     shop.Add(ModContent.ItemType<Bunnynator>());
+                //     break;
+                case NPCID.TravellingMerchant:
+                    shop.Add(ModContent.ItemType<Mouse>());
+                    break;
             }
-            if (shop.NpcType == NPCID.Clothier)
-            {
-                shop.Add(ModContent.ItemType<WhiteThread>());
-            }
-            /*if (shop.NpcType == NPCID.BestiaryGirl)
-                shop.Add(ModContent.ItemType<Bunnynator>());*/
         }
     }
 
-    internal class StunnedNPC : GlobalNPC
+        internal class StunnedNPC : GlobalNPC
     {
         public override bool InstancePerEntity => true;
 

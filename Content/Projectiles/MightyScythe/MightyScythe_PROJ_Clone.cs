@@ -74,7 +74,7 @@ namespace VanillaModding.Content.Projectiles.MightyScythe
 
             if (rotdef >= 360f) rotdef = 0f;
 
-            NPC closestNPC = AdvAI.FindClosestNPC(2048f, Projectile.Center);
+            NPC closestNPC = AdvAI.FindClosestNPC(2048f, Projectile.Center, npc => npc.CanBeChasedBy());
             if (closestNPC == null)
                 return;
 

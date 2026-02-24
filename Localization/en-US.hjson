@@ -390,6 +390,11 @@ Mods: {
 					'ported to 1.4.4.9, idk u tell me'
 					'''
 			}
+
+			Mouse: {
+				DisplayName: Mouse
+				Tooltip: Displays your click per second
+			}
 		}
 
 		NPCs: {
@@ -524,5 +529,13 @@ Mods: {
 
 		DamageClasses.Click.DisplayName: click damage
 		Tiles.AetherPylonTile.MapEntry: Aether Pylon Tile
+
+		InfoDisplays: {
+			ClickInfoDisplay: {
+				DisplayName: Click Per Second
+				CPS: "{0} click per second"
+				noCPS: N/A
+			}
+		}
 	}
 }
