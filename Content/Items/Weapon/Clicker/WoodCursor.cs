@@ -26,14 +26,6 @@ namespace VanillaModding.Content.Items.Weapon.Clicker
             Item.height = 24;
         }
 
-        /*public override void AddRecipes()
-        {
-            CreateRecipe()
-                .AddIngredient(ItemID.Wood, 5)
-                .AddTile(TileID.WorkBenches)
-                .Register();
-        }*/
-
         public override void AddRecipes()
         {
             CreateRecipe()
