@@ -13,14 +13,11 @@ using Terraria.Map;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using VanillaModding.Common.UI;
-using VanillaModding.Content.DamageClasses;
 using VanillaModding.Content.Items;
 using VanillaModding.Content.Items.Accessories.Book;
 using VanillaModding.Content.Prefixes;
-using VanillaModding.Content.Projectiles.MightyScythe.MightyProjectile;
 using VanillaModding.External.AI;
 using VanillaModding.External.Draw;
-using static Terraria.NPC;
 
 namespace VanillaModding.Common
 {
@@ -37,7 +34,7 @@ namespace VanillaModding.Common
         public float cursorKnockbackTotal = 0;
         public List<(int, int, int)> stackedCursorBuff = new List<(int, int, int)>();
         public int clicksTotal, clicksPerSecond, clicksThisSecond;
-        public bool isClicking, holdingCursor;
+        public bool isClicking, holdingCursor, hasTarget;
 
         // DPS METER 60ROLL
         private int[] clickBuffer = new int[60];
@@ -161,13 +158,15 @@ namespace VanillaModding.Common
                 
             }
 
+            NPC nearNPC = AdvAI.FindClosestEntityUnderPoint<NPC>(Main.MouseWorld, 2 * 16f, npc => !npc.dontTakeDamage && !npc.townNPC);
+            Player nearPlayer = AdvAI.FindClosestEntityUnderPoint<Player>(Main.MouseWorld, 2 * 16f, player => isPlayerPVP(player) && player.active && !player.dead);
+            hasTarget = nearNPC != null || nearPlayer != null;
             if (ModContent.GetModItem(cursor) != null && Main.mouseLeft && (ModContent.GetModItem(cursor).Item.autoReuse || Main.mouseLeftRelease)  && CursorUI.ValidCursorConditions(myPlayer, ModContent.GetModItem(cursor), cursorRange) && ModContent.GetModItem(cursor) is ClickerItem item)
             {
                 isClicking = true;
                 clickBuffer[clickbufferIndex]++;
                 clicksTotal++;
-                NPC nearNPC = AdvAI.FindClosestEntityUnderPoint<NPC>(Main.MouseWorld, 2 * 16f, npc => !npc.dontTakeDamage && !npc.townNPC);
-                Player nearPlayer = AdvAI.FindClosestPlayer(2 * 16f, Main.MouseWorld, player => isPlayerPVP(player) && player.active && !player.dead);
+                
                 if (nearNPC != null)
                 {
                     bool crit = Main.rand.Next() < myPlayer.GetTotalCritChance(item.Item.DamageType) / 100f;
@@ -252,12 +251,14 @@ namespace VanillaModding.Common
             base.PostUpdate();
         }
 
+        float cursorScale = 0f;
         float cursorFade = 0f;
         float lastRange;
         bool validRange;
         public override void DrawPlayer(Camera camera)
         {
-            cursorFade = MathHelper.Lerp(cursorFade, holdingCursor ? 1f : 0f, 0.0424f);
+            cursorScale = MathHelper.Lerp(cursorScale, holdingCursor ? 1f : 0f, 0.0424f);
+            cursorFade = MathHelper.Lerp(cursorFade, holdingCursor ? (hasTarget ? 1f : 0.25f) : 0f, 0.0644f);
             if (Player.HeldItem.ModItem is ClickerItem clicker)
             {
                 validRange = CursorUI.ValidCursorConditions(Player, ModContent.GetModItem(clicker.Type), cursorRange);
@@ -274,7 +275,7 @@ namespace VanillaModding.Common
             float gridAlpha = 0.3f * cursorFade;
             DrawHelper.DrawDashedCircle(
                 Player.Center,
-                lastRange * cursorFade,
+                lastRange * cursorScale,
                 120,
                 1,
                 baseColor * circleAlpha,
@@ -282,7 +283,7 @@ namespace VanillaModding.Common
             );
             DrawHelper.DrawGridInsideCircle(
                 Player.Center,
-                lastRange * cursorFade,
+                lastRange * cursorScale,
                 16,
                 baseColor * gridAlpha,
                 2f
