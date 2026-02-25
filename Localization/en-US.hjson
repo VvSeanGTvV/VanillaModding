@@ -430,6 +430,16 @@ Mods: {
 				DisplayName: Cactus Cursor
 				Tooltip: ""
 			}
+
+			IronCursor: {
+				DisplayName: Iron Cursor
+				Tooltip: ""
+			}
+
+			LeadCursor: {
+				DisplayName: Lead Cursor
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {

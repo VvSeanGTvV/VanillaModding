@@ -165,10 +165,5 @@ namespace VanillaModding.External.Draw
                 0f
             );
         }
-
-        internal static void DrawGrid(Vector2 center, float range1, float range2, int v1, Color color, float v2)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
