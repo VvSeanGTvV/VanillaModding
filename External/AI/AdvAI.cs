@@ -15,6 +15,73 @@ namespace VanillaModding.External.AI
     {
 
         /// <summary>
+        /// Find the closest entity of type <typeparamref name="T"/> by distance, from the point vector in <paramref name="point"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="point"> Point Radar </param>
+        /// <param name="maxDistance"> maximum distance it can reach </param>
+        /// <param name="filter"> Filters, if returns true then it picks, else it continues (unless it has filter, otherwise it'll run without filter) </param>
+        /// <returns></returns>
+        public static T FindClosestEntityUnderPoint<T>(
+                Vector2 point,
+                float maxDistance,
+                Func<T, bool> filter = null
+            )
+            where T : Entity
+        {
+            T closest = null;
+            float sqrMaxDistance = maxDistance * maxDistance;
+
+            // Handle NPC
+            if (typeof(T) == typeof(NPC))
+            {
+                for (int i = 0; i < Main.maxNPCs; i++)
+                {
+                    NPC npc = Main.npc[i];
+                    if (!npc.active || npc.life <= 0)
+                        continue;
+
+                    if (filter != null && !filter((T)(Entity)npc))
+                        continue;
+
+                    Vector2 closestPoint = npc.Hitbox.ClosestPointInRect(point);
+                    float sqrDistance = Vector2.DistanceSquared(point, closestPoint);
+
+                    if (sqrDistance <= sqrMaxDistance)
+                    {
+                        sqrMaxDistance = sqrDistance;
+                        closest = (T)(Entity)npc;
+                    }
+                }
+            }
+
+            // Handle Player
+            if (typeof(T) == typeof(Player))
+            {
+                for (int i = 0; i < Main.maxPlayers; i++)
+                {
+                    Player player = Main.player[i];
+                    if (!player.active || player.dead)
+                        continue;
+
+                    if (filter != null && !filter((T)(Entity)player))
+                        continue;
+
+                    Vector2 closestPoint = player.Hitbox.ClosestPointInRect(point);
+                    float sqrDistance = Vector2.DistanceSquared(point, closestPoint);
+
+                    if (sqrDistance <= sqrMaxDistance)
+                    {
+                        sqrMaxDistance = sqrDistance;
+                        closest = (T)(Entity)player;
+                    }
+                }
+            }
+
+            return closest;
+        }
+
+        /// <summary>
         /// Find the closest enemy <see cref="NPC"/> by distance, from the point vector in <paramref name="center"/>.
         /// </summary>
         /// <param name="maxDetectDistance"> Maximum distance that projectile can see. </param>
@@ -32,6 +99,7 @@ namespace VanillaModding.External.AI
             for (int k = 0; k < Main.maxNPCs; k++)
             {
                 NPC target = Main.npc[k];
+                if (!target.active || target.life <= 0) continue;
                 // The DistanceSquared function returns a squared distance between 2 points, skipping relatively expensive square root calculations
                 float sqrDistanceToTarget = Vector2.DistanceSquared(target.Center, center);
 

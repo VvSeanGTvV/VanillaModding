@@ -410,6 +410,26 @@ Mods: {
 				DisplayName: Wood Cursor
 				Tooltip: ""
 			}
+
+			RichmahoganyCursor: {
+				DisplayName: Rich Mahogany Cursor
+				Tooltip: ""
+			}
+
+			ShadewoodCursor: {
+				DisplayName: Shadewood Cursor
+				Tooltip: ""
+			}
+
+			SpookywoodCursor: {
+				DisplayName: Spooky Wood Cursor
+				Tooltip: ""
+			}
+
+			CactusCursor: {
+				DisplayName: Cactus Cursor
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
@@ -510,7 +530,7 @@ Mods: {
 			FishTrout.DisplayName: Fish Trout
 			DiceThrowableProjectile.DisplayName: Thrown Dice
 			OrangeLaser.DisplayName: Orange Laser
-			BombarchistProj.DisplayName: Bombarchist Proj
+			BombarchistProj.DisplayName: Bombarchist Bomb
 		}
 
 		Prefixes: {

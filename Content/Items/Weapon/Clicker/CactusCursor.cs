@@ -9,7 +9,7 @@ using VanillaModding.Content.DamageClasses;
 
 namespace VanillaModding.Content.Items.Weapon.Clicker
 {
-    internal class WoodCursor : ClickerItem
+    internal class CactusCursor : ClickerItem
     {
         public override void SetStaticDefaults()
         {
@@ -20,24 +20,16 @@ namespace VanillaModding.Content.Items.Weapon.Clicker
         {
             range = 250f;
             Item.DamageType = ModContent.GetInstance<Click>();
-            Item.damage = 1;
+            Item.damage = 2;
             Item.knockBack = 1f;
             Item.width = 16;
             Item.height = 24;
         }
 
-        /*public override void AddRecipes()
-        {
-            CreateRecipe()
-                .AddIngredient(ItemID.Wood, 5)
-                .AddTile(TileID.WorkBenches)
-                .Register();
-        }*/
-
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.Wood, 5)
+                .AddIngredient(ItemID.Cactus, 5)
                 .AddTile(TileID.WorkBenches)
                 .Register();
         }

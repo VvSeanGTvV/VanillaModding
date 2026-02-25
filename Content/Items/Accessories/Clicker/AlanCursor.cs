@@ -25,7 +25,7 @@ namespace VanillaModding.Content.Items.Accessories.Clicker
             Item.height = 52;
             Item.accessory = true;
             Item.rare = ItemRarityID.Expert;
-            Buffs.Add((BuffID.Burning, 60 * 5));
+            Buffs.Add((BuffID.Burning, 60 * 5, 10));
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)

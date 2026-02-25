@@ -20,10 +20,10 @@ namespace VanillaModding.Content.Items
         public float range;
 
         /// <summary>
-        /// A collection of buffs (<see langword="int"/> BuffID, <see langword="int"/> BuffDuration) from an accessory or item, this gets added to the <see cref="VanillaModdingPlayer"/>'s stacked buff list 
+        /// A collection of buffs (<see langword="int"/> BuffID, <see langword="int"/> BuffDuration, <see langword="int"/> ClicksRequired) from an accessory or item, this gets added to the <see cref="VanillaModdingPlayer"/>'s stacked buff list 
         /// which by standard can stack more and more depending on how many accessory you equipped related to Clicker Class.
         /// </summary>
-        public List<(int, int)> Buffs = new List<(int, int)>();
+        public List<(int, int, int)> Buffs = new List<(int, int, int)>();
 
         /// <summary>
         /// <para/> Allows for multiple clicker accessories to be equipped at once. Allows <see cref="CanAccessoryBeEquippedWith(Item, Item, Player)"/> method to return true, except any existing/same of the accessory despite having it true will still be false to prevent stacking of the same accessory.

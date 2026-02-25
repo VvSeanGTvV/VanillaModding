@@ -9,10 +9,11 @@ using VanillaModding.Content.DamageClasses;
 
 namespace VanillaModding.Content.Items.Weapon.Clicker
 {
-    internal class WoodCursor : ClickerItem
+    internal class ShadewoodCursor : ClickerItem
     {
         public override void SetStaticDefaults()
         {
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<WoodCursor>();
             Item.ResearchUnlockCount = 1;
         }
 
@@ -20,24 +21,16 @@ namespace VanillaModding.Content.Items.Weapon.Clicker
         {
             range = 250f;
             Item.DamageType = ModContent.GetInstance<Click>();
-            Item.damage = 1;
-            Item.knockBack = 1f;
+            Item.damage = 3;
+            Item.knockBack = 2f;
             Item.width = 16;
             Item.height = 24;
         }
 
-        /*public override void AddRecipes()
-        {
-            CreateRecipe()
-                .AddIngredient(ItemID.Wood, 5)
-                .AddTile(TileID.WorkBenches)
-                .Register();
-        }*/
-
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.Wood, 5)
+                .AddIngredient(ItemID.Shadewood, 5)
                 .AddTile(TileID.WorkBenches)
                 .Register();
         }

@@ -11,6 +11,12 @@ namespace VanillaModding.Content.Items.Weapon.Clicker
 {
     internal class RichmahoganyCursor : ClickerItem
     {
+        public override void SetStaticDefaults()
+        {
+            ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<WoodCursor>();
+            Item.ResearchUnlockCount = 1;
+        }
+
         public override void SetDefaults()
         {
             range = 250f;

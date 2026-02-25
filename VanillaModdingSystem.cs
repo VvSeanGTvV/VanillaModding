@@ -19,7 +19,16 @@ namespace VanillaModding
                 () => "Any Cursor Wood", // Display name
                 ModContent.ItemType<WoodCursor>(),
                 ModContent.ItemType<EbonwoodCursor>(),
-                ModContent.ItemType<PearlwoodCursor>()
+                ModContent.ItemType<PearlwoodCursor>(),
+                ModContent.ItemType<RichmahoganyCursor>(),
+                ModContent.ItemType<ShadewoodCursor>(),
+                ModContent.ItemType<SpookywoodCursor>()
+            );
+
+            RecipeGroup corruptionCursor = new RecipeGroup(
+                () => "Any Corruption Cursor Wood", // Display name
+                ModContent.ItemType<EbonwoodCursor>(),
+                ModContent.ItemType<ShadewoodCursor>()
             );
 
             RecipeGroup woodGroup = new RecipeGroup(
@@ -37,6 +46,7 @@ namespace VanillaModding
             );
 
             // Register the group with a unique name
+            RecipeGroup.RegisterGroup("VMT:AnyCorruptCursorWood", corruptionCursor);
             RecipeGroup.RegisterGroup("VMT:AnyCursorWood", woodCursorGroup);
             RecipeGroup.RegisterGroup("VMT:AnyWood", woodGroup);
         }

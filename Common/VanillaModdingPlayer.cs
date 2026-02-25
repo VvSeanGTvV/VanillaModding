@@ -35,7 +35,7 @@ namespace VanillaModding.Common
         public float cursorRange = 0;
         public int cursorDamageTotal = 0;
         public float cursorKnockbackTotal = 0;
-        public List<(int, int)> stackedCursorBuff = new List<(int, int)>();
+        public List<(int, int, int)> stackedCursorBuff = new List<(int, int, int)>();
         public int clicksTotal, clicksPerSecond, clicksThisSecond;
         public bool isClicking, holdingCursor;
 
@@ -166,7 +166,7 @@ namespace VanillaModding.Common
                 isClicking = true;
                 clickBuffer[clickbufferIndex]++;
                 clicksTotal++;
-                NPC nearNPC = AdvAI.FindClosestNPC(2 * 16f, Main.MouseWorld, npc => !npc.dontTakeDamage && !npc.townNPC);
+                NPC nearNPC = AdvAI.FindClosestEntityUnderPoint<NPC>(Main.MouseWorld, 2 * 16f, npc => !npc.dontTakeDamage && !npc.townNPC);
                 Player nearPlayer = AdvAI.FindClosestPlayer(2 * 16f, Main.MouseWorld, player => isPlayerPVP(player) && player.active && !player.dead);
                 if (nearNPC != null)
                 {
@@ -179,7 +179,7 @@ namespace VanillaModding.Common
                     myPlayer.ApplyDamageToNPC(nearNPC, (int)finalDamage, cursorKnockbackTotal, myPlayer.direction, crit, item.Item.DamageType, true);
                     foreach (var buffData in stackedCursorBuff)
                     {
-                        nearNPC.AddBuff(buffData.Item1, buffData.Item2);
+                        if (clicksTotal % buffData.Item3 == 0) nearNPC.AddBuff(buffData.Item1, buffData.Item2);
                     }
                 }
                 if (nearPlayer != null)
@@ -191,7 +191,7 @@ namespace VanillaModding.Common
                     //myPlayer.ApplyDamageToNPC(nearNPC, item.Item.damage, item.Item.knockBack, myPlayer.direction, crit, item.Item.DamageType);
                     foreach (var buffData in stackedCursorBuff)
                     {
-                        nearPlayer.AddBuff(buffData.Item1, buffData.Item2);
+                        if (clicksTotal % buffData.Item3 == 0) nearPlayer.AddBuff(buffData.Item1, buffData.Item2);
                     }
                 }
             }
