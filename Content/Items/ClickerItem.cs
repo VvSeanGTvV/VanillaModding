@@ -51,10 +51,6 @@ namespace VanillaModding.Content.Items
             VanillaModdingPlayer cursorPlayer = player.GetModPlayer<VanillaModdingPlayer>();
             cursorPlayer.overrideCursor = hasCustomCursor;
             if (hasCustomCursor) cursorPlayer.cursorItem = Type;
-            cursorPlayer.cursorRange += range;
-            cursorPlayer.cursorDamageTotal += Item.damage;
-
-            cursorPlayer.stackedCursorBuff.AddRange(Buffs);
         }
     }
 }

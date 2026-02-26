@@ -96,13 +96,6 @@ namespace VanillaModding.Common.GlobalNPCs
                 case NPCID.Clothier:
                     shop.Add(ModContent.ItemType<WhiteThread>());
                     break;
-
-                // case NPCID.BestiaryGirl:
-                //     shop.Add(ModContent.ItemType<Bunnynator>());
-                //     break;
-                case NPCID.TravellingMerchant:
-                    shop.Add(ModContent.ItemType<Mouse>());
-                    break;
             }
         }
     }

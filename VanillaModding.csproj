@@ -28,6 +28,8 @@
 	  </Reference>  
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Content\DamageClasses\" />
+    <Folder Include="Content\InfoDisplays\" />
     <Folder Include="Content\Items\Weapon\Summoner\" />
   </ItemGroup>
 </Project>

@@ -8,8 +8,6 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using VanillaModding.Common;
-using VanillaModding.Content.DamageClasses;
-
 namespace VanillaModding.Content.Items.Accessories.Clicker
 {
     internal class AlanCursor : ClickerItem
@@ -19,13 +17,10 @@ namespace VanillaModding.Content.Items.Accessories.Clicker
         public override void SetDefaults()
         {
             hasCustomCursor = true;
-            multiAccessoryClicker = true;
-            Item.DamageType = ModContent.GetInstance<Click>();
             Item.width = 46;
             Item.height = 52;
             Item.accessory = true;
             Item.rare = ItemRarityID.Expert;
-            Buffs.Add((BuffID.Burning, 60 * 5, 10));
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)

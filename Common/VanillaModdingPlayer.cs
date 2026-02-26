@@ -26,15 +26,6 @@ namespace VanillaModding.Common
         // Cursor related variables
         public bool overrideCursor = false;
         public int cursorItem = -1;
-        /// <summary>
-        /// Range of the cursor, can be adjusted by accessories or buffs, used for checking if the cursor can hit the target or not.
-        /// </summary>
-        public float cursorRange = 0;
-        public int cursorDamageTotal = 0;
-        public float cursorKnockbackTotal = 0;
-        public List<(int, int, int)> stackedCursorBuff = new List<(int, int, int)>();
-        public int clicksTotal, clicksPerSecond, clicksThisSecond;
-        public bool isClicking, holdingCursor, hasTarget;
 
         // DPS METER 60ROLL
         private int[] clickBuffer = new int[60];
@@ -47,9 +38,6 @@ namespace VanillaModding.Common
         // Held Item of prefix and class
         int currentPrefix = 0;
         DamageClass currentClass = null;
-
-        // Info Displays
-        public bool showClicksTotal = false;
 
         // Accessories Bool
         public bool accSatanicBible = false;
@@ -80,11 +68,6 @@ namespace VanillaModding.Common
         /// </summary>
         public bool stunned;
 
-        public override void RefreshInfoAccessoriesFromTeamPlayers(Player otherPlayer)
-        {
-            if (otherPlayer.GetModPlayer<VanillaModdingPlayer>().showClicksTotal) showClicksTotal = true;
-        }
-
         #region reset functions
         // The ResetEffects hook is important for buffs to work correctly.
         // It resets the effects applied by your buff when it expires.
@@ -94,33 +77,15 @@ namespace VanillaModding.Common
             stunned = false;
         }
 
-        public void ResetCursorStat()
-        {
-            holdingCursor = false;
-            overrideCursor = false;
-            cursorItem = -1;
-
-            stackedCursorBuff.Clear();
-            cursorDamageTotal = 0;
-            isClicking = false;
-            cursorRange = cursorKnockbackTotal = 0;
-        }
-
         public void ResetBool()
         {
             accSatanicBible = false;
-        }
-
-        public override void ResetInfoAccessories()
-        {
-            showClicksTotal = false;
         }
         #endregion
 
         public override void PreUpdate()
         {
             ResetBool();
-            ResetCursorStat();
             base.PreUpdate();
         }
 
@@ -144,75 +109,7 @@ namespace VanillaModding.Common
         /// <param name="other"> other player to Check </param>
         /// <returns></returns>
         public bool isPlayerPVP(Player other) => (other.hostile && Player.team != 0) || (Player.team != other.team && other.hostile);
-
-        public void UpdateCursorDamage(Player myPlayer)
-        {
-            int cursor = myPlayer.HeldItem.ModItem != null && myPlayer.HeldItem.ModItem is ClickerItem ? myPlayer.HeldItem.type : -1;
-            if (cursor <= -1) return;
-            holdingCursor = true;
-            if (myPlayer.HeldItem.ModItem != null && myPlayer.HeldItem.ModItem is ClickerItem heldCursor)
-            {
-                cursorRange = heldCursor.range;
-                cursorDamageTotal = heldCursor.Item.damage;
-                cursorKnockbackTotal = heldCursor.Item.knockBack;
-                
-            }
-
-            NPC nearNPC = AdvAI.FindClosestEntityUnderPoint<NPC>(Main.MouseWorld, 2 * 16f, npc => !npc.dontTakeDamage && !npc.townNPC);
-            Player nearPlayer = AdvAI.FindClosestEntityUnderPoint<Player>(Main.MouseWorld, 2 * 16f, player => isPlayerPVP(player) && player.active && !player.dead);
-            hasTarget = nearNPC != null || nearPlayer != null;
-            if (ModContent.GetModItem(cursor) != null && Main.mouseLeft && (ModContent.GetModItem(cursor).Item.autoReuse || Main.mouseLeftRelease)  && CursorUI.ValidCursorConditions(myPlayer, ModContent.GetModItem(cursor), cursorRange) && ModContent.GetModItem(cursor) is ClickerItem item)
-            {
-                isClicking = true;
-                clickBuffer[clickbufferIndex]++;
-                clicksTotal++;
-                
-                if (nearNPC != null)
-                {
-                    bool crit = Main.rand.Next() < myPlayer.GetTotalCritChance(item.Item.DamageType) / 100f;
-                    StatModifier damageModifier = myPlayer.GetTotalDamage(item.Item.DamageType);
-                    float finalDamage = damageModifier.ApplyTo(cursorDamageTotal);
-
-                    //Main.NewText($"Item: {item.Name}, Range: {item.range}, {myPlayer.position.DistanceSQ(Main.MouseWorld)}, DamageB/F/M/A: {damageModifier.Base}:{damageModifier.Flat}:{damageModifier.Multiplicative}:{damageModifier.Additive}, DamageF: {finalDamage}");
-
-                    myPlayer.ApplyDamageToNPC(nearNPC, (int)finalDamage, cursorKnockbackTotal, myPlayer.direction, crit, item.Item.DamageType, true);
-                    foreach (var buffData in stackedCursorBuff)
-                    {
-                        if (clicksTotal % buffData.Item3 == 0) nearNPC.AddBuff(buffData.Item1, buffData.Item2);
-                    }
-                }
-                if (nearPlayer != null)
-                {
-                    //Main.NewText($"Item: {item.Name}, Range: {item.range}, {myPlayer.position.DistanceSQ(Main.MouseWorld)}");
-
-                    bool crit = Main.rand.Next(100) < myPlayer.GetTotalCritChance(item.Item.DamageType);
-                    nearPlayer.Hurt(Terraria.DataStructures.PlayerDeathReason.ByCustomReason($"{myPlayer.name} used {item.Name} on {nearPlayer.name}"), cursorDamageTotal, myPlayer.direction, true);
-                    //myPlayer.ApplyDamageToNPC(nearNPC, item.Item.damage, item.Item.knockBack, myPlayer.direction, crit, item.Item.DamageType);
-                    foreach (var buffData in stackedCursorBuff)
-                    {
-                        if (clicksTotal % buffData.Item3 == 0) nearPlayer.AddBuff(buffData.Item1, buffData.Item2);
-                    }
-                }
-            }
-        }
-
-        public void ClickPerSecond()
-        {
-            // Move to next tick
-            clickbufferIndex++;
-            if (clickbufferIndex >= 60)
-                clickbufferIndex = 0;
-
-            // Clear the new slot for this tick
-            clickBuffer[clickbufferIndex] = 0;
-
-            // Recalculate CPS (sum of last 60 ticks)
-            int total = 0;
-            for (int i = 0; i < 60; i++)
-                total += clickBuffer[i];
-
-            if (isClicking) clicksPerSecond = total;
-        }
+       
 
         public override void OnHurt(Player.HurtInfo info)
         {
@@ -245,49 +142,7 @@ namespace VanillaModding.Common
             {
                 myPlayer.AddBuff(BuffID.Slow, 2);
             }
-
-            UpdateCursorDamage(myPlayer);
-            ClickPerSecond();
             base.PostUpdate();
-        }
-
-        float cursorScale = 0f;
-        float cursorFade = 0f;
-        float lastRange;
-        bool validRange;
-        public override void DrawPlayer(Camera camera)
-        {
-            cursorScale = MathHelper.Lerp(cursorScale, holdingCursor ? 1f : 0f, 0.0424f);
-            cursorFade = MathHelper.Lerp(cursorFade, holdingCursor ? (hasTarget ? 1f : 0.25f) : 0f, 0.0644f);
-            if (Player.HeldItem.ModItem is ClickerItem clicker)
-            {
-                validRange = CursorUI.ValidCursorConditions(Player, ModContent.GetModItem(clicker.Type), cursorRange);
-                lastRange = cursorRange;
-            }
-            else
-            {
-                validRange = false;
-            }
-
-            Color baseColor = validRange ? Color.White : Color.Red;
-
-            float circleAlpha = 0.5f * cursorFade;
-            float gridAlpha = 0.3f * cursorFade;
-            DrawHelper.DrawDashedCircle(
-                Player.Center,
-                lastRange * cursorScale,
-                120,
-                1,
-                baseColor * circleAlpha,
-                4f
-            );
-            DrawHelper.DrawGridInsideCircle(
-                Player.Center,
-                lastRange * cursorScale,
-                16,
-                baseColor * gridAlpha,
-                2f
-            );
         }
 
         public override void PostUpdateMiscEffects()
@@ -456,14 +311,12 @@ namespace VanillaModding.Common
 
         public override void SaveData(TagCompound tag)
         {
-            tag["clicksTotal"] = clicksTotal;
             tag["diamondHeart"] = DiamondHeart;
             tag["lunarHeart"] = LunarHeart;
         }
 
         public override void LoadData(TagCompound tag)
         {
-            clicksTotal = tag.GetInt("clicksTotal");
             DiamondHeart = tag.GetInt("diamondHeart");
             LunarHeart = tag.GetInt("lunarHeart");
         }

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using VanillaModding.Content.DamageClasses;
 
 namespace VanillaModding.Content.Items.Accessories.Vanity
 {
