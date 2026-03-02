@@ -9,7 +9,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Common.Systems;
-using VanillaModding.External.AI;
+using VanillaModding.Common.Utilities;
 
 namespace VanillaModding.Content.Projectiles.Lobotomy
 {

@@ -9,7 +9,7 @@ using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
-using VanillaModding.External.Draw;
+using VanillaModding.Common.Utilities;
 
 namespace VanillaModding.Content.Projectiles.Tizona
 {
@@ -130,10 +130,10 @@ namespace VanillaModding.Content.Projectiles.Tizona
                     float edgeRotation = Projectile.rotation + Projectile.ai[0] * i * ((float)Math.PI * -2f) * 0.025f + Utils.Remap(percentageOfLife, 0f, 0.6f, 0f, 0.9f) * Projectile.ai[0];
                     Vector2 drawPos = position + edgeRotation.ToRotationVector2() * (texture.Width * 0.5f - 6f) * projectileScale;
                     float scale = i / 12f;
-                    DrawHelper.DrawPrettyStarSparkle(Projectile.Opacity, SpriteEffects.None, drawPos, Color.Lerp(new Color(255, 190, 190, 0), new Color(190, 180, 255, 0), percentageOfLife) * lerpTime * 2f * scale, color, percentageOfLife, 0f, 0.5f, 0.5f, 1f, edgeRotation, new Vector2(0f, Utils.Remap(percentageOfLife, 0f, 1f, 3f, 0f)) * scaleFactor, Vector2.One * scaleFactor);
+                    DrawUtils.DrawPrettyStarSparkle(Projectile.Opacity, SpriteEffects.None, drawPos, Color.Lerp(new Color(255, 190, 190, 0), new Color(190, 180, 255, 0), percentageOfLife) * lerpTime * 2f * scale, color, percentageOfLife, 0f, 0.5f, 0.5f, 1f, edgeRotation, new Vector2(0f, Utils.Remap(percentageOfLife, 0f, 1f, 3f, 0f)) * scaleFactor, Vector2.One * scaleFactor);
                 }
                 Vector2 drawpos2 = position + (Projectile.rotation + Utils.Remap(percentageOfLife, 0f, 0.6f, 0f, 0.9f) * Projectile.ai[0]).ToRotationVector2() * (texture.Width * 0.5f - 4f) * projectileScale;
-                DrawHelper.DrawPrettyStarSparkle(Projectile.Opacity, SpriteEffects.None, drawpos2, Color.Lerp(new Color(255, 190, 190, 0), new Color(190, 180, 255, 0), percentageOfLife) * lerpTime * 1.5f, color, percentageOfLife, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(percentageOfLife, 0f, 1f, 4f, 1f)) * scaleFactor, Vector2.One * scaleFactor);
+                DrawUtils.DrawPrettyStarSparkle(Projectile.Opacity, SpriteEffects.None, drawpos2, Color.Lerp(new Color(255, 190, 190, 0), new Color(190, 180, 255, 0), percentageOfLife) * lerpTime * 1.5f, color, percentageOfLife, 0f, 0.5f, 0.5f, 1f, 0f, new Vector2(2f, Utils.Remap(percentageOfLife, 0f, 1f, 4f, 1f)) * scaleFactor, Vector2.One * scaleFactor);
             }
 
             public override bool PreDraw(ref Color lightColor)

@@ -9,7 +9,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
-using VanillaModding.External.AI;
+using VanillaModding.Common.Utilities;
 
 namespace VanillaModding.Content.Projectiles.Tizona
 {

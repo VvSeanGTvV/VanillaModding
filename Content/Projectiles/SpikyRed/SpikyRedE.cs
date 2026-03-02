@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.ModLoader;
-using VanillaModding.External.AI;
+using VanillaModding.Common.Utilities;
 
 namespace VanillaModding.Content.Projectiles.SpikyRed
 {

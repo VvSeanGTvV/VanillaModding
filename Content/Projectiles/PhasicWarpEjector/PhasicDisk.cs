@@ -9,7 +9,6 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using VanillaModding.External.AI;
 
 namespace VanillaModding.Content.Projectiles.PhasicWarpEjector
 {

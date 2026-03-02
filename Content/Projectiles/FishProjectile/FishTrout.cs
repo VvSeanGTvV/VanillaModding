@@ -15,7 +15,6 @@ using Terraria.ModLoader;
 using VanillaModding.Common.GlobalNPCs;
 using VanillaModding.Common.Systems;
 using VanillaModding.Content.Dusts.SMASH;
-using VanillaModding.External.AI;
 
 namespace VanillaModding.Content.Projectiles.FishProjectile
 {

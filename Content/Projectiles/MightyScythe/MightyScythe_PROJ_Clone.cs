@@ -10,7 +10,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
-using VanillaModding.External.AI;
+using VanillaModding.Common.Utilities;
 using static Humanizer.In;
 
 namespace VanillaModding.Content.Projectiles.MightyScythe

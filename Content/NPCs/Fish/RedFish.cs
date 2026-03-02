@@ -15,8 +15,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using VanillaModding.Common.GlobalNPCs;
 using VanillaModding.Common.Systems;
-
-using VanillaModding.External.AI;
+using VanillaModding.Common.Utilities;
 
 namespace VanillaModding.Content.NPCs.Fish
 {

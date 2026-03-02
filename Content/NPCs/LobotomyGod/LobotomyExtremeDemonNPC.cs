@@ -12,8 +12,8 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Common.Systems;
+using VanillaModding.Common.Utilities;
 using VanillaModding.Content.Projectiles.Lobotomy;
-using VanillaModding.External.AI;
 
 namespace VanillaModding.Content.NPCs.LobotomyGod
 {

@@ -13,7 +13,6 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
-using VanillaModding.External.Draw;
 
 namespace VanillaModding.Content.Projectiles.MightyScythe
 {

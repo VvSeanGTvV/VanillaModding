@@ -9,7 +9,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace VanillaModding.External.AI
+namespace VanillaModding.Common.Utilities
 {
     internal class AdvAI
     {

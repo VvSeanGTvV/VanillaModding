@@ -1,11 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.Graphics;
 using Terraria.ID;
@@ -13,11 +15,14 @@ using Terraria.Map;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using VanillaModding.Common.UI;
+using VanillaModding.Common.Utilities;
+using VanillaModding.Content.Dusts;
 using VanillaModding.Content.Items;
+using VanillaModding.Content.Items.Accessories;
 using VanillaModding.Content.Items.Accessories.Book;
 using VanillaModding.Content.Prefixes;
-using VanillaModding.External.AI;
-using VanillaModding.External.Draw;
+using VanillaModding.Content.Projectiles.EffectProjectile;
+using VanillaModding.Content.Projectiles.KoboldDynamite;
 
 namespace VanillaModding.Common
 {
@@ -39,10 +44,12 @@ namespace VanillaModding.Common
         int currentPrefix = 0;
         DamageClass currentClass = null;
 
+        // Int Accessories
+        public int totem = -1;
+
         // Accessories Bool
         public bool accSatanicBible = false;
-        public bool accMouse = false;
-        public bool accClickerEmblem = false;
+        public bool accTotem = false;
 
         // This variable is for D I C E item.
         /// <summary>
@@ -79,9 +86,64 @@ namespace VanillaModding.Common
 
         public void ResetBool()
         {
+            totem = -1;
+
+            accTotem = false;
             accSatanicBible = false;
         }
+
+        public void ResetDice()
+        {
+            totalRolls = 0;
+            DiceMult = 0;
+            rolling = false;
+            hasAnyDiceEffect = false;
+        }
+
         #endregion
+
+        private int FindTotemSlot()
+        {
+            for (int i = 3; i < 9 + Player.GetAmountOfExtraAccessorySlotsToShow(); i++)
+            {
+                if (Player.armor[i].type == ModContent.ItemType<TotemOfUndying>())
+                    return i;
+            }
+
+            return -1;
+        }
+
+        public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genDust, ref PlayerDeathReason damageSource)
+        {
+            int totemSlot = FindTotemSlot();
+
+            if (Player.HasItem(ModContent.ItemType<TotemOfUndying>(), Player.armor))
+            {
+                // Consume it
+                Player.armor[totemSlot].TurnToAir();
+
+                // Prevent death
+                Player.statLife = Player.statLifeMax / 10; // Restore 50% HP
+                Player.HealEffect(Player.statLifeMax / 10);
+                ;
+
+                Projectile.NewProjectile(Player.GetSource_Death(), Player.Center, new Vector2(0, -10f), ModContent.ProjectileType<TotemOfUndyingEffect>(), 0, 0, Main.myPlayer);
+
+                for (int i = 0; i < 20; i++)
+                {
+                    Dust dust = Dust.NewDustDirect(Player.position, Player.width, Player.height, DustID.Smoke, 0f, 0f, 100, default, 2f);
+                    dust.velocity *= 1.4f;
+                }
+
+                // Optional immunity
+                Player.immune = true;
+                Player.immuneTime = 60*3;
+
+                SoundEngine.PlaySound(SoundID.Item37, Player.Center);
+                return false; // CANCEL DEATH
+            }
+            return true;
+        }
 
         public override void PreUpdate()
         {
@@ -245,13 +307,7 @@ namespace VanillaModding.Common
         /// Resets the entire DICE stats for the player.
         /// Useful, once a player dies to properly reset.
         /// </summary>
-        public void ResetDice()
-        {
-            totalRolls = 0;
-            DiceMult = 0;
-            rolling = false;
-            hasAnyDiceEffect = false;
-        }
+        
 
         public override void OnEnterWorld()
         {

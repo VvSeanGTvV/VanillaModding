@@ -10,7 +10,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Common;
 using VanillaModding.Common.GlobalNPCs;
-using VanillaModding.External.AI;
+using VanillaModding.Common.Utilities;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace VanillaModding.Content.Projectiles.DiceProjectile

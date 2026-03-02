@@ -391,54 +391,12 @@ Mods: {
 					'''
 			}
 
-			Mouse: {
-				DisplayName: Mouse
-				Tooltip: Displays your click per second
-			}
-
-			EbonwoodCursor: {
-				DisplayName: Ebonwood Cursor
-				Tooltip: ""
-			}
-
-			PearlwoodCursor: {
-				DisplayName: Pearlwood Cursor
-				Tooltip: ""
-			}
-
-			WoodCursor: {
-				DisplayName: Wood Cursor
-				Tooltip: ""
-			}
-
-			RichmahoganyCursor: {
-				DisplayName: Rich Mahogany Cursor
-				Tooltip: ""
-			}
-
-			ShadewoodCursor: {
-				DisplayName: Shadewood Cursor
-				Tooltip: ""
-			}
-
-			SpookywoodCursor: {
-				DisplayName: Spooky Wood Cursor
-				Tooltip: ""
-			}
-
-			CactusCursor: {
-				DisplayName: Cactus Cursor
-				Tooltip: ""
-			}
-
-			IronCursor: {
-				DisplayName: Iron Cursor
-				Tooltip: ""
-			}
-
-			LeadCursor: {
-				DisplayName: Lead Cursor
-				Tooltip: ""
+			TotemOfUndying: {
+				DisplayName: Voodoo Soul
+				Tooltip: 
+					'''
+					Gives you a second chance, though consumes on death.
+					'''
 			}
 		}
 
@@ -541,6 +499,7 @@ Mods: {
 			DiceThrowableProjectile.DisplayName: Thrown Dice
 			OrangeLaser.DisplayName: Orange Laser
 			BombarchistProj.DisplayName: Bombarchist Bomb
+			TotemOfUndyingEffect.DisplayName: Totem Of Undying Effect
 		}
 
 		Prefixes: {

@@ -16,7 +16,6 @@ using VanillaModding.Common.GlobalNPCs;
 using VanillaModding.Common.Systems;
 using VanillaModding.Content.Buffs;
 using VanillaModding.Content.Items.Consumable;
-using VanillaModding.External.AI;
 
 namespace VanillaModding.Content.Projectiles.DiceProjectile
 {
