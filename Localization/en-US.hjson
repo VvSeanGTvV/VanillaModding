@@ -393,10 +393,7 @@ Mods: {
 
 			TotemOfUndying: {
 				DisplayName: Voodoo Soul
-				Tooltip: 
-					'''
-					Gives you a second chance, though consumes on death.
-					'''
+				Tooltip: Gives you a second chance, though consumes on death.
 			}
 		}
 

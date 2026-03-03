@@ -21,8 +21,8 @@ namespace VanillaModding.Content.Dusts
         {
             dust.position += dust.velocity;
             dust.rotation += 0.1f;
-            dust.velocity.Y *= 0.80f;
-            dust.velocity.X *= 0.74f;
+            dust.velocity.Y *= 0.74f;
+            dust.velocity.X *= 0.84f;
             //dust.velocity.X += 0.05f;
             dust.alpha += 5;
             ReduceScale(dust);

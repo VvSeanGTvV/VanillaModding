@@ -117,7 +117,7 @@ namespace VanillaModding.Common
         {
             int totemSlot = FindTotemSlot();
 
-            if (Player.HasItem(ModContent.ItemType<TotemOfUndying>(), Player.armor))
+            if (Player.HasItem(ModContent.ItemType<TotemOfUndying>(), Player.armor) && totemSlot != -1)
             {
                 // Consume it
                 Player.armor[totemSlot].TurnToAir();
@@ -127,7 +127,7 @@ namespace VanillaModding.Common
                 Player.HealEffect(Player.statLifeMax / 10);
                 ;
 
-                Projectile.NewProjectile(Player.GetSource_Death(), Player.Center, new Vector2(0, -10f), ModContent.ProjectileType<TotemOfUndyingEffect>(), 0, 0, Main.myPlayer);
+                Projectile.NewProjectile(Player.GetSource_Death(), Player.Center, new Vector2(0, -5f), ModContent.ProjectileType<TotemOfUndyingEffect>(), 0, 0, Main.myPlayer);
 
                 for (int i = 0; i < 20; i++)
                 {

@@ -17,7 +17,7 @@ namespace VanillaModding.Content.Projectiles.EffectProjectile
 {
     internal class TotemOfUndyingEffect : ModProjectile
     {
-        int originalTime = 60 * 2;
+        int originalTime = 60 * 1;
         public override void SetDefaults()
         {
             
@@ -43,7 +43,7 @@ namespace VanillaModding.Content.Projectiles.EffectProjectile
             float a = (1 - (Projectile.timeLeft / originalTime));
             multiplier = 1 + (a * 5);
 
-            Projectile.rotation += multiplier;
+            Projectile.rotation += MathHelper.ToRadians((float)Math.Pow(10f, a*2f));
             base.AI();
         }
 
@@ -55,8 +55,8 @@ namespace VanillaModding.Content.Projectiles.EffectProjectile
                 Projectile.Center,
                 Color.LightGoldenrodYellow,
                 ModContent.DustType<ColorableDust>(),
-                25,
-                5
+                20,
+                10
             );
         }
 
