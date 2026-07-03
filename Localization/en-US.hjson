@@ -395,6 +395,11 @@ Mods: {
 				DisplayName: Voodoo Soul
 				Tooltip: Gives you a second chance, though consumes on death.
 			}
+
+			LogodomySpirit: {
+				DisplayName: Logodomy Spirit
+				Tooltip: Summons Lobotomy God
+			}
 		}
 
 		NPCs: {
