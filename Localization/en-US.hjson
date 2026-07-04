@@ -396,9 +396,14 @@ Mods: {
 				Tooltip: Gives you a second chance, though consumes on death.
 			}
 
-			LogodomySpirit: {
-				DisplayName: Logodomy Spirit
+			LogodomySoul: {
+				DisplayName: Soul of Lobotomy
 				Tooltip: Summons Lobotomy God
+			}
+
+			LogodomyAltar: {
+				DisplayName: Logodomy Altar
+				Tooltip: ""
 			}
 		}
 
@@ -456,6 +461,8 @@ Mods: {
 					Princess_LovesNPC: I like {NPCName}.
 				}
 			}
+
+			LobotomySpiritLife.DisplayName: Lobotomy Spirit Life
 		}
 
 		Projectiles: {
