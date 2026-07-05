@@ -1,12 +1,16 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.ModLoader;
 using VanillaModding.Common;
+using VanillaModding.Content.NPCs.LobotomyGod;
 
 namespace VanillaModding
 {
@@ -15,6 +19,22 @@ namespace VanillaModding
         internal enum MessageType : byte
         {
             VMTStatIncreasePlayerSync,
+            SpawnNPC,
+        }
+
+        public void SpawnNPCAt(int npcType, Vector2 pos)
+        {
+            int npcID = NPC.NewNPC(
+                new EntitySource_Misc("SummonItem"),
+                (int)pos.X,
+                (int)pos.Y,
+                npcType
+            );
+
+            if (Main.netMode == NetmodeID.Server)
+            {
+                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, npcID);
+            }
         }
 
         // Override this method to handle network packets sent for this mod.
@@ -35,6 +55,15 @@ namespace VanillaModding
                     {
                         // Forward the changes to the other clients
                         examplePlayer.SyncPlayer(-1, whoAmI, false);
+                    }
+                    break;
+                case MessageType.SpawnNPC:
+                    int npc = reader.ReadInt32();
+                    Vector2 spawnPos = reader.ReadVector2();
+
+                    if (Main.netMode == NetmodeID.Server)
+                    {
+                        SpawnNPCAt(npc, spawnPos);
                     }
                     break;
                 default:

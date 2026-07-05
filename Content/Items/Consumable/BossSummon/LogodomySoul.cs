@@ -14,6 +14,7 @@ using VanillaModding.Content.Items.Placeable;
 using VanillaModding.Content.NPCs.LobotomyGod;
 using VanillaModding.Content.NPCs.Sirius;
 using VanillaModding.Content.Tiles;
+using static VanillaModding.VanillaModding;
 
 namespace VanillaModding.Content.Items.Consumable.BossSummon
 {
@@ -88,24 +89,35 @@ namespace VanillaModding.Content.Items.Consumable.BossSummon
 
         public override bool? UseItem(Player player)
         {
-            Point? altar = FindNearbyAltar(player);
+            Point tilePos = Main.MouseWorld.ToTileCoordinates();
+            Tile tile = Framing.GetTileSafely(tilePos);
 
-            if (!altar.HasValue)
-                return false;
-
-            Point p = altar.Value;
-
-            // Center of the tile
-            int spawnX = p.X * 16 + 24;
-            int spawnY = p.Y * 16 + 16;
+            if (!tile.HasTile || tile.TileType != ModContent.TileType<LogodomyAltarTile>()) return false;
+            
+                // Center of the tile
+                int spawnX = tilePos.X * 16 + 24;
+            int spawnY = tilePos.Y * 16 + 16;
 
             SoundEngine.PlaySound(SoundID.AbigailSummon, new Vector2(spawnX, spawnY));
 
-            NPC.NewNPC(
+            // Only run on the server (or single-player host)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+            {
+                NPC.NewNPC(
                     player.GetSource_ItemUse(Item),
                     spawnX,
                     spawnY,
                     ModContent.NPCType<LobotomySpiritLife>());
+
+            }
+            else
+            {
+                ModPacket packet = Mod.GetPacket();
+                packet.Write((byte)MessageType.SpawnNPC);
+                packet.Write(ModContent.NPCType<LobotomySpiritLife>());
+                packet.WriteVector2(Main.MouseWorld); // send spawn position
+                packet.Send();
+            }
 
             return true;
         }
@@ -121,7 +133,7 @@ namespace VanillaModding.Content.Items.Consumable.BossSummon
         }
         public override Color? GetAlpha(Color lightColor)
         {
-            return new Color(0f * 0.97f, 1f * 0.97f, 0f * 0.97f, 0.5f);
+            return new Color(0.25f * 0.97f, 1f * 0.97f, 0f * 0.97f, 0.5f);
         }
     }
 }
