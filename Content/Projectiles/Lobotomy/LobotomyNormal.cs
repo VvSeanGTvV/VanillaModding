@@ -38,7 +38,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             Projectile.ignoreWater = true; // Does the projectile's speed be influenced by water?
             Projectile.tileCollide = true; // Can the projectile collide with tiles?
             Projectile.extraUpdates = 1; // Set to above 0 if you want the projectile to update multiple time in a frame
-
+            Projectile.netUpdate = true;
             //AIType = ProjectileID.Bullet; // Act exactly like default Bullet
 
         }
@@ -51,14 +51,13 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             //Projectile.penetrate = -1;
             Projectile.rotation += MathHelper.ToRadians(15f) * Projectile.direction;
 
-            Projectile.timeLeft = 2;
             if (Projectile.ai[0] >= 0)
             {
                 Player owner = Main.player[Projectile.owner];
 
                 Vector2 directionToPlayer = owner.Center - Projectile.Center;
                 float distance = directionToPlayer.Length();
-                if (distance >= 550f) Projectile.ai[0] = 1f;
+                if (distance >= 550f && Projectile.ai[0] <= 0) Projectile.ai[0] = 1f;
                 if (Projectile.ai[0] >= 1f)
                 {
                     Projectile.tileCollide = false;
@@ -69,8 +68,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
                     // Kill when close enough
                     if (distance < 20f)
                     {
-                        //Item.NewItem(Projectile.GetSource_FromAI(), Projectile.position, ModContent.ItemType<LobotomyThrowable>());
-                        Projectile.Kill();
+                        Projectile.timeLeft = 0;
                         return;
                     }
 
@@ -95,6 +93,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
                     Projectile.ai[0]--;
                 }
             }
+            Projectile.timeLeft = 2;
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)

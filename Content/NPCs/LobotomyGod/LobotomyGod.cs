@@ -35,8 +35,8 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
             NPC.height = 100;
 
             NPC.damage = 35;
-            NPC.defense = 20;
-            NPC.lifeMax = 45000;
+            NPC.defense = 25;
+            NPC.lifeMax = 200000;
 
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;
@@ -81,6 +81,7 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
         
         private int getNewPhase()
         {
+            NPC.netUpdate = true;
             int[] attackTable = new int[]
             {
                 -1, -1, -1, -1, -1, -1,
@@ -459,8 +460,8 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                 ChanceDenominator = 1,
                 MinimumStackPerChunkBase = 1,
                 MaximumStackPerChunkBase = 1,
-                MinimumItemDropsCount = 3,
-                MaximumItemDropsCount = 6,
+                MinimumItemDropsCount = 7,
+                MaximumItemDropsCount = 10,
             };
 
             var parameters2 = new DropOneByOne.Parameters()

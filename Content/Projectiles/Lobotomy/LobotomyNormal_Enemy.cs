@@ -13,7 +13,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
 {
     public class LobotomyNormal_Enemy : ModProjectile
     {
-        public override string Texture => $"{nameof(VanillaModding)}/Content/Projectiles/Lobotomy/LobotomyNormal";
+        //public override string Texture => $"{nameof(VanillaModding)}/Content/Projectiles/Lobotomy/LobotomyNormal";
         private float rotdef = 0f;
         public override void SetStaticDefaults()
         {
@@ -54,27 +54,30 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
             Vector2 directionToPlayer = owner.Center - Projectile.Center;
             float distance = directionToPlayer.Length();
 
-            Projectile.timeLeft = 2;
-            returnBack = (distance >= 550f);
+            if (!owner.active)
+            {
+                Projectile.timeLeft = 0;
+                return;
+            }
+            
+            
             if (!returnBack)
             {
+                returnBack = (distance >= 550f);
                 Projectile.position.X += 0.35f;
             } 
             else
             {
                
-
-
                 Projectile.tileCollide = false;
 
                 float returnSpeed = 14f;
                 float inertia = 20f;
 
                 // Kill when close enough
-                if (distance < 20f)
+                if (distance < 200f)
                 {
-                    //Item.NewItem(Projectile.GetSource_FromAI(), Projectile.position, ModContent.ItemType<LobotomyThrowable>());
-                    Projectile.Kill();
+                    if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.Kill();
                     return;
                 }
 
@@ -83,7 +86,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
 
                 Projectile.velocity = (Projectile.velocity * (inertia - 1) + directionToPlayer) / inertia;
             }
-            
+            Projectile.timeLeft = 2;
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)

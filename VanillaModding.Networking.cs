@@ -10,6 +10,7 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Common;
+using VanillaModding.Common.Systems;
 using VanillaModding.Content.NPCs.LobotomyGod;
 
 namespace VanillaModding
@@ -18,8 +19,15 @@ namespace VanillaModding
     {
         internal enum MessageType : byte
         {
+            /// <summary>
+            /// Syncs life fruit and mana crystal
+            /// </summary>
             VMTStatIncreasePlayerSync,
-            SpawnNPC,
+
+            /// <summary>
+            /// Spawn NPC at a specific position w/ TypeID *not best for bosses, but works for small NPCs.
+            /// </summary>
+            SpawnNPC, 
         }
 
         public void SpawnNPCAt(int npcType, Vector2 pos)

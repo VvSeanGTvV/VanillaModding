@@ -11,6 +11,7 @@ using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Common.Systems;
+using static VanillaModding.VanillaModding;
 
 namespace VanillaModding.Content.NPCs.LobotomyGod
 {
@@ -44,11 +45,13 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
             if (NPC.AnyNPCs(ModContent.NPCType<LobotomyGod>()))
                 return;
 
-            SoundEngine.PlaySound(SoundID.Roar, new Vector2(NPC.Center.X, NPC.Center.Y));
+            SoundEngine.PlaySound(SoundID.Shatter, new Vector2(NPC.Center.X, NPC.Center.Y));
+            SoundEngine.PlaySound(VanillaModdingSoundID.FireInTheHole, new Vector2(NPC.Center.X, NPC.Center.Y));
+
             NPC.NewNPC(
                 NPC.GetSource_Death(),
                 (int)NPC.Center.X,
-                (int)NPC.Center.Y,
+                (int)NPC.Center.Y + 350,
                 ModContent.NPCType<LobotomyGod>());
         }
 

@@ -1,6 +1,7 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Content.Items.Consumable.BossSummon;
 using VanillaModding.Content.Items.Materials;
 
 namespace VanillaModding.Content.Items.Weapon.Throwable.Lobotomy
@@ -39,10 +40,11 @@ namespace VanillaModding.Content.Items.Weapon.Throwable.Lobotomy
         {
             Recipe recipe = CreateRecipe();
             //recipe.AddIngredient(ItemID.SoulofSight, 15);
+            recipe.AddIngredient(ModContent.ItemType<LogodomySoul>(), 1);
             recipe.AddIngredient(ModContent.ItemType<LogodomyShard>(), 35);
             recipe.AddIngredient(ItemID.SoulofLight, 10);
             recipe.AddIngredient(ItemID.LightDisc, 1);
-            recipe.AddTile(TileID.TinkerersWorkbench);
+            recipe.AddTile(TileID.LunarCraftingStation);
             recipe.Register();
         }
     }
