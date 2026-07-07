@@ -16,6 +16,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using VanillaModding.Common.UI;
 using VanillaModding.Common.Utilities;
+using VanillaModding.Content.Buffs;
 using VanillaModding.Content.Dusts;
 using VanillaModding.Content.Items;
 using VanillaModding.Content.Items.Accessories;
@@ -50,6 +51,8 @@ namespace VanillaModding.Common
         // Accessories Bool
         public bool accSatanicBible = false;
         public bool accTotem = false;
+        public bool accEpipen = false;
+        public bool accValentineRing = false;
 
         // This variable is for D I C E item.
         /// <summary>
@@ -74,6 +77,7 @@ namespace VanillaModding.Common
         /// has been stunned by the Stunned debuff
         /// </summary>
         public bool stunned;
+        public bool Adrenaline, NaturalAdrenaline = false;
 
         #region reset functions
         // The ResetEffects hook is important for buffs to work correctly.
@@ -90,6 +94,7 @@ namespace VanillaModding.Common
 
             accTotem = false;
             accSatanicBible = false;
+            accEpipen = false;
         }
 
         public void ResetDice()
@@ -142,6 +147,9 @@ namespace VanillaModding.Common
                 SoundEngine.PlaySound(SoundID.Item37, Player.Center);
                 return false; // CANCEL DEATH
             }
+
+            Adrenaline = false;
+            NaturalAdrenaline = false;
             return true;
         }
 
@@ -196,6 +204,13 @@ namespace VanillaModding.Common
         {
             Player myPlayer = Main.LocalPlayer;
 
+            if (!NaturalAdrenaline
+                && !myPlayer.HasBuff(ModContent.BuffType<AdrenalineExhausted>())
+                && !myPlayer.HasBuff(ModContent.BuffType<Adrenaline>())
+                ) NaturalAdrenaline = myPlayer.statLife > myPlayer.statLifeMax * 0.35f && accEpipen;
+
+            if (accValentineRing) myPlayer.lifeRegen *= 2;
+
             currentPrefix = myPlayer.HeldItem.prefix;
             currentClass = myPlayer.HeldItem.DamageType;
 
@@ -204,6 +219,24 @@ namespace VanillaModding.Common
             {
                 myPlayer.AddBuff(BuffID.Slow, 2);
             }
+            
+            if (Adrenaline && !myPlayer.HasBuff(ModContent.BuffType<Adrenaline>()))
+            {
+                myPlayer.AddBuff(BuffID.Weak, 60 * 60);
+                myPlayer.AddBuff(BuffID.Dazed, 60 * 60);
+                myPlayer.AddBuff(BuffID.Darkness, 60 * 30);
+                myPlayer.AddBuff(BuffID.Blackout, 60 * 15);
+                myPlayer.AddBuff(ModContent.BuffType<AdrenalineExhausted>(), 60 * 30);
+                Adrenaline = false;
+            }
+
+            if (NaturalAdrenaline && myPlayer.statLife < myPlayer.statLifeMax * 0.35f)
+            {
+                myPlayer.AddBuff(ModContent.BuffType<Adrenaline>(), 60 * 15);
+                NaturalAdrenaline = false;
+                Adrenaline = true;
+            }
+
             base.PostUpdate();
         }
 

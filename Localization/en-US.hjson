@@ -25,6 +25,16 @@ Mods: {
 				DisplayName: Feral Cured
 				Description: Increased damage, Increased life regen, Immune related to most Feral Bites side effects
 			}
+
+			Adrenaline: {
+				DisplayName: Adrenaline Rush
+				Description: Fight or Flight! Increased movement speed, Increased damage, and Increased life regen.
+			}
+
+			AdrenalineExhausted: {
+				DisplayName: Adrenaline Exhausted
+				Description: The rush has expired. Major debuff is applied and hope you have backup plan.
+			}
 		}
 
 		Achievements: {
@@ -404,6 +414,24 @@ Mods: {
 			LogodomyAltar: {
 				DisplayName: Logodomy Altar
 				Tooltip: ""
+			}
+
+			AdrenalinePotion: {
+				DisplayName: Adrenaline Potion
+				Tooltip:
+					'''
+					Gives a punch to the rush, speedy and strong! 
+					A Fight-or-Flight situation, but at a sad cost.
+					'''
+			}
+
+			AdrenalinePen: {
+				DisplayName: Adrenaline Pen
+				Tooltip:
+					'''
+					Automatically gives an Adrenaline Rush whenever the user is below 35% health. 
+					'Fight-or-Flight' situation type pen.
+					'''
 			}
 		}
 

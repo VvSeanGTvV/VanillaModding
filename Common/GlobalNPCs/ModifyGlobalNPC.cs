@@ -20,6 +20,7 @@ using VanillaModding.Content.Items.Materials;
 using VanillaModding.Content.Items.Accessories.Book;
 using VanillaModding.Content.NPCs.Fish;
 using VanillaModding.Content.Items.Accessories.Clicker;
+using VanillaModding.Content.Items.Accessories;
 
 namespace VanillaModding.Common.GlobalNPCs
 {
@@ -95,6 +96,10 @@ namespace VanillaModding.Common.GlobalNPCs
 
                 case NPCID.Clothier:
                     shop.Add(ModContent.ItemType<WhiteThread>());
+                    break;
+
+                case NPCID.Merchant:
+                    shop.Add(ModContent.ItemType<ValentineRing>());
                     break;
             }
         }

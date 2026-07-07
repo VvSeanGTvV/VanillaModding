@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Common;
 
 namespace VanillaModding.Content.Items.Accessories
 {
@@ -25,7 +26,8 @@ namespace VanillaModding.Content.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            player.lifeRegen += 4;
+            VanillaModdingPlayer VMP = player.GetModPlayer<VanillaModdingPlayer>();
+            if (VMP != null) VMP.accValentineRing = true;
             player.jumpSpeedBoost += 2.25f;
         }
     }

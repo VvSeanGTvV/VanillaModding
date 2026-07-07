@@ -57,6 +57,7 @@ namespace VanillaModding.Content.Buffs
         {
             Main.pvpBuff[Type] = true; // This buff can be applied by other players in Pvp, so we need this to be true.
             Main.buffNoSave[Type] = true;
+            Main.debuff[Type] = true; // This buff is a debuff, so we need this to be true.
         }
 
         public override void Update(Player player, ref int buffIndex)
