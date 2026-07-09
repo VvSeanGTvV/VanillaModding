@@ -36,7 +36,7 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
 
             NPC.damage = 35;
             NPC.defense = 25;
-            NPC.lifeMax = 200000;
+            NPC.lifeMax = 100000;
 
             NPC.HitSound = SoundID.NPCHit1;
             NPC.DeathSound = SoundID.NPCDeath1;

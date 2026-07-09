@@ -13,6 +13,7 @@ using Terraria.DataStructures;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Common.Utilities;
 
 namespace VanillaModding.Content.Projectiles.MightyScythe
 {
@@ -140,11 +141,17 @@ namespace VanillaModding.Content.Projectiles.MightyScythe
             return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), start, end, 15f * Projectile.scale, ref collisionPoint);
         }
 
+        public override bool? CanCutTiles()
+        {
+            return true;
+        }
+
         // Do a similar collision check for tiles
         public override void CutTiles()
         {
             Vector2 start = Owner.MountedCenter;
             Vector2 end = start + Projectile.rotation.ToRotationVector2() * (Projectile.Size.Length() * Projectile.scale);
+
             Utils.PlotTileLine(start, end, 15 * Projectile.scale, DelegateMethods.CutTiles);
         }
 

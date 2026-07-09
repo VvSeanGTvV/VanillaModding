@@ -66,8 +66,12 @@ Mods: {
 			}
 
 			MightyScythe: {
-				DisplayName: Mighty Sickle
-				Tooltip: Forged with Death Sickle, Bloody Sickle & Ice Sickle from the Ancient Manipulation.
+				DisplayName: Mighty Sawkle
+				Tooltip:
+					'''
+					Forged with Picksaw, Death Sickle, Bloody Sickle & Ice Sickle from the Ancient Manipulation.
+					A multi-purpose sickle, that can mine, cut trees, hay, conveniently a magic weapon. 
+					'''
 			}
 
 			MightyScytheOld: {
