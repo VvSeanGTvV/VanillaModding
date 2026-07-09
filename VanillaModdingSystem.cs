@@ -15,6 +15,10 @@ namespace VanillaModding
 {
     internal class VanillaModdingSystem : ModSystem
     {
+        /// <summary>
+        /// Make this item behave like a sickle, allowing it to cut plants and grass tiles. Do note, this is ONLY on vanilla plants/grass tiles.
+        /// </summary>
+        public static bool[] Sickle = new bool[ItemLoader.ItemCount];
         public override void Load()
         {
             On_Player.ItemCheck_CutTiles += Hook_ItemCheck_CutTiles;
@@ -54,8 +58,8 @@ namespace VanillaModding
                     if (!isHayTile) 
                         continue;
 
-                    // Only your custom item
-                    if (sItem.type != ModContent.ItemType<MightyScythe>())
+                    // Only items can make grass/plants drop hay if they are marked as sickles
+                    if (!Sickle[sItem.type])
                         continue;
 
                     if (Main.tileCut[type] && WorldGen.CanCutTile(x, y, DelegateMethods.tilecut_0))
@@ -65,8 +69,8 @@ namespace VanillaModding
                            (type == TileID.Plants2 ||
                             type == TileID.JunglePlants2 ||
                             type == TileID.HallowedPlants2)
-                           ? Main.rand.Next(4, 6)
-                           : Main.rand.Next(2, 4);
+                           ? Main.rand.Next(2, 4)
+                           : Main.rand.Next(1, 2);
 
                         int id = Item.NewItem(
                             new EntitySource_TileBreak(x * 16, y * 16),

@@ -46,7 +46,7 @@ namespace VanillaModding.Common
         DamageClass currentClass = null;
 
         // Int Accessories
-        public int totem = -1;
+        public Item totem = null;
 
         // Accessories Bool
         public bool accSatanicBible = false;
@@ -90,7 +90,7 @@ namespace VanillaModding.Common
 
         public void ResetBool()
         {
-            totem = -1;
+            totem = null;
 
             accTotem = false;
             accSatanicBible = false;
@@ -107,29 +107,17 @@ namespace VanillaModding.Common
 
         #endregion
 
-        private int FindTotemSlot()
-        {
-            for (int i = 3; i < 9 + Player.GetAmountOfExtraAccessorySlotsToShow(); i++)
-            {
-                if (Player.armor[i].type == ModContent.ItemType<TotemOfUndying>())
-                    return i;
-            }
-
-            return -1;
-        }
-
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genDust, ref PlayerDeathReason damageSource)
         {
-            int totemSlot = FindTotemSlot();
 
-            if (Player.HasItem(ModContent.ItemType<TotemOfUndying>(), Player.armor) && totemSlot != -1)
+            if (totem != null && accTotem)
             {
                 // Consume it
-                Player.armor[totemSlot].TurnToAir();
+                totem.TurnToAir();
 
                 // Prevent death
-                Player.statLife = Player.statLifeMax / 10; // Restore 50% HP
-                Player.HealEffect(Player.statLifeMax / 10);
+                Player.statLife = Player.statLifeMax / 5; // Restore 50% HP
+                Player.HealEffect(Player.statLifeMax / 5);
                 ;
 
                 Projectile.NewProjectile(Player.GetSource_Death(), Player.Center, new Vector2(0, -5f), ModContent.ProjectileType<TotemOfUndyingEffect>(), 0, 0, Main.myPlayer);
@@ -200,6 +188,12 @@ namespace VanillaModding.Common
             base.OnHurt(info);
         }
 
+        public override void UpdateLifeRegen()
+        {
+            Player myPlayer = Main.LocalPlayer;
+            if (accValentineRing) myPlayer.lifeRegen *= 2;
+        }
+
         public override void PostUpdate()
         {
             Player myPlayer = Main.LocalPlayer;
@@ -209,7 +203,7 @@ namespace VanillaModding.Common
                 && !myPlayer.HasBuff(ModContent.BuffType<Adrenaline>())
                 ) NaturalAdrenaline = myPlayer.statLife > myPlayer.statLifeMax * 0.35f && accEpipen;
 
-            if (accValentineRing) myPlayer.lifeRegen *= 2;
+            
 
             currentPrefix = myPlayer.HeldItem.prefix;
             currentClass = myPlayer.HeldItem.DamageType;

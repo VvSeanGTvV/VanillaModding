@@ -19,9 +19,8 @@ namespace VanillaModding.Content.Items.Weapon.Combo.MightyScythe
         public static short glowMask;
         public override void SetStaticDefaults()
         {
-            //glowMask = GlowMaskAPI.Tools.instance.AddGlowMask(ModContent.Request<Texture2D>($"{nameof(VanillaModding)}/Items/MightyScythe_Glow", AssetRequestMode.ImmediateLoad).Value);
+            VanillaModdingSystem.Sickle[Type] = true;
         }
-        // The Display Name and Tooltip of this item can be edited in the Localization/en-US_Mods.VanillaModding.hjson file.
 
 
         // just a method to consolidate the default stats of the item, so we can easily switch between the two modes
@@ -126,6 +125,7 @@ namespace VanillaModding.Content.Items.Weapon.Combo.MightyScythe
                 Item.useAnimation = 36;
                 Item.damage = 0;
 
+                Item.pick = 0;
                 Item.axe = 0;
                 Item.UseSound = SoundID.Item9;
 

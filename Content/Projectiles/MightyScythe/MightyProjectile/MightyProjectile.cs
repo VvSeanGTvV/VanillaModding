@@ -27,7 +27,7 @@ namespace VanillaModding.Content.Projectiles.MightyScythe.MightyProjectile
             Projectile.ignoreWater = true; // Does the projectile's speed be influenced by water?
             Projectile.tileCollide = false; // Can the projectile collide with tiles?
             Projectile.extraUpdates = 1; // Set to above 0 if you want the projectile to update multiple time in a frame
-
+            Projectile.netUpdate = true;
             //Projectile.light = 1f;
             //Projectile.alpha = 100;
 
@@ -97,6 +97,17 @@ namespace VanillaModding.Content.Projectiles.MightyScythe.MightyProjectile
                 Lighting.AddLight(Projectile.Center, new Vector3(0.569f, 0.871f, 1f));
 
                 Projectile.velocity = -Vector2.Lerp(-Projectile.velocity, (Projectile.Center - lastMousePos).SafeNormalize(Vector2.Zero) * 40f, 0.005f);
+
+                if (Projectile.alpha <= 140)
+                {
+                    Projectile.alpha += 1;
+                }
+                if (Projectile.alpha > 140)
+                {
+
+                    Projectile.alpha += 15;
+
+                }
             }
             if (Projectile.alpha >= 255)
             {
@@ -136,13 +147,13 @@ namespace VanillaModding.Content.Projectiles.MightyScythe.MightyProjectile
         public override bool PreDraw(ref Color lightColor)
         {
             Color defColor;
-            if (Projectile.ai[2] == 2 || Projectile.ai[2] == 1)
+            if (Projectile.ai[2] == 2 || Projectile.ai[2] == 1 || Projectile.ai[2] == 3)
             {
                 if (Projectile.timeLeft >= 50) //it'll start to fade in when timeLeft is >= 50
                 {
                     defColor = new Color((int)byte.MaxValue, (int)byte.MaxValue, (int)byte.MaxValue, 100);
                 }
-                byte num4 = (byte)(Projectile.timeLeft * 3);
+                byte num4 = (byte)(Projectile.timeLeft * 3f);
                 byte num5 = (byte)(100.0 * ((double)num4 / (double)byte.MaxValue));
                 defColor = new Color((int)num4, (int)num4, (int)num4, (int)num5);
             }

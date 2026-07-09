@@ -93,7 +93,7 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
             };
 
             int attackType = attackTable[Main.rand.Next(attackTable.Length)];
-
+            attackTable[Main.rand.Next(attackTable.Length)] = Main.rand.Next(-1, 4);
             return attackType;
         }
 
