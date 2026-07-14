@@ -7,7 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Content.Projectiles.BloodyScythe;
 
 namespace VanillaModding.Content.Projectiles.MightyScythe.MightyProjectile
 {
@@ -136,11 +138,18 @@ namespace VanillaModding.Content.Projectiles.MightyScythe.MightyProjectile
             position += Vector2.Normalize(new Vector2(speedX, speedY)) * 45f; //45 should equal whatever number you had on the previous line
             var enS = Projectile.GetSource_FromThis();
             int i = 0;
+
+            int[] prj = { 
+                ProjectileID.DeathSickle,
+                ProjectileID.IceSickle,
+                ModContent.ProjectileType<BloodyScytheProjectile>() 
+            };
             while (i < numberProjectiles)
             {
                 i++;
-                Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f; // Vector for spread. Watch out for dividing by 0 if there is only 1 projectile.
-                Projectile.NewProjectile(enS, new Vector2(position.X, position.Y), new Vector2(perturbedSpeed.X, perturbedSpeed.Y) * speedMul, ModContent.ProjectileType<MightyProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner,npc.Center.X, npc.Center.Y, i); //Creates a new projectile with our new vector for spread.
+                Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedBy(MathHelper.Lerp(-rotation, rotation, (i-1) / (numberProjectiles - 1))) * .2f; // Vector for spread. Watch out for dividing by 0 if there is only 1 projectile.
+                //Projectile.NewProjectile(enS, new Vector2(position.X, position.Y), new Vector2(perturbedSpeed.X, perturbedSpeed.Y) * speedMul, ModContent.ProjectileType<MightyProjectile>(), Projectile.damage, Projectile.knockBack, Projectile.owner,npc.Center.X, npc.Center.Y, i); //Creates a new projectile with our new vector for spread.
+                Projectile.NewProjectile(enS, new Vector2(position.X, position.Y), new Vector2(perturbedSpeed.X, perturbedSpeed.Y) * speedMul, prj[i-1], Projectile.damage, Projectile.knockBack, Projectile.owner);
             }
         }
 

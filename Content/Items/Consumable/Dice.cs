@@ -48,7 +48,7 @@ namespace VanillaModding.Content.Items.Consumable
             Item.height = 30;
             Item.maxStack = 1;
             Item.value = 100;
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ItemRarityID.Yellow;
             Item.useAnimation = 30;
             Item.useTime = 30;
             Item.useStyle = ItemUseStyleID.Swing;
@@ -108,12 +108,14 @@ namespace VanillaModding.Content.Items.Consumable
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.ShroomiteBar, 10);
-            recipe.AddIngredient(ItemID.SoulofSight, 10);
-            recipe.AddIngredient(ItemID.SoulofFright, 10);
-            recipe.AddIngredient(ItemID.SoulofLight, 10);
-            recipe.AddIngredient(ItemID.SoulofNight, 10);
-            recipe.AddIngredient(ItemID.SoulofMight, 10);
+            recipe.AddIngredient(ItemID.Ectoplasm, 5);
+            recipe.AddIngredient(ItemID.GlowingMushroom, 5);
+            recipe.AddIngredient(ItemID.HallowedBar, 10);
+            recipe.AddIngredient(ItemID.SoulofSight, 1);
+            recipe.AddIngredient(ItemID.SoulofFright, 1);
+            recipe.AddIngredient(ItemID.SoulofLight, 1);
+            recipe.AddIngredient(ItemID.SoulofNight, 1);
+            recipe.AddIngredient(ItemID.SoulofMight, 1);
             recipe.AddTile(TileID.MythrilAnvil);
             recipe.Register();
         }

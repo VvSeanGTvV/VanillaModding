@@ -8,6 +8,7 @@ using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Content.Items.Accessories.Book;
+using VanillaModding.Content.Items.Weapon.Melee;
 
 namespace VanillaModding.Common
 {
@@ -25,7 +26,18 @@ namespace VanillaModding.Common
                         itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<BookofLeviathanLock>(), 10));
                     }
                     break;
-                    #endregion
+                #endregion
+
+                /* Fishing Crate */
+                #region Fishing Crates
+                case ItemID.OceanCrate:
+                case ItemID.OceanCrateHard:
+                    {
+                        itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<FishTrout>(), 30));
+                    }
+                    break;
+
+                 #endregion
             }
         }
     }

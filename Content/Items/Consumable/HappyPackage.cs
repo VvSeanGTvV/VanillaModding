@@ -29,7 +29,7 @@ namespace VanillaModding.Content.Items.Consumable
             Item.height = 16;
             Item.maxStack = Item.CommonMaxStack;
             Item.value = Item.buyPrice(gold: 25);
-            Item.rare = ItemRarityID.Yellow;
+            Item.rare = ItemRarityID.Pink;
             Item.useAnimation = 40;
             Item.useTime = 40;
             Item.useStyle = ItemUseStyleID.HoldUp;

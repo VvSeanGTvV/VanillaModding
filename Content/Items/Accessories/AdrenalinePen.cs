@@ -29,7 +29,7 @@ namespace VanillaModding.Content.Items.Accessories
             CreateRecipe(1)
                 .AddIngredient(ModContent.ItemType<AdrenalinePotion>(), 3)
                 .AddIngredient(ItemID.HallowedBar, 3)
-                .AddIngredient(ItemID.MechanicalBatteryPiece, 1)
+                .AddIngredient(ItemID.Bottle, 1)
                 .AddTile(TileID.MythrilAnvil)
                 .Register();
         }

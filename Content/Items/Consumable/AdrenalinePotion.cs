@@ -49,14 +49,6 @@ namespace VanillaModding.Content.Items.Consumable
                 .AddIngredient(ItemID.BottledWater, 1)
                 .AddTile(TileID.AlchemyTable)
                 .Register();
-
-            CreateRecipe(2)
-                .AddIngredient(ItemID.CrystalShard, 2)
-                .AddIngredient(ItemID.Fireblossom, 4)
-                .AddIngredient(ItemID.FallenStar, 2)
-                .AddIngredient(ItemID.BottledWater, 2)
-                .AddTile(TileID.AlchemyTable)
-                .Register();
         }
 
         public override bool? UseItem(Player player)

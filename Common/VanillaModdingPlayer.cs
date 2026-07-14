@@ -216,11 +216,11 @@ namespace VanillaModding.Common
             
             if (Adrenaline && !myPlayer.HasBuff(ModContent.BuffType<Adrenaline>()))
             {
-                myPlayer.AddBuff(BuffID.Weak, 60 * 60);
-                myPlayer.AddBuff(BuffID.Dazed, 60 * 60);
-                myPlayer.AddBuff(BuffID.Darkness, 60 * 30);
-                myPlayer.AddBuff(BuffID.Blackout, 60 * 15);
-                myPlayer.AddBuff(ModContent.BuffType<AdrenalineExhausted>(), 60 * 30);
+                myPlayer.AddBuff(BuffID.Weak, 60 * 30);
+                myPlayer.AddBuff(BuffID.Dazed, 60 * 30);
+                myPlayer.AddBuff(BuffID.Darkness, 60 * 15);
+                myPlayer.AddBuff(BuffID.Blackout, 60 * 5);
+                myPlayer.AddBuff(ModContent.BuffType<AdrenalineExhausted>(), 60 * 15);
                 Adrenaline = false;
             }
 

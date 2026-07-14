@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
@@ -45,6 +46,12 @@ namespace VanillaModding.Content.Items.Weapon.Melee
             Projectile.NewProjectile(source, player.MountedCenter, new Vector2(player.direction, 0f), type, damage, knockback, player.whoAmI, player.direction * player.gravDir, player.itemAnimationMax * 2f, adjustedItemScale / 1.25f); //(60f * 8f) player.itemAnimationMax * 2f
 
             return false;
+        }
+
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            // Remove default knockback line
+            tooltips.RemoveAll(t => t.Name == "Knockback" && t.Mod == "Terraria");
         }
 
         public override bool? CanHitNPC(Player player, NPC target) => false;

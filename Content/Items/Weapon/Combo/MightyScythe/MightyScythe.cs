@@ -27,9 +27,9 @@ namespace VanillaModding.Content.Items.Weapon.Combo.MightyScythe
         public void SetDefaultStats()
         {
             Item.DamageType = DamageClass.Melee;
-            Item.useTime = 2;
+            Item.useTime = 5;
             Item.useAnimation = 15;
-            Item.damage = 257;
+            Item.damage = 250;
 
             Item.axe = 26;
             Item.UseSound = SoundID.Item1;
@@ -73,9 +73,9 @@ namespace VanillaModding.Content.Items.Weapon.Combo.MightyScythe
             recipe.AddIngredient(ItemID.Sickle, 1);
             recipe.AddIngredient(ModContent.ItemType<BloodyScythe>(), 1);
             //recipe.AddIngredient(ItemID.ChlorophyteBar, 15);
-            recipe.AddIngredient(ItemID.LunarBar, 35);
+            recipe.AddIngredient(ItemID.LunarBar, 25);
             //recipe.AddIngredient(ItemID.MeteoriteBar, 15);
-            recipe.AddIngredient(ItemID.HallowedBar, 35);
+            recipe.AddIngredient(ItemID.HallowedBar, 10);
             //recipe.AddIngredient(ItemID.AdamantiteBar, 15);
             recipe.AddIngredient(ItemID.SoulofMight, 15);
             recipe.AddIngredient(ItemID.SoulofSight, 15);
@@ -143,7 +143,7 @@ namespace VanillaModding.Content.Items.Weapon.Combo.MightyScythe
         {
             float adjustedItemScale = player.GetAdjustedItemScale(Item);
             Projectile.NewProjectile(source, player.MountedCenter, new Vector2(player.direction, 0f), type, damage, knockback, player.whoAmI, player.direction * player.gravDir, player.itemAnimationMax * 2f, adjustedItemScale / 1.25f);
-            if (hehealt) Projectile.NewProjectile(source, player.MountedCenter, new Vector2(player.direction, 0f), ModContent.ProjectileType<MightyProjectile>(), 310, 0f, player.whoAmI, Main.MouseWorld.X, Main.MouseWorld.Y);
+            if (hehealt) Projectile.NewProjectile(source, player.MountedCenter, new Vector2(player.direction, 0f), ModContent.ProjectileType<MightyProjectile>(), 320, 0f, player.whoAmI, Main.MouseWorld.X, Main.MouseWorld.Y);
             
             return false;
         }
