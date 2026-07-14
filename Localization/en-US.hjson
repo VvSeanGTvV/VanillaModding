@@ -445,6 +445,11 @@ Mods: {
 					'Fight-or-Flight' situation type pen.
 					'''
 			}
+
+			ElectrifiedBar: {
+				DisplayName: Plasmic Bar
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {

@@ -8,6 +8,7 @@ using Terraria.DataStructures;
 using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Content.Items.Materials.Bars;
 using VanillaModding.Content.Items.Weapon.Melee.BloodyScythe;
 using VanillaModding.Content.Projectiles.MightyScythe;
 using VanillaModding.Content.Projectiles.MightyScythe.MightyProjectile;
@@ -75,7 +76,7 @@ namespace VanillaModding.Content.Items.Weapon.Combo.MightyScythe
             //recipe.AddIngredient(ItemID.ChlorophyteBar, 15);
             recipe.AddIngredient(ItemID.LunarBar, 25);
             //recipe.AddIngredient(ItemID.MeteoriteBar, 15);
-            recipe.AddIngredient(ItemID.HallowedBar, 10);
+            recipe.AddIngredient(ModContent.ItemType<ElectrifiedBar>(), 10);
             //recipe.AddIngredient(ItemID.AdamantiteBar, 15);
             recipe.AddIngredient(ItemID.SoulofMight, 15);
             recipe.AddIngredient(ItemID.SoulofSight, 15);
