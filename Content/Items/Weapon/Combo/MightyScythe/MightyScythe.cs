@@ -20,7 +20,7 @@ namespace VanillaModding.Content.Items.Weapon.Combo.MightyScythe
         public static short glowMask;
         public override void SetStaticDefaults()
         {
-            VanillaModdingSystem.Sickle[Type] = true;
+            VanillaModdingSystem.Sickle[Type] = new VanillaModdingSystem.SickleData(true, 2, 4, 4, 6);
         }
 
 
@@ -30,7 +30,7 @@ namespace VanillaModding.Content.Items.Weapon.Combo.MightyScythe
             Item.DamageType = DamageClass.Melee;
             Item.useTime = 5;
             Item.useAnimation = 15;
-            Item.damage = 250;
+            Item.damage = 180;
 
             Item.axe = 26;
             Item.UseSound = SoundID.Item1;
@@ -104,11 +104,6 @@ namespace VanillaModding.Content.Items.Weapon.Combo.MightyScythe
                 SpriteEffects.None,
                 0f
             );
-        }
-
-        public override bool WeaponPrefix()
-        {
-            return base.WeaponPrefix();
         }
 
         public override bool AltFunctionUse(Player player)

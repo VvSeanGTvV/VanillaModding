@@ -13,6 +13,7 @@ using Terraria.ModLoader;
 using VanillaModding.Common;
 using VanillaModding.Common.Systems;
 using VanillaModding.Content.Buffs;
+using VanillaModding.Content.Items.Materials.Bars;
 using VanillaModding.Content.Projectiles.DiceProjectile;
 using VanillaModding.Content.Projectiles.MightyScythe;
 using VanillaModding.Content.Projectiles.PhasicWarpEjector;
@@ -108,9 +109,8 @@ namespace VanillaModding.Content.Items.Consumable
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.Ectoplasm, 5);
             recipe.AddIngredient(ItemID.GlowingMushroom, 5);
-            recipe.AddIngredient(ItemID.HallowedBar, 10);
+            recipe.AddIngredient(ModContent.ItemType<ElectrifiedBar>(), 10);
             recipe.AddIngredient(ItemID.SoulofSight, 1);
             recipe.AddIngredient(ItemID.SoulofFright, 1);
             recipe.AddIngredient(ItemID.SoulofLight, 1);

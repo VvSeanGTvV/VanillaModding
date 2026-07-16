@@ -15,10 +15,25 @@ namespace VanillaModding
 {
     internal class VanillaModdingSystem : ModSystem
     {
+        public struct SickleData
+        {
+            public bool isSickle;
+            public int[] GrassDrop = new int[2];
+            public int[] TallGrassDrop = new int[2];
+
+            public SickleData(bool Sickle = false, int minGrassDrop = 1, int maxGrassDrop = 2, int minTallGrassDrop = 2, int maxTallGrassDrop = 4)
+            {
+                isSickle = Sickle;
+                GrassDrop[0] = minGrassDrop;
+                GrassDrop[1] = maxGrassDrop;
+                TallGrassDrop[0] = minTallGrassDrop;
+                TallGrassDrop[1] = maxTallGrassDrop;
+            }
+        }
         /// <summary>
         /// Make this item behave like a sickle, allowing it to cut plants and grass tiles. Do note, this is ONLY on vanilla plants/grass tiles.
         /// </summary>
-        public static bool[] Sickle = new bool[ItemLoader.ItemCount];
+        public static SickleData[] Sickle = new SickleData[ItemLoader.ItemCount];
         public override void Load()
         {
             On_Player.ItemCheck_CutTiles += Hook_ItemCheck_CutTiles;
@@ -59,7 +74,7 @@ namespace VanillaModding
                         continue;
 
                     // Only items can make grass/plants drop hay if they are marked as sickles
-                    if (!Sickle[sItem.type])
+                    if (!Sickle[sItem.type].isSickle)
                         continue;
 
                     if (Main.tileCut[type] && WorldGen.CanCutTile(x, y, DelegateMethods.tilecut_0))
@@ -69,8 +84,8 @@ namespace VanillaModding
                            (type == TileID.Plants2 ||
                             type == TileID.JunglePlants2 ||
                             type == TileID.HallowedPlants2)
-                           ? Main.rand.Next(2, 4)
-                           : Main.rand.Next(1, 2);
+                           ? Main.rand.Next(Sickle[sItem.type].TallGrassDrop[0], Sickle[sItem.type].TallGrassDrop[1])
+                           : Main.rand.Next(Sickle[sItem.type].GrassDrop[0], Sickle[sItem.type].GrassDrop[1]);
 
                         int id = Item.NewItem(
                             new EntitySource_TileBreak(x * 16, y * 16),

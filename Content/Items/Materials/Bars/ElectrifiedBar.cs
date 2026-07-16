@@ -47,10 +47,10 @@ namespace VanillaModding.Content.Items.Materials.Bars
 
         public override void AddRecipes()
         {
-            CreateRecipe(1)
-                .AddIngredient(ItemID.HallowedBar, 1)
+            CreateRecipe(2)
+                .AddIngredient(ItemID.HallowedBar, 2)
                 .AddIngredient(ItemID.Ectoplasm, 1)
-                .AddTile(TileID.MythrilAnvil)
+                .AddTile(TileID.AdamantiteForge)
                 .Register();
         }
 
