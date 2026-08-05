@@ -48,7 +48,7 @@ namespace VanillaModding.Content.Tiles
             TileObjectData.newTile.StyleHorizontal = true;
             // These definitions allow for vanilla's pylon TileEntities to be placed.
             // tModLoader has a built in Tile Entity specifically for modded pylons, which we must extend (see SimplePylonTileEntity)
-            TEModdedPylon moddedPylon = ModContent.GetInstance<SimplePylonTileEntity>();
+            TEModdedPylon moddedPylon = ModContent.GetInstance<AetherPylonTileEntity>();
             TileObjectData.newTile.HookCheckIfCanPlace = new PlacementHook(moddedPylon.PlacementPreviewHook_CheckIfCanPlace, 1, 0, true);
             TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(moddedPylon.Hook_AfterPlacement, -1, 0, false);
 
@@ -67,13 +67,11 @@ namespace VanillaModding.Content.Tiles
 
         public override NPCShop.Entry GetNPCShopEntry()
         {
-            // In this method we can customize the shop entry for the pylon item.
-            // The default method, base.GetNPCShopEntry(), generates a shop entry for the pylon item with the typical pylon conditions: Condition.HappyEnoughToSellPylons, Condition.AnotherTownNPCNearby, and Condition.NotInEvilBiome
-            NPCShop.Entry shopEntry = base.GetNPCShopEntry();
+            NPCShop.Entry shopEntry = new NPCShop.Entry(ModContent.ItemType<AetherPylon>());
 
-            // We will take that shop entry and add an additional condition to check for ExampleBiome, as this is typical for biome pylons
-            // This does not affect the teleport conditions, only the sale conditions
             shopEntry.AddCondition(Condition.InAether);
+            shopEntry.AddCondition(Condition.HappyEnoughToSellPylons);
+            shopEntry.AddCondition(Condition.NotInEvilBiome);
 
             // and finally we return the shop entry
             return shopEntry;
@@ -89,7 +87,7 @@ namespace VanillaModding.Content.Tiles
         public override void KillMultiTile(int i, int j, int frameX, int frameY)
         {
             // We need to clean up after ourselves, since this is still a "unique" tile, separate from Vanilla Pylons, so we must kill the TileEntity.
-            ModContent.GetInstance<SimplePylonTileEntity>().Kill(i, j);
+            ModContent.GetInstance<AetherPylonTileEntity>().Kill(i, j);
         }
 
         public override bool ValidTeleportCheck_BiomeRequirements(TeleportPylonInfo pylonInfo, SceneMetrics sceneData)

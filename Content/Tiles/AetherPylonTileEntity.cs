@@ -7,5 +7,5 @@ using Terraria.ModLoader.Default;
 
 namespace VanillaModding.Content.Tiles
 {
-    internal class SimplePylonTileEntity : TEModdedPylon { }
+    internal class AetherPylonTileEntity : TEModdedPylon { }
 }

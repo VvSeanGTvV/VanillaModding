@@ -450,6 +450,20 @@ Mods: {
 				DisplayName: Plasmic Bar
 				Tooltip: ""
 			}
+
+			PlasmicBulletBall: {
+				DisplayName: Plasmic Bullet
+				Tooltip: Phases like a ghost
+			}
+
+			Supershark: {
+				DisplayName: Supershark
+				Tooltip:
+					'''
+					somethin.
+					'Megashark's other brother'
+					'''
+			}
 		}
 
 		NPCs: {
@@ -554,6 +568,7 @@ Mods: {
 			OrangeLaser.DisplayName: Orange Laser
 			BombarchistProj.DisplayName: Bombarchist Bomb
 			TotemOfUndyingEffect.DisplayName: Totem Of Undying Effect
+			PlasmaBullet.DisplayName: Plasma Bullet
 		}
 
 		Prefixes: {
