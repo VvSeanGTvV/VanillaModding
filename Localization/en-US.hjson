@@ -460,8 +460,17 @@ Mods: {
 				DisplayName: Supershark
 				Tooltip:
 					'''
-					somethin.
+					75% chance to save ammo, with slightly more inaccuracy
 					'Megashark's other brother'
+					'''
+			}
+
+			HealingFlower: {
+				DisplayName: Healing Flower
+				Tooltip:
+					'''
+					Automatically use the highest healing potion avaliable when needed 
+					'Works only if your not potion sickness'
 					'''
 			}
 		}

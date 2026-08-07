@@ -13,7 +13,7 @@ namespace VanillaModding.Content.Items.Accessories.Book
 {
     internal class BookSatanicBible : ModItem
     {
-        public float damageBonus = 1.66f;
+        public float damageBonus = 1.36f;
         public int forcedHealth = 1;
         public int manaBonus = 50;
         public int div = 25;

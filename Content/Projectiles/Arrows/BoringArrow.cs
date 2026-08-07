@@ -20,7 +20,7 @@ namespace VanillaModding.Content.Projectiles.Arrows
             Projectile.arrow = true;
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Ranged;
-            Projectile.timeLeft = 1200;
+            Projectile.timeLeft = 30;
         }
 
         public override void AI()
@@ -33,6 +33,11 @@ namespace VanillaModding.Content.Projectiles.Arrows
                 Projectile.velocity.Y = 32f;
             }
             Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.ToRadians(90f);
+        }
+
+        public override void OnKill(int timeLeft)
+        {
+            base.OnKill(timeLeft);
         }
     }
 }

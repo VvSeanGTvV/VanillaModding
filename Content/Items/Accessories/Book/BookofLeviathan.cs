@@ -13,7 +13,7 @@ namespace VanillaModding.Content.Items.Accessories.Book
 {
     internal class BookofLeviathan : ModItem
     {
-        public float damageBonus = 1.50f;
+        public float damageBonus = 1.20f;
 
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(Math.Floor((damageBonus - 1f) * 1000f) / 10f);
         public override void SetDefaults()
