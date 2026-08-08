@@ -25,6 +25,45 @@ namespace VanillaModding.Content.Projectiles.Arrows
 
         public override void AI()
         {
+            Projectile.rotation = Projectile.velocity.ToRotation() - MathHelper.ToRadians(90f);
+            for (int i = -2; i < 2; i++)
+            {
+                Dust.NewDust(Projectile.Center + new Vector2(0, i).RotatedBy(MathHelper.ToRadians(Projectile.rotation)), 0, 0, DustID.GreenTorch, Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f);
+            }
+            
+            Projectile.velocity.Y = Projectile.velocity.Y + 0.25f; // 0.1f for arrow gravity, 0.4f for knife gravity
+            if (Projectile.velocity.Y > 32f) // This check implements "terminal velocity". We don't want the projectile to keep getting faster and faster. Past 16f this projectile will travel through blocks, so this check is useful.
+            {
+                Projectile.velocity.Y = 32f;
+            }
+        }
+        public override void OnKill(int timeLeft)
+        {
+            if (Projectile.damage <= 1) return;
+            int projCount = 1;
+            for (int i = -projCount; i < projCount; i++)
+            {
+                float angle = MathHelper.ToRadians(5f * i);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity.RotatedBy(angle), (int)Projectile.ai[0], Projectile.damage / 2, Projectile.knockBack, Projectile.owner);
+            }
+        }
+    }
+
+    internal class BoringArrowSmall : ModProjectile
+    {
+        public override void SetDefaults()
+        {
+            Projectile.width = 10;
+            Projectile.height = 10;
+
+            Projectile.arrow = true;
+            Projectile.friendly = true;
+            Projectile.DamageType = DamageClass.Ranged;
+            Projectile.timeLeft = 30;
+        }
+
+        public override void AI()
+        {
             Dust.NewDust(Projectile.Center, 0, 0, DustID.GreenTorch, Projectile.velocity.X * 0.25f, Projectile.velocity.Y * 0.25f);
 
             Projectile.velocity.Y = Projectile.velocity.Y + 0.25f; // 0.1f for arrow gravity, 0.4f for knife gravity
@@ -37,7 +76,13 @@ namespace VanillaModding.Content.Projectiles.Arrows
 
         public override void OnKill(int timeLeft)
         {
-            base.OnKill(timeLeft);
+            if (Projectile.damage <= 1) return;
+            int projCount = 1;
+            for (int i = -projCount; i < projCount; i++)
+            {
+                float angle = MathHelper.ToRadians(5f * i);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity.RotatedBy(angle), ModContent.ProjectileType<BoringArrowSmall>(), Projectile.damage / 2, Projectile.knockBack, Projectile.owner);
+            }
         }
     }
 }

@@ -87,6 +87,18 @@ namespace VanillaModding.Content.NPCs.Fish
 
         }
 
+        public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
+        {
+            hit.SourceDamage = 1;
+            base.OnHitByItem(player, item, hit, damageDone);
+        }
+
+        public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
+        {
+            hit.SourceDamage = 1;
+            base.OnHitByProjectile(projectile, hit, damageDone);
+        }
+
         int timerTile = 0;
         int si = 0;
         bool once, twice, YeetMode;

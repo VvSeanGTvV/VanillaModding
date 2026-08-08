@@ -221,8 +221,8 @@ Mods: {
 			}
 
 			BoringBow: {
-				DisplayName: Boring Bow (wip)
-				Tooltip: ""
+				DisplayName: Dragon's Bow
+				Tooltip: Shoots a stored arrow, that explodes into two co-existing ammo
 			}
 
 			VulcanBolt_Ammo: {
@@ -313,21 +313,6 @@ Mods: {
 					'''
 					Diabolical knockback 
 					why?
-					'''
-			}
-
-			testcursor: {
-				DisplayName: testcursor
-				Tooltip: ""
-			}
-
-			AlanCursor: {
-				DisplayName: Alan's Cursor
-				Tooltip:
-					'''
-					'My name is Alan Becker!'
-					Allow Clicker Class to burn!
-					Increases your max minions by {0}
 					'''
 			}
 
@@ -457,7 +442,7 @@ Mods: {
 			}
 
 			Supershark: {
-				DisplayName: Supershark
+				DisplayName: Gatlingshark
 				Tooltip:
 					'''
 					75% chance to save ammo, with slightly more inaccuracy
@@ -470,6 +455,20 @@ Mods: {
 				Tooltip:
 					'''
 					Automatically use the highest healing potion avaliable when needed 
+					'Works only if your not potion sickness'
+					'''
+			}
+
+			AlanCursor: {
+				DisplayName: Alan Cursor
+				Tooltip: ""
+			}
+
+			PhiloFlower: {
+				DisplayName: Philosopher's Flower
+				Tooltip:
+					'''
+					Automatically use the highest healing potion avaliable when needed and reduces the cooldown of healing potions by 25%
 					'Works only if your not potion sickness'
 					'''
 			}
@@ -578,6 +577,7 @@ Mods: {
 			BombarchistProj.DisplayName: Bombarchist Bomb
 			TotemOfUndyingEffect.DisplayName: Totem Of Undying Effect
 			PlasmaBullet.DisplayName: Plasma Bullet
+			BoringArrowSmall.DisplayName: Boring Arrow Small
 		}
 
 		Prefixes: {
