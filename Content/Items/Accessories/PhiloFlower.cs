@@ -6,12 +6,16 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace VanillaModding.Content.Items.Accessories
 {
     internal class PhiloFlower : ModItem
     {
+        public static readonly int MultiplicativeDelayDecrease = 25;
+
+        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(0, MultiplicativeDelayDecrease);
         public override void SetDefaults()
         {
             Item.width = 20;
@@ -23,6 +27,7 @@ namespace VanillaModding.Content.Items.Accessories
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
+            player.PotionDelayModifier *= 1 - MultiplicativeDelayDecrease / 100f;
             if (player.statLife <= player.statLifeMax2 * 0.25f && player.potionDelay <= 0 && !player.HasBuff(BuffID.PotionSickness))
             {
                 int highHeal = 0;
@@ -41,8 +46,9 @@ namespace VanillaModding.Content.Items.Accessories
                     player.Heal(highHeal);
                     player.HealEffect(highHeal);
 
-                    player.AddBuff(BuffID.PotionSickness, (int)(40 * 0.75f) * 60);
-                    player.potionDelay = (int)(40 * 0.75f) * 60;
+                    int potionDuration = (int)player.PotionDelayModifier.ApplyTo(player.potionDelayTime);
+                    player.AddBuff(BuffID.PotionSickness, potionDuration);
+                    player.potionDelay = potionDuration;
 
                     SoundEngine.PlaySound(SoundID.Item3, player.position);
                     highHealItem.stack--;

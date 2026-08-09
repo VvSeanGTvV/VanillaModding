@@ -468,7 +468,8 @@ Mods: {
 				DisplayName: Philosopher's Flower
 				Tooltip:
 					'''
-					Automatically use the highest healing potion avaliable when needed and reduces the cooldown of healing potions by 25%
+					Automatically use the highest healing potion avaliable when needed
+					{$CommonItemTooltip.ReducesHealingPotionCooldownByPercent@1}
 					'Works only if your not potion sickness'
 					'''
 			}

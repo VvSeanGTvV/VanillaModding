@@ -36,7 +36,7 @@ namespace VanillaModding.Content.Items.Weapon.Ranged
 
             // Weapon Properties
             Item.DamageType = DamageClass.Ranged; // Sets the damage type to ranged.
-            Item.damage = 35; // Sets the item's damage. Note that projectiles shot by this weapon will use its and the used ammunition's damage added together.
+            Item.damage = 37; // Sets the item's damage. Note that projectiles shot by this weapon will use its and the used ammunition's damage added together.
             Item.knockBack = 1.5f; // Sets the item's knockback. Note that projectiles shot by this weapon will use its and the used ammunition's knockback added together.
             Item.noMelee = true; // So the item's animation doesn't do damage.
 
@@ -51,9 +51,9 @@ namespace VanillaModding.Content.Items.Weapon.Ranged
             CreateRecipe(1)
                 .AddIngredient(ItemID.Megashark, 1)
                 .AddIngredient(ItemID.IllegalGunParts, 1)
+                .AddIngredient(ItemID.SharkFin, 4)
                 .AddIngredient(ItemID.SoulofFright, 20)
                 .AddIngredient(ItemID.SandBlock, 20)
-                .AddIngredient(ItemID.SharkFin, 4)
                 .AddTile(TileID.MythrilAnvil)
                 .Register();
         }
@@ -66,7 +66,7 @@ namespace VanillaModding.Content.Items.Weapon.Ranged
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, position + new Vector2(0, Main.rand.NextFloat(-.25f, .25f) + .25f), velocity.RotatedByRandom(MathHelper.ToRadians(7.5f)), type, damage, knockback, player.whoAmI);
+            if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, position + new Vector2(0, Main.rand.NextFloat(-.25f, .25f) + .15f), velocity.RotatedByRandom(MathHelper.ToRadians(7.5f)), type, damage, knockback, player.whoAmI);
             return false;
         }
 

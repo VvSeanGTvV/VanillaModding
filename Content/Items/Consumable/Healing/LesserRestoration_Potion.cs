@@ -22,7 +22,8 @@ namespace VanillaModding.Content.Items.Consumable.Healing
             Item.maxStack = Item.CommonMaxStack;
 
             Item.healLife = 50;
-            Item.potionDelay = 2100;
+            Item.healMana = 50;
+            Item.potionDelay = Item.restorationDelay;
             Item.potion = true;
 
             Item.useStyle = ItemUseStyleID.DrinkLiquid;
@@ -37,19 +38,17 @@ namespace VanillaModding.Content.Items.Consumable.Healing
 
         public override void AddRecipes()
         {
-            Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.Mushroom, 1);
-            recipe.AddIngredient(ItemID.PinkGel, 1);
-            //recipe.AddIngredient(ModContent.ItemType<LobotomyThrowable>(), 1);
-            recipe.AddTile(TileID.Bottles);
-            recipe.Register();
+            CreateRecipe(1)
+                .AddIngredient(ItemID.LesserHealingPotion, 1)
+                .AddIngredient(ItemID.LesserManaPotion, 1)
+                .AddTile(TileID.Bottles)
+                .Register();
 
-            Recipe recipe2 = CreateRecipe();
-            recipe2.AddIngredient(ItemID.Mushroom, 1);
-            recipe2.AddIngredient(ItemID.PinkGel, 1);
-            //recipe.AddIngredient(ModContent.ItemType<LobotomyThrowable>(), 1);
-            recipe2.AddTile(TileID.AlchemyTable);
-            recipe2.Register();
+            CreateRecipe()
+                .AddIngredient(ItemID.LesserHealingPotion, 1)
+                .AddIngredient(ItemID.LesserManaPotion, 1)
+                .AddTile(TileID.AlchemyTable)
+                .Register();
         }
     }
 }

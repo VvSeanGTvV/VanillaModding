@@ -41,8 +41,9 @@ namespace VanillaModding.Content.Items.Accessories
                     player.Heal(highHeal);
                     player.HealEffect(highHeal);
 
-                    player.AddBuff(BuffID.PotionSickness, 40 * 60);
-                    player.potionDelay = 40 * 60;
+                    int potionDuration = (int)player.PotionDelayModifier.ApplyTo(player.potionDelayTime);
+                    player.AddBuff(BuffID.PotionSickness, potionDuration);
+                    player.potionDelay = potionDuration;
 
                     SoundEngine.PlaySound(SoundID.Item3, player.position);
                     highHealItem.stack--;
