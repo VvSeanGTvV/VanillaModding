@@ -39,7 +39,7 @@ namespace VanillaModding.Content.Items.Ammo
             CreateRecipe(60)
                 .AddIngredient(ItemID.MusketBall, 60)
                 .AddIngredient(ModContent.ItemType<ElectrifiedBar>(), 1)
-                .AddTile(TileID.MythrilAnvil)
+                .AddTile<Tiles.Furniture.FusionCore>()
                 .Register();
         }
     }

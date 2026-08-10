@@ -478,6 +478,24 @@ Mods: {
 				DisplayName: Life Bullet
 				Tooltip: Steals their life by {0}%
 			}
+
+			ResurrectionPotion: {
+				DisplayName: Resurrection Potion
+				Tooltip:
+					'''
+					A revival potion, which use upon death though results with potion sickness
+					'Return with greatness!'
+					'''
+			}
+
+			FusionCore: {
+				DisplayName: Fusion Core
+				Tooltip:
+					'''
+					Combined crafting station of:
+					Workbench, Anvil, Furnace, Anvil (Hardmode), Furnace (Hardmode)
+					'''
+			}
 		}
 
 		NPCs: {
@@ -618,7 +636,11 @@ Mods: {
 		}
 
 		DamageClasses.Click.DisplayName: click damage
-		Tiles.AetherPylonTile.MapEntry: Aether Pylon Tile
+
+		Tiles: {
+			AetherPylonTile.MapEntry: Aether Pylon Tile
+			FusionCore.MapEntry: Fusion Core
+		}
 
 		InfoDisplays: {
 			ClickInfoDisplay: {

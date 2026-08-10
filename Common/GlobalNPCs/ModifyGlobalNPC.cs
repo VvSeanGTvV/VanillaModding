@@ -21,6 +21,7 @@ using VanillaModding.Content.Items.Accessories.Book;
 using VanillaModding.Content.NPCs.Fish;
 using VanillaModding.Content.Items.Accessories.Clicker;
 using VanillaModding.Content.Items.Accessories;
+using VanillaModding.Content.Items.Consumable.Healing;
 
 namespace VanillaModding.Common.GlobalNPCs
 {
@@ -99,7 +100,11 @@ namespace VanillaModding.Common.GlobalNPCs
                     break;
 
                 case NPCID.Merchant:
-                    shop.Add(ModContent.ItemType<ValentineRing>());
+                    shop.Add(ModContent.ItemType<ValentineRing>(), Condition.DownedEyeOfCthulhu);
+                    break;
+
+                case NPCID.TravellingMerchant:
+                    shop.Add(ModContent.ItemType<ResurrectionPotion>(), Condition.DownedSkeletron);
                     break;
             }
         }

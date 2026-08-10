@@ -17,7 +17,8 @@ namespace VanillaModding.Content.Items.Ammo
     internal class LifeStealBullet : ModItem
     {
 
-        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MathF.Round(0.085f * 1000) / 10);
+        public static float LifeStealPercentage => 0.065f; // 8.5% life steal
+        public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MathF.Round(LifeStealPercentage * 1000) / 10);
         public override void SetStaticDefaults()
         {
             // Registers a vertical animation with 4 frames and each one will last 5 ticks (1/12 second)
@@ -35,7 +36,7 @@ namespace VanillaModding.Content.Items.Ammo
             Item.consumable = true; // This marks the item as consumable, making it automatically be consumed when it's used as ammunition, or something else, if possible
             Item.knockBack = 3f; // Sets the item's knockback. Ammunition's knockback added together with weapon and projectiles.
             Item.value = Item.sellPrice(0, 0, 5, 0); // Item price in copper coins (can be converted with Item.sellPrice/Item.buyPrice)
-            Item.rare = ItemRarityID.Lime; // The color that the item's name will be in-game.
+            Item.rare = ItemRarityID.Yellow; // The color that the item's name will be in-game.
             Item.shoot = ModContent.ProjectileType<Content.Projectiles.Bullets.LifeStealBullet>(); // The projectile that weapons fire when using this item as ammunition.
             Item.shootSpeed = 18f; // The speed of the projectile.
 
@@ -48,7 +49,7 @@ namespace VanillaModding.Content.Items.Ammo
             CreateRecipe(60)
                 .AddIngredient(ItemID.MusketBall, 60)
                 .AddIngredient(ItemID.LifeFruit, 1)
-                .AddTile(TileID.MythrilAnvil)
+                .AddTile<Tiles.Furniture.FusionCore>()
                 .Register();
         }
     }

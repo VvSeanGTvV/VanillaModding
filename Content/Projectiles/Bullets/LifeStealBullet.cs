@@ -11,6 +11,7 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Common.Utilities;
+using VanillaModding.Content.Items.Ammo;
 
 namespace VanillaModding.Content.Projectiles.Bullets
 {
@@ -50,13 +51,13 @@ namespace VanillaModding.Content.Projectiles.Bullets
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (target.life > 0 && !target.immortal) SpawnHelper.CreateLifeSoul(Projectile.GetSource_FromThis(), target, damageDone, 0.085f, Projectile.owner);
+            if (target.life > 0 && !target.immortal) SpawnHelper.CreateLifeSoul(Projectile.GetSource_FromThis(), target, damageDone, Content.Items.Ammo.LifeStealBullet.LifeStealPercentage, Projectile.owner);
             base.OnHitNPC(target, hit, damageDone);
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            SpawnHelper.CreateLifeSoul(Projectile.GetSource_FromThis(), target, info.Damage, 0.085f, Projectile.owner);
+            SpawnHelper.CreateLifeSoul(Projectile.GetSource_FromThis(), target, info.Damage, Content.Items.Ammo.LifeStealBullet.LifeStealPercentage, Projectile.owner);
             base.OnHitPlayer(target, info);
         }
 

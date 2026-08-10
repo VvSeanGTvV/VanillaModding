@@ -21,6 +21,7 @@ using VanillaModding.Content.Dusts;
 using VanillaModding.Content.Items;
 using VanillaModding.Content.Items.Accessories;
 using VanillaModding.Content.Items.Accessories.Book;
+using VanillaModding.Content.Items.Consumable.Healing;
 using VanillaModding.Content.Prefixes;
 using VanillaModding.Content.Projectiles.EffectProjectile;
 using VanillaModding.Content.Projectiles.KoboldDynamite;
@@ -45,12 +46,8 @@ namespace VanillaModding.Common
         int currentPrefix = 0;
         DamageClass currentClass = null;
 
-        // Int Accessories
-        public Item totem = null;
-
         // Accessories Bool
         public bool accSatanicBible = false;
-        public bool accTotem = false;
         public bool accEpipen = false;
         public bool accValentineRing = false;
 
@@ -90,9 +87,6 @@ namespace VanillaModding.Common
 
         public void ResetBool()
         {
-            totem = null;
-
-            accTotem = false;
             accSatanicBible = false;
             accEpipen = false;
         }
@@ -109,31 +103,23 @@ namespace VanillaModding.Common
 
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genDust, ref PlayerDeathReason damageSource)
         {
-
-            if (totem != null && accTotem)
+            for (int i = 0; i < 49; i++)
             {
-                // Consume it
-                totem.TurnToAir();
-
-                // Prevent death
-                Player.statLife = Player.statLifeMax / 5; // Restore 50% HP
-                Player.HealEffect(Player.statLifeMax / 5);
-                ;
-
-                Projectile.NewProjectile(Player.GetSource_Death(), Player.Center, new Vector2(0, -5f), ModContent.ProjectileType<TotemOfUndyingEffect>(), 0, 0, Main.myPlayer);
-
-                for (int i = 0; i < 20; i++)
+                Item item = Player.inventory[i];
+                if (item.type == ModContent.ItemType<ResurrectionPotion>() && item.stack > 0 && !Player.HasBuff(BuffID.PotionSickness))
                 {
-                    Dust dust = Dust.NewDustDirect(Player.position, Player.width, Player.height, DustID.Smoke, 0f, 0f, 100, default, 2f);
-                    dust.velocity *= 1.4f;
+                    Player.statLife = Player.statLifeMax2;
+                    Player.statMana = Player.statManaMax2;
+                    SoundEngine.PlaySound(SoundID.Item3, Player.position);
+
+                    int potionDuration = (int)Player.PotionDelayModifier.ApplyTo(Player.potionDelayTime);
+                    Player.AddBuff(BuffID.PotionSickness, potionDuration);
+                    Player.potionDelay = potionDuration;
+
+                    item.stack--;
+                    if (item.stack <= 0) item.TurnToAir();
+                    return false;
                 }
-
-                // Optional immunity
-                Player.immune = true;
-                Player.immuneTime = 60*3;
-
-                SoundEngine.PlaySound(SoundID.Item37, Player.Center);
-                return false; // CANCEL DEATH
             }
 
             Adrenaline = false;
