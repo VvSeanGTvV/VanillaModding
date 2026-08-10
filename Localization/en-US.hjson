@@ -473,6 +473,11 @@ Mods: {
 					'Works only if your not potion sickness'
 					'''
 			}
+
+			LifeStealBullet: {
+				DisplayName: Life Bullet
+				Tooltip: Steals their life by {0}%
+			}
 		}
 
 		NPCs: {
@@ -579,6 +584,8 @@ Mods: {
 			TotemOfUndyingEffect.DisplayName: Totem Of Undying Effect
 			PlasmaBullet.DisplayName: Plasma Bullet
 			BoringArrowSmall.DisplayName: Boring Arrow Small
+			LifeSoul.DisplayName: Life Soul
+			LifeStealBullet.DisplayName: Life Steal Bullet
 		}
 
 		Prefixes: {

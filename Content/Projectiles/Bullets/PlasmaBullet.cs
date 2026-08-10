@@ -10,7 +10,7 @@ using Terraria.ModLoader;
 using VanillaModding.Common.Utilities;
 using VanillaModding.Content.Buffs;
 
-namespace VanillaModding.Content.Projectiles.Laser
+namespace VanillaModding.Content.Projectiles.Bullets
 {
     internal class PlasmaBullet : ModProjectile
     {
