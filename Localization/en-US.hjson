@@ -492,8 +492,8 @@ Mods: {
 				DisplayName: Fusion Core
 				Tooltip:
 					'''
-					Combined crafting station of:
-					Workbench, Anvil, Furnace, Anvil (Hardmode), Furnace (Hardmode)
+					A more of all in one crafting stations, which can be used to craft items that require multiple crafting stations.
+					(WIP)
 					'''
 			}
 		}

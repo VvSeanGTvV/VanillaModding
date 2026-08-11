@@ -21,6 +21,12 @@ namespace VanillaModding.Content.Items.Accessories
             Item.value = Item.sellPrice(0, 1, 0, 0);
         }
 
+        public override bool CanAccessoryBeEquippedWith(Item equippedItem, Item incomingItem, Player player)
+        {
+            if (equippedItem.type == ModContent.ItemType<PhiloFlower>()) return false;
+            return true;
+        }
+
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             if (player.statLife <= player.statLifeMax2 * 0.25f && player.potionDelay <= 0 && !player.HasBuff(BuffID.PotionSickness))

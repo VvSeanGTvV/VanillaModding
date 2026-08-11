@@ -29,6 +29,7 @@ namespace VanillaModding.Content.Tiles.Furniture
 
             DustType = DustID.IceTorch;
             AdjTiles = [TileID.WorkBenches, TileID.Furnaces, TileID.AdamantiteForge, TileID.Anvils, TileID.MythrilAnvil];
+            Main.tileLighted[Type] = true;
 
             // Placement
             TileObjectData.newTile.CopyFrom(TileObjectData.Style3x3);
@@ -40,6 +41,12 @@ namespace VanillaModding.Content.Tiles.Furniture
             AddMapEntry(new Color(136, 233, 255), name);
         }
 
-        
+        public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b)
+        {
+            r = (136 / 255f) * 0.75f;
+            g = (233 / 255f) * 0.75f;
+            b = (255 / 255f) * 0.75f;
+            base.ModifyLight(i, j, ref r, ref g, ref b);
+        }
     }
 }

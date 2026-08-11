@@ -21,7 +21,16 @@ namespace VanillaModding
             public int[] GrassDrop = new int[2];
             public int[] TallGrassDrop = new int[2];
 
-            public SickleData(bool Sickle = false, int minGrassDrop = 1, int maxGrassDrop = 2, int minTallGrassDrop = 2, int maxTallGrassDrop = 4)
+            /// <summary>
+            /// Creates a Sickle Data that allows the item to behave like a sickle, allowing it to cut plants and grass tiles.
+            /// By default it uses the vanilla Sickle's drop rate, but you can customize it by changing the min/max values for grass and tall grass drops.
+            /// </summary>
+            /// <param name="Sickle"></param>
+            /// <param name="minGrassDrop"></param>
+            /// <param name="maxGrassDrop"></param>
+            /// <param name="minTallGrassDrop"></param>
+            /// <param name="maxTallGrassDrop"></param>
+            public SickleData(bool Sickle = true, int minGrassDrop = 1, int maxGrassDrop = 2, int minTallGrassDrop = 2, int maxTallGrassDrop = 4)
             {
                 isSickle = Sickle;
                 GrassDrop[0] = minGrassDrop;
@@ -31,9 +40,35 @@ namespace VanillaModding
             }
         }
         /// <summary>
-        /// Make this item behave like a sickle, allowing it to cut plants and grass tiles. Do note, this is ONLY on vanilla plants/grass tiles.
+        /// Make this item behave like a sickle, allowing it to cut plants and grass tiles.
+        /// by Default it uses the vanilla Sickle's drop rate.
         /// </summary>
         public static SickleData[] Sickle = new SickleData[ItemLoader.ItemCount];
+
+        /// <summary>
+        /// All the avaliable tile IDs that are considered "hay tiles" for the purpose of sickle cutting. This includes various types of plants and grass tiles.
+        /// Incase whether, I want a mod support atleast this is more sustainable and expandable.
+        /// </summary>
+        public static int[] Grass = new int[]
+        {
+            TileID.Plants,
+            TileID.Plants2,
+            TileID.JunglePlants,
+            TileID.JunglePlants2,
+            TileID.HallowedPlants,
+            TileID.HallowedPlants2,
+            TileID.CrimsonPlants,
+            TileID.CorruptPlants,
+            TileID.AshPlants
+        };
+
+        public static int[] TallGrass = new int[]
+        {
+            TileID.Plants2,
+            TileID.JunglePlants2,
+            TileID.HallowedPlants2
+        };
+
         public override void Load()
         {
             On_Player.ItemCheck_CutTiles += Hook_ItemCheck_CutTiles;
@@ -57,18 +92,8 @@ namespace VanillaModding
                 {
                     Tile tile = Framing.GetTileSafely(x, y);
                     int type = tile.TileType;
-
-                    //Mod.Logger.Debug($"x:{itemRectangle.Center.X} y:{itemRectangle.Center.Y} id:{type}");
-                    bool isHayTile =
-                          type == TileID.Plants ||
-                          type == TileID.Plants2 ||
-                          type == TileID.JunglePlants ||
-                          type == TileID.JunglePlants2 ||
-                          type == TileID.HallowedPlants ||
-                          type == TileID.HallowedPlants2 ||
-                          type == TileID.CrimsonPlants ||
-                          type == TileID.CorruptPlants ||
-                          type == TileID.AshPlants;
+                    bool isHayTile = Grass.Contains(type);
+                    bool isTallGrassTile = TallGrass.Contains(type);
 
                     if (!isHayTile) 
                         continue;
@@ -77,16 +102,16 @@ namespace VanillaModding
                     if (!Sickle[sItem.type].isSickle)
                         continue;
 
+                    // This is where it cuts the tile and checks in World Gen whether this can cut tile.
                     if (Main.tileCut[type] && WorldGen.CanCutTile(x, y, DelegateMethods.tilecut_0))
                     {
-                        Mod.Logger.Debug($"x:{x} y:{y} | xp:{self.position.X} yp:{self.position.Y} | id:{type}");
+                        // Amount of hay taken from Sickle Data
                         int amount =
-                           (type == TileID.Plants2 ||
-                            type == TileID.JunglePlants2 ||
-                            type == TileID.HallowedPlants2)
+                           (isTallGrassTile)
                            ? Main.rand.Next(Sickle[sItem.type].TallGrassDrop[0], Sickle[sItem.type].TallGrassDrop[1])
                            : Main.rand.Next(Sickle[sItem.type].GrassDrop[0], Sickle[sItem.type].GrassDrop[1]);
 
+                        // Spawn this hay item along with ID
                         int id = Item.NewItem(
                             new EntitySource_TileBreak(x * 16, y * 16),
                             x * 16, y * 16, 0, 0,
@@ -96,6 +121,7 @@ namespace VanillaModding
                             -1
                         );
 
+                        // When on Multiplayer sync the item drop to all clients
                         if (Main.netMode == NetmodeID.MultiplayerClient)
                             NetMessage.SendData(MessageID.SyncItem, -1, -1, null, id, 1f);
                     }
@@ -105,7 +131,7 @@ namespace VanillaModding
             orig(self, sItem, itemRectangle, shouldIgnore);
         }
 
-        public override void AddRecipeGroups()
+        public override void AddRecipeGroups() //uh
         {
 
         }

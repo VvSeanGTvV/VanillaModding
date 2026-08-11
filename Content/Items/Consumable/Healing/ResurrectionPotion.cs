@@ -13,8 +13,8 @@ namespace VanillaModding.Content.Items.Consumable.Healing
             Item.Size = new Vector2(width, height);
 
             Item.useTime = Item.useAnimation = 17;
-            Item.useTurn = true;
             Item.maxStack = Item.CommonMaxStack;
+            Item.useTurn = true;
             Item.noMelee = true;
 
             Item.value = Item.sellPrice(gold: 30);

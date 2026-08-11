@@ -25,6 +25,13 @@ namespace VanillaModding.Content.Items.Accessories
             Item.value = Item.sellPrice(0, 1, 0, 0);
         }
 
+        public override bool CanAccessoryBeEquippedWith(Item equippedItem, Item incomingItem, Player player)
+        {
+            if (equippedItem.type == ModContent.ItemType<HealingFlower>()) return false;
+            if (equippedItem.type == ItemID.PhilosophersStone) return false;
+            return true;
+        }
+
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.PotionDelayModifier *= 1 - MultiplicativeDelayDecrease / 100f;

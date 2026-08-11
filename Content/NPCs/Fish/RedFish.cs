@@ -87,21 +87,21 @@ namespace VanillaModding.Content.NPCs.Fish
 
         }
 
+        int timerTile = 0;
+        int si = 0;
+        bool once, twice, YeetMode;
         public override void OnHitByItem(Player player, Item item, NPC.HitInfo hit, int damageDone)
         {
-            hit.SourceDamage = 1;
+            if (!twice) hit.SourceDamage = 1;
             base.OnHitByItem(player, item, hit, damageDone);
         }
 
         public override void OnHitByProjectile(Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
-            hit.SourceDamage = 1;
+            if (!twice) hit.SourceDamage = 1;
             base.OnHitByProjectile(projectile, hit, damageDone);
         }
 
-        int timerTile = 0;
-        int si = 0;
-        bool once, twice, YeetMode;
         public override void AI()
         {
             if (!YeetMode) 
@@ -166,10 +166,10 @@ namespace VanillaModding.Content.NPCs.Fish
                 //NPC.GetGlobalNPC<VanillaModdingNPC>().statLifeMax2 = 15000 - NPC.GetGlobalNPC<VanillaModdingNPC>().statLifeMax;
                 if (!twice)
                 {
-                    twice = true;
                     NPC.lifeMax = 15000;
-                    NPC.life = 15000;
+                    NPC.life = NPC.lifeMax;
                     NPC.defense = 0;
+                    twice = true;
                 }
             } else if (aggroTo <= -1)
             {
