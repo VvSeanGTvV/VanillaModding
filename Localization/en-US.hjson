@@ -35,6 +35,11 @@ Mods: {
 				DisplayName: Adrenaline Exhausted
 				Description: The rush has expired. Major debuff is applied and hope you have backup plan.
 			}
+
+			PetAndroid: {
+				DisplayName: Pet Android
+				Description: Mods.VanillaModding.Buffs.PetAndroid.Description
+			}
 		}
 
 		Achievements: {
@@ -497,6 +502,16 @@ Mods: {
 				DisplayName: Soul of Unity
 				Tooltip: "'The trio of essence, united together'"
 			}
+
+			SpaceRifle: {
+				DisplayName: Space Rifle
+				Tooltip: ""
+			}
+
+			ShinyBlackSlab: {
+				DisplayName: Shiny Black Slab
+				Tooltip: Summons a pet android
+			}
 		}
 
 		NPCs: {
@@ -605,6 +620,7 @@ Mods: {
 			BoringArrowSmall.DisplayName: Boring Arrow Small
 			LifeSoul.DisplayName: Life Soul
 			LifeStealBullet.DisplayName: Life Steal Bullet
+			AndroidGuy.DisplayName: Android Guy
 		}
 
 		Prefixes: {
@@ -634,6 +650,8 @@ Mods: {
 				PositiveEffects: +Feather Light
 				DisplayName: Pico
 			}
+
+			Efficient.DisplayName: Efficient
 		}
 
 		DamageClasses.Click.DisplayName: click damage
