@@ -489,12 +489,13 @@ Mods: {
 			}
 
 			FusionCore: {
-				DisplayName: Fusion Core
-				Tooltip:
-					'''
-					A more of all in one crafting stations, which can be used to craft items that require multiple crafting stations.
-					(WIP)
-					'''
+				DisplayName: Fusion Station
+				Tooltip: A more of all in one crafting stations, which can be used to craft items that require multiple crafting stations.
+			}
+
+			SoulofUnity: {
+				DisplayName: Soul of Unity
+				Tooltip: "'The trio of essence, united together'"
 			}
 		}
 
@@ -638,8 +639,8 @@ Mods: {
 		DamageClasses.Click.DisplayName: click damage
 
 		Tiles: {
-			AetherPylonTile.MapEntry: Aether Pylon Tile
-			FusionCore.MapEntry: Fusion Core
+			AetherPylonTile.MapEntry: Aether Pylon
+			FusionCore.MapEntry: Fusion Station
 		}
 
 		InfoDisplays: {

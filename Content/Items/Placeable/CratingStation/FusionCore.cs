@@ -37,9 +37,9 @@ namespace VanillaModding.Content.Items.Placeable.CratingStation
                 .AddIngredient(ItemID.MythrilAnvil)
                 .AddIngredient(ItemID.AdamantiteForge)
                 .AddIngredient<ElectrifiedBar>(20)
-                .AddIngredient(ItemID.SoulofFright, 5)
-                .AddIngredient(ItemID.SoulofMight, 5)
-                .AddIngredient(ItemID.SoulofSight, 5)
+                .AddIngredient(ItemID.SoulofFright, 10)
+                .AddIngredient(ItemID.SoulofMight, 10)
+                .AddIngredient(ItemID.SoulofSight, 10)
                 .Register();
 
             CreateRecipe()
@@ -47,9 +47,9 @@ namespace VanillaModding.Content.Items.Placeable.CratingStation
                 .AddIngredient(ItemID.MythrilAnvil)
                 .AddIngredient(ItemID.TitaniumForge)
                 .AddIngredient<ElectrifiedBar>(20)
-                .AddIngredient(ItemID.SoulofFright, 5)
-                .AddIngredient(ItemID.SoulofMight, 5)
-                .AddIngredient(ItemID.SoulofSight, 5)
+                .AddIngredient(ItemID.SoulofFright, 10)
+                .AddIngredient(ItemID.SoulofMight, 10)
+                .AddIngredient(ItemID.SoulofSight, 10)
                 .Register();
         }
     }
