@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Common.Systems;
 using VanillaModding.Content.Pets.AndroidGuy;
 using VanillaModding.Content.Pets.SandTrapperPet;
 
@@ -22,7 +23,7 @@ namespace VanillaModding.Content.Items.Pets
         }
 
         public override void Update(Player player, ref int buffIndex)
-        { // This method gets called every frame your buff is active on your player.
+        {
             bool unused = false;
             player.BuffHandle_SpawnPetIfNeededAndSetTime(buffIndex, ref unused, ModContent.ProjectileType<AndroidGuy>());
         }
@@ -33,29 +34,44 @@ namespace VanillaModding.Content.Items.Pets
         // Names and descriptions of all ExamplePetX classes are defined using .hjson files in the Localization folder
         public override void SetDefaults()
         {
-            Item.DefaultToVanitypet(ModContent.ProjectileType<AndroidGuy>(), ModContent.BuffType<PetAndroid>());
-
             Item.noUseGraphic = true;
+            Item.noMelee = true;
             Item.width = 32;
             Item.height = 32;
-            Item.rare = ItemRarityID.Pink;
+            Item.rare = ItemRarityID.Blue;
+            Item.useStyle = ItemUseStyleID.Swing;
+            Item.useAnimation = 20;
+            Item.useTime = 20;
+            Item.UseSound = VanillaModdingSoundID.AndroidSummon;
+            Item.value = Item.sellPrice(0, 0, 15, 0);
+
+            Item.buffType = ModContent.BuffType<PetAndroid>();
+            Item.shoot = ModContent.ProjectileType<AndroidGuy>();
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             player.AddBuff(Item.buffType, 2); // The item applies the buff, the buff spawns the projectile
-
+            Projectile.NewProjectile(source, player.Center.X, player.Center.Y, 0f, 0f, type, 0, 0f, player.whoAmI);
             return false;
         }
 
         // Please see Content/ExampleRecipes.cs for a detailed explanation of recipe creation.
         public override void AddRecipes()
         {
-            /*CreateRecipe()
+            CreateRecipe()
+                .AddIngredient(ItemID.Emerald, 1)
                 .AddIngredient(ItemID.Glass, 5)
                 .AddIngredient(ItemID.SilverBar, 10)
                 .AddTile(TileID.Anvils)
-                .Register();*/
+                .Register();
+
+            CreateRecipe()
+                .AddIngredient(ItemID.Emerald, 1)
+                .AddIngredient(ItemID.Glass, 5)
+                .AddIngredient(ItemID.TungstenBar, 10)
+                .AddTile(TileID.Anvils)
+                .Register();
         }
     }
 }

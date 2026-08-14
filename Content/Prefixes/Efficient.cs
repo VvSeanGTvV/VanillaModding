@@ -30,7 +30,7 @@ namespace VanillaModding.Content.Prefixes
         {
             manaMult *= 1f - 0.311f * Power;
             damageMult *= 1f - 0.311f * Power;
-            useTimeMult *= 1f - 0.462f * Power;
+            useTimeMult *= 1f - 0.472f * Power;
             knockbackMult *= 1f - 0.314f * Power;
             //critBonus -= (int)Power * 2;
         }

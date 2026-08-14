@@ -14,6 +14,7 @@ using Terraria.ID;
 using Terraria.Map;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using VanillaModding.Common.Systems;
 using VanillaModding.Common.UI;
 using VanillaModding.Common.Utilities;
 using VanillaModding.Content.Buffs;
@@ -108,13 +109,17 @@ namespace VanillaModding.Common
                 Item item = Player.inventory[i];
                 if (item.type == ModContent.ItemType<ResurrectionPotion>() && item.stack > 0 && !Player.HasBuff(BuffID.PotionSickness))
                 {
-                    Player.statLife = Player.statLifeMax2;
-                    Player.statMana = Player.statManaMax2;
+                    Player.statLife = (int)(Player.statLifeMax2 * 0.5f);
+                    Player.statMana = (int)(Player.statManaMax2 * 0.5f);
                     SoundEngine.PlaySound(SoundID.Item3, Player.position);
+                    SoundEngine.PlaySound(VanillaModdingSoundID.Hallelujah, Player.position);
 
-                    int potionDuration = (int)Player.PotionDelayModifier.ApplyTo(Player.potionDelayTime);
+                    int potionDuration = (int)Player.PotionDelayModifier.ApplyTo(Player.potionDelayTime * 1.25f);
                     Player.AddBuff(BuffID.PotionSickness, potionDuration);
                     Player.potionDelay = potionDuration;
+
+                    Player.manaSick = true;
+                    Player.AddBuff(BuffID.ManaSickness, (int)(Player.manaSickTime * 1.25f));
 
                     item.stack--;
                     if (item.stack <= 0) item.TurnToAir();

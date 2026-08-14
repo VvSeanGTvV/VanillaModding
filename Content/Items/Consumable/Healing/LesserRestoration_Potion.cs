@@ -44,7 +44,7 @@ namespace VanillaModding.Content.Items.Consumable.Healing
                 .AddTile(TileID.Bottles)
                 .Register();
 
-            CreateRecipe()
+            CreateRecipe(1)
                 .AddIngredient(ItemID.LesserHealingPotion, 1)
                 .AddIngredient(ItemID.LesserManaPotion, 1)
                 .AddTile(TileID.AlchemyTable)

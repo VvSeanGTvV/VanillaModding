@@ -5,7 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.Audio;
+using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Common.Systems;
+using VanillaModding.Common.Utilities;
 using VanillaModding.Content.Items.Pets;
 
 namespace VanillaModding.Content.Pets.AndroidGuy
@@ -14,18 +18,22 @@ namespace VanillaModding.Content.Pets.AndroidGuy
     {
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Projectile.type] = 8;
+            Main.projFrames[Projectile.type] = 10;
+            Main.projPet[Type] = true;
+
+            ProjectileID.Sets.CharacterPreviewAnimations[Type] = ProjectileID.Sets.SimpleLoop(1, Main.projFrames[Type] - 2, 8)
+                .WithOffset(-10f, 0f)
+                .WithSpriteDirection(-1)
+                .WithCode(DelegateMethodsHelper.CharacterPreview.Static);
         }
         public override void SetDefaults()
         {
-            Projectile.width = 52;
-            Projectile.height = 52;
+            Projectile.width = 34;
+            Projectile.height = 50;
 
             Projectile.friendly = true;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = false;
-
-            Projectile.aiStyle = 0;
         }
 
         public override void AI()
@@ -39,26 +47,41 @@ namespace VanillaModding.Content.Pets.AndroidGuy
             }
 
             // Gravity
-            if (Projectile.velocity.Y < 10f)
+            if (Projectile.velocity.Y < 20f)
                 Projectile.velocity.Y += 0.4f;
+            if (Collision.SolidCollision(
+                    Projectile.position + new Vector2(0, Projectile.velocity.Y),
+                    Projectile.width,
+                    Projectile.height))
+            {
+                Projectile.velocity.Y = 0;
+            }
 
             // Distance from player
-            float distance = player.Center.X - Projectile.Center.X;
+            float distanceX = player.Center.X - Projectile.Center.X;
+            float distance = Vector2.Distance(player.Center, Projectile.Center);
 
-            // Walk toward player
-            if (Math.Abs(distance) > 50f)
+            if (Math.Abs(distance) > 850f)
             {
-                float speed = 2f;
+                Projectile.position = player.Center - new Vector2(0, Projectile.height / 2);
+                SoundEngine.PlaySound(VanillaModdingSoundID.MessageSamsung, Projectile.Center);
+                for (int i = 0; i < 20; i++) Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.MagicMirror);
+            }
+            if (Math.Abs(distanceX) > 50f)
+            {
+                float speed = 0.15f;
+                float maxSpeed = 10f;
+                if (Projectile.velocity.Y != 0f) maxSpeed = 5f;
+                if (distanceX > 0) Projectile.velocity.X += speed;
+                else Projectile.velocity.X -= speed;
 
-                if (distance > 0)
-                    Projectile.velocity.X = speed;
-                else
-                    Projectile.velocity.X = -speed;
+                if (Projectile.velocity.X > maxSpeed) Projectile.velocity.X = maxSpeed;
+                if (Projectile.velocity.X < -maxSpeed) Projectile.velocity.X = -maxSpeed;
             }
             else
             {
-                // Slow down when close
-                Projectile.velocity.X *= 0.8f;
+                if (Projectile.velocity.Y == 0f) Projectile.velocity.X *= 0.75f;
+                else Projectile.velocity.X *= 0.95f;
             }
 
             // Jump if there's an obstacle
@@ -76,29 +99,40 @@ namespace VanillaModding.Content.Pets.AndroidGuy
             // Walking animation
             if (Math.Abs(Projectile.velocity.X) > 0.1f && Projectile.velocity.Y == 0f)
             {
+                // Scale animation speed by movement speed
+                float speed = Math.Abs(Projectile.velocity.X);
+
+                // Base frame speed: lower = faster animation
+                int baseFrameTime = 8;
+
+                // Dynamic frame time: faster movement = fewer ticks per frame
+                int dynamicFrameTime = (int)(baseFrameTime / Math.Clamp(speed, 0.5f, 4f));
+
                 Projectile.frameCounter++;
 
-                if (Projectile.frameCounter >= 8)
+                if (Projectile.frameCounter >= dynamicFrameTime)
                 {
                     Projectile.frameCounter = 0;
                     Projectile.frame++;
 
-                    if (Projectile.frame >= Main.projFrames[Projectile.type])
+                    if (Projectile.frame >= Main.projFrames[Projectile.type] - 1)
                         Projectile.frame = 0;
                 }
             }
             else
             {
+                
                 // Idle frame
                 Projectile.frame = 0;
                 Projectile.frameCounter = 0;
+                if (Projectile.velocity.Y > 6f) Projectile.frame = Main.projFrames[Projectile.type] - 1;
             }
 
             // Face movement direction
             if (Projectile.velocity.X != 0)
             {
                 Projectile.spriteDirection =
-                    Projectile.velocity.X > 0 ? 1 : -1;
+                    Projectile.velocity.X > 0 ? -1 : 1;
             }
         }
     }

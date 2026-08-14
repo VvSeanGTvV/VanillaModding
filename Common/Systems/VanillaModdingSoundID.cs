@@ -37,5 +37,9 @@ namespace VanillaModding.Common.Systems
         public static readonly SoundStyle LobotomyInsane = LoadSound("Lobotomy/LobotomyInsaneBeam") with { Volume = 0.45f, Pitch = 0f, MaxInstances = 25 };
 
         public static readonly SoundStyle Hallelujah = LoadSound("Bombs/HolyHandGrenadeHallelujah");
+
+        // Android Guy
+        public static readonly SoundStyle MessageSamsung = LoadSound("AndroidGuy/MessageSamsung");
+        public static readonly SoundStyle AndroidSummon = LoadSound("AndroidGuy/TaDaAndroid");
     }
 }

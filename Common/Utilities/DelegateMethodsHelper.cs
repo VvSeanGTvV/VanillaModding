@@ -12,6 +12,22 @@ namespace VanillaModding.Common.Utilities
 {
     internal class DelegateMethodsHelper
     {
+        public static class CharacterPreview
+        {
+            public static void Static(Projectile proj, bool walking) { }
+            public static void SimpleRotate(Projectile proj, bool walking, float speed = 0.1f)
+            {
+                if (walking)
+                {
+                    proj.rotation += speed;
+                }
+                else
+                {
+                    proj.rotation = 0f;
+                }
+            }
+        }
+
         public static bool CutTiles(int x, int y)
         {
             if (!WorldGen.InWorld(x, y, 1))

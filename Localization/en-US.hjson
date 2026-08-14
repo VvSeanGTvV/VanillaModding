@@ -37,8 +37,8 @@ Mods: {
 			}
 
 			PetAndroid: {
-				DisplayName: Pet Android
-				Description: Mods.VanillaModding.Buffs.PetAndroid.Description
+				DisplayName: Bugdroid
+				Description: The mascot of Android
 			}
 		}
 
@@ -488,7 +488,7 @@ Mods: {
 				DisplayName: Resurrection Potion
 				Tooltip:
 					'''
-					A revival potion, which use upon death though results with potion sickness
+					A revival potion, which use upon death though results with potion sickness, returns only 25% mana and health upon use
 					'Return with greatness!'
 					'''
 			}
@@ -509,8 +509,8 @@ Mods: {
 			}
 
 			ShinyBlackSlab: {
-				DisplayName: Shiny Black Slab
-				Tooltip: Summons a pet android
+				DisplayName: Shiny Black Cell Phone
+				Tooltip: Summons Bugdroid, a cool mascot!
 			}
 		}
 
