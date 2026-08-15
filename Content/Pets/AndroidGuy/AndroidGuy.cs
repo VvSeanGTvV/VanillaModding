@@ -18,10 +18,10 @@ namespace VanillaModding.Content.Pets.AndroidGuy
     {
         public override void SetStaticDefaults()
         {
-            Main.projFrames[Projectile.type] = 10;
+            Main.projFrames[Projectile.type] = 11;
             Main.projPet[Type] = true;
 
-            ProjectileID.Sets.CharacterPreviewAnimations[Type] = ProjectileID.Sets.SimpleLoop(1, Main.projFrames[Type] - 2, 8)
+            ProjectileID.Sets.CharacterPreviewAnimations[Type] = ProjectileID.Sets.SimpleLoop(1, Main.projFrames[Type] - 3, 8)
                 .WithOffset(-10f, 0f)
                 .WithSpriteDirection(-1)
                 .WithCode(DelegateMethodsHelper.CharacterPreview.Static);
@@ -36,9 +36,15 @@ namespace VanillaModding.Content.Pets.AndroidGuy
             Projectile.ignoreWater = false;
         }
 
+        bool floatToPlayer;
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
+
+            // Distance from player
+            float distanceX = player.Center.X - Projectile.Center.X;
+            float distanceY = player.Center.Y - Projectile.Center.Y;
+            float distance = Vector2.Distance(player.Center, Projectile.Center);
 
             // Keep the projectile from disappearing as long as the player isn't dead and has the pet buff.
             if (!player.dead && player.HasBuff(ModContent.BuffType<PetAndroid>()))
@@ -52,16 +58,33 @@ namespace VanillaModding.Content.Pets.AndroidGuy
             if (Collision.SolidCollision(
                     Projectile.position + new Vector2(0, Projectile.velocity.Y),
                     Projectile.width,
-                    Projectile.height))
+                    Projectile.height, true) && !floatToPlayer)
             {
                 Projectile.velocity.Y = 0;
             }
 
-            // Distance from player
-            float distanceX = player.Center.X - Projectile.Center.X;
-            float distance = Vector2.Distance(player.Center, Projectile.Center);
+            Projectile.tileCollide = !floatToPlayer;
+            if (floatToPlayer)
+            {
+                float maxSpeed = 20f;
 
-            if (Math.Abs(distance) > 850f)
+                // distanceY = player.Center.Y - projectile.Center.Y
+                float desiredY = distanceY;
+
+                // Scale speed based on distance
+                float speed = MathHelper.Clamp(Math.Abs(desiredY) * 0.05f, 1f, maxSpeed);
+
+                // Move toward player
+                if (desiredY < 0) // player is above → go up (negative Y)
+                    Projectile.velocity.Y = -speed;
+                else              // player is below → go down (positive Y)
+                    Projectile.velocity.Y = speed;
+
+                floatToPlayer = (Math.Abs(distance) > 500f);
+            }
+            else floatToPlayer = (Math.Abs(distance) > 750f);
+
+            if (Math.Abs(distance) > 1500f)
             {
                 Projectile.position = player.Center - new Vector2(0, Projectile.height / 2);
                 SoundEngine.PlaySound(VanillaModdingSoundID.MessageSamsung, Projectile.Center);
@@ -71,7 +94,8 @@ namespace VanillaModding.Content.Pets.AndroidGuy
             {
                 float speed = 0.15f;
                 float maxSpeed = 10f;
-                if (Projectile.velocity.Y != 0f) maxSpeed = 5f;
+                if (Projectile.velocity.Y != 0f && !floatToPlayer) maxSpeed = 5f;
+                if (floatToPlayer) maxSpeed = 20f;
                 if (distanceX > 0) Projectile.velocity.X += speed;
                 else Projectile.velocity.X -= speed;
 
@@ -85,7 +109,7 @@ namespace VanillaModding.Content.Pets.AndroidGuy
             }
 
             // Jump if there's an obstacle
-            if (Projectile.velocity.Y == 0f)
+            if (Projectile.velocity.Y == 0f && !floatToPlayer)
             {
                 if (Collision.SolidCollision(
                     Projectile.position + new Vector2(Projectile.velocity.X, 0),
@@ -97,7 +121,7 @@ namespace VanillaModding.Content.Pets.AndroidGuy
             }
 
             // Walking animation
-            if (Math.Abs(Projectile.velocity.X) > 0.1f && Projectile.velocity.Y == 0f)
+            if (Math.Abs(Projectile.velocity.X) > 0.1f && Projectile.velocity.Y == 0f && !floatToPlayer)
             {
                 // Scale animation speed by movement speed
                 float speed = Math.Abs(Projectile.velocity.X);
@@ -115,7 +139,7 @@ namespace VanillaModding.Content.Pets.AndroidGuy
                     Projectile.frameCounter = 0;
                     Projectile.frame++;
 
-                    if (Projectile.frame >= Main.projFrames[Projectile.type] - 1)
+                    if (Projectile.frame >= Main.projFrames[Projectile.type] - 2)
                         Projectile.frame = 0;
                 }
             }
@@ -125,8 +149,18 @@ namespace VanillaModding.Content.Pets.AndroidGuy
                 // Idle frame
                 Projectile.frame = 0;
                 Projectile.frameCounter = 0;
-                if (Projectile.velocity.Y > 6f) Projectile.frame = Main.projFrames[Projectile.type] - 1;
+                if (Projectile.velocity.Y > 6f) Projectile.frame = Main.projFrames[Projectile.type] - 2;
+                if (Projectile.velocity.Y < -6f || floatToPlayer)
+                {
+                    Projectile.frame = Main.projFrames[Projectile.type] - 1;
+                    for (int i = 0; i < 5; i++) {
+                        Dust.NewDust(Projectile.Center + new Vector2(-4, -4), 2, 2, DustID.Terra, Main.rand.NextFloat(-2f, 2f), Main.rand.NextFloat(-10f, 10f));
+                        Dust.NewDust(Projectile.Center + new Vector2(4, -4), 2, 2, DustID.Terra, Main.rand.NextFloat(-2f, 2f), Main.rand.NextFloat(-10f, 10f));
+                    }
+                }
             }
+
+            if (floatToPlayer) Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2; else Projectile.rotation = 0;
 
             // Face movement direction
             if (Projectile.velocity.X != 0)
@@ -134,6 +168,7 @@ namespace VanillaModding.Content.Pets.AndroidGuy
                 Projectile.spriteDirection =
                     Projectile.velocity.X > 0 ? -1 : 1;
             }
+
         }
     }
 }

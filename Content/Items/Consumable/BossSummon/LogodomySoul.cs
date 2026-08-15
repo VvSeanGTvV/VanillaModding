@@ -13,6 +13,7 @@ using VanillaModding.Content.Items.Materials;
 using VanillaModding.Content.Items.Placeable;
 using VanillaModding.Content.NPCs.LobotomyGod;
 using VanillaModding.Content.NPCs.Sirius;
+using VanillaModding.Content.Rarities;
 using VanillaModding.Content.Tiles;
 using static VanillaModding.VanillaModding;
 
@@ -39,7 +40,7 @@ namespace VanillaModding.Content.Items.Consumable.BossSummon
             Item.height = 18;
             Item.maxStack = Item.CommonMaxStack;
             Item.value = 100;
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ModContent.RarityType<BrightTurquoise>();
             Item.useAnimation = 30;
             Item.useTime = 30;
             Item.useStyle = ItemUseStyleID.HoldUp;
@@ -128,7 +129,7 @@ namespace VanillaModding.Content.Items.Consumable.BossSummon
             recipe.AddIngredient(ItemID.SoulofLight, 5);
             recipe.AddIngredient(ItemID.SoulofSight, 5);
             recipe.AddIngredient(ItemID.SoulofMight, 5);
-            recipe.AddTile(TileID.MythrilAnvil);
+            recipe.AddTile<Tiles.Furniture.FusionCore>();
             recipe.Register();
         }
         public override Color? GetAlpha(Color lightColor)

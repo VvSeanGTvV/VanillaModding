@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Content.Items.Consumable.BossSummon;
 using VanillaModding.Content.Items.Materials;
+using VanillaModding.Content.Rarities;
 
 namespace VanillaModding.Content.Items.Weapon.Throwable.Lobotomy
 {
@@ -33,7 +34,7 @@ namespace VanillaModding.Content.Items.Weapon.Throwable.Lobotomy
             Item.noMelee = true;
             Item.autoReuse = true;
             Item.value = Item.sellPrice(0, 5, 25, 0);
-            Item.rare = ItemRarityID.LightPurple;
+            Item.rare = ModContent.RarityType<BrightTurquoise>();
         }
 
         public override void AddRecipes()

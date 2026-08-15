@@ -15,6 +15,12 @@ namespace VanillaModding
 {
     internal class VanillaModdingSystem : ModSystem
     {
+        public static int DiscoR;
+        public static int DiscoG;
+        public static int DiscoB;
+        private bool DiscoRB, DiscoGB, DiscoBB;
+        int Updatetimer = 0;
+
         public struct SickleData
         {
             public bool isSickle;
@@ -77,6 +83,77 @@ namespace VanillaModding
         public override void Unload()
         {
             On_Player.ItemCheck_CutTiles -= Hook_ItemCheck_CutTiles;
+        }
+
+        public override void PostUpdateEverything()
+        {
+            Updatetimer++;
+            if (Updatetimer > 60) Updatetimer = 0;
+        }
+        
+        public override void PreUpdateItems()
+        {
+            if (Updatetimer % 10 == 0) DoUpdateRGBRarity();
+        }
+
+        private void DoUpdateRGBRarity()
+        {
+            if (!DiscoRB)
+            {
+                DiscoR++;
+                if (DiscoR > 255)
+                {
+                    DiscoR = 255;
+                    DiscoRB = !DiscoRB;
+                }
+            }
+            else
+            {
+                DiscoR--;
+                if (DiscoR < 0)
+                {
+                    DiscoR = 0;
+                    DiscoRB = !DiscoRB;
+                }
+            }
+
+            if (!DiscoGB)
+            {
+                DiscoG++;
+                if (DiscoG > 255)
+                {
+                    DiscoG = 255;
+                    DiscoGB = !DiscoGB;
+                }
+            }
+            else
+            {
+                DiscoG--;
+                if (DiscoG < 0)
+                {
+                    DiscoG = 0;
+                    DiscoGB = !DiscoGB;
+                }
+            }
+
+            if (!DiscoBB)
+            {
+                DiscoB++;
+                if (DiscoB > 255)
+                {
+                    DiscoB = 255;
+                    DiscoBB = !DiscoBB;
+                }
+            }
+            else
+            {
+                DiscoB--;
+                if (DiscoB < 0)
+                {
+                    DiscoB = 0;
+                    DiscoBB = !DiscoBB;
+                }
+            }
         }
 
         private void Hook_ItemCheck_CutTiles(On_Player.orig_ItemCheck_CutTiles orig, Player self, Item sItem, Rectangle itemRectangle, bool[] shouldIgnore)

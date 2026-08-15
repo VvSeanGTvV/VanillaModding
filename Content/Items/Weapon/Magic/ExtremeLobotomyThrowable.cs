@@ -2,6 +2,7 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Content.Items.Weapon.Throwable.Lobotomy;
+using VanillaModding.Content.Rarities;
 
 namespace VanillaModding.Content.Items.Weapon.Magic
 {
@@ -33,7 +34,7 @@ namespace VanillaModding.Content.Items.Weapon.Magic
             Item.noMelee = true;
             Item.autoReuse = true;
             Item.value = Item.sellPrice(0, 30, 50, 0);
-            Item.rare = ItemRarityID.Master;
+            Item.rare = ModContent.RarityType<BrightTurquoise>();
         }
 
         public override void AddRecipes()

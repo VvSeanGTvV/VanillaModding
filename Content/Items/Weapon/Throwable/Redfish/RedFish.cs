@@ -1,6 +1,7 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Content.Rarities;
 
 namespace VanillaModding.Content.Items.Weapon.Throwable.Redfish
 {
@@ -25,7 +26,7 @@ namespace VanillaModding.Content.Items.Weapon.Throwable.Redfish
             Item.noMelee = true;
             Item.autoReuse = true;
             Item.value = Item.sellPrice(0, 1, 25, 0);
-            Item.rare = ItemRarityID.Red;
+            Item.rare = ModContent.RarityType<BrightTurquoise>();
         }
     }
 }

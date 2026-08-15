@@ -12,6 +12,7 @@ using VanillaModding.Content.Items.Materials.Bars;
 using VanillaModding.Content.Items.Weapon.Melee.BloodyScythe;
 using VanillaModding.Content.Projectiles.MightyScythe;
 using VanillaModding.Content.Projectiles.MightyScythe.MightyProjectile;
+using VanillaModding.Content.Rarities;
 
 namespace VanillaModding.Content.Items.Weapon.Combo.MightyScythe
 {
@@ -58,7 +59,7 @@ namespace VanillaModding.Content.Items.Weapon.Combo.MightyScythe
 
             Item.shootsEveryUse = true;
 
-            Item.rare = ItemRarityID.Red;
+            Item.rare = ModContent.RarityType<BrightTurquoise>();
             Item.autoReuse = true;
 
             Item.noUseGraphic = true;
@@ -67,22 +68,19 @@ namespace VanillaModding.Content.Items.Weapon.Combo.MightyScythe
 
         public override void AddRecipes()
         {
-            Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.Picksaw, 1);
-            recipe.AddIngredient(ItemID.DeathSickle, 1);
-            recipe.AddIngredient(ItemID.IceSickle, 1);
-            recipe.AddIngredient(ItemID.Sickle, 1);
-            recipe.AddIngredient(ModContent.ItemType<BloodyScythe>(), 1);
-            //recipe.AddIngredient(ItemID.ChlorophyteBar, 15);
-            recipe.AddIngredient(ItemID.LunarBar, 25);
-            //recipe.AddIngredient(ItemID.MeteoriteBar, 15);
-            recipe.AddIngredient(ModContent.ItemType<ElectrifiedBar>(), 10);
-            //recipe.AddIngredient(ItemID.AdamantiteBar, 15);
-            recipe.AddIngredient(ItemID.SoulofMight, 15);
-            recipe.AddIngredient(ItemID.SoulofSight, 15);
-            recipe.AddIngredient(ItemID.SoulofFright, 15);
-            recipe.AddTile(TileID.LunarCraftingStation);
-            recipe.Register();
+            CreateRecipe()
+                .AddIngredient(ItemID.Picksaw, 1)
+                .AddIngredient(ItemID.DeathSickle, 1)
+                .AddIngredient(ItemID.IceSickle, 1)
+                .AddIngredient(ItemID.Sickle, 1)
+                .AddIngredient(ModContent.ItemType<BloodyScythe>(), 1)
+                .AddIngredient(ItemID.LunarBar, 25)
+                .AddIngredient(ModContent.ItemType<ElectrifiedBar>(), 10)
+                .AddIngredient(ItemID.SoulofMight, 15)
+                .AddIngredient(ItemID.SoulofSight, 15)
+                .AddIngredient(ItemID.SoulofFright, 15)
+                .AddTile(TileID.LunarCraftingStation)
+                .Register();
         }
 
         public override void PostDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, float rotation, float scale, int whoAmI)

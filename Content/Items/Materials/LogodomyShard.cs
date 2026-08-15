@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
+using VanillaModding.Content.Rarities;
 
 namespace VanillaModding.Content.Items.Materials
 {
@@ -18,7 +19,7 @@ namespace VanillaModding.Content.Items.Materials
             Item.maxStack = Item.CommonMaxStack;
 
             Item.value = Item.sellPrice(gold: 1, silver: 50);
-            Item.rare = ItemRarityID.Pink;
+            Item.rare = ModContent.RarityType<BrightTurquoise>();
         }
     }
 }
