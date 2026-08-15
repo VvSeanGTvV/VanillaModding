@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.Events;
@@ -137,8 +138,9 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 
         }
 
-        private int attackCounter;
-        private int attackProj;
+        private bool dash;
+        private int attackCounter, attackProj, dashTimer;
+        private Vector2 lastTarget;
         public override void SendExtraAI(BinaryWriter writer)
         {
             writer.Write(attackCounter);
@@ -177,8 +179,10 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             float distanceFactor = MathHelper.Clamp(distance / 400f, 1f, 40f);
             turnSpeed = turnSpeed * distanceFactor;
 
+            if (dashTimer > 0) speed = 38f;
             targetWSpeed = targetWNoSpeed * speed;
             // Smoothly rotate toward target direction
+            
             Vector2 targetDir = targetWSpeed.SafeNormalize(Vector2.UnitY);
             float currentRot = NPC.velocity.SafeNormalize(Vector2.UnitY).ToRotation();
             float targetRot = targetDir.ToRotation();
@@ -186,6 +190,15 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 
             // Apply the new direction and speed
             Vector2 moveTo = newRot.ToRotationVector2() * speed;
+            if (dashTimer > 0)
+            {
+                inertia = 20f;
+                moveTo = lastTarget;
+            }
+            else
+            {
+                lastTarget = moveTo;
+            }
 
             // Apply inertia-based smoothing
             NPC.velocity = (NPC.velocity * (inertia - 1f) + moveTo) / inertia;
@@ -211,7 +224,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
                     Main.projectile[projectile].timeLeft = 500;
                     prj++;
                 }
-
+                
                 attackProj = 350;
                 NPC.netUpdate = true;
             }
@@ -243,12 +256,27 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             var entitySource = NPC.GetSource_FromAI();
             attackCounter--;
 
-
             if (NPC.CountNPCS(ModContent.NPCType<DuneSplicerCloneHead>()) < count && attackCounter < 1)
             {
                 Vector2 offset = new Vector2(Main.rand.Next(-640, 640), Main.rand.Next(-640, 640));
                 if (Main.netMode != NetmodeID.MultiplayerClient) NPC.NewNPC(entitySource, (int)(NPC.Center.X + offset.X), (int)(NPC.Center.Y + offset.Y), ModContent.NPCType<DuneSplicerCloneHead>(), NPC.whoAmI);
             }
+
+            Player player = Main.player[NPC.target];
+            float distance = (NPC.Center - player.Center).Length();
+            // This smoothly scales between 0.8x (close) and 2.5x (far)
+            float distanceFactor = MathHelper.Clamp(distance / 400f, 1f, 40f);
+            if (dash && dashTimer < 0 && distance < 500f)
+            {
+                SoundEngine.PlaySound(SoundID.Roar, NPC.Center);
+                dashTimer = 120;
+                dash = false;
+            }
+            else
+            {
+                dashTimer--;
+            }
+            dash = true;
         }
 
         /*public override bool PreKill()

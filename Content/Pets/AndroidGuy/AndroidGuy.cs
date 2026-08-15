@@ -55,13 +55,13 @@ namespace VanillaModding.Content.Pets.AndroidGuy
             // Gravity
             if (Projectile.velocity.Y < 20f)
                 Projectile.velocity.Y += 0.4f;
-            if (Collision.SolidCollision(
+
+            bool grounded = (Collision.SolidCollision(
                     Projectile.position + new Vector2(0, Projectile.velocity.Y),
                     Projectile.width,
-                    Projectile.height, true) && !floatToPlayer)
-            {
-                Projectile.velocity.Y = 0;
-            }
+                    Projectile.height, true));
+
+            if (grounded && !floatToPlayer) Projectile.velocity.Y = 0;
 
             Projectile.tileCollide = !floatToPlayer;
             if (floatToPlayer)
@@ -80,7 +80,7 @@ namespace VanillaModding.Content.Pets.AndroidGuy
                 else              // player is below → go down (positive Y)
                     Projectile.velocity.Y = speed;
 
-                floatToPlayer = (Math.Abs(distance) > 500f);
+                floatToPlayer = (Math.Abs(distance) > 50f);
             }
             else floatToPlayer = (Math.Abs(distance) > 750f);
 
