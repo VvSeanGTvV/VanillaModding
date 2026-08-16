@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Content.Items.Pets;
 using VanillaModding.Content.Items.Weapon.Combo.MightyScythe;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -83,6 +84,17 @@ namespace VanillaModding
         public override void Unload()
         {
             On_Player.ItemCheck_CutTiles -= Hook_ItemCheck_CutTiles;
+        }
+
+        public override void PostAddRecipes()
+        {
+            foreach (Recipe recipe in Main.recipe)
+            {
+                if (recipe.HasResult(ItemID.CellPhone))
+                {
+                    recipe.AddIngredient<ShinyBlackSlab>();
+                }
+            }
         }
 
         public override void PostUpdateEverything()

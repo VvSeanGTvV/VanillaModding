@@ -34,12 +34,12 @@ namespace VanillaModding.Content.Items.Pets
         // Names and descriptions of all ExamplePetX classes are defined using .hjson files in the Localization folder
         public override void SetDefaults()
         {
-            Item.noUseGraphic = true;
+            Item.noUseGraphic = false;
             Item.noMelee = true;
             Item.width = 32;
             Item.height = 32;
             Item.rare = ItemRarityID.Blue;
-            Item.useStyle = ItemUseStyleID.Swing;
+            Item.useStyle = ItemUseStyleID.HoldUp;
             Item.useAnimation = 20;
             Item.useTime = 20;
             Item.UseSound = VanillaModdingSoundID.AndroidSummon;
@@ -56,7 +56,6 @@ namespace VanillaModding.Content.Items.Pets
             return false;
         }
 
-        // Please see Content/ExampleRecipes.cs for a detailed explanation of recipe creation.
         public override void AddRecipes()
         {
             CreateRecipe()

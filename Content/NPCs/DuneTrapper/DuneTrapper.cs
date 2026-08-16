@@ -178,8 +178,6 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             // This smoothly scales between 0.8x (close) and 2.5x (far)
             float distanceFactor = MathHelper.Clamp(distance / 400f, 1f, 40f);
             turnSpeed = turnSpeed * distanceFactor;
-
-            if (dashTimer > 0) speed = 38f;
             targetWSpeed = targetWNoSpeed * speed;
             // Smoothly rotate toward target direction
             
@@ -192,7 +190,6 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             Vector2 moveTo = newRot.ToRotationVector2() * speed;
             if (dashTimer > 0)
             {
-                inertia = 20f;
                 moveTo = lastTarget;
             }
             else
@@ -201,7 +198,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             }
 
             // Apply inertia-based smoothing
-            NPC.velocity = (NPC.velocity * (inertia - 1f) + moveTo) / inertia;
+            NPC.velocity = ((NPC.velocity * (inertia - 1f) + moveTo) / inertia) * (dashTimer > 0 ? 1.15f : 1f);
 
 
             if (attackCounter < 1) attackCounter = 150;

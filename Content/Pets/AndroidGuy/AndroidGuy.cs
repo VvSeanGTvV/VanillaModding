@@ -57,9 +57,9 @@ namespace VanillaModding.Content.Pets.AndroidGuy
                 Projectile.velocity.Y += 0.4f;
 
             bool grounded = (Collision.SolidCollision(
-                    Projectile.position + new Vector2(0, Projectile.velocity.Y),
+                    Projectile.position + new Vector2(0, (Projectile.height - 4) + Projectile.velocity.Y),
                     Projectile.width,
-                    Projectile.height, true));
+                    4, true));
 
             if (grounded && !floatToPlayer) Projectile.velocity.Y = 0;
 
