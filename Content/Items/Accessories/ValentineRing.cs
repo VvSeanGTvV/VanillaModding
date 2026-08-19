@@ -11,6 +11,7 @@ using VanillaModding.Common;
 
 namespace VanillaModding.Content.Items.Accessories
 {
+    [AutoloadEquip(EquipType.HandsOn)]
     internal class ValentineRing : ModItem
     {
         public override void SetDefaults()
