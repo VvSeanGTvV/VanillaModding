@@ -459,7 +459,7 @@ Mods: {
 				DisplayName: Healing Flower
 				Tooltip:
 					'''
-					Automatically use the highest healing potion avaliable when needed 
+					Automatically use the healing potion when needed 
 					'Works only if your not potion sickness'
 					'''
 			}
@@ -470,7 +470,7 @@ Mods: {
 			}
 
 			PhiloFlower: {
-				DisplayName: Philosopher's Flower
+				DisplayName: Philosopher's Flower (WIP)
 				Tooltip:
 					'''
 					Automatically use the highest healing potion avaliable when needed
@@ -511,6 +511,16 @@ Mods: {
 			ShinyBlackSlab: {
 				DisplayName: Shiny Black Cell Phone
 				Tooltip: Summons Bugdroid, a cool mascot!
+			}
+
+			RestorationFlower: {
+				DisplayName: Restoration Flower
+				Tooltip:
+					'''
+					{0}% reduced mana cost
+					{0}% reduced health potion cooldown
+					Automatically use healing potion or mana potion when needed
+					'''
 			}
 		}
 

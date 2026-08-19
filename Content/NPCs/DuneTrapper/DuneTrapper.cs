@@ -198,7 +198,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             }
 
             // Apply inertia-based smoothing
-            NPC.velocity = ((NPC.velocity * (inertia - 1f) + moveTo) / inertia) * (dashTimer > 0 ? 1.15f : 1f);
+            NPC.velocity = ((NPC.velocity * (inertia - 1f) + moveTo) / inertia) * (dashTimer > 60 ? 1.15f : 1f);
 
 
             if (attackCounter < 1) attackCounter = 150;

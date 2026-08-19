@@ -38,16 +38,17 @@ namespace VanillaModding.Content.Items.Consumable.Healing
 
         public override void AddRecipes()
         {
-            CreateRecipe(1)
-                .AddIngredient(ItemID.LesserHealingPotion, 1)
-                .AddIngredient(ItemID.LesserManaPotion, 1)
+            CreateRecipe(2)
+                .AddIngredient(ItemID.LesserHealingPotion, 2)
+                .AddIngredient(ItemID.LesserManaPotion, 2)
                 .AddTile(TileID.Bottles)
                 .Register();
 
-            CreateRecipe(1)
-                .AddIngredient(ItemID.LesserHealingPotion, 1)
-                .AddIngredient(ItemID.LesserManaPotion, 1)
-                .AddTile(TileID.AlchemyTable)
+            CreateRecipe(2)
+                .AddIngredient(ItemID.Mushroom, 1)
+                .AddIngredient(ItemID.PinkGel, 2)
+                .AddIngredient(ItemID.Bottle, 2)
+                .AddTile(TileID.Bottles)
                 .Register();
         }
     }

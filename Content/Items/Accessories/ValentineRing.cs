@@ -15,7 +15,7 @@ namespace VanillaModding.Content.Items.Accessories
     {
         public override void SetDefaults()
         {
-            int width = 30; int height = 30;
+            int width = 28; int height = 20;
             Item.Size = new Vector2(width, height);
 
             Item.value = Item.buyPrice(gold: 5);

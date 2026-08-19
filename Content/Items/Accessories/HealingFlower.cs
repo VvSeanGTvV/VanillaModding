@@ -10,6 +10,7 @@ using Terraria.Audio;
 
 namespace VanillaModding.Content.Items.Accessories
 {
+    [AutoloadEquip(EquipType.Waist)]
     internal class HealingFlower : ModItem
     {
         public override void SetDefaults()
@@ -21,41 +22,9 @@ namespace VanillaModding.Content.Items.Accessories
             Item.value = Item.sellPrice(0, 1, 0, 0);
         }
 
-        public override bool CanAccessoryBeEquippedWith(Item equippedItem, Item incomingItem, Player player)
-        {
-            if (equippedItem.type == ModContent.ItemType<PhiloFlower>()) return false;
-            return true;
-        }
-
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
-            if (player.statLife <= player.statLifeMax2 * 0.25f && player.potionDelay <= 0 && !player.HasBuff(BuffID.PotionSickness))
-            {
-                int highHeal = 0;
-                Item highHealItem = null;
-                for (int i = 0; i < 49; i++)
-                {
-                    Item item = player.inventory[i];
-                    if (item.healLife > highHeal && item.stack > 0)
-                    {
-                        highHeal = item.healLife;
-                        highHealItem = item;
-                    }
-                }
-                if (highHeal > 0 && highHealItem != null)
-                {
-                    player.Heal(highHeal);
-                    player.HealEffect(highHeal);
-
-                    int potionDuration = (int)player.PotionDelayModifier.ApplyTo(player.potionDelayTime);
-                    player.AddBuff(BuffID.PotionSickness, potionDuration);
-                    player.potionDelay = potionDuration;
-
-                    SoundEngine.PlaySound(SoundID.Item3, player.position);
-                    highHealItem.stack--;
-                    if (highHealItem.stack <= 0) highHealItem.TurnToAir();
-                }
-            }
+            if (player.statLife <= player.statLifeMax2 * 0.25f && player.potionDelay <= 0 && !player.HasBuff(BuffID.PotionSickness)) player.QuickHeal();
         }
 
         public override void AddRecipes()

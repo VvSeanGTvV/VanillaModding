@@ -8,6 +8,8 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Content.Items.Accessories;
+using VanillaModding.Content.Items.Consumable.Healing;
 using VanillaModding.Content.Items.Pets;
 using VanillaModding.Content.Items.Weapon.Combo.MightyScythe;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -79,11 +81,40 @@ namespace VanillaModding
         public override void Load()
         {
             On_Player.ItemCheck_CutTiles += Hook_ItemCheck_CutTiles;
+            On_Player.ItemCheck_PayMana += Hook_ItemCheck_PayMana;
+        }
+
+        // During Item before use of Mana
+        private bool Hook_ItemCheck_PayMana(On_Player.orig_ItemCheck_PayMana orig, Player self, Item sItem, bool canUse)
+        {
+            int num = (int)((float)sItem.mana * self.manaCost);
+            if (self.armor.Any(i => i.type == ModContent.ItemType<RestorationFlower>()))
+            {
+                if (self.statMana < num)
+                {
+                    self.QuickMana();
+                    self.statMana -= num;
+                }
+            }
+            else
+
+            if (self.statMana < num) canUse = false;
+            return orig(self, sItem, canUse);
+
         }
 
         public override void Unload()
         {
             On_Player.ItemCheck_CutTiles -= Hook_ItemCheck_CutTiles;
+        }
+
+        public override void AddRecipes()
+        {
+            Recipe.Create(ItemID.RestorationPotion)
+                .AddIngredient<LesserRestoration_Potion>(2)
+                .AddIngredient(ItemID.GlowingMushroom, 1)
+                .AddTile(TileID.Bottles)
+                .Register();
         }
 
         public override void PostAddRecipes()
