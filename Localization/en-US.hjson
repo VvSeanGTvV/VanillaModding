@@ -1,5 +1,17 @@
 Mods: {
 	VanillaModding: {
+		Achievements: {
+			DuneTrapperKilled: {
+				FriendlyName: King of the Sandstorm
+				Description: Defeat Dune Trapper, an massive worm menace who loved to be within the Sandstorm event.
+			}
+
+			NotFriendlyDrone: {
+				FriendlyName: Brutal Drone Killer
+				Description: You no friend. Always killing the Drone that delivers to you and serves no threat.
+			}
+		}
+
 		Buffs: {
 			DiceBuff: {
 				DisplayName: Dice Buff
@@ -39,18 +51,6 @@ Mods: {
 			PetAndroid: {
 				DisplayName: Bugdroid
 				Description: The mascot of Android
-			}
-		}
-
-		Achievements: {
-			DuneTrapperKilled: {
-				FriendlyName: King of the Sandstorm
-				Description: Defeat Dune Trapper, an massive worm menace who loved to be within the Sandstorm event.
-			}
-
-			NotFriendlyDrone: {
-				FriendlyName: Not Friendly Guy
-				Description: Too many delivery drones been killed. Since when you this evil?
 			}
 		}
 
@@ -522,6 +522,11 @@ Mods: {
 					Automatically use healing potion or mana potion when needed
 					'''
 			}
+
+			ShimmerGun: {
+				DisplayName: Shimmer Gun (WIP)
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
@@ -631,6 +636,7 @@ Mods: {
 			LifeSoul.DisplayName: Life Soul
 			LifeStealBullet.DisplayName: Life Steal Bullet
 			AndroidGuy.DisplayName: Android Guy
+			ShimmerBullet.DisplayName: Shimmer Bullet
 		}
 
 		Prefixes: {

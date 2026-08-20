@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Common.Systems;
@@ -36,6 +37,12 @@ namespace VanillaModding.Content.Pets.AndroidGuy
             Projectile.ignoreWater = false;
         }
 
+        public override void OnSpawn(IEntitySource source)
+        {
+            Projectile.position -= new Vector2(0, 5f);
+            base.OnSpawn(source);
+        }
+
         bool floatToPlayer;
         public override void AI()
         {
@@ -43,7 +50,7 @@ namespace VanillaModding.Content.Pets.AndroidGuy
 
             // Distance from player
             float distanceX = player.Center.X - Projectile.Center.X;
-            float distanceY = player.Center.Y - Projectile.Center.Y;
+            float distanceY = (player.Center.Y - 5f) - Projectile.Center.Y;
             float distance = Vector2.Distance(player.Center, Projectile.Center);
 
             // Keep the projectile from disappearing as long as the player isn't dead and has the pet buff.

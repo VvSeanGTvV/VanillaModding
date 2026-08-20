@@ -23,8 +23,8 @@ namespace VanillaModding.Content.Projectiles.Bullets
         }
         public override void SetDefaults()
         {
-            Projectile.width = 12;
-            Projectile.height = 12;
+            Projectile.width = 44;
+            Projectile.height = 10;
 
             Projectile.tileCollide = true;
             Projectile.ignoreWater = false;

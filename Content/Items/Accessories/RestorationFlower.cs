@@ -71,8 +71,8 @@ namespace VanillaModding.Content.Items.Accessories
                 .Register();
 
             CreateRecipe(1)
-                .AddIngredient(ItemID.NaturesGift, 1)
                 .AddIngredient(ItemID.FlowerofFire, 1)
+                .AddIngredient(ItemID.NaturesGift, 1)
                 .AddIngredient(ItemID.RestorationPotion, 1)
                 .AddTile(TileID.TinkerersWorkbench)
                 .Register();
