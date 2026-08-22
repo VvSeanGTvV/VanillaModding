@@ -27,8 +27,8 @@ namespace VanillaModding.Content.Items.Consumable.BossSummon
 
         public override void SetDefaults()
         {
-            Item.width = 20;
-            Item.height = 20;
+            Item.width = 30;
+            Item.height = 34;
             Item.maxStack = Item.CommonMaxStack;
             Item.value = 100;
             Item.rare = ItemRarityID.Blue;
@@ -76,14 +76,14 @@ namespace VanillaModding.Content.Items.Consumable.BossSummon
 
         public override void AddRecipes()
         {
-            Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.AntlionMandible, 1);
-            recipe.AddIngredient(ItemID.FossilOre, 2);
-            recipe.AddIngredient(ItemID.SoulofNight, 5);
-            recipe.AddIngredient(ItemID.SoulofLight, 5);
-            //recipe.AddIngredient(ModContent.ItemType<LobotomyThrowable>(), 1);
-            recipe.AddTile(TileID.MythrilAnvil);
-            recipe.Register();
+            CreateRecipe()
+                .AddIngredient(ItemID.AntlionMandible, 5)
+                .AddIngredient(ItemID.FossilOre, 2)
+                .AddIngredient(ItemID.SoulofNight, 5)
+                .AddIngredient(ItemID.SoulofLight, 5)
+                .AddIngredient(ItemID.SandBlock, 20)
+                .AddTile(TileID.MythrilAnvil)
+                .Register();
         }
     }
 }

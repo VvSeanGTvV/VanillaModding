@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
@@ -12,12 +13,15 @@ using VanillaModding.Content.Items.Accessories;
 using VanillaModding.Content.Items.Consumable.Healing;
 using VanillaModding.Content.Items.Pets;
 using VanillaModding.Content.Items.Weapon.Combo.MightyScythe;
+using VanillaModding.Content.Rarities;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace VanillaModding
 {
     internal class VanillaModdingSystem : ModSystem
     {
+        public static readonly List<(int id, CustomDrawRarity Rarity)> RarityRender = new();
+
         public static int DiscoR;
         public static int DiscoG;
         public static int DiscoB;
@@ -78,8 +82,21 @@ namespace VanillaModding
             TileID.HallowedPlants2
         };
 
+        private void RarityCustomLoad(CustomDrawRarity[] ModdedRarities)
+        {
+            foreach (CustomDrawRarity Rarity in ModdedRarities) RarityRender.Add(new(Rarity.Type, Rarity));
+        }
+
+        public static bool RarityCustomExist(int Rarity) => RarityRender.Any(x => x.id == Rarity);
+        public static CustomDrawRarity RarityCustomByID(int Rarity) => RarityRender.Find(x => x.id == Rarity).Rarity;
+
         public override void Load()
         {
+            RarityCustomLoad(
+            [
+                ModContent.GetInstance<CosmicPurple>(),
+                ModContent.GetInstance<Rainbow>(),
+            ]);
             On_Player.ItemCheck_CutTiles += Hook_ItemCheck_CutTiles;
             On_Player.ItemCheck_PayMana += Hook_ItemCheck_PayMana;
         }

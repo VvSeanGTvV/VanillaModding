@@ -105,7 +105,7 @@ Mods: {
 			}
 
 			SandTrapperSummon: {
-				DisplayName: Suspicious Looking Fossil
+				DisplayName: Desert Medallion
 				Tooltip: Summons Dune Trapper
 			}
 
@@ -683,6 +683,34 @@ Mods: {
 				CPS: "{0} click per second"
 				noCPS: N/A
 			}
+		}
+
+		Configs: {
+			VanillaModdingConfigClient: {
+				DisplayName: VM Config Client
+				Headers.Items: Items
+
+				CustomTooltip: {
+					Label: Custom Draw Rarity
+					Tooltip:
+						'''
+						On -> Allows rarity to be custom drawn
+						Off -> Only use vanilla style
+						'''
+				}
+
+				CustomSpecialEffectsTooltip: {
+					Label: Special Effects Rarity
+					Tooltip:
+						'''
+						(Required) Custom Draw Rarity to be Enabled
+						On -> Allows rarity to have cool special effects
+						Off -> Never render special effects
+						'''
+				}
+			}
+
+			VanillaModdingConfigServer.DisplayName: VM Config Server
 		}
 	}
 }

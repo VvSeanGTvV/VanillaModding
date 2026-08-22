@@ -157,8 +157,8 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
                 NPC.TargetClosest();
             
             Player player = Main.player[NPC.target];
-            float speed = 14f;
-            float inertia = 40f;
+            float speed = 24f;
+            float inertia = 120f;
             float turnSpeed = MathHelper.ToRadians(25f); // radians per frame — smaller = slower turning
             bool InDesert = (player.ZoneDesert || player.ZoneUndergroundDesert);
 
@@ -198,7 +198,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             }
 
             // Apply inertia-based smoothing
-            NPC.velocity = ((NPC.velocity * (inertia - 1f) + moveTo) / inertia) * (dashTimer > 60 ? 1.15f : 1f);
+            NPC.velocity = ((NPC.velocity * (inertia - 1f) + moveTo) / inertia) * (dashTimer > 115 ? 1.15f : 1f);
 
 
             if (attackCounter < 1) attackCounter = 150;
@@ -253,7 +253,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             var entitySource = NPC.GetSource_FromAI();
             attackCounter--;
 
-            if (NPC.CountNPCS(ModContent.NPCType<DuneSplicerCloneHead>()) < count && attackCounter < 1)
+            if (NPC.CountNPCS(ModContent.NPCType<DuneSplicerCloneHead>()) < count && attackCounter < 1 && Main.rand.NextBool(16))
             {
                 Vector2 offset = new Vector2(Main.rand.Next(-640, 640), Main.rand.Next(-640, 640));
                 if (Main.netMode != NetmodeID.MultiplayerClient) NPC.NewNPC(entitySource, (int)(NPC.Center.X + offset.X), (int)(NPC.Center.Y + offset.Y), ModContent.NPCType<DuneSplicerCloneHead>(), NPC.whoAmI);
@@ -273,7 +273,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
             {
                 dashTimer--;
             }
-            dash = true;
+            if (!dash) dash = Main.rand.NextBool();
         }
 
         /*public override bool PreKill()
