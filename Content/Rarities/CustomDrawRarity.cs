@@ -19,6 +19,11 @@ namespace VanillaModding.Content.Rarities
         public virtual Color BloomClr => new Color(65, 65, 65, 0);
         public virtual Color TextClr => new Color(255, 255, 255, 255);
 
+        public virtual void Update()
+        {
+
+        }
+
         public virtual void Draw(Item Item, string text, int X, int Y, float rotation, Vector2 origin, Vector2 baseScale, Color? textColor = null, Color? lightColor = null, bool? renderSpecialEffects = null)
         {
             Draw(Item, Main.spriteBatch, text, X, Y, Colors.AlphaDarken(textColor ?? TextClr), lightColor ?? BloomClr, rotation, origin, baseScale, Main.GlobalTimeWrappedHourly,

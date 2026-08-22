@@ -15,7 +15,7 @@ using VanillaModding.Content.Rarities;
 
 namespace VanillaModding.Common
 {
-    internal class ModifyGlobalItem : GlobalItem
+    internal class VanillaModdingGlobalItem : GlobalItem
     {
         #region Tooltip Rarity
         public override bool PreDrawTooltipLine(
@@ -32,10 +32,14 @@ namespace VanillaModding.Common
             Item item,
             DrawableTooltipLine line)
         {
-            if (VanillaModdingSystem.RarityCustomExist(item.rare) && line.Name == "ItemName" && ModContent.GetInstance<VanillaModdingConfigClient>().CustomTooltip)
+            if (VanillaModdingSystem.RarityCustomExist(item.rare) && line.Name == "ItemName")
             {
-                VanillaModdingSystem.RarityCustomByID(item.rare).Draw(item, line);
-                if (ModContent.GetInstance<VanillaModdingConfigClient>().CustomSpecialEffectsTooltip) VanillaModdingSystem.RarityCustomByID(item.rare).SpecialDraw(line);
+                VanillaModdingSystem.RarityCustomByID(item.rare).Update();
+                if (ModContent.GetInstance<VanillaModdingConfigClient>().CustomTooltip)
+                {
+                    VanillaModdingSystem.RarityCustomByID(item.rare).Draw(item, line);
+                    if (ModContent.GetInstance<VanillaModdingConfigClient>().CustomSpecialEffectsTooltip) VanillaModdingSystem.RarityCustomByID(item.rare).SpecialDraw(line);
+                }
             }
         }
         #endregion

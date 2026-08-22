@@ -26,7 +26,7 @@ namespace VanillaModding.Content.Items.Weapon.Throwable.Redfish
             Item.noMelee = true;
             Item.autoReuse = true;
             Item.value = Item.sellPrice(0, 1, 25, 0);
-            Item.rare = ModContent.RarityType<Rainbow>();
+            Item.rare = ModContent.RarityType<HoloRainbow>();
         }
     }
 }

@@ -16,19 +16,28 @@ using static VanillaModding.Content.Rarities.CosmicPurple;
 
 namespace VanillaModding.Content.Rarities
 {
-    internal class Rainbow : CustomDrawRarity
+    internal class HoloRainbow : CustomDrawRarity
     {
-        public override Color RarityColor => Main.DiscoColor * 2f;
+        private static float duration = ((float)(Main.GlobalTimeWrappedHourly * Math.PI));
+        public override Color RarityColor => new Color(
+                                        ((float)Math.Sin((((duration - (Math.PI / 1.5)) / 2) - 0.1f) * 0.5)),
+                                        (((float)Math.Cos(((duration / 2) - 0.1f) * 0.5))),
+                                        ((float)Math.Sin((((duration + (Math.PI / 1.5)) / 2) - 0.1f) * 0.5) * -1)
+                                        );
 
         public override Color TextClr => defColor;
 
         public static Color defColor = new Color(255, 255, 255, 255);
 
-        public sealed class RainbowTextSnippet(string text) : TextSnippet
+        public override void Update()
+        {
+            duration = ((float)(Main.GlobalTimeWrappedHourly * Math.PI));
+        }
+
+        public sealed class HoloRainbowTextSnippet(string text) : TextSnippet
         {
             public override bool UniqueDraw(bool justCheckingString, out Vector2 size, SpriteBatch spriteBatch, Vector2 position = new Vector2(), Color color = new Color(), float scale = 1)
             {
-                float duration = ((float)(Main.GlobalTimeWrappedHourly * Math.PI));
                 size = new Vector2(GetStringLength(FontAssets.MouseText.Value), FontAssets.MouseText.Value.MeasureString(" ").Y * scale);
 
                 if (color == default || color == Main.MouseTextColorReal)
@@ -57,9 +66,9 @@ namespace VanillaModding.Content.Rarities
                                         );
                         for (int i = 0; i < 4; i++)
                         {
-                            float j1 = (float)Math.Sin(duration * 0.5f) % MathHelper.TwoPi;
+                            float j1 = 2.5f + (float)Math.Sin(duration * 0.5f) % MathHelper.TwoPi;
                             float j2 = duration * 0.5f % MathHelper.TwoPi;
-                            ChatManager.DrawColorCodedString(spriteBatch, font, item.ToString(), pos + new Vector2(2 * j1, 0).RotatedBy(MathHelper.ToRadians(90 * i) + j2), color, 0, Vector2.Zero, new(scale));
+                            ChatManager.DrawColorCodedString(spriteBatch, font, item.ToString(), pos + new Vector2(j1, 0).RotatedBy(MathHelper.ToRadians(90 * i) + j2), color, 0, Vector2.Zero, new(scale));
                         }
                         txt += item;
                     }
@@ -105,7 +114,7 @@ namespace VanillaModding.Content.Rarities
                 TextSnippet textSnippet = snippets[i];
                 if (snippets[i].GetType() == typeof(TextSnippet))
                 {
-                    snippets[i] = new RainbowTextSnippet(textSnippet.Text);
+                    snippets[i] = new HoloRainbowTextSnippet(textSnippet.Text);
                 }
             }
 

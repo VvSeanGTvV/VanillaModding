@@ -95,7 +95,7 @@ namespace VanillaModding
             RarityCustomLoad(
             [
                 ModContent.GetInstance<CosmicPurple>(),
-                ModContent.GetInstance<Rainbow>(),
+                ModContent.GetInstance<HoloRainbow>(),
             ]);
             On_Player.ItemCheck_CutTiles += Hook_ItemCheck_CutTiles;
             On_Player.ItemCheck_PayMana += Hook_ItemCheck_PayMana;
