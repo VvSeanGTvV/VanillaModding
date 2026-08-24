@@ -8,6 +8,7 @@ using VanillaModding.Common.Systems;
 using VanillaModding.Content.Projectiles.FishProjectile;
 using VanillaModding.Content.Projectiles.MightyScythe;
 using VanillaModding.Content.Projectiles.MightyScythe.MightyProjectile;
+using VanillaModding.Content.Rarities;
 
 namespace VanillaModding.Content.Items.Weapon.Melee
 {
@@ -31,7 +32,7 @@ namespace VanillaModding.Content.Items.Weapon.Melee
             Item.shootsEveryUse = true;
             Item.shoot = ModContent.ProjectileType<Projectiles.FishProjectile.FishTrout>();
 
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ModContent.RarityType<OceanBlue>();
             Item.UseSound = VanillaModdingSoundID.FishSpeeenShort;
             Item.autoReuse = true;
 

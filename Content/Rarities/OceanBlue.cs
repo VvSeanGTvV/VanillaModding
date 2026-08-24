@@ -25,11 +25,6 @@ namespace VanillaModding.Content.Rarities
 
         public override int GetPrefixedRarity(int offset, float valueMult)
         {
-            if (offset < 0)
-            {
-                return ItemRarityID.Red; // todo a somethin
-            }
-
             return Type; // no 'lower' tier to go to, so return the type of this rarity.
         }
         public sealed class OceanTextSnippet(string text) : TextSnippet
@@ -49,8 +44,8 @@ namespace VanillaModding.Content.Rarities
                     color.A = 255;
 
                     color = new Color(20 + (int)(69 * Math.Abs(Math.Sin(duration / 2f))), 197 + (int)(27 * Math.Abs(Math.Sin(duration / 2f))), 255);
-                    ChatManager.DrawColorCodedStringShadow(spriteBatch, font, text, position, color * 2f, 0, Vector2.Zero, new(scale));
-                    ChatManager.DrawColorCodedString(spriteBatch, font, text, position, Color.Lerp(Color.Black, color, 0.2f) * 1.5f, 0, Vector2.Zero, new(scale));
+                    ChatManager.DrawColorCodedStringShadow(spriteBatch, font, text, position, Color.Lerp(Color.Black, color, 0.5f) * 1.25f, 0, Vector2.Zero, new(scale));
+                    ChatManager.DrawColorCodedString(spriteBatch, font, text, position, color * 2f, 0, Vector2.Zero, new(scale));
                 }
                 return true;
             }
@@ -99,13 +94,13 @@ namespace VanillaModding.Content.Rarities
             var fontSize = ChatManager.GetStringSize(font, text, new Vector2(1));
             rand.SetSeed(1);
 
-            int bubbleCount = rand.Next((int)fontSize.X / 7, (int)fontSize.X / 5) + 1;
+            int bubbleCount = rand.Next((int)fontSize.X / 7, (int)fontSize.X / 5) + rand.Next(2);
             var color2 = lightColor;
             color2.A = 0;
             var bubbleOrigin = new Vector2(13, 13);
             for (int i = 0; i < bubbleCount; i++)
             {
-                var v = new Vector2(rand.NextFloat(fontSize.X), rand.NextFloat(fontSize.Y * 0.6f) + 1f);
+                var v = new Vector2(rand.NextFloat(fontSize.X) + (float)(Math.Sin(duration + i) * 2.5f), rand.NextFloat(fontSize.Y * 0.6f) + 1f);
                 float lifeTime = Main.GlobalTimeWrappedHourly * 4f + rand.NextFloat(MathHelper.TwoPi);
                 lifeTime %= MathHelper.TwoPi;
 
@@ -113,12 +108,16 @@ namespace VanillaModding.Content.Rarities
                     continue;
 
                 float sinValue = (float)Math.Sin(lifeTime);
-                var white = (Color.Lerp(textColor, Color.White, 0.25f) * 1.5f) * sinValue;
+                var white = (Color.Lerp(textColor, Color.White, 0.25f) * 1.75f) * sinValue;
 
-                spriteBatch.Draw(bubble, new Vector2(X + (float)Math.Sin(duration), Y - lifeTime * MaxY + 3f) + v, null, white, 0, bubbleOrigin,
+                spriteBatch.Draw(bubble, new Vector2(X, Y - lifeTime * MaxY + 3f) + v, null, white, 0, bubbleOrigin,
                     (float)lifeTime / MathHelper.TwoPi * 0.3f, SpriteEffects.None, 0f);
-                spriteBatch.Draw(bubble, new Vector2(X + (float)Math.Cos(duration), Y - lifeTime * MaxY + 2f) + v, null, white * 0.5f, 0, bubbleOrigin,
+
+                spriteBatch.Draw(bubble, new Vector2(X, Y - lifeTime * MaxY + 2f) + v, null, white * 0.5f, 0, bubbleOrigin,
                     (float)lifeTime / MathHelper.TwoPi, SpriteEffects.None, 0f);
+
+                spriteBatch.Draw(bubble, new Vector2(X, Y - lifeTime * MaxY + 1f) + v, null, white * 0.25f, 0, bubbleOrigin,
+                   (float)lifeTime / MathHelper.TwoPi * 0.5f, SpriteEffects.None, 0f);
             }
         }
     }

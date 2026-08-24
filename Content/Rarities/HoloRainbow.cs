@@ -67,7 +67,7 @@ namespace VanillaModding.Content.Rarities
                         for (int i = 0; i < 4; i++)
                         {
                             float j2 = duration * 0.75f % MathHelper.TwoPi;
-                            ChatManager.DrawColorCodedString(spriteBatch, font, item.ToString(), pos + new Vector2(3f, 0).RotatedBy(MathHelper.ToRadians(90 * i) + j2), color, 0, Vector2.Zero, new(scale));
+                            ChatManager.DrawColorCodedString(spriteBatch, font, item.ToString(), pos + new Vector2(3f, 0).RotatedBy(MathHelper.ToRadians(90 * i) + j2), Color.Lerp(Color.Black, color, 0.2f), 0, Vector2.Zero, new(scale));
                         }
                         txt += item;
                     }

@@ -27,11 +27,11 @@ namespace VanillaModding.Content.Items.Consumable.BossSummon
 
         public override void SetDefaults()
         {
-            Item.width = 32;
-            Item.height = 36;
+            Item.width = 36;
+            Item.height = 42;
             Item.maxStack = Item.CommonMaxStack;
             Item.value = 100;
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ItemRarityID.Orange;
             Item.useAnimation = 30;
             Item.useTime = 30;
             Item.useStyle = ItemUseStyleID.HoldUp;
@@ -80,7 +80,7 @@ namespace VanillaModding.Content.Items.Consumable.BossSummon
                 .AddIngredient(ItemID.AntlionMandible, 5)
                 .AddIngredient(ItemID.SoulofNight, 5)
                 .AddIngredient(ItemID.SoulofLight, 5)
-                .AddIngredient(ItemID.SandBlock, 20)
+                .AddIngredient(ItemID.SandBlock, 10)
                 .AddTile(TileID.MythrilAnvil)
                 .Register();
         }
