@@ -31,7 +31,7 @@ namespace VanillaModding.Content.Rarities
 
         public override void Update()
         {
-            duration = ((float)(Main.GlobalTimeWrappedHourly * Math.PI));
+            duration = ((float)(Main.GlobalTimeWrappedHourly * Math.PI) * 1.25f);
         }
 
         public sealed class HoloRainbowTextSnippet(string text) : TextSnippet
@@ -49,10 +49,10 @@ namespace VanillaModding.Content.Rarities
                 {
                     var pos = position;
                     var font = FontAssets.MouseText.Value;
-                    color.A = 255;
-
                     string txt = "";
                     float b = 0;
+
+                    color.A = 255;
                     foreach (var item in text)
                     {
                         pos = position;
@@ -66,13 +66,11 @@ namespace VanillaModding.Content.Rarities
                                         );
                         for (int i = 0; i < 4; i++)
                         {
-                            float j1 = 2.5f + (float)Math.Sin(duration * 0.5f) % MathHelper.TwoPi;
-                            float j2 = duration * 0.5f % MathHelper.TwoPi;
-                            ChatManager.DrawColorCodedString(spriteBatch, font, item.ToString(), pos + new Vector2(j1, 0).RotatedBy(MathHelper.ToRadians(90 * i) + j2), color, 0, Vector2.Zero, new(scale));
+                            float j2 = duration * 0.75f % MathHelper.TwoPi;
+                            ChatManager.DrawColorCodedString(spriteBatch, font, item.ToString(), pos + new Vector2(3f, 0).RotatedBy(MathHelper.ToRadians(90 * i) + j2), color, 0, Vector2.Zero, new(scale));
                         }
                         txt += item;
                     }
-
                     b = 0;
                     txt = "";
                     foreach (var item in text)
@@ -86,7 +84,7 @@ namespace VanillaModding.Content.Rarities
                                     (((float)Math.Cos(((duration / 2) + b - 0.1f) * 0.5))),
                                     ((float)Math.Sin((((duration + (Math.PI / 1.5)) / 2) + b - 0.1f) * 0.5) * -1)
                                     );
-                        ChatManager.DrawColorCodedStringShadow(spriteBatch, font, item.ToString(), pos, Color.Lerp(Color.Black, color, 0.25f), 0, Vector2.Zero, new(scale));
+                        ChatManager.DrawColorCodedStringShadow(spriteBatch, font, item.ToString(), pos, Color.Lerp(Color.Black, color, 0.4f), 0, Vector2.Zero, new(scale));
                         ChatManager.DrawColorCodedString(spriteBatch, font, item.ToString(), pos, Color.Lerp(Color.White, color, 0.5f), 0, Vector2.Zero, new(scale));
                         txt += item;
                     }

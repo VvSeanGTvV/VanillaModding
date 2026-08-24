@@ -138,7 +138,7 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
 
         }
 
-        private bool dash;
+        private bool dash, flip;
         private int attackCounter, attackProj, dashTimer;
         private Vector2 lastTarget;
         public override void SendExtraAI(BinaryWriter writer)
@@ -173,8 +173,8 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
                 NPC.netUpdate = true;
                 return;
             }
-            targetWNoSpeed = (player.Center - NPC.Center).SafeNormalize(Vector2.Zero);
-            float distance = (NPC.Center - player.Center).Length();
+            targetWNoSpeed = ((player.Center + new Vector2(0, (flip) ? -140f : 140f)) - NPC.Center).SafeNormalize(Vector2.Zero);
+            float distance = (NPC.Center - (player.Center + new Vector2(0, (flip) ? -140f : 140f))).Length();
             // This smoothly scales between 0.8x (close) and 2.5x (far)
             float distanceFactor = MathHelper.Clamp(distance / 400f, 1f, 40f);
             turnSpeed = turnSpeed * distanceFactor;
@@ -268,12 +268,13 @@ namespace VanillaModding.Content.NPCs.DuneTrapper
                 SoundEngine.PlaySound(SoundID.Roar, NPC.Center);
                 dashTimer = 120;
                 dash = false;
+                flip = !flip;
             }
             else
             {
                 dashTimer--;
             }
-            if (!dash) dash = Main.rand.NextBool();
+            if (!dash && Vector2.Distance(NPC.Center, player.Center) < 480) dash = Main.rand.NextBool(64);
         }
 
         /*public override bool PreKill()

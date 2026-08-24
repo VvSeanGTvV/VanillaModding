@@ -17,7 +17,7 @@ namespace VanillaModding.Content.Rarities
         {
             if (offset < 0)
             {
-                return ItemRarityID.Red; // Make the rarity of items that have this rarity with a positive modifier the higher tier one.
+                return ItemRarityID.Red;
             }
 
             return Type; // no 'lower' tier to go to, so return the type of this rarity.

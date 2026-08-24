@@ -24,9 +24,9 @@ namespace VanillaModding.Common
         public bool CustomSpecialEffectsTooltip;
     }
 
-    internal class VanillaModdingConfigServer : ModConfig
+    /*internal class VanillaModdingConfigServer : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
-    }
+    }*/
 }

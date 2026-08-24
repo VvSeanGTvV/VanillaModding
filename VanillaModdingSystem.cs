@@ -96,6 +96,7 @@ namespace VanillaModding
             [
                 ModContent.GetInstance<CosmicPurple>(),
                 ModContent.GetInstance<HoloRainbow>(),
+                ModContent.GetInstance<OceanBlue>(),
             ]);
             On_Player.ItemCheck_CutTiles += Hook_ItemCheck_CutTiles;
             On_Player.ItemCheck_PayMana += Hook_ItemCheck_PayMana;
