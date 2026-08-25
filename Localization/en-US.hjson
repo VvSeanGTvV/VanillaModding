@@ -469,16 +469,6 @@ Mods: {
 				Tooltip: ""
 			}
 
-			PhiloFlower: {
-				DisplayName: Philosopher's Flower (WIP)
-				Tooltip:
-					'''
-					Automatically use the highest healing potion avaliable when needed
-					{$CommonItemTooltip.ReducesHealingPotionCooldownByPercent@1}
-					'Works only if your not potion sickness'
-					'''
-			}
-
 			LifeStealBullet: {
 				DisplayName: Life Bullet
 				Tooltip: Steals their life by {0}%
@@ -526,6 +516,21 @@ Mods: {
 			ShimmerGun: {
 				DisplayName: Shimmer Gun (WIP)
 				Tooltip: ""
+			}
+
+			TropicalFlower: {
+				DisplayName: Tropical Bloom
+				Tooltip:
+					'''
+					{0}% reduced mana cost
+					{0}% reduced health potion cooldown
+					Automatically use healing potion or mana potion when needed
+					'''
+			}
+
+			JungleJuice: {
+				DisplayName: Jungle Juice
+				Tooltip: A tropical concoction with hints of Life Fruit and nutmeg
 			}
 		}
 

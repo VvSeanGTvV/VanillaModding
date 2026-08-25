@@ -106,11 +106,12 @@ namespace VanillaModding
         private bool Hook_ItemCheck_PayMana(On_Player.orig_ItemCheck_PayMana orig, Player self, Item sItem, bool canUse)
         {
             int num = (int)((float)sItem.mana * self.manaCost);
-            if (self.armor.Any(i => i.type == ModContent.ItemType<RestorationFlower>()))
+            if (self.armor.Any(i => (i.type == ModContent.ItemType<RestorationFlower>()) || (i.type == ModContent.ItemType<TropicalFlower>())))
             {
                 if (self.statMana < num)
                 {
                     self.QuickMana();
+                    self.statMana += (self.armor.Any(i => (i.type == ModContent.ItemType<TropicalFlower>()))) ? 5 : 0;
                     self.statMana -= num;
                 }
             }

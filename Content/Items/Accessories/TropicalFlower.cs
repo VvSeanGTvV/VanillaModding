@@ -4,18 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
-using Terraria.Audio;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
-using VanillaModding.Common;
 
 namespace VanillaModding.Content.Items.Accessories
 {
     [AutoloadEquip(EquipType.Waist)]
-    internal class RestorationFlower : ModItem
+    internal class TropicalFlower : ModItem
     {
-        public static readonly int MultiplicativeDelayDecrease = 10;
+        public static readonly int MultiplicativeDelayDecrease = 12;
 
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(MultiplicativeDelayDecrease);
         public override void SetDefaults()
@@ -23,32 +21,29 @@ namespace VanillaModding.Content.Items.Accessories
             Item.width = 20;
             Item.height = 44;
             Item.accessory = true;
-            Item.rare = ItemRarityID.LightRed;
-            Item.value = Item.sellPrice(0, 3, 0, 0);
+            Item.rare = ItemRarityID.Lime;
+            Item.value = Item.sellPrice(0, 4, 30, 0);
         }
 
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.manaCost -= (MultiplicativeDelayDecrease / 100f);
             player.PotionDelayModifier *= 1f - (MultiplicativeDelayDecrease / 100f);
-            if (player.statLife <= player.statLifeMax2 * 0.25f && player.potionDelay <= 0 && !player.HasBuff(BuffID.PotionSickness)) player.QuickHeal();
+            if (player.statLife <= player.statLifeMax2 * 0.25f && player.potionDelay <= 0 && !player.HasBuff(BuffID.PotionSickness))
+            {
+                player.AddBuff(BuffID.Honey, 60 * 30);
+                player.QuickHeal();
+            }
         }
 
         public override void AddRecipes()
         {
             CreateRecipe(1)
-                .AddIngredient(ModContent.ItemType<HealingFlower>(), 1)
-                .AddIngredient(ItemID.ManaFlower, 1)
-                .AddIngredient(ItemID.PinkGel, 1)
-                .AddIngredient(ItemID.CrystalShard, 2)
-                .AddTile(TileID.TinkerersWorkbench)
-                .Register();
-
-            CreateRecipe(1)
-                .AddIngredient(ItemID.FlowerofFire, 1)
-                .AddIngredient(ItemID.NaturesGift, 1)
-                .AddIngredient(ItemID.RestorationPotion, 1)
-                .AddIngredient(ItemID.CrystalShard, 2)
+                .AddIngredient(ModContent.ItemType<RestorationFlower>(), 1)
+                .AddIngredient(ItemID.LifeFruit, 1)
+                .AddIngredient(ItemID.BottledHoney, 2)
+                .AddIngredient(ItemID.JungleSpores, 5)
+                .AddIngredient(ItemID.Vine, 2)
                 .AddTile(TileID.TinkerersWorkbench)
                 .Register();
         }

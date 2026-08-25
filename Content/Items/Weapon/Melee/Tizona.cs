@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Mono.Cecil;
 using System;
 using Terraria;
 using Terraria.DataStructures;
@@ -6,6 +7,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Content.Items.Materials;
 using VanillaModding.Content.Projectiles.Tizona;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace VanillaModding.Content.Items.Weapon.Melee
 {
@@ -27,7 +29,7 @@ namespace VanillaModding.Content.Items.Weapon.Melee
             Item.height = 48;
             Item.useTime = 25;
             Item.useAnimation = 25;
-            Item.useStyle = 1;
+            Item.useStyle = ItemUseStyleID.Swing;
             Item.knockBack = 5;
             Item.value = 6000;
             Item.rare = ItemRarityID.Pink;
@@ -52,30 +54,10 @@ namespace VanillaModding.Content.Items.Weapon.Melee
             recipe1.Register();
         }
 
-        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
-        {
-            target.AddBuff(BuffID.Bleeding, 720);
-            base.OnHitNPC(player, target, hit, damageDone);
-        }
-
-        public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo)
-        {
-            target.AddBuff(BuffID.Bleeding, 720);
-            base.OnHitPvp(player, target, hurtInfo);
-        }
-
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             float adjustedItemScale = player.GetAdjustedItemScale(Item);
-            Projectile.NewProjectile(source, player.MountedCenter, new Vector2(player.direction, 0f), type, damage, knockback, player.whoAmI, player.direction * player.gravDir, player.itemAnimationMax * 2f, adjustedItemScale / 1.25f);
-            Projectile.NewProjectile(source, player.MountedCenter, velocity, ModContent.ProjectileType<DeadlyBulb>(), damage, knockback / 2, player.whoAmI, 0);
-            /*float projectilesCount = 2;
-            float rotation = MathHelper.ToRadians(25);
-            for (int i = 0; i < projectilesCount; i++)
-            {
-                Vector2 perturbedSpeed = velocity.RotatedBy((MathHelper.Lerp(0, rotation, i / Math.Clamp(projectilesCount - 1, 1, projectilesCount)) - 0.5f) * -player.direction * player.gravDir) * 1.1f;
-                Projectile.NewProjectile(source, position, perturbedSpeed, ModContent.ProjectileType<DeadlyBulb>(), damage / 2, knockback / 2, player.whoAmI, -1);
-            }*/
+            if (Main.myPlayer == player.whoAmI) Projectile.NewProjectile(source, player.MountedCenter, new Vector2(player.direction, 0f), type, damage, knockback, player.whoAmI, player.direction * player.gravDir, player.itemAnimationMax * 2f, adjustedItemScale / 1.25f);
             return false;
         }
     }

@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 
 namespace VanillaModding.Content.Items.Consumable.Healing
 {
-    internal class LesserRestoration_Potion : ModItem
+    internal class JungleJuice : ModItem
     {
         public override void SetDefaults()
         {
@@ -16,33 +16,30 @@ namespace VanillaModding.Content.Items.Consumable.Healing
             Item.useTurn = true;
             Item.maxStack = Item.CommonMaxStack;
 
-            Item.healLife = 50;
-            Item.healMana = 50;
-            Item.potionDelay = Item.restorationDelay;
+            Item.healLife = 180;
             Item.potion = true;
 
             Item.useStyle = ItemUseStyleID.DrinkLiquid;
             Item.consumable = true;
             Item.noMelee = true;
 
-            Item.value = Item.sellPrice(silver: 2);
-            Item.rare = ItemRarityID.Blue;
+            Item.value = Item.sellPrice(gold: 2, silver: 10);
+            Item.rare = ItemRarityID.Lime;
 
             Item.UseSound = SoundID.Item3;
         }
 
         public override void AddRecipes()
         {
-            CreateRecipe(2)
-                .AddIngredient(ItemID.LesserHealingPotion, 2)
-                .AddIngredient(ItemID.LesserManaPotion, 2)
+            CreateRecipe(3)
+                .AddIngredient(ItemID.GreaterHealingPotion, 3)
+                .AddIngredient(ItemID.LifeFruit, 1)
                 .AddTile(TileID.Bottles)
                 .Register();
 
-            CreateRecipe(2)
-                .AddIngredient(ItemID.Mushroom, 1)
-                .AddIngredient(ItemID.PinkGel, 2)
-                .AddIngredient(ItemID.Bottle, 2)
+            CreateRecipe(3)
+                .AddIngredient(ItemID.GreaterHealingPotion, 3)
+                .AddIngredient(ItemID.LifeFruit, 1)
                 .AddTile(TileID.Bottles)
                 .Register();
         }

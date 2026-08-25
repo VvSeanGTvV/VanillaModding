@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria;
 using VanillaModding.Content.Dusts.Sparkle;
-using Terraria.GameContent.Drawing;
+using VanillaModding.Content.Projectiles.Tizona;
 
 namespace VanillaModding.Content.Projectiles.Tonbogiri
 {
@@ -30,7 +31,26 @@ namespace VanillaModding.Content.Projectiles.Tonbogiri
             ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.StardustPunch,
             new ParticleOrchestraSettings { PositionInWorld = Main.rand.NextVector2FromRectangle(target.Hitbox) }, Projectile.owner);
             hit.HitDirection = (Main.player[Projectile.owner].Center.X < target.Center.X) ? 1 : (-1);
+            OnHitEntity(target);
             target.AddBuff(BuffID.Bleeding, 720);
+        }
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.StardustPunch,
+            new ParticleOrchestraSettings { PositionInWorld = Main.rand.NextVector2FromRectangle(target.Hitbox) }, Projectile.owner);
+            info.HitDirection = (Main.player[Projectile.owner].Center.X < target.Center.X) ? 1 : (-1);
+            if (info.PvP)
+            {
+                OnHitEntity(target);
+                target.AddBuff(BuffID.Bleeding, 720);
+            }
+        }
+
+        public void OnHitEntity(Entity target)
+        {
+            Vector2 velocity = Vector2.Normalize(target.Center - Projectile.Center) * 10f;
+            if (Main.myPlayer == Projectile.owner) Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, velocity, ModContent.ProjectileType<DeadlyBulb>(), Projectile.damage, Projectile.knockBack / 2, Projectile.owner, 0);
         }
 
         public override bool PreAI()

@@ -24,8 +24,8 @@ namespace VanillaModding.Content.Items.Weapon.Ranged
             Item.rare = ItemRarityID.Pink; 
 
             // Use Properties
-            Item.useTime = 17; // The item's use time in ticks (60 ticks == 1 second.)
-            Item.useAnimation = 17; // The length of the item's use animation in ticks (60 ticks == 1 second.)
+            Item.useTime = 15; // The item's use time in ticks (60 ticks == 1 second.)
+            Item.useAnimation = 15; // The length of the item's use animation in ticks (60 ticks == 1 second.)
             Item.useStyle = ItemUseStyleID.Shoot; 
             Item.autoReuse = true; 
 
@@ -46,19 +46,19 @@ namespace VanillaModding.Content.Items.Weapon.Ranged
 
         public override void AddRecipes()
         {
-            Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.AdamantiteBar, 15);
-            recipe.AddIngredient(ModContent.ItemType<SoulofBlight>(), 15);
-            recipe.AddIngredient(ItemID.HallowedRepeater, 1);
-            recipe.AddTile(TileID.MythrilAnvil);
-            recipe.Register();
+            CreateRecipe()
+                .AddIngredient(ItemID.AdamantiteBar, 15)
+                .AddIngredient(ModContent.ItemType<SoulofBlight>(), 15)
+                .AddIngredient(ItemID.HallowedRepeater, 1)
+                .AddTile(TileID.MythrilAnvil)
+                .Register();
 
-            Recipe recipe1 = CreateRecipe();
-            recipe1.AddIngredient(ItemID.TitaniumBar, 15);
-            recipe1.AddIngredient(ModContent.ItemType<SoulofBlight>(), 15);
-            recipe1.AddIngredient(ItemID.HallowedRepeater, 1);
-            recipe1.AddTile(TileID.MythrilAnvil);
-            recipe1.Register();
+            CreateRecipe()
+                .AddIngredient(ItemID.TitaniumBar, 15)
+                .AddIngredient(ModContent.ItemType<SoulofBlight>(), 15)
+                .AddIngredient(ItemID.HallowedRepeater, 1)
+                .AddTile(TileID.MythrilAnvil)
+                .Register();
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

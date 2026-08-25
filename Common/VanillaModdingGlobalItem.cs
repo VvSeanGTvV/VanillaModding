@@ -58,8 +58,9 @@ namespace VanillaModding.Common
         // Equip Bool
         public override bool CanEquipAccessory(Item item, Player player, int slot, bool modded)
         {
-            if ((item.type == ItemID.ManaFlower) || (item.type == ModContent.ItemType<HealingFlower>())) return !ItemExistInArmor(player, slot, ModContent.ItemType<RestorationFlower>());
-            if (item.type == ModContent.ItemType<RestorationFlower>()) return !ItemExistInArmor(player, slot, ModContent.ItemType<HealingFlower>()) && !ItemExistInArmor(player, slot, ItemID.ManaFlower);
+            if ((item.type == ItemID.ManaFlower) || (item.type == ModContent.ItemType<HealingFlower>())) return !ItemExistInArmor(player, slot, ModContent.ItemType<RestorationFlower>()) && !ItemExistInArmor(player, slot, ModContent.ItemType<TropicalFlower>());
+            if (item.type == ModContent.ItemType<RestorationFlower>()) return !ItemExistInArmor(player, slot, ModContent.ItemType<TropicalFlower>()) && !ItemExistInArmor(player, slot, ModContent.ItemType<HealingFlower>()) && !ItemExistInArmor(player, slot, ItemID.ManaFlower);
+            if (item.type == ModContent.ItemType<TropicalFlower>()) return !ItemExistInArmor(player, slot, ModContent.ItemType<RestorationFlower>()) && !ItemExistInArmor(player, slot, ModContent.ItemType<HealingFlower>()) && !ItemExistInArmor(player, slot, ItemID.ManaFlower);
 
             return base.CanEquipAccessory(item, player, slot, modded);
         }
