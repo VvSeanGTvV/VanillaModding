@@ -51,6 +51,8 @@ namespace VanillaModding.Common
         public bool accSatanicBible = false;
         public bool accEpipen = false;
         public bool accValentineRing = false;
+        public bool accSharedBrutalShield = false;
+        public bool accBrutalShield = false;
 
         // This variable is for D I C E item.
         /// <summary>
@@ -88,6 +90,7 @@ namespace VanillaModding.Common
 
         public void ResetBool()
         {
+            accBrutalShield = accSharedBrutalShield = false;
             accSatanicBible = false;
             accEpipen = false;
         }
@@ -100,6 +103,59 @@ namespace VanillaModding.Common
             hasAnyDiceEffect = false;
         }
 
+        #endregion
+
+        #region Shield Absorption Team
+        private bool TeammateCanAbsorbDamage()
+        {
+            foreach (var otherPlayer in Main.ActivePlayers)
+            {
+                if (otherPlayer.whoAmI != Main.myPlayer && IsAbleToAbsorbDamageForTeammate(otherPlayer, Player.team))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static bool IsAbleToAbsorbDamageForTeammate(Player player, int team)
+        {
+            return player.active
+                && !player.dead
+                && !player.immune // This check can be removed, allowing players to take hits for team-mates in quick succession. Removing it can also help with de-syncs where the player getting hurt thinks there is no-one to tank the damage, but by the time the hit arrives on the player with the shield, they take extra damage
+                && player.GetModPlayer<VanillaModdingPlayer>().accBrutalShield
+                && player.team == team
+                && player.statLife > player.statLifeMax2 * BrutalShield.DamageAbsorptionAbilityLifeThreshold;
+        }
+
+        // This code finds the closest player wearing AbsorbTeamDamageAccessory.
+        private static bool IsClosestShieldWearerInRange(Player player, Vector2 target, int team)
+        {
+            if (!IsAbleToAbsorbDamageForTeammate(player, team))
+            {
+                return false;
+            }
+
+            float distance = player.Distance(target);
+            if (distance > BrutalShield.DamageAbsorptionRange)
+            {
+                return false; // player we're out of range, so can't take the hit
+            }
+
+            foreach (var otherPlayer in Main.ActivePlayers)
+            {
+                if (otherPlayer.whoAmI != Main.myPlayer && IsAbleToAbsorbDamageForTeammate(otherPlayer, team))
+                {
+                    float otherPlayerDistance = otherPlayer.Distance(target);
+                    if (distance > otherPlayerDistance || (distance == otherPlayerDistance && otherPlayer.whoAmI < Main.myPlayer))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
         #endregion
 
         public override bool PreKill(double damage, int hitDirection, bool pvp, ref bool playSound, ref bool genDust, ref PlayerDeathReason damageSource)
@@ -158,7 +214,14 @@ namespace VanillaModding.Common
         /// <param name="other"> other player to Check </param>
         /// <returns></returns>
         public bool isPlayerPVP(Player other) => (other.hostile && Player.team != 0) || (Player.team != other.team && other.hostile);
-       
+
+        public override void ModifyHurt(ref Player.HurtModifiers modifiers)
+        {
+            if (accBrutalShield && Player == Main.LocalPlayer && TeammateCanAbsorbDamage())
+            {
+                modifiers.FinalDamage *= 1f - BrutalShield.DamageAbsorptionMultiplier;
+            }
+        }
 
         public override void OnHurt(Player.HurtInfo info)
         {
@@ -175,6 +238,25 @@ namespace VanillaModding.Common
                     if (Main.rand.NextBool())
                         Projectile.NewProjectile(Player.GetSource_FromAI(), Player.position, new Vector2(Main.rand.NextFloat(-10f, 10f), Main.rand.NextFloat(-10f, 10f)), ProjectileID.BookOfSkullsSkull, BookSatanicBible.skeletonDMG, 1, Main.myPlayer);
 
+            }
+
+            // On Hurt is used in this example to act upon another player being hurt.
+            // If the player who was hurt was defended, check if the local player should take the remaining damage for them
+            Player localPlayer = Main.LocalPlayer;
+            if (accSharedBrutalShield && Player != localPlayer && IsClosestShieldWearerInRange(localPlayer, Player.Center, Player.team))
+            {
+                // The intention of AbsorbTeamDamageAccessory is to transfer 30% of damage taken by teammates to the wearer.
+                // In ModifiedHurt, we reduce the damage by 30%. The resulting reduced damage is passed to OnHurt, where the player wearing AbsorbTeamDamageAccessory hurts themselves.
+                // Since OnHurt is provided with the damage already reduced by 30%, we need to reverse the math to determine how much the damage was originally reduced by
+                // Working through the math, the amount of damage that was reduced is equal to: damage * (percent / (1 - percent))
+                float percent = BrutalShield.DamageAbsorptionMultiplier;
+                int damage = (int)(info.Damage * (percent / (1 - percent)));
+
+                // Don't bother pinging the defending player and upsetting their immunity frames if the portion of damage we're taking rounds down to 0
+                if (damage > 0)
+                {
+                    localPlayer.Hurt(PlayerDeathReason.ByOther(16), damage, 0);
+                }
             }
             base.OnHurt(info);
         }

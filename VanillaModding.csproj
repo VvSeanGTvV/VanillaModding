@@ -1,4 +1,4 @@
-
+﻿
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\tModLoader.targets" />
   <PropertyGroup>
@@ -23,9 +23,12 @@
     <None Remove="Projectiles\MightyScythe\MightyScytheProjectile_Glow.png" />
   </ItemGroup>
   <ItemGroup>
+	  <Reference Include="CustomRarityLib">
+	    <HintPath>..\ModAssemblies\CustomRarityLib_v1.0.1.dll</HintPath>
+	  </Reference>
 	  <Reference Include="Microsoft.Xna.Framework.Xact">
 	    <HintPath>..\..\..\..\..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_32\Microsoft.Xna.Framework.Xact\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Xact.dll</HintPath>
-	  </Reference>  
+	  </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\DamageClasses\" />
@@ -33,4 +36,5 @@
     <Folder Include="Content\Items\Weapon\Summoner\" />
     <Folder Include="External\" />
   </ItemGroup>
+	
 </Project>

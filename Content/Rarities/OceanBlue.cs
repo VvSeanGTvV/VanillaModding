@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CustomRarityLib.Rarity;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using System;
@@ -18,9 +19,9 @@ namespace VanillaModding.Content.Rarities
     internal class OceanBlue : CustomDrawRarity
     {
         public override Color RarityColor => CTX;
-        public override Color TextClr => CTX;
+        public override Color TextColor => CTX;
         private static float duration = ((float)(Main.GlobalTimeWrappedHourly * Math.PI));
-        public override Color BloomClr => new Color(122, 222, 255);
+        public override Color LightColor => new Color(122, 222, 255);
         public static Color CTX = new Color(20, 197, 255);
 
         public override int GetPrefixedRarity(int offset, float valueMult)

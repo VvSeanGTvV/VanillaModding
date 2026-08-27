@@ -52,6 +52,11 @@ Mods: {
 				DisplayName: Bugdroid
 				Description: The mascot of Android
 			}
+
+			AbsorbTeamBrutalShield: {
+				DisplayName: Absorb Team Brutal Shield
+				Description: Mods.VanillaModding.Buffs.AbsorbTeamBrutalShield.Description
+			}
 		}
 
 		Items: {
@@ -532,6 +537,16 @@ Mods: {
 				DisplayName: Jungle Juice
 				Tooltip: A tropical concoction with hints of Life Fruit and nutmeg
 			}
+
+			BrutalShield: {
+				DisplayName: Brutal Tank Shield
+				Tooltip:
+					'''
+					Grants immunity to knockback
+					Absorbs {0}% of damage done to players on your team when above {1}% life
+					Enemies are more likely to target you
+					'''
+			}
 		}
 
 		NPCs: {
@@ -642,6 +657,7 @@ Mods: {
 			LifeStealBullet.DisplayName: Life Steal Bullet
 			AndroidGuy.DisplayName: Android Guy
 			ShimmerBullet.DisplayName: Shimmer Bullet
+			OcramSpike.DisplayName: Ocram Spike
 		}
 
 		Prefixes: {

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CustomRarityLib.Rarity;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using System;
@@ -17,9 +18,9 @@ namespace VanillaModding.Content.Rarities
     {
         // Cosmic Purple is the rarity for Post-DoG gear.
         // It is a unique rarity and does not have its items rarity change on reforge.
-        public override Color RarityColor => TextClr * 2f;
-        public override Color BloomClr => BTX;
-        public override Color TextClr => CTX;
+        public override Color RarityColor => TextColor * 2f;
+        public override Color LightColor => BTX;
+        public override Color TextColor => CTX;
 
         public static Color CTX = new Color(103, 66, 138, 255);
         public static Color BTX = new Color(65, 38, 87, 0);

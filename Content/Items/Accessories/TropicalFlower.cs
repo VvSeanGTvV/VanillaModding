@@ -19,7 +19,7 @@ namespace VanillaModding.Content.Items.Accessories
         public override void SetDefaults()
         {
             Item.width = 20;
-            Item.height = 44;
+            Item.height = 42;
             Item.accessory = true;
             Item.rare = ItemRarityID.Lime;
             Item.value = Item.sellPrice(0, 4, 30, 0);

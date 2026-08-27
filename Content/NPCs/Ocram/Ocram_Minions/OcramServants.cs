@@ -3,6 +3,9 @@ using Terraria.ModLoader;
 using Terraria;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Terraria.DataStructures;
+using System;
+using VanillaModding.Content.Projectiles.OcramProjectile;
 
 namespace VanillaModding.Content.NPCs.Ocram.Ocram_Minions
 {
@@ -31,11 +34,24 @@ namespace VanillaModding.Content.NPCs.Ocram.Ocram_Minions
             NPC.aiStyle = -1;
         }
 
+
+        
         readonly float rotSpeed = 0.25f;
         float rotdef;
-        bool hehe;
+        bool hehe, spawnSpike;
+        int timerSpawnSpike, iSpike;
+
+        public override void OnSpawn(IEntitySource source)
+        {
+            // Timer being used a modes before the AI
+            if (NPC.ai[1] > 0) spawnSpike = true;
+            NPC.ai[1] = 0;
+            base.OnSpawn(source);
+        }
+
         public override void AI()
         {
+            
             NPC.ai[1]++;
             if (!Main.npc[(int)NPC.ai[0]].active || Main.npc[(int)NPC.ai[0]] == null || (int)NPC.ai[0] == 0)
             {
@@ -64,7 +80,17 @@ namespace VanillaModding.Content.NPCs.Ocram.Ocram_Minions
                 if (NPC.ai[2] == 0) { NPC.velocity = Vector2.Zero; NPC.ai[2]++; } else if (NPC.ai[2] < 3) { NPC.velocity += NPC.DirectionTo(closestNPC.Center) * 640f / 60f; NPC.ai[2]++; }
             if(NPC.ai[1] >= 100 && hehe) { hehe = false; NPC.ai[1] = 0; NPC.ai[2] = 0; }
 
-
+            if (hehe && spawnSpike)
+            {
+                timerSpawnSpike++;
+                if (timerSpawnSpike % 10 == 0)
+                {
+                    iSpike++;
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, 16).RotatedBy(MathHelper.ToRadians(45 * iSpike)), new Vector2(0, 20f).RotatedBy(MathHelper.ToDegrees(45 * iSpike)), ModContent.ProjectileType<OcramSpike>(), 5, 2f);
+                    if (iSpike >= 8) iSpike = 0;
+                    timerSpawnSpike = 0;
+                }
+            }
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

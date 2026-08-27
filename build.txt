@@ -1,3 +1,4 @@
 displayName = OtherSide [ALPHA]
 author = VvSeanGtvV
-version = 0.1.84
+version = 0.1.85
+modReferences = CustomRarityLib

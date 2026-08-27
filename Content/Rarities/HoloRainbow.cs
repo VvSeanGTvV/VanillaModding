@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CustomRarityLib.Rarity;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using System;
@@ -25,7 +26,7 @@ namespace VanillaModding.Content.Rarities
                                         ((float)Math.Sin((((duration + (Math.PI / 1.5)) / 2) - 0.1f) * 0.5) * -1)
                                         );
 
-        public override Color TextClr => defColor;
+        public override Color TextColor => defColor;
 
         public static Color defColor = new Color(255, 255, 255, 255);
 

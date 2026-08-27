@@ -1,27 +1,21 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Content.Items.Accessories;
 using VanillaModding.Content.Items.Consumable.Healing;
 using VanillaModding.Content.Items.Pets;
-using VanillaModding.Content.Items.Weapon.Combo.MightyScythe;
 using VanillaModding.Content.Rarities;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace VanillaModding
 {
     internal class VanillaModdingSystem : ModSystem
     {
-        public static readonly List<(int id, CustomDrawRarity Rarity)> RarityRender = new();
-
+        public static float Zoom = 1;
         public static int DiscoR;
         public static int DiscoG;
         public static int DiscoB;
@@ -82,22 +76,27 @@ namespace VanillaModding
             TileID.HallowedPlants2
         };
 
-        private void RarityCustomLoad(CustomDrawRarity[] ModdedRarities)
+        public override void PostSetupContent()
         {
-            foreach (CustomDrawRarity Rarity in ModdedRarities) RarityRender.Add(new(Rarity.Type, Rarity));
+            // Check if the mod exist
+            if (ModLoader.HasMod("CustomRarityLib"))
+            {
+                CustomRarityLib.CustomRaritySystem.RarityCustomLoad([
+                    ModContent.GetInstance<CosmicPurple>(),
+                    ModContent.GetInstance<HoloRainbow>(),
+                    ModContent.GetInstance<OceanBlue>(),
+                ]);
+            }
         }
 
-        public static bool RarityCustomExist(int Rarity) => RarityRender.Any(x => x.id == Rarity);
-        public static CustomDrawRarity RarityCustomByID(int Rarity) => RarityRender.Find(x => x.id == Rarity).Rarity;
+        public override void ModifyTransformMatrix(ref SpriteViewMatrix Transform)
+        {
+            Transform.Zoom *= Zoom;
+            base.ModifyTransformMatrix(ref Transform);
+        }
 
         public override void Load()
         {
-            RarityCustomLoad(
-            [
-                ModContent.GetInstance<CosmicPurple>(),
-                ModContent.GetInstance<HoloRainbow>(),
-                ModContent.GetInstance<OceanBlue>(),
-            ]);
             On_Player.ItemCheck_CutTiles += Hook_ItemCheck_CutTiles;
             On_Player.ItemCheck_PayMana += Hook_ItemCheck_PayMana;
         }

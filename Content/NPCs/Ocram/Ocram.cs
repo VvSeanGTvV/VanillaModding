@@ -381,39 +381,38 @@ namespace VanillaModding.Content.NPCs.Ocram
                 }
                 if (stg == 1)
                 {
-                    if (t1 >= (LaserShotPerSec / 1.75f) && l1 < LaserProjectileCount * 3)
-                    {
-                        onSide = true;
-                        Vector2 position = NPC.Center - new Vector2(45, 0);
-                        Vector2 targetPosition = target.Center;
-                        Vector2 direction = targetPosition - position;
-
-                        if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(45, 0), direction.RotatedByRandom(MathHelper.ToRadians(24)), ModContent.ProjectileType<PinkishLaser>(), 17, 8);
-                        leyeg = 3;
-
-                        l1++;
-                        t1 = 0;
-                    }
-
                     if (!df)
                     {
-                        if (t1 >= LaserDelay && l2 < LaserRepeat)
+                        t2++;
+                        if (t2 >= 60 * 1.5f)
+                        {
                             df = true;
+                        }
                     }
                     else
                     {
-                        t2++;
-                        if (t2 >= LaserDelay && l2 < LaserRepeat)
+                        if (t1 >= (LaserShotPerSec / 1.85f) && l1 < LaserProjectileCount * 3)
                         {
+                            onSide = true;
+                            Vector2 position = NPC.Center - new Vector2(45, 0);
+                            Vector2 targetPosition = target.Center;
+                            Vector2 direction = targetPosition - position;
+
+                            if (Main.netMode != NetmodeID.MultiplayerClient) Projectile.NewProjectile(source, NPC.Center - new Vector2(45, 0), direction.RotatedByRandom(MathHelper.ToRadians(45)), ModContent.ProjectileType<PinkishLaser>(), 17, 8);
+                            leyeg = 3;
+
+                            l1++;
                             t1 = 0;
+                        }
+                        if (t1 >= LaserDelay && l2 < LaserRepeat)
+                        {
+                            t2 = 0;
                             l1 = 0;
                             leftSide = !leftSide;
-                            t2 = 0;
-                            df = false;
                             l2++;
+                            df = false;
                         }
                     }
-
 
                     if (t1 >= LaserDelay && l2 >= LaserRepeat) ResetStage(2, boosSTG);
                 }
@@ -440,7 +439,7 @@ namespace VanillaModding.Content.NPCs.Ocram
                     {
                         ki = 0;
                         SoundEngine.PlaySound(SoundID.NPCDeath45, NPC.position);
-                        NPC.NewNPC(source, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OcramServants>(), 0, NPC.whoAmI);
+                        NPC.NewNPC(source, (int)NPC.Center.X, (int)NPC.Center.Y, ModContent.NPCType<OcramServants>(), 0, NPC.whoAmI, 1);
                     }
                     if (NPC.CountNPCS(ModContent.NPCType<OcramServants>()) >= MaxMinions && ki > 10)
                     {

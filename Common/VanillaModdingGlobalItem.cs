@@ -17,33 +17,6 @@ namespace VanillaModding.Common
 {
     internal class VanillaModdingGlobalItem : GlobalItem
     {
-        #region Tooltip Rarity
-        public override bool PreDrawTooltipLine(
-            Item item,
-            DrawableTooltipLine line,
-            ref int yOffset)
-        {
-            if (VanillaModdingSystem.RarityCustomExist(item.rare) && line.Name == "ItemName" && ModContent.GetInstance<VanillaModdingConfigClient>().CustomTooltip) return false;
-
-            return true;
-        }
-
-        public override void PostDrawTooltipLine(
-            Item item,
-            DrawableTooltipLine line)
-        {
-            if (VanillaModdingSystem.RarityCustomExist(item.rare) && line.Name == "ItemName")
-            {
-                VanillaModdingSystem.RarityCustomByID(item.rare).Update();
-                if (ModContent.GetInstance<VanillaModdingConfigClient>().CustomTooltip)
-                {
-                    VanillaModdingSystem.RarityCustomByID(item.rare).Draw(item, line);
-                    if (ModContent.GetInstance<VanillaModdingConfigClient>().CustomSpecialEffectsTooltip) VanillaModdingSystem.RarityCustomByID(item.rare).SpecialDraw(line);
-                }
-            }
-        }
-        #endregion
-
         bool ItemExistInArmor(Player player, int slot, int item, bool ignoreSocialAccessory = true)
         {
             /*for (int i = 0; i < player.armor.Length; i++)

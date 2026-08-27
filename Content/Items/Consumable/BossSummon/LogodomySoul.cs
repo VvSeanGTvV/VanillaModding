@@ -9,6 +9,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Common.CamModifier;
 using VanillaModding.Content.Items.Materials;
 using VanillaModding.Content.Items.Placeable;
 using VanillaModding.Content.NPCs.LobotomyGod;
@@ -90,6 +91,8 @@ namespace VanillaModding.Content.Items.Consumable.BossSummon
 
         public override bool? UseItem(Player player)
         {
+            // TODO the intro now
+            Main.instance.CameraModifiers.Add(new CameraZoomMovement(Main.MouseWorld, 300, 2, uniqueIdentity: FullName, sine: true));
             Point tilePos = Main.MouseWorld.ToTileCoordinates();
             Tile tile = Framing.GetTileSafely(tilePos);
 
