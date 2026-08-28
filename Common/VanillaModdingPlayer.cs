@@ -47,12 +47,16 @@ namespace VanillaModding.Common
         int currentPrefix = 0;
         DamageClass currentClass = null;
 
+        // Empowered Tool/Weapon
+        public int Empowered = 0;
+
         // Accessories Bool
         public bool accSatanicBible = false;
         public bool accEpipen = false;
         public bool accValentineRing = false;
         public bool accSharedBrutalShield = false;
         public bool accBrutalShield = false;
+        
 
         // This variable is for D I C E item.
         /// <summary>

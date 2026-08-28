@@ -31,7 +31,7 @@ namespace VanillaModding.Content.Items.Accessories
     [AutoloadEquip(EquipType.Shield)]
     internal class BrutalShield : ModItem
     {
-        public static readonly int DamageAbsorptionAbilityLifeThresholdPercent = 35;
+        public static readonly int DamageAbsorptionAbilityLifeThresholdPercent = 55;
         public static float DamageAbsorptionAbilityLifeThreshold => DamageAbsorptionAbilityLifeThresholdPercent / 100f;
 
         public static readonly int DamageAbsorptionPercent = 30;
@@ -47,7 +47,7 @@ namespace VanillaModding.Content.Items.Accessories
             Item.width = 36;
             Item.height = 38;
             Item.accessory = true;
-            Item.rare = ItemRarityID.Pink;
+            Item.rare = ItemRarityID.Yellow;
             Item.defense = 16;
             Item.value = Item.buyPrice(0, 20, 0, 0);
         }

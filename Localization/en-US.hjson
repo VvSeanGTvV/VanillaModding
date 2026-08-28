@@ -547,6 +547,15 @@ Mods: {
 					Enemies are more likely to target you
 					'''
 			}
+
+			Pwnageddon: {
+				DisplayName: Pwnageddon
+				Tooltip:
+					'''
+					A strong hammer that is very heavy and does the job well, other than losing its ability to break wall
+					In every 4th hits, a spectral hammer comes down to auto lock an enemy and does twice more damage
+					'''
+			}
 		}
 
 		NPCs: {
@@ -658,6 +667,8 @@ Mods: {
 			AndroidGuy.DisplayName: Android Guy
 			ShimmerBullet.DisplayName: Shimmer Bullet
 			OcramSpike.DisplayName: Ocram Spike
+			PwnageddonProj.DisplayName: Pwnageddon Proj
+			PwnageddonEcho.DisplayName: Pwnageddon Echo
 		}
 
 		Prefixes: {

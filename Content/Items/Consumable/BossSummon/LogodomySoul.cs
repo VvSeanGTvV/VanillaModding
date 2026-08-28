@@ -128,12 +128,12 @@ namespace VanillaModding.Content.Items.Consumable.BossSummon
 
         public override void AddRecipes()
         {
-            Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.SoulofLight, 5);
-            recipe.AddIngredient(ItemID.SoulofSight, 5);
-            recipe.AddIngredient(ItemID.SoulofMight, 5);
-            recipe.AddTile<Tiles.Furniture.FusionCore>();
-            recipe.Register();
+            CreateRecipe()
+                .AddIngredient(ItemID.SoulofLight, 5)
+                .AddIngredient(ItemID.SoulofSight, 5)
+                .AddIngredient(ItemID.SoulofMight, 5)
+                .AddTile<Tiles.Furniture.FusionCore>()
+                .Register();
         }
         public override Color? GetAlpha(Color lightColor)
         {

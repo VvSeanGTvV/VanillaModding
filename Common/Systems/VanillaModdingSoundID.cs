@@ -18,7 +18,7 @@ namespace VanillaModding.Common.Systems
         public static SoundStyle LoadSound(string path) 
             => new($"{nameof(VanillaModding)}/Assets/Sounds/{path}");
 
-        public static readonly SoundStyle DeathNoteItemAsylum = LoadSound("DICE/DeathNote_ItemAsylum") with { Volume = 0.25f };
+        public static readonly SoundStyle DeathNoteItemAsylum = LoadSound("DICE/DeathNote_ItemAsylum") with { Volume = 0.25f, MaxInstances = 25 };
         public static readonly SoundStyle FishSpeak = LoadSound("Fish/Fish") with { Volume = 0.45f, Pitch = 0f, MaxInstances = 25 };
         public static readonly SoundStyle FishHit = LoadSound("Fish/FishHit") with { Volume = 0.45f, Pitch = 0f, MaxInstances = 25 };
         public static readonly SoundStyle FishSpeeen = LoadSound("Fish/FishSpeeen") with { Volume = 0.45f, Pitch = 0f, MaxInstances = 25 };
@@ -36,10 +36,15 @@ namespace VanillaModding.Common.Systems
         public static readonly SoundStyle LobotomyEasyBounce = LoadSound("Lobotomy/LobotomyEasyBounce") with { Volume = 0.45f, Pitch = 0f, MaxInstances = 25 };
         public static readonly SoundStyle LobotomyInsane = LoadSound("Lobotomy/LobotomyInsaneBeam") with { Volume = 0.45f, Pitch = 0f, MaxInstances = 25 };
 
+        // Holy
         public static readonly SoundStyle Hallelujah = LoadSound("Bombs/HolyHandGrenadeHallelujah");
 
         // Android Guy
         public static readonly SoundStyle MessageSamsung = LoadSound("AndroidGuy/MessageSamsung");
         public static readonly SoundStyle AndroidSummon = LoadSound("AndroidGuy/TaDaAndroid");
+
+        // SFX
+        public static readonly SoundStyle HammerHit = LoadSound("Hammer/ChurchBell") with { MaxInstances = 25 };
+        public static readonly SoundStyle HammerBigHit = LoadSound("Hammer/Bell") with { MaxInstances = 25 };
     }
 }

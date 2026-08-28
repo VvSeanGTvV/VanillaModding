@@ -65,8 +65,6 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
 
             Vector2 target = (isEnemy) ? closestPlayer.Center : closestNPC.Center;
             Projectile.velocity = -Vector2.Lerp(-Projectile.velocity, (Projectile.Center - target).SafeNormalize(Vector2.Zero) * projSpeed, 0.05f);
-
-
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
