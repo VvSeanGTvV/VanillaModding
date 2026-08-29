@@ -13,24 +13,23 @@ namespace VanillaModding.Common.Utilities
         /// <summary>
         /// A helper to spawn a circle of dust
         /// </summary>
-        /// <param name="position">where to spawn it</param>
-        /// <param name="dustColor">dust color</param>
-        /// <param name="dustType">what dust is it</param>
-        /// <param name="amount">How many dust in a circle spawned</param>
-        /// <param name="X"> unknown </param>
-        /// <returns>Returns an array of <see cref="Dust"/> that has spawned</returns>
-        public static Dust[] SpawnCircleDust(Vector2 position, Color dustColor, int dustType, int amount, int X = 2)
+        /// <param name="position"> Dust to spawn in this position </param>
+        /// <param name="dustColor"> Dust Color if supported </param>
+        /// <param name="dustType"> DustID or DustType </param>
+        /// <param name="amount"> Amount to spawn in Circle </param>
+        /// <param name="Velocity"> How fast </param>
+        /// <param name="Offset"> Padding or offset of the Circle </param>
+        /// <returns>Returns an array of <see cref="Dust"/> that has spawned, if needed to modify</returns>
+        public static Dust[] SpawnCircleDust(Vector2 position, int dustType, int amount, float Velocity = 6f, Vector2 Offset = default, Color dustColor = default)
         {
-            Vector2 vel = Vector2.UnitX * X;
-            List<Dust> dusts = new();
+            if (Offset == default) Offset = Vector2.Zero;
 
+            List<Dust> dusts = new();
             for (int i = 0; i < amount; i++)
             {
                 float rot = MathHelper.TwoPi * i / amount;
-                Vector2 velocity = vel.RotatedBy(rot);
-                Dust dust = Dust.NewDustPerfect(position, dustType, velocity, newColor: dustColor, Alpha: 25);
-                dust.scale = 1f;
-
+                Vector2 velocity = new Vector2(Velocity, 0).RotatedBy(rot);
+                Dust dust = Dust.NewDustPerfect(position + Offset.RotatedBy(rot), dustType, velocity, newColor: dustColor, Alpha: 25);
                 dusts.Add(dust);
             }
             return dusts.ToArray();

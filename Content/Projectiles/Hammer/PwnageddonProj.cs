@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
+using Terraria.Map;
 using Terraria.ModLoader;
 using VanillaModding.Common;
 using VanillaModding.Common.Systems;
@@ -56,16 +58,36 @@ namespace VanillaModding.Content.Projectiles.Hammer
         public override bool PreKill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
-            float numberOfDusts = 13f;
-            float rotFactor = 360f / numberOfDusts;
-            for (int i = 0; i < numberOfDusts; i++)
+            Entity[] data = CollisionUtils.GetEntitysinCircle(Main.npc, Projectile.Center, 75, 5, ent =>
             {
-                float rot = MathHelper.ToRadians(i * rotFactor);
-                Vector2 offset = new Vector2(9f, 0).RotatedBy(rot);
-                Vector2 velOffset = new Vector2(6f, 0).RotatedBy(rot);
-                Dust dust = Dust.NewDustPerfect(Projectile.Center + offset, DustID.Sandnado, new Vector2(velOffset.X, velOffset.Y));
+                NPC npc = (NPC)ent;
+                if (npc == null) return false;
+                return !npc.friendly && !npc.dontTakeDamage;
+            });
+
+            foreach (Entity entity in data)
+            {
+                if (!entity.active) continue;
+                NPC npc = (NPC)entity;
+                if (npc == null || !npc.active || npc.whoAmI == Projectile.ai[1]) continue;
+
+                
+                StatModifier damageModifier = player.GetTotalDamage(Projectile.DamageType);
+                player.ApplyDamageToNPC(
+                    npc, 
+                    (int)Math.Max(1, damageModifier.ApplyTo(Projectile.damage * 0.8f)), 
+                    npc.knockBackResist * Projectile.knockBack, 
+                    npc.Center.X < Projectile.Center.X ? -1 : 1, 
+                    Main.rand.NextFloat() < Projectile.CritChance / 100f, 
+                    Projectile.DamageType, 
+                    true
+                    );
+            }
+
+            Dust[] dusts = SpawnHelper.SpawnCircleDust(Projectile.Center, DustID.Sandnado, 13, Offset: new Vector2(9f, 0));
+            foreach (Dust dust in dusts)
+            {
                 dust.noGravity = true;
-                dust.velocity = velOffset;
                 dust.scale = 2.5f;
             }
 
@@ -76,11 +98,14 @@ namespace VanillaModding.Content.Projectiles.Hammer
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
+            Projectile.ai[1] = target.whoAmI;
             if (EmpoweredHammer >= 3)
             {
-                Projectile.ai[1] = target.whoAmI;
-                int hammer = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(Projectile.velocity.SafeNormalize(Vector2.UnitX).X * 5, -15f), ModContent.ProjectileType<PwnageddonEcho>(), Projectile.damage * 2, Projectile.knockBack * 1.5f, Projectile.owner, 0f, Projectile.ai[1]);
-                Main.projectile[hammer].localAI[0] = Math.Sign(Projectile.velocity.X);
+                Player player = Main.player[Projectile.owner];
+
+                ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
+                new ParticleOrchestraSettings { PositionInWorld = Projectile.Center }, Projectile.owner);
+                int hammer = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(Projectile.velocity.SafeNormalize(Vector2.UnitX).X * 10f, 0), ModContent.ProjectileType<PwnageddonEcho>(), Projectile.damage * 2, Projectile.knockBack * 1.5f, Projectile.owner, 0f, Projectile.ai[1]);
                 Main.projectile[hammer].netUpdate = true;
                 HighBong = true;
                 EmpoweredHammer = 0;
@@ -89,7 +114,6 @@ namespace VanillaModding.Content.Projectiles.Hammer
             {
                 EmpoweredHammer++;
             }
-
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -101,7 +125,7 @@ namespace VanillaModding.Content.Projectiles.Hammer
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                Color color = Projectile.GetAlpha(new Color(lightColor.R, lightColor.G, 0, lightColor.A)) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                Color color = Projectile.GetAlpha(new Color(lightColor.R, lightColor.G * 0.85f, 0, lightColor.A)) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
                 Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.oldRot[k], drawOrigin, Projectile.scale, SpriteEffects.None, 0);
             }
 
@@ -136,34 +160,31 @@ namespace VanillaModding.Content.Projectiles.Hammer
             return new Color(255, 248, 0, 255) with { A = 0 };
         }
 
+        public override bool? CanDamage()
+        => Projectile.ai[0] >= 42f;
+
+        public float rot = 15.5f;
         public override void AI()
         {
             Projectile.ai[0] += 1f;
             if (Projectile.ai[0] < 42f)
             {
-                Projectile.velocity.Y *= 0.9575f;
-                Projectile.velocity.X *= 0.98f;
-                Projectile.rotation += MathHelper.ToRadians(Projectile.ai[0] * 0.5f) * Projectile.localAI[0] * Projectile.direction;
+                Projectile.rotation += MathHelper.ToRadians(rot) * Projectile.direction;
+                Projectile.velocity.Y -= 0.35f;
+                Projectile.velocity.X *= 0.989f;
+                rot *= 0.989f;
             }
-            else if (Projectile.ai[0] >= 42f)
+            else
             {
                 Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2 * 0.5f;
-                Projectile.extraUpdates = 2;
-
-                if (Projectile.ai[1] != -5)
-                    targeted = Main.npc[(int)Projectile.ai[1]];
-                if (targeted == null || !targeted.CanBeChasedBy(Projectile, false) || !targeted.active)
-                {
-                    Projectile.ai[1] = -5;
-                    targeted = AdvAI.FindClosestNPC(2000, Projectile.Center, npc => !npc.friendly);
-                }
+                if (Projectile.ai[1] >= 0 && targeted == null && Main.npc[(int)Projectile.ai[1]].active) targeted = Main.npc[(int)Projectile.ai[1]];
+                if (targeted == null || !targeted.active) targeted = AdvAI.FindClosestNPC(2000, Projectile.Center, npc => !npc.friendly && npc.CanBeChasedBy(Projectile, false));
                 if (targeted != null)
                 {
                     Projectile.velocity = -Vector2.Lerp(-Projectile.velocity, (Projectile.Center - targeted.Center).SafeNormalize(Vector2.Zero) * 40f, 0.05f);
                     if (Projectile.penetrate <= -1) Projectile.penetrate = 1;
                 }
-                else
-                    Projectile.Kill();
+                else Projectile.Kill();
             }
 
             if (Main.rand.NextBool())
@@ -186,22 +207,43 @@ namespace VanillaModding.Content.Projectiles.Hammer
         public override bool PreKill(int timeLeft)
         {
             Player player = Main.player[Projectile.owner];
-
-            float numberOfDusts = 45f;
-            float rotFactor = 360f / numberOfDusts;
-            for (int i = 0; i < numberOfDusts; i++)
+            Entity[] data = CollisionUtils.GetEntitysinCircle(Main.npc, Projectile.Center, 148, 10, ent =>
             {
-                float rot = MathHelper.ToRadians(i * rotFactor);
-                Vector2 offset = new Vector2(15f, 0).RotatedBy(rot);
-                Vector2 velOffset = new Vector2(12.5f, 0).RotatedBy(rot);
-                Dust dust = Dust.NewDustPerfect(Projectile.Center + offset, DustID.Sandnado, velOffset);
+                NPC npc = (NPC)ent;
+                if (npc == null) return false;
+                return !npc.friendly && !npc.dontTakeDamage;
+            });
+
+            foreach (Entity entity in data)
+            {
+                if (!entity.active) continue;
+                NPC npc = (NPC)entity;
+                if (npc == null || !npc.active || npc.whoAmI == Projectile.ai[1]) continue;
+
+                StatModifier damageModifier = player.GetTotalDamage(Projectile.DamageType);
+                player.ApplyDamageToNPC(
+                    npc,
+                    (int)Math.Max(1, damageModifier.ApplyTo(Projectile.damage * 0.8f)),
+                    npc.knockBackResist * Projectile.knockBack,
+                    npc.Center.X < Projectile.Center.X ? -1 : 1,
+                    Main.rand.NextFloat() < Projectile.CritChance / 100f,
+                    Projectile.DamageType,
+                    true
+                    );
+            }
+
+            Dust[] dusts = SpawnHelper.SpawnCircleDust(Projectile.Center, DustID.Sandnado, 45, 12.5f, Offset: new Vector2(15f, 0));
+            int i = 0;
+            foreach (Dust dust in dusts)
+            {
                 dust.noGravity = true;
-                dust.velocity = velOffset * (i % 2 == 0 ? 0.9f : i % 3 == 0 ? 0.8f : 1f);
+                dust.velocity = dust.velocity * (float)(0.85f + Math.Abs(Math.Sin(i)) * 0.15f);
                 dust.scale = 3f;
+                i++;
             }
 
             SoundEngine.PlaySound(VanillaModdingSoundID.HammerBigHit, Projectile.Center);
-            SoundEngine.PlaySound(VanillaModdingSoundID.DeathNoteItemAsylum, Projectile.Center);
+            //SoundEngine.PlaySound(VanillaModdingSoundID.DeathNoteItemAsylum, Projectile.Center);
             return false;
         }
 

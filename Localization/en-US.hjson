@@ -552,7 +552,7 @@ Mods: {
 				DisplayName: Pwnageddon
 				Tooltip:
 					'''
-					A strong hammer that is very heavy and does the job well, other than losing its ability to break wall
+					A strong hammer that is very heavy and useful crowd control weapon, other than losing its ability to break wall
 					In every 4th hits, a spectral hammer comes down to auto lock an enemy and does twice more damage
 					'''
 			}

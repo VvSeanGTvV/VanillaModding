@@ -1,31 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
-using Terraria.Graphics;
 using Terraria.ID;
-using Terraria.Map;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using VanillaModding.Common.Systems;
-using VanillaModding.Common.UI;
-using VanillaModding.Common.Utilities;
 using VanillaModding.Content.Buffs;
-using VanillaModding.Content.Dusts;
-using VanillaModding.Content.Items;
 using VanillaModding.Content.Items.Accessories;
 using VanillaModding.Content.Items.Accessories.Book;
 using VanillaModding.Content.Items.Consumable.Healing;
 using VanillaModding.Content.Prefixes;
-using VanillaModding.Content.Projectiles.EffectProjectile;
-using VanillaModding.Content.Projectiles.KoboldDynamite;
 
 namespace VanillaModding.Common
 {
