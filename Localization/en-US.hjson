@@ -337,8 +337,8 @@ Mods: {
 			}
 
 			Bunnynator: {
-				DisplayName: Bunnynator
-				Tooltip: Turns any critter to bunny!
+				DisplayName: Bunny Ray
+				Tooltip: Transmutate any critter to a bunny!
 			}
 
 			WhiteThread: {
@@ -552,8 +552,17 @@ Mods: {
 				DisplayName: Pwnageddon
 				Tooltip:
 					'''
-					A strong hammer that is very heavy and useful crowd control weapon, other than losing its ability to break wall
+					Strong hammer that is very heavy and useful crowd control weapon, other than losing its ability to break wall
 					In every 4th hits, a spectral hammer comes down to auto lock an enemy and does twice more damage
+					'''
+			}
+
+			ShellBreaker: {
+				DisplayName: Shell Breaker
+				Tooltip:
+					'''
+					Hammer capable of dealing such insane armor penetration, which is useful at such tanky entities
+					In every 4th hits, a spectral hammer spawns having to fart upon a hit on entity and explodes spore clouds
 					'''
 			}
 		}
@@ -669,6 +678,8 @@ Mods: {
 			OcramSpike.DisplayName: Ocram Spike
 			PwnageddonProj.DisplayName: Pwnageddon Proj
 			PwnageddonEcho.DisplayName: Pwnageddon Echo
+			ShellBreakerProj.DisplayName: Shell Breaker Proj
+			ShellBreakerEcho.DisplayName: Shell Breaker Echo
 		}
 
 		Prefixes: {

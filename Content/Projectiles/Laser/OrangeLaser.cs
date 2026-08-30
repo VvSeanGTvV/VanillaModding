@@ -15,8 +15,8 @@ namespace VanillaModding.Content.Projectiles.Laser
     {
         public override void SetDefaults()
         {
-            Projectile.width = 44;
-            Projectile.height = 4;
+            Projectile.width = 10;
+            Projectile.height = 10;
 
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Magic;
@@ -27,7 +27,6 @@ namespace VanillaModding.Content.Projectiles.Laser
 
         public override void AI()
         {
-            // The projectile is rotated to face the direction of travel
             Projectile.rotation = Projectile.velocity.ToRotation();
         }   
 
@@ -36,7 +35,7 @@ namespace VanillaModding.Content.Projectiles.Laser
             if (target.CountsAsACritter && target.type != NPCID.Bunny)
             {
                 target.active = false;
-                NPC.NewNPC(Projectile.GetSource_FromAI(), (int)target.position.X, (int)target.position.Y, NPCID.Bunny);
+                NPC.NewNPC(Projectile.GetSource_FromAI(), (int)target.position.X, (int)target.position.Y, Main.rand.NextBool(64) ? NPCID.GoldBunny : NPCID.Bunny);
             }
             if (Main.rand.NextFloat() < 0.35f) target.AddBuff(BuffID.Slow, 120);
             base.OnHitNPC(target, hit, damageDone);

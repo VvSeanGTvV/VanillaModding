@@ -15,27 +15,23 @@ namespace VanillaModding.Content.Items.Weapon.Magic
     {
         public override void SetDefaults()
         {
-            // Common Properties
             Item.width = 46;
             Item.height = 24;
             Item.scale = 0.85f;
             Item.rare = ItemRarityID.Blue;
 
-            // Use Properties
-            Item.useTime = 19; // The item's use time in ticks (60 ticks == 1 second.)
-            Item.useAnimation = 19; // The length of the item's use animation in ticks (60 ticks == 1 second.)
+            Item.useTime = 19;
+            Item.useAnimation = 19;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.autoReuse = true;
 
-            // The sound that this item plays when used.
             Item.UseSound = SoundID.Item157;
 
-            // Weapon Properties
-            Item.DamageType = DamageClass.Magic; // Sets the damage type to ranged.
-            Item.damage = 32; // Sets the item's damage. Note that projectiles shot by this weapon will use its and the used ammunition's damage added together.
-            Item.knockBack = 1f; // Sets the item's knockback. Note that projectiles shot by this weapon will use its and the used ammunition's knockback added together.
-            Item.noMelee = true; // So the item's animation doesn't do damage.
-            Item.mana = 10; // The amount of mana the player needs to consume to use this item.
+            Item.DamageType = DamageClass.Magic;
+            Item.damage = 32;
+            Item.knockBack = 1f;
+            Item.noMelee = true;
+            Item.mana = 10;
 
             // Gun Properties
             Item.shoot = ProjectileID.GreenLaser; // For some reason, all the guns in the vanilla source have this.
@@ -49,7 +45,7 @@ namespace VanillaModding.Content.Items.Weapon.Magic
                 player.armor[1].type == ItemID.MeteorSuit &&
                 player.armor[2].type == ItemID.MeteorLeggings)
             {
-                mult *= 0.25f;
+                mult *= 0.15f;
             }
         }
 

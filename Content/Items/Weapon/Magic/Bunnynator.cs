@@ -17,9 +17,9 @@ namespace VanillaModding.Content.Items.Weapon.Magic
         public override void SetDefaults()
         {
             // Common Properties
-            Item.width = 90;
-            Item.height = 42;
-            Item.scale = 0.65f;
+            Item.width = 58;
+            Item.height = 30;
+            Item.scale = 0.85f;
             Item.rare = ItemRarityID.Blue;
 
             // Use Properties
@@ -33,7 +33,7 @@ namespace VanillaModding.Content.Items.Weapon.Magic
 
             // Weapon Properties
             Item.DamageType = DamageClass.Magic; // Sets the damage type to ranged.
-            Item.damage = 46; // Sets the item's damage. Note that projectiles shot by this weapon will use its and the used ammunition's damage added together.
+            Item.damage = 22; // Sets the item's damage. Note that projectiles shot by this weapon will use its and the used ammunition's damage added together.
             Item.knockBack = 2f; // Sets the item's knockback. Note that projectiles shot by this weapon will use its and the used ammunition's knockback added together.
             Item.noMelee = true; // So the item's animation doesn't do damage.
             Item.mana = 6; // The amount of mana the player needs to consume to use this item.
@@ -41,21 +41,29 @@ namespace VanillaModding.Content.Items.Weapon.Magic
             // Gun Properties
             Item.shoot = ModContent.ProjectileType<OrangeLaser>(); // For some reason, all the guns in the vanilla source have this.
             Item.shootSpeed = 64f; // The speed of the projectile (measured in pixels per frame.)
-            Item.value = Item.sellPrice(0, 1, 30, 0);
+            Item.value = Item.sellPrice(0, 3, 30, 0);
         }
 
-        public override Vector2? HoldoutOffset()
+        public override Vector2? HoldoutOffset() => new Vector2(-5f, 0f);
+
+        public override void ModifyManaCost(Player player, ref float reduce, ref float mult)
         {
-            return new Vector2(-15f, 0f);
+            if (player.armor[0].type == ItemID.MeteorHelmet &&
+                player.armor[1].type == ItemID.MeteorSuit &&
+                player.armor[2].type == ItemID.MeteorLeggings)
+            {
+                mult *= 0f;
+            }
         }
+
 
         public override void AddRecipes()
         {
             CreateRecipe()
                 .AddIngredient(ItemID.SpaceGun, 1)
-                .AddIngredient(ItemID.BunnyEars, 1)
-                .AddIngredient(ItemID.BunnyTail, 1)
-                .AddIngredient(ItemID.Vine, 10)
+                .AddIngredient(ItemID.Bunny, 1)
+                .AddIngredient(ItemID.Hay, 2)
+                .AddIngredient(ItemID.Vine, 5)
                 .AddTile(TileID.Anvils)
                 .Register();
         }
