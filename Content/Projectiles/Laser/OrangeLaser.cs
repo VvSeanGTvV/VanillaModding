@@ -15,20 +15,18 @@ namespace VanillaModding.Content.Projectiles.Laser
     {
         public override void SetDefaults()
         {
-            Projectile.width = 10;
-            Projectile.height = 10;
+            Projectile.CloneDefaults(ProjectileID.GreenLaser);
+            AIType = ProjectileID.GreenLaser;
 
             Projectile.friendly = true;
             Projectile.DamageType = DamageClass.Magic;
-            Projectile.timeLeft = 1200;
             Projectile.penetrate = 3;
-            Projectile.light = 1f;
         }
 
         public override void AI()
         {
             Projectile.rotation = Projectile.velocity.ToRotation();
-        }   
+        }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {

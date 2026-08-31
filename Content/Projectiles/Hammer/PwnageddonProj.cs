@@ -121,7 +121,7 @@ namespace VanillaModding.Content.Projectiles.Hammer
             {
                 Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
                 Color color = Projectile.GetAlpha(new Color(lightColor.R, lightColor.G * 0.85f, 0, lightColor.A)) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.oldRot[k], drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.oldRot[k] - (Projectile.direction == -1 ? MathHelper.ToRadians(90f) : 0), drawOrigin, Projectile.scale, SpriteEffects.None, 0);
             }
 
             return true;
