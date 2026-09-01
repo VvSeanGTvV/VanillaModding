@@ -494,8 +494,8 @@ Mods: {
 			}
 
 			SoulofUnity: {
-				DisplayName: Soul of Unity
-				Tooltip: "'The trio of essence, united together'"
+				DisplayName: Quintessential Soul
+				Tooltip: "'The four souls, united together'"
 			}
 
 			SpaceRifle: {
@@ -563,6 +563,15 @@ Mods: {
 					'''
 					Hammer capable of dealing such insane armor penetration, which is useful at such tanky entities
 					In every 4th hits, a spectral hammer spawns having to fart upon a hit on entity and explodes spore clouds
+					'''
+			}
+
+			SpectrePaladinHammer: {
+				DisplayName: Spectral Paladin's Hammer
+				Tooltip:
+					'''
+					Hammer capable of return, and a heavy damage hammer
+					In every 4th hits, the hammer becomes an explosive hammer
 					'''
 			}
 		}
@@ -680,6 +689,7 @@ Mods: {
 			PwnageddonEcho.DisplayName: Pwnageddon Echo
 			ShellBreakerProj.DisplayName: Shell Breaker Proj
 			ShellBreakerEcho.DisplayName: Shell Breaker Echo
+			SpectrePaladinHammerProj.DisplayName: Spectre Paladin Hammer Proj
 		}
 
 		Prefixes: {

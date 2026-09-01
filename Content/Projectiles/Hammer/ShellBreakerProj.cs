@@ -20,7 +20,7 @@ namespace VanillaModding.Content.Projectiles.Hammer
     internal class ShellBreakerProj : ModProjectile
     {
         public ref int EmpoweredHammer => ref Main.player[Projectile.owner].GetModPlayer<VanillaModdingPlayer>().Empowered;
-        public override string Texture => $"{nameof(VanillaModding)}/Content/Items/Weapon/Melee/ShellBreaker";
+        public override string Texture => $"{nameof(VanillaModding)}/Content/Items/Weapon/Melee/Hammer/ShellBreaker";
 
         public override void SetStaticDefaults()
         {
@@ -49,7 +49,7 @@ namespace VanillaModding.Content.Projectiles.Hammer
             Projectile.rotation += MathHelper.ToRadians(5.5f) * Projectile.direction;
 
             Projectile.velocity.X *= 0.97f;
-            Projectile.velocity.Y = Projectile.velocity.Y + 0.25f;
+            Projectile.velocity.Y = Projectile.velocity.Y + 0.15f;
             if (Projectile.velocity.Y > 32f)
             {
                 Projectile.velocity.Y = 32f;

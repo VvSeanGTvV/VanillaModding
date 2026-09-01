@@ -16,7 +16,7 @@ namespace VanillaModding.Content.Projectiles.Hammer
     internal class PwnageddonProj : ModProjectile
     {
         public ref int EmpoweredHammer => ref Main.player[Projectile.owner].GetModPlayer<VanillaModdingPlayer>().Empowered;
-        public override string Texture => $"{nameof(VanillaModding)}/Content/Items/Weapon/Melee/Pwnageddon";
+        public override string Texture => $"{nameof(VanillaModding)}/Content/Items/Weapon/Melee/Hammer/Pwnageddon";
 
         public override void SetStaticDefaults()
         {

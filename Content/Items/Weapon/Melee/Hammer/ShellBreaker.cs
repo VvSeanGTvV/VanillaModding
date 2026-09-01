@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 using VanillaModding.Content.Items.Materials;
 using VanillaModding.Content.Projectiles.Hammer;
 
-namespace VanillaModding.Content.Items.Weapon.Melee
+namespace VanillaModding.Content.Items.Weapon.Melee.Hammer
 {
     internal class ShellBreaker : ModItem
     {
@@ -18,13 +18,13 @@ namespace VanillaModding.Content.Items.Weapon.Melee
             Item.noMelee = true;
             Item.noUseGraphic = true;
             Item.autoReuse = true;
-            Item.useAnimation = Item.useTime = 40;
+            Item.useAnimation = Item.useTime = 45;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.knockBack = 10f;
             Item.UseSound = SoundID.Item1;
             Item.DamageType = DamageClass.MeleeNoSpeed;
             Item.value = Item.sellPrice(0, 3, 0, 0);
-            Item.rare = ItemRarityID.Yellow;
+            Item.rare = ItemRarityID.Lime;
             Item.shoot = ModContent.ProjectileType<ShellBreakerProj>();
             Item.shootSpeed = 27f;
         }
