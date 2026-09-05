@@ -12,7 +12,7 @@ using VanillaModding.Content.Projectiles.DuneTrapper;
 using VanillaModding.Content.Pets.SandTrapperPet;
 using static Humanizer.In;
 
-namespace VanillaModding.Content.Items.Weapon.Magic
+namespace VanillaModding.Content.Items.Weapon.Summoner
 {
     public class SandTrapperPetBuff : ModBuff
     {
@@ -102,7 +102,7 @@ namespace VanillaModding.Content.Items.Weapon.Magic
             }
             player.AddBuff(Item.buffType, 2);
             latestProjectile = Projectile.NewProjectile(source, position, velocity, type, Item.damage, knockback, Main.myPlayer);
-            mainhead = Main.projectile[(int)latestProjectile];
+            mainhead = Main.projectile[latestProjectile];
 
             if (formatTable != null && formatTable.Length > 0 )
             {
@@ -118,14 +118,14 @@ namespace VanillaModding.Content.Items.Weapon.Magic
                 lastProjectile = latestProjectile;
                 latestProjectile = Projectile.NewProjectile(source, position, Vector2.Zero, ModContent.ProjectileType<SandTrapperPetBody>(), Item.damage, knockback, Main.myPlayer, lastProjectile);
 
-                Main.projectile[(int)latestProjectile].ai[0] = lastProjectile;
-                reformatProjectile.Add(Main.projectile[(int)latestProjectile]);
+                Main.projectile[latestProjectile].ai[0] = lastProjectile;
+                reformatProjectile.Add(Main.projectile[latestProjectile]);
             }
 
             latestProjectile = Projectile.NewProjectile(source, position, Vector2.Zero, ModContent.ProjectileType<SandTrapperPetTail>(), Item.damage, knockback, Main.myPlayer, lastProjectile);
             
-            Main.projectile[(int)latestProjectile].ai[0] = lastProjectile;
-            reformatProjectile.Add(Main.projectile[(int)latestProjectile]);
+            Main.projectile[latestProjectile].ai[0] = lastProjectile;
+            reformatProjectile.Add(Main.projectile[latestProjectile]);
 
             formatTable = reformatProjectile.ToArray();
 

@@ -58,6 +58,7 @@ namespace VanillaModding.Content.Rarities
                     {
                         pos = position;
                         pos.X += FontAssets.MouseText.Value.MeasureString(txt).X;
+                        pos.Y += ((float)Math.Sin((duration + (txt.Length / 2)) / 2) * 1.5f) + 1.25f;
 
                         b += 0.1f;
                         color = new Color(
@@ -78,6 +79,7 @@ namespace VanillaModding.Content.Rarities
                     {
                         pos = position;
                         pos.X += FontAssets.MouseText.Value.MeasureString(txt).X;
+                        pos.Y += (float)Math.Sin((duration + (txt.Length / 2)) / 2) * 1.5f;
 
                         b += 0.1f;
                         color = new Color(

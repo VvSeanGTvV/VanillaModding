@@ -54,8 +54,8 @@ namespace VanillaModding.Content.Items.Materials
             Lighting.AddLight(Item.Center, new Vector3(1f, 1f, 0.824f) * 0.55f * Main.essScale); // Makes this item glow when thrown out of inventory.
         }*/
         public override void PostUpdate()
-            => Lighting.AddLight(Item.Center, new Vector3(0.85f * 0.93f, 1f * 0.75f, 1f * 0.86f) * 0.45f * Main.essScale);
+            => Lighting.AddLight(Item.Center, new Vector3(0.9f * 0.93f, 1f * 0.55f, 1f * 0.65f) * 0.45f * Main.essScale);
         public override Color? GetAlpha(Color lightColor)
-            => new Color(0.85f * 0.93f, 1f * 0.75f, 1f * 0.86f);
+            => new Color(0.9f * 0.93f, 1f * 0.75f, 1f * 0.86f);
     }
 }

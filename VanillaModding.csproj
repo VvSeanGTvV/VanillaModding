@@ -33,7 +33,6 @@
   <ItemGroup>
     <Folder Include="Content\DamageClasses\" />
     <Folder Include="Content\InfoDisplays\" />
-    <Folder Include="Content\Items\Weapon\Summoner\" />
     <Folder Include="External\" />
   </ItemGroup>
 	

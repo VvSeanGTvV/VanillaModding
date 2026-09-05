@@ -9,6 +9,7 @@ using Terraria.ModLoader;
 using VanillaModding.Content.Items.Accessories;
 using VanillaModding.Content.Items.Consumable.Healing;
 using VanillaModding.Content.Items.Pets;
+using VanillaModding.Content.Items.Weapon.Melee;
 using VanillaModding.Content.Rarities;
 
 namespace VanillaModding
@@ -142,6 +143,15 @@ namespace VanillaModding
                 if (recipe.HasResult(ItemID.CellPhone))
                 {
                     recipe.AddIngredient<ShinyBlackSlab>();
+                }
+
+                if (recipe.HasResult(ModContent.ItemType<BasicSword>()))
+                {
+                    for (int i = 0; i < ItemLoader.ItemCount; i++)
+                    {
+                        Item item = ContentSamples.ItemsByType[i];
+                        if (item != null && item.type > ItemID.None && item.damage > 0 && item.DamageType == DamageClass.Melee) recipe.AddIngredient(item.type, 1);
+                    }
                 }
             }
         }

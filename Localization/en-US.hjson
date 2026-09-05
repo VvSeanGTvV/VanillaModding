@@ -61,8 +61,8 @@ Mods: {
 
 		Items: {
 			BasicSword: {
-				DisplayName: Dirt Sword (Legacy)
-				Tooltip: Dirt with a silver blade attached.
+				DisplayName: The Dirtiest Sword
+				Tooltip: "'Your dedication is worth it'"
 			}
 
 			LobotomyThrowable: {
@@ -327,7 +327,7 @@ Mods: {
 			}
 
 			RTSoft: {
-				DisplayName: RT Soft
+				DisplayName: Robinson's Necklace
 				Tooltip: "'Once a Growtopian'"
 			}
 
@@ -574,6 +574,21 @@ Mods: {
 					In every 4th hits, the hammer becomes an explosive hammer
 					'''
 			}
+
+			LunarBoots: {
+				DisplayName: Lunar Walkers
+				Tooltip:
+					'''
+					Allows flight, super fast running, and extra mobility on ice
+					{0}% increased movement speed
+					Provides the ability to walk on water, honey & lava
+					Grants immunity to fire blocks and {1} seconds of immunity to lava
+					Reduces damage from touching lava
+					Increases jump speed and allows auto-jump
+					Negates fall damage
+					'All-In-One your useful boots'
+					'''
+			}
 		}
 
 		NPCs: {
@@ -690,6 +705,8 @@ Mods: {
 			ShellBreakerProj.DisplayName: Shell Breaker Proj
 			ShellBreakerEcho.DisplayName: Shell Breaker Echo
 			SpectrePaladinHammerProj.DisplayName: Spectre Paladin Hammer Proj
+			SpectreExplodeHammer.DisplayName: Spectre Explode Hammer
+			SpectrePaladinHammerEcho.DisplayName: Spectre Paladin Hammer Echo
 		}
 
 		Prefixes: {

@@ -19,7 +19,6 @@ using VanillaModding.Content.Items.Armor.Vanity;
 using VanillaModding.Content.Items.Materials;
 using VanillaModding.Content.Items.Accessories.Book;
 using VanillaModding.Content.NPCs.Fish;
-using VanillaModding.Content.Items.Accessories.Clicker;
 using VanillaModding.Content.Items.Accessories;
 using VanillaModding.Content.Items.Consumable.Healing;
 

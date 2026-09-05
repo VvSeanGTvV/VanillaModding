@@ -8,8 +8,8 @@ using Terraria.ID;
 using Terraria;
 using Terraria.ModLoader;
 using VanillaModding.Content.NPCs.DuneTrapper;
-using VanillaModding.Content.Items.Weapon.Magic;
 using VanillaModding.Content.Items.Materials;
+using VanillaModding.Content.Items.Weapon.Summoner;
 
 namespace VanillaModding.Content.Items.Consumable.BossBags
 {

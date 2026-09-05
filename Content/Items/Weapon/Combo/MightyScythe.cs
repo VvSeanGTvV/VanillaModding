@@ -14,7 +14,7 @@ using VanillaModding.Content.Projectiles.MightyScythe;
 using VanillaModding.Content.Projectiles.MightyScythe.MightyProjectile;
 using VanillaModding.Content.Rarities;
 
-namespace VanillaModding.Content.Items.Weapon.Combo.MightyScythe
+namespace VanillaModding.Content.Items.Weapon.Combo
 {
     public class MightyScythe : ModItem
     {
