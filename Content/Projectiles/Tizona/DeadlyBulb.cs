@@ -18,12 +18,15 @@ namespace VanillaModding.Content.Projectiles.Tizona
         public override void SetStaticDefaults()
         {
             Main.projFrames[Type] = 4;
+
+            ProjectileID.Sets.TrailCacheLength[Type] = 7;
+            ProjectileID.Sets.TrailingMode[Type] = 2;
         }
 
         public override void SetDefaults()
         {
-            Projectile.width = 10; // The width of projectile hitbox
-            Projectile.height = 10; // The height of projectile hitbox
+            Projectile.width = 18; // The width of projectile hitbox
+            Projectile.height = 18; // The height of projectile hitbox
             Projectile.aiStyle = -1; // The ai style of the projectile, please reference the source code of Terraria
             Projectile.friendly = true;
             Projectile.hostile = false; // Can the projectile deal damage to the player?
@@ -45,18 +48,18 @@ namespace VanillaModding.Content.Projectiles.Tizona
         public override void AI()
         {
             AdvAI.FrameAnimate(0, 3, 8, Projectile);
-            Lighting.AddLight(Projectile.position, 1f * 0.87f, 1f * 0.87f, 0.824f * 0.87f);
+            Lighting.AddLight(Projectile.position, Color.Yellow.ToVector3() * 0.45f);
 
             if (Projectile.timeLeft < 100f)
             {
                 Projectile.alpha = alpha * (int)Math.Round(light * ((float)Projectile.timeLeft / 100f));
-                Projectile.light = light * ((float)Projectile.timeLeft / 100f);
+                //Projectile.light = light * ((float)Projectile.timeLeft / 100f);
             }
 
             if (Projectile.ai[0] != 0)
             {
                 Projectile.scale = 1.5f;
-                Projectile.light = 0.5f;
+                //Projectile.light = 0.5f;
                 if (Projectile.ai[0] < 0) 
                 {
                     NPC closestNPC = AdvAI.FindClosestNPC(512f, Projectile.Center, npc => npc.CanBeChasedBy());

@@ -10,7 +10,7 @@ namespace VanillaModding.Content.Items.Accessories
     [AutoloadEquip(EquipType.Shoes)]
     internal class LunarBoots : ModItem
     {
-        public float speedBoost = 0.125f;
+        public float speedBoost = 0.08f;
         public int lavaMax = 420;
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(speedBoost*100, lavaMax / 60);
 

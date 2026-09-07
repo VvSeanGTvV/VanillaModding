@@ -12,11 +12,13 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.Graphics.CameraModifiers;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using VanillaModding.Common.Systems;
+using VanillaModding.Content.Items.Materials;
 using VanillaModding.Content.NPCs.Ocram.Ocram_Minions;
 using VanillaModding.Content.Projectiles.OcramProjectile;
 
@@ -150,6 +152,33 @@ namespace VanillaModding.Content.NPCs.Ocram
                 //SpamPerSecond = 3;
                 //divDashSpeed = 10;
             }
+        }
+
+        public override void ModifyNPCLoot(NPCLoot npcLoot)
+        {
+            LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
+            var parameters = new DropOneByOne.Parameters()
+            {
+                ChanceNumerator = 1,
+                ChanceDenominator = 1,
+                MinimumStackPerChunkBase = 1,
+                MaximumStackPerChunkBase = 1,
+                MinimumItemDropsCount = 5,
+                MaximumItemDropsCount = 16,
+            };
+
+            notExpertRule.OnSuccess(new DropOneByOne(ModContent.ItemType<SoulofBlight>(), parameters));
+
+            bool hasAdamantite = WorldGen.SavedOreTiers.Adamantite == TileID.Adamantite;
+            bool hasTitanium = WorldGen.SavedOreTiers.Adamantite == TileID.Titanium;
+
+            if (hasAdamantite || hasTitanium)
+            {
+                parameters.MinimumItemDropsCount = 10;
+                parameters.MaximumItemDropsCount = 38;
+                notExpertRule.OnSuccess(new DropOneByOne(hasAdamantite ? ItemID.TitaniumOre : ItemID.AdamantiteOre, parameters));
+            }
+            npcLoot.Add(notExpertRule);
         }
 
         // Etc. VARIABLE AI (do nut touch)

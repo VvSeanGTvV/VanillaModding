@@ -1,11 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Graphics;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
+using Terraria.Utilities;
 using VanillaModding.Content.Items.Accessories;
 using VanillaModding.Content.Items.Consumable.Healing;
 using VanillaModding.Content.Items.Pets;
@@ -16,6 +19,9 @@ namespace VanillaModding
 {
     internal class VanillaModdingSystem : ModSystem
     {
+        // LOCALIZED TEXT
+        public static LocalizedText Priceless { get; private set; }
+
         public static float Zoom = 1;
         public static int DiscoR;
         public static int DiscoG;
@@ -98,6 +104,8 @@ namespace VanillaModding
 
         public override void Load()
         {
+            Priceless = Language.GetOrRegister(Mod.GetLocalizationKey("Items.Priceless"));
+
             On_Player.ItemCheck_CutTiles += Hook_ItemCheck_CutTiles;
             On_Player.ItemCheck_PayMana += Hook_ItemCheck_PayMana;
         }
@@ -106,12 +114,11 @@ namespace VanillaModding
         private bool Hook_ItemCheck_PayMana(On_Player.orig_ItemCheck_PayMana orig, Player self, Item sItem, bool canUse)
         {
             int num = (int)((float)sItem.mana * self.manaCost);
-            if (self.armor.Any(i => (i.type == ModContent.ItemType<RestorationFlower>()) || (i.type == ModContent.ItemType<TropicalFlower>())))
+            if (self.armor.Any(i => (i.type == ModContent.ItemType<RestorationFlower>())))
             {
                 if (self.statMana < num)
                 {
                     self.QuickMana();
-                    self.statMana += (self.armor.Any(i => (i.type == ModContent.ItemType<TropicalFlower>()))) ? 5 : 0;
                     self.statMana -= num;
                 }
             }
@@ -136,6 +143,48 @@ namespace VanillaModding
                 .Register();
         }
 
+        public override void PostWorldLoad()
+        {
+            foreach (Recipe recipe in Main.recipe)
+            {
+                if (recipe.HasResult(ModContent.ItemType<DirtiestSword>()))
+                {
+                    List<int> meleeWeapons = new();
+
+                    // Load all existing melee weapons into the list
+                    for (int i = 1; i < ItemLoader.ItemCount; i++)
+                    {
+                        Item item = ContentSamples.ItemsByType[i];
+
+                        if (item != null && // Item exist
+                            item.type > ItemID.None && // what?
+                            item.damage > 0 && // acutally does damage
+                            item.DamageType == DamageClass.Melee && // Melee only
+                            item.type != ModContent.ItemType<DirtiestSword>()) // Do not put the same item onto an item recipe
+                        {
+                            meleeWeapons.Add(item.type);
+                        }
+                    }
+
+                    if (meleeWeapons.Count == 0)
+                        continue;
+
+                    int seed = Main.ActiveWorldFileData.Seed; // Use the active world seed to ensure consistent randomization across clients in multiplayer
+                    UnifiedRandom random = new(seed);
+
+                    // 1 random items (idk if wanting to put 3 items)
+                    for (int i = 0; i < 1 && meleeWeapons.Count > 0; i++)
+                    {
+                        int index = random.Next(meleeWeapons.Count);
+                        int itemType = meleeWeapons[index];
+
+                        recipe.AddIngredient(itemType, 1);
+                        meleeWeapons.RemoveAt(index); // remove it to prevent duplicates
+                    }
+                }
+            }
+        }
+
         public override void PostAddRecipes()
         {
             foreach (Recipe recipe in Main.recipe)
@@ -145,14 +194,7 @@ namespace VanillaModding
                     recipe.AddIngredient<ShinyBlackSlab>();
                 }
 
-                if (recipe.HasResult(ModContent.ItemType<BasicSword>()))
-                {
-                    for (int i = 0; i < ItemLoader.ItemCount; i++)
-                    {
-                        Item item = ContentSamples.ItemsByType[i];
-                        if (item != null && item.type > ItemID.None && item.damage > 0 && item.DamageType == DamageClass.Melee) recipe.AddIngredient(item.type, 1);
-                    }
-                }
+                
             }
         }
 

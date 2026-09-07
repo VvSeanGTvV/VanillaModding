@@ -60,7 +60,7 @@ Mods: {
 		}
 
 		Items: {
-			BasicSword: {
+			DirtiestSword: {
 				DisplayName: The Dirtiest Sword
 				Tooltip: "'Your dedication is worth it'"
 			}
@@ -84,11 +84,6 @@ Mods: {
 					'''
 			}
 
-			MightyScytheOld: {
-				DisplayName: Soul Scythe (Legacy)
-				Tooltip: Old Copyrighted stuff
-			}
-
 			Tizona: {
 				DisplayName: Tizona
 				Tooltip: Has a chance to cause Bleeding
@@ -110,7 +105,7 @@ Mods: {
 			}
 
 			SandTrapperSummon: {
-				DisplayName: Desert Medallion
+				DisplayName: Desert Pendant
 				Tooltip: Summons Dune Trapper
 			}
 
@@ -518,21 +513,6 @@ Mods: {
 					'''
 			}
 
-			ShimmerGun: {
-				DisplayName: Shimmer Gun (WIP)
-				Tooltip: ""
-			}
-
-			TropicalFlower: {
-				DisplayName: Tropical Bloom
-				Tooltip:
-					'''
-					{0}% reduced mana cost
-					{0}% reduced health potion cooldown
-					Automatically use healing potion or mana potion when needed
-					'''
-			}
-
 			JungleJuice: {
 				DisplayName: Jungle Juice
 				Tooltip: A tropical concoction with hints of Life Fruit and nutmeg
@@ -579,7 +559,7 @@ Mods: {
 				DisplayName: Lunar Walkers
 				Tooltip:
 					'''
-					Allows flight, super fast running, and extra mobility on ice
+					Allows flight, insanely fast running, and extra mobility on ice
 					{0}% increased movement speed
 					Provides the ability to walk on water, honey & lava
 					Grants immunity to fire blocks and {1} seconds of immunity to lava
@@ -589,6 +569,8 @@ Mods: {
 					'All-In-One your useful boots'
 					'''
 			}
+
+			Priceless: Priceless
 		}
 
 		NPCs: {
@@ -651,7 +633,6 @@ Mods: {
 
 		Projectiles: {
 			MightyScythe_PROJ.DisplayName: Mighty Scythe
-			MightyScytheOLD_PROJ.DisplayName: Soul Scythe
 			MightyScythe_PROJ_Clone.DisplayName: Mini Mighty Scythe
 			HolyHandBomb.DisplayName: Holy Hand Grenade
 			SpikyRedE.DisplayName: Spiky Red
@@ -700,13 +681,15 @@ Mods: {
 			AndroidGuy.DisplayName: Android Guy
 			ShimmerBullet.DisplayName: Shimmer Bullet
 			OcramSpike.DisplayName: Ocram Spike
-			PwnageddonProj.DisplayName: Pwnageddon Proj
-			PwnageddonEcho.DisplayName: Pwnageddon Echo
-			ShellBreakerProj.DisplayName: Shell Breaker Proj
-			ShellBreakerEcho.DisplayName: Shell Breaker Echo
-			SpectrePaladinHammerProj.DisplayName: Spectre Paladin Hammer Proj
-			SpectreExplodeHammer.DisplayName: Spectre Explode Hammer
-			SpectrePaladinHammerEcho.DisplayName: Spectre Paladin Hammer Echo
+			PwnageddonProj.DisplayName: Pwnageddon
+			PwnageddonEcho.DisplayName: Pwnageddon
+			ShellBreakerProj.DisplayName: Shell Breaker
+			ShellBreakerEcho.DisplayName: Shell Breaker
+			SpectrePaladinHammerProj.DisplayName: Spectre Paladin Hammer
+			SpectreExplodeHammer.DisplayName: Spectre Explodsion
+			SpectrePaladinHammerEcho.DisplayName: Spectre Paladin Hammer
+			MightyScytheOLD_PROJ.DisplayName: Mighty Scythe O L D_ P R O J
+			DirtiestExplode.DisplayName: Dirtiest Explode
 		}
 
 		Prefixes: {
