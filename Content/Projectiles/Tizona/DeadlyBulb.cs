@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace VanillaModding.Content.Projectiles.Tizona
         {
             Main.projFrames[Type] = 4;
 
-            ProjectileID.Sets.TrailCacheLength[Type] = 7;
+            ProjectileID.Sets.TrailCacheLength[Type] = 8;
             ProjectileID.Sets.TrailingMode[Type] = 2;
         }
 
@@ -35,11 +36,14 @@ namespace VanillaModding.Content.Projectiles.Tizona
             Projectile.alpha = 0; // The transparency of the projectile, 255 for completely transparent. (aiStyle 1 quickly fades the projectile in) Make sure to delete this if you aren't using an aiStyle that fades in. You'll wonder why your projectile is invisible.
             Projectile.ignoreWater = true; // Does the projectile's speed be influenced by water?
             Projectile.tileCollide = false; // Can the projectile collide with tiles?
-            Projectile.scale = 2f;
+            Projectile.scale = 1f;
             Projectile.extraUpdates = 1; // Set to above 0 if you want the projectile to update multiple time in a frame
 
             //AIType = ProjectileID.Bullet; // Act exactly like default Bullet
         }
+
+        public override bool? CanDamage()
+        => Projectile.ai[1] > 10;
 
         //Vector2 speedSave = //Projectile.velocity = -Vector2.Lerp(-Projectile.velocity, (Projectile.Center - closestNPC.Center).SafeNormalize(Vector2.Zero) * projSpeed, 0.1f);
         float r1;
@@ -56,65 +60,60 @@ namespace VanillaModding.Content.Projectiles.Tizona
                 //Projectile.light = light * ((float)Projectile.timeLeft / 100f);
             }
 
-            if (Projectile.ai[0] != 0)
-            {
-                Projectile.scale = 1.5f;
-                //Projectile.light = 0.5f;
-                if (Projectile.ai[0] < 0) 
-                {
-                    NPC closestNPC = AdvAI.FindClosestNPC(512f, Projectile.Center, npc => npc.CanBeChasedBy());
-                    if (closestNPC == null)
-                        return;
-                    Projectile.velocity = -Vector2.Lerp(-Projectile.velocity, (Projectile.Center - closestNPC.Center).SafeNormalize(Vector2.Zero) * 20f, 0.0025f);
-                    return;
-                };
-                NPC target = Main.npc[(int)Projectile.ai[1]];
-                Projectile.velocity = -Vector2.Lerp(-Projectile.velocity, (Projectile.Center - target.Center).SafeNormalize(Vector2.Zero) * 20f, 0.005f);
-            }
-            else
-            {
-                NPC closestNPC = AdvAI.FindClosestNPC(512f, Projectile.Center, npc => npc.CanBeChasedBy());
-                if (closestNPC == null)
-                    return;
-                Projectile.velocity = -Vector2.Lerp(-Projectile.velocity, (Projectile.Center - closestNPC.Center).SafeNormalize(Vector2.Zero) * 20f, 0.0025f);
-            }
+            NPC closestNPC = Main.npc[(int)Projectile.ai[0]].active ? Main.npc[(int)Projectile.ai[0]] : AdvAI.FindClosestNPC(512f, Projectile.Center, npc => npc.CanBeChasedBy());
+            if (closestNPC == null)
+                return;
+
+            Projectile.scale = MathHelper.Clamp(Projectile.timeLeft / 300f, 0.25f, 1.75f);
+            Projectile.ai[1]++;
+            Projectile.ai[0] = closestNPC.whoAmI;
+            Projectile.velocity = -Vector2.Lerp(-Projectile.velocity, (Projectile.Center - closestNPC.Center).SafeNormalize(Vector2.Zero) * 20f, 0.005f);
 
             r1 = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (Projectile.ai[0] == 0)
-            {
-                Projectile.rotation = r1;
-                explodeBulb(target);
-            }
-            else
-            {
-                ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
+            ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
                 new ParticleOrchestraSettings { PositionInWorld = Main.rand.NextVector2FromRectangle(target.Hitbox) }, Projectile.owner);
-                hit.HitDirection = (Main.player[Projectile.owner].Center.X < target.Center.X) ? 1 : (-1);
-                target.AddBuff(BuffID.Bleeding, 720);
-            }
+            hit.HitDirection = (Main.player[Projectile.owner].Center.X < target.Center.X) ? 1 : (-1);
+            //if (Main.rand.NextBool(4)) target.AddBuff(BuffID.Bleeding, 720);
         }
 
-        private void explodeBulb(NPC target)
+        public override void OnHitPlayer(Player target, Player.HurtInfo hit)
         {
-            var position = Projectile.position;
-            var speedX = Projectile.velocity.X;
-            var speedY = Projectile.velocity.Y;
-            float speedMul = 4f;
-            float numberProjectiles = 3; // 3 shots
-            float rotation = MathHelper.ToRadians(45);//Shoots them in a 45 degree radius. (This is technically 90 degrees because it's 45 degrees up from your cursor and 45 degrees down)
-            position += Vector2.Normalize(new Vector2(speedX, speedY)) * 45f; //45 should equal whatever number you had on the previous line
-            var enS = Projectile.GetSource_FromThis();
-            for (int i = 0; i < numberProjectiles; i++)
-            {
-                Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f; // Vector for spread. Watch out for dividing by 0 if there is only 1 projectile.
-                Projectile.NewProjectile(enS, position, perturbedSpeed * speedMul, ModContent.ProjectileType<DeadlyBulb>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 1, target.whoAmI); //Creates a new projectile with our new vector for spread.
-                
-            }
+            ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.Excalibur,
+                new ParticleOrchestraSettings { PositionInWorld = Main.rand.NextVector2FromRectangle(target.Hitbox) }, Projectile.owner);
+            hit.HitDirection = (Main.player[Projectile.owner].Center.X < target.Center.X) ? 1 : (-1);
+            //if (Main.rand.NextBool(4)) target.AddBuff(BuffID.Bleeding, 720);
         }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D texture = (Texture2D)ModContent.Request<Texture2D>(Texture);
+
+            // Calculate the height of a single frame
+            int frameHeight = texture.Height / Main.projFrames[Projectile.type];
+            
+
+            // Draw the custom frame
+            for (int k = 0; k < Projectile.oldPos.Length; k++)
+            {
+                Rectangle sourceRectangle = new Rectangle(0, (Math.Abs(Projectile.frame - k) % Main.projFrames[Projectile.type]) * frameHeight, texture.Width, frameHeight);
+                Vector2 origin = sourceRectangle.Size() / 2f;
+
+                SpriteEffects spriteEffects = Projectile.oldSpriteDirection[k] == -1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+                Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + origin + new Vector2(0f, Projectile.gfxOffY);
+                Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                Main.EntitySpriteDraw(texture, drawPos, sourceRectangle, color, Projectile.oldRot[k], origin, Projectile.scale, spriteEffects, 0);
+            }
+
+            // Return false to stop vanilla code from drawing the default sprite over yours
+            return false;
+        }
+
+        public override Color? GetAlpha(Color lightColor)
+            => new Color(1f * 0.97f, 1f * 0.97f, 0.824f * 0.97f, 0.5f);
 
         public override void OnSpawn(IEntitySource source)
         {

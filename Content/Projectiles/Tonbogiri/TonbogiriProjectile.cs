@@ -31,8 +31,8 @@ namespace VanillaModding.Content.Projectiles.Tonbogiri
             ParticleOrchestrator.RequestParticleSpawn(clientOnly: false, ParticleOrchestraType.StardustPunch,
             new ParticleOrchestraSettings { PositionInWorld = Main.rand.NextVector2FromRectangle(target.Hitbox) }, Projectile.owner);
             hit.HitDirection = (Main.player[Projectile.owner].Center.X < target.Center.X) ? 1 : (-1);
+            if (Main.rand.NextBool(4) && !target.HasBuff(BuffID.Bleeding)) target.AddBuff(BuffID.Bleeding, 520);
             OnHitEntity(target);
-            target.AddBuff(BuffID.Bleeding, 720);
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
@@ -42,15 +42,34 @@ namespace VanillaModding.Content.Projectiles.Tonbogiri
             info.HitDirection = (Main.player[Projectile.owner].Center.X < target.Center.X) ? 1 : (-1);
             if (info.PvP)
             {
+                if (Main.rand.NextBool(4) && !target.HasBuff(BuffID.Bleeding)) target.AddBuff(BuffID.Bleeding, 520);
                 OnHitEntity(target);
-                target.AddBuff(BuffID.Bleeding, 720);
             }
         }
 
         public void OnHitEntity(Entity target)
         {
-            Vector2 velocity = Vector2.Normalize(target.Center - Projectile.Center) * 10f;
-            if (Main.myPlayer == Projectile.owner) Projectile.NewProjectile(Projectile.GetSource_FromAI(), target.Center, velocity, ModContent.ProjectileType<DeadlyBulb>(), Projectile.damage, Projectile.knockBack / 2, Projectile.owner, 0);
+            
+            if (Main.myPlayer == Projectile.owner) explodeBulb(target);
+        }
+
+        private void explodeBulb(Entity target)
+        {
+            Vector2 velocity = Vector2.Normalize(target.Center - Projectile.Center) * 20f;
+            var position = Projectile.position;
+            var speedX = velocity.X;
+            var speedY = velocity.Y;
+            float speedMul = 1.5f;
+            float numberProjectiles = 3; // 3 shots
+            float rotation = MathHelper.ToRadians(45);//Shoots them in a 45 degree radius. (This is technically 90 degrees because it's 45 degrees up from your cursor and 45 degrees down)
+            position += Vector2.Normalize(new Vector2(speedX, speedY)) * 45f; //45 should equal whatever number you had on the previous line
+            var enS = Projectile.GetSource_FromThis();
+            for (int i = 0; i < numberProjectiles; i++)
+            {
+                Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f; // Vector for spread. Watch out for dividing by 0 if there is only 1 projectile.
+                Projectile.NewProjectile(enS, position, perturbedSpeed * speedMul, ModContent.ProjectileType<DeadlyBulb>(), (int)((Projectile.damage * 2) / numberProjectiles), Projectile.knockBack, Projectile.owner, target.whoAmI); //Creates a new projectile with our new vector for spread.
+
+            }
         }
 
         public override bool PreAI()

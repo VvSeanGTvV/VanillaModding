@@ -156,6 +156,11 @@ namespace VanillaModding.Content.NPCs.Ocram
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Content.Items.Placeable.Furniture.OcramTrophy>(), 10));
+
+            // ItemDropRule.MasterModeCommonDrop for the relic
+            npcLoot.Add(ItemDropRule.MasterModeCommonDrop(ModContent.ItemType<Items.Placeable.Furniture.OcramRelic>()));
+
             LeadingConditionRule notExpertRule = new LeadingConditionRule(new Conditions.NotExpert());
             var parameters = new DropOneByOne.Parameters()
             {

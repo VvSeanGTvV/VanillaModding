@@ -222,12 +222,12 @@ Mods: {
 
 			VulcanRepeater: {
 				DisplayName: Vulcan Repeater
-				Tooltip: Transforms any suitable ammo into Vulcan Bolts
+				Tooltip: Transform any arrows into a stored vulcan arrow, that carry attributes of the original ammo
 			}
 
 			BoringBow: {
 				DisplayName: Dragon's Bow
-				Tooltip: Shoots a stored arrow, that explodes into two co-existing ammo
+				Tooltip: Shoots a 3 arrows at once, last would contain a the original ammo
 			}
 
 			VulcanBolt_Ammo: {
@@ -571,6 +571,21 @@ Mods: {
 			}
 
 			Priceless: Priceless
+
+			WhiteStuccoWall: {
+				DisplayName: White Stucco Wall
+				Tooltip: ""
+			}
+
+			WhiteStucco: {
+				DisplayName: White Stucco
+				Tooltip: ""
+			}
+
+			OcramRelic: {
+				DisplayName: Ocram Relic
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {

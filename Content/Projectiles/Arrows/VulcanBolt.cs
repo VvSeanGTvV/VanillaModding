@@ -6,8 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Content.Projectiles.Tizona;
 
 namespace VanillaModding.Content.Projectiles.Arrows
 {
@@ -84,8 +86,54 @@ namespace VanillaModding.Content.Projectiles.Arrows
             Projectile.knockBack = 8f;
         }
 
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (Main.rand.NextBool(4) && !target.HasBuff(BuffID.Bleeding)) target.AddBuff(BuffID.Bleeding, 220);
+            OnHitEntity(target);
+        }
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
+        {
+            if (info.PvP)
+            {
+                if (Main.rand.NextBool(4) && !target.HasBuff(BuffID.Bleeding)) target.AddBuff(BuffID.Bleeding, 220);
+                OnHitEntity(target);
+            }
+        }
+
+        public void OnHitEntity(Entity target)
+        {
+            Vector2 velocity = Vector2.Normalize(target.Center - Projectile.Center) * 10f;
+            if (Main.myPlayer == Projectile.owner) explodeBulb(target);
+        }
+
+        private void explodeBulb(Entity target)
+        {
+            var position = Projectile.position;
+            var speedX = Projectile.velocity.X;
+            var speedY = Projectile.velocity.Y;
+            float speedMul = 1.5f;
+            float numberProjectiles = 5; // 3 shots
+            float rotation = MathHelper.ToRadians(45);//Shoots them in a 45 degree radius. (This is technically 90 degrees because it's 45 degrees up from your cursor and 45 degrees down)
+            position += Vector2.Normalize(new Vector2(speedX, speedY)) * 45f; //45 should equal whatever number you had on the previous line
+            var enS = Projectile.GetSource_FromThis();
+            for (int i = 0; i < numberProjectiles; i++)
+            {
+                Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedBy(MathHelper.Lerp(-rotation, rotation, i / (numberProjectiles - 1))) * .2f; // Vector for spread. Watch out for dividing by 0 if there is only 1 projectile.
+                Projectile.NewProjectile(enS, position, perturbedSpeed * speedMul, ModContent.ProjectileType<DeadlyBulb>(), (int)(Projectile.damage / numberProjectiles), Projectile.knockBack, Projectile.owner, target.whoAmI); //Creates a new projectile with our new vector for spread.
+
+            }
+        }
+
         public override void OnKill(int timeLeft)
         {
+            if (Projectile.owner == Main.myPlayer && (int)Projectile.ai[1] != Type)
+            {
+                int stored = Projectile.NewProjectile(Projectile.GetSource_Death(), Projectile.Center, Projectile.velocity, (int)Projectile.ai[1], 1, 0, Projectile.owner);
+                Main.projectile[stored].DamageType = DamageClass.Ranged;
+                Main.projectile[stored].timeLeft = 2;
+            }
+            
             // Play an exploding sound.
             SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
 

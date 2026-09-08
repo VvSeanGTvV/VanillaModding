@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria;
 
-namespace VanillaModding.Content.Tiles
+namespace VanillaModding.Content.Tiles.Furniture
 {
     internal class OcramTrophy : ModTile
     {

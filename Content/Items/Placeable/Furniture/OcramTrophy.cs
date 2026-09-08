@@ -7,14 +7,14 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
 
-namespace VanillaModding.Content.Items.Placeable
+namespace VanillaModding.Content.Items.Placeable.Furniture
 {
     internal class OcramTrophy : ModItem
     {
         public override void SetDefaults()
         {
             // Vanilla has many useful methods like these, use them! This substitutes setting Item.createTile and Item.placeStyle as well as setting a few values that are common across all placeable items
-            Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.OcramTrophy>());
+            Item.DefaultToPlaceableTile(ModContent.TileType<Content.Tiles.Furniture.OcramTrophy>());
 
             Item.width = 32;
             Item.height = 32;

@@ -49,7 +49,8 @@ namespace VanillaModding.Content.Items.Weapon.Ranged
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
             float adjustedItemScale = player.GetAdjustedItemScale(Item);
-            Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<BoringArrow>(), damage, knockback, player.whoAmI, type);
+            for (int i = -1; i < 1; i++)
+                Projectile.NewProjectile(source, position + new Vector2(Math.Abs(i * 4), i * 14), velocity, ModContent.ProjectileType<BoringArrow>(), damage, knockback, player.whoAmI, type);
 
             return false;
         }

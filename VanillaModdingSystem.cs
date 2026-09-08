@@ -194,7 +194,10 @@ namespace VanillaModding
                     recipe.AddIngredient<ShinyBlackSlab>();
                 }
 
-                
+                if (recipe.HasResult(ItemID.Zenith))
+                {
+                    recipe.AddIngredient<Tizona>();
+                }
             }
         }
 
