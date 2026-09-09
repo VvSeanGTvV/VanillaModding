@@ -30,7 +30,7 @@ namespace VanillaModding.Content.Items.Consumable.BossSummon
             Item.height = 18;
             Item.maxStack = Item.CommonMaxStack;
             Item.value = 100;
-            Item.rare = ItemRarityID.Blue;
+            Item.rare = ItemRarityID.Pink;
             Item.useAnimation = 30;
             Item.useTime = 30;
             Item.useStyle = ItemUseStyleID.HoldUp;
@@ -73,25 +73,29 @@ namespace VanillaModding.Content.Items.Consumable.BossSummon
 
         public override void AddRecipes()
         {
-            Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.MechanicalSkull, 1);
-            recipe.AddIngredient(ItemID.AdamantiteBar, 10);
-            recipe.AddIngredient(ItemID.MechanicalEye, 2);
-            recipe.AddIngredient(ItemID.SoulofNight, 5);
-            recipe.AddIngredient(ItemID.SoulofLight, 5);
-            //recipe.AddIngredient(ModContent.ItemType<LobotomyThrowable>(), 1);
-            recipe.AddTile(TileID.MythrilAnvil);
-            recipe.Register();
+            CreateRecipe()
+                .AddIngredient(ItemID.AdamantiteBar, 10)
+                .AddIngredient(ItemID.Bone, 15)
+                .AddIngredient(ItemID.SoulofFright, 5)
+                .AddIngredient(ItemID.SoulofMight, 5)
+                .AddIngredient(ItemID.SoulofSight, 5)
+                .AddIngredient(ItemID.SoulofNight, 5)
+                .AddIngredient(ItemID.SoulofLight, 5)
+                .AddTile(TileID.MythrilAnvil)
+                .SortAfterFirstRecipesOf(ItemID.MechanicalSkull)
+                .Register();
 
-            Recipe recipe2 = CreateRecipe();
-            recipe2.AddIngredient(ItemID.MechanicalSkull, 1);
-            recipe2.AddIngredient(ItemID.TitaniumBar, 10);
-            recipe2.AddIngredient(ItemID.MechanicalEye, 2);
-            recipe2.AddIngredient(ItemID.SoulofNight, 5);
-            recipe2.AddIngredient(ItemID.SoulofLight, 5);
-            //recipe.AddIngredient(ModContent.ItemType<LobotomyThrowable>(), 1);
-            recipe2.AddTile(TileID.MythrilAnvil);
-            recipe2.Register();
+            CreateRecipe()
+                .AddIngredient(ItemID.TitaniumBar, 10)
+                .AddIngredient(ItemID.Bone, 15)
+                .AddIngredient(ItemID.SoulofFright, 5)
+                .AddIngredient(ItemID.SoulofMight, 5)
+                .AddIngredient(ItemID.SoulofSight, 5)
+                .AddIngredient(ItemID.SoulofNight, 5)
+                .AddIngredient(ItemID.SoulofLight, 5)
+                .AddTile(TileID.MythrilAnvil)
+                .SortAfterFirstRecipesOf(ItemID.MechanicalSkull)
+                .Register();
         }
     }
 }

@@ -10,11 +10,11 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ModLoader;
 
-namespace VanillaModding.Common.UI.ResourceOverlay.DiamondHeart
+namespace VanillaModding.Common.UI.ResourceOverlay.EctoHeart
 {
-    internal class DiamondHeartOverlay : ModResourceOverlay
+    internal class EctoHeartOverlay : ModResourceOverlay
     {
-        string whereHeart = "VanillaModding/Common/UI/ResourceOverlay/DiamondHeart";
+        string whereHeart = "VanillaModding/Common/UI/ResourceOverlay/EctoHeart";
         // This field is used to cache vanilla assets used in the CompareAssets helper method further down in this file
         private Dictionary<string, Asset<Texture2D>> vanillaAssetCache = new();
 
@@ -30,7 +30,7 @@ namespace VanillaModding.Common.UI.ResourceOverlay.DiamondHeart
 
             bool drawingBarsPanels = CompareAssets(asset, barsFolder + "HP_Panel_Middle");
 
-            int exampleFruits = Main.LocalPlayer.GetModPlayer<VanillaModdingPlayer>().DiamondHeart;
+            int exampleFruits = Main.LocalPlayer.GetModPlayer<VanillaModdingPlayer>().EctoHeart;
 
             // Life resources are drawn over in groups of two
             if (context.resourceNumber >= 1 * exampleFruits)

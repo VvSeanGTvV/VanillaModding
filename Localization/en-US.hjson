@@ -149,26 +149,6 @@ Mods: {
 				Tooltip: Summons an Mini Dune Trapper minion to fight for you
 			}
 
-			HeartCanister: {
-				DisplayName: Heart Canister (Legacy)
-				Tooltip: Increases maximum life by {0} (this is not useful anymore).
-			}
-
-			DiamondCanister: {
-				DisplayName: Diamond Heart Canister (Legacy)
-				Tooltip: Increases maximum life by {0} (this is not useful anymore).
-			}
-
-			MythrilCanister: {
-				DisplayName: Mythril Life Canister
-				Tooltip: Permanently increases maximum life by {0}
-			}
-
-			OrichalcumCanister: {
-				DisplayName: Orichalcum Life Canister
-				Tooltip: Permanently increases maximum life by {0}
-			}
-
 			LuminiteHeart: {
 				DisplayName: Lunar Life Crystal
 				Tooltip: Permanently increases maximum life by {0}
@@ -222,7 +202,7 @@ Mods: {
 
 			VulcanRepeater: {
 				DisplayName: Vulcan Repeater
-				Tooltip: Transform any arrows into a stored vulcan arrow, that carry attributes of the original ammo
+				Tooltip: Transform any arrows into a stored vulcan explosive arrow, that carry attributes of the original ammo
 			}
 
 			BoringBow: {
@@ -586,6 +566,16 @@ Mods: {
 				DisplayName: Ocram Relic
 				Tooltip: ""
 			}
+
+			HallowedCanister: {
+				DisplayName: Spectral Life Canister
+				Tooltip: Permanently increases maximum life by {0}
+			}
+
+			EggCannon: {
+				DisplayName: Egg Cannon
+				Tooltip: ""
+			}
 		}
 
 		NPCs: {
@@ -705,6 +695,7 @@ Mods: {
 			SpectrePaladinHammerEcho.DisplayName: Spectre Paladin Hammer
 			MightyScytheOLD_PROJ.DisplayName: Mighty Scythe O L D_ P R O J
 			DirtiestExplode.DisplayName: Dirtiest Explode
+			EasterEgg.DisplayName: Easter Egg
 		}
 
 		Prefixes: {

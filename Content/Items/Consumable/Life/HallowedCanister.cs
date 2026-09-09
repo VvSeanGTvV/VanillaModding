@@ -1,18 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using VanillaModding.Common;
+using VanillaModding.Content.Items.Materials;
 
 namespace VanillaModding.Content.Items.Consumable.Life
 {
-    internal class MythrilCanister : ModItem
+    internal class HallowedCanister : ModItem
     {
         public static readonly int LifePerFruit = 10;
 
@@ -28,8 +24,7 @@ namespace VanillaModding.Content.Items.Consumable.Life
             int width = 30; int height = 18;
             Item.Size = new Vector2(width, height);
 
-            Item.useTime = Item.useAnimation = 17;
-            //Item.holdStyle = ItemHoldStyleID.HoldFront;
+            Item.useTime = Item.useAnimation = 30;
             Item.useTurn = true;
             Item.maxStack = Item.CommonMaxStack;
 
@@ -37,35 +32,28 @@ namespace VanillaModding.Content.Items.Consumable.Life
             Item.consumable = true;
             Item.noMelee = true;
 
-            Item.value = Item.sellPrice(gold: 2, silver: 80);
-            Item.rare = ItemRarityID.LightRed;
-            //Item.expert = true;
-
-            Item.UseSound = SoundID.Item2;
-            //Item.CloneDefaults(ItemID.LifeFruit);
+            Item.value = Item.sellPrice(gold: 5, silver: 80);
+            Item.rare = ItemRarityID.Yellow;
+            Item.UseSound = SoundID.Item4;
         }
 
         public override bool CanUseItem(Player player)
         {
             // This check prevents this item from being used before vanilla health upgrades are maxed out.
-            return player.ConsumedLifeCrystals == Player.LifeCrystalMax && player.ConsumedLifeFruit == Player.LifeFruitMax;
+            return player.ConsumedLifeCrystals >= Player.LifeCrystalMax && player.ConsumedLifeFruit >= Player.LifeFruitMax;
         }
 
         public override bool? UseItem(Player player)
         {
             // Moving the exampleLifeFruits check from CanUseItem to here allows this example fruit to still "be used" like Life Fruit can be
             // when at the max allowed, but it will just play the animation and not affect the player's max life
-            if (player.GetModPlayer<VanillaModdingPlayer>().DiamondHeart >= player.GetModPlayer<VanillaModdingPlayer>().MaxDiamondHeart)
+            if (player.GetModPlayer<VanillaModdingPlayer>().EctoHeart >= player.GetModPlayer<VanillaModdingPlayer>().MaxEctoHeart)
             {
                 // Returning null will make the item not be consumed
                 return null;
             }
-
-            // This method handles permanently increasing the player's max health and displaying the green heal text
             player.UseHealthMaxIncreasingItem(LifePerFruit);
-
-            // This field tracks how many of the example fruit have been consumed
-            player.GetModPlayer<VanillaModdingPlayer>().DiamondHeart++;
+            player.GetModPlayer<VanillaModdingPlayer>().EctoHeart++;
 
             return true;
         }
@@ -74,9 +62,10 @@ namespace VanillaModding.Content.Items.Consumable.Life
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.MythrilBar, 10)
-                .AddIngredient(ItemID.Diamond, 1)
-                .AddIngredient(ItemID.LifeCrystal, 1)
+                .AddIngredient(ItemID.LifeFruit, 1)
+                .AddIngredient(ItemID.HallowedBar, 10)
+                .AddIngredient(ItemID.Ectoplasm, 5)
+                .AddIngredient<SoulofUnity>(5)
                 .AddTile(TileID.MythrilAnvil)
                 .Register();
         }

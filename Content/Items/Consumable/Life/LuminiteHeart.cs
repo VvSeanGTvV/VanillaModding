@@ -44,8 +44,8 @@ namespace VanillaModding.Content.Items.Consumable.Life
         public override bool CanUseItem(Player player)
         {
             // This check prevents this item from being used before vanilla health upgrades are maxed out.
-            return player.ConsumedLifeCrystals == Player.LifeCrystalMax && player.ConsumedLifeFruit == Player.LifeFruitMax 
-                && player.GetModPlayer<VanillaModdingPlayer>().DiamondHeart >= player.GetModPlayer<VanillaModdingPlayer>().MaxDiamondHeart;
+            return player.ConsumedLifeCrystals >= Player.LifeCrystalMax && player.ConsumedLifeFruit >= Player.LifeFruitMax 
+                && player.GetModPlayer<VanillaModdingPlayer>().EctoHeart >= player.GetModPlayer<VanillaModdingPlayer>().MaxEctoHeart;
         }
 
         public override bool? UseItem(Player player)

@@ -113,7 +113,7 @@ namespace VanillaModding.Content.Projectiles.Arrows
             var speedX = Projectile.velocity.X;
             var speedY = Projectile.velocity.Y;
             float speedMul = 1.5f;
-            float numberProjectiles = 5; // 3 shots
+            float numberProjectiles = 2; // 3 shots
             float rotation = MathHelper.ToRadians(45);//Shoots them in a 45 degree radius. (This is technically 90 degrees because it's 45 degrees up from your cursor and 45 degrees down)
             position += Vector2.Normalize(new Vector2(speedX, speedY)) * 45f; //45 should equal whatever number you had on the previous line
             var enS = Projectile.GetSource_FromThis();

@@ -26,7 +26,7 @@ namespace VanillaModding.Common
         private int clickbufferIndex = 0;
 
         // This is Life/Mana modification related thing.
-        public int DiamondHeart, MaxDiamondHeart = 20;
+        public int EctoHeart, MaxEctoHeart = 20;
         public int LunarHeart, MaxLunarHeart = 20;
 
         // Held Item of prefix and class
@@ -187,8 +187,8 @@ namespace VanillaModding.Common
         public override void ModifyMaxStats(out StatModifier health, out StatModifier mana)
         {
             health = StatModifier.Default with { 
-                Base = 
-                DiamondHeart * Content.Items.Consumable.Life.MythrilCanister.LifePerFruit + 
+                Base =
+                EctoHeart * Content.Items.Consumable.Life.HallowedCanister.LifePerFruit + 
                 LunarHeart * Content.Items.Consumable.Life.LuminiteHeart.LifePerFruit 
             };
 
@@ -422,7 +422,7 @@ namespace VanillaModding.Common
             ModPacket packet = Mod.GetPacket();
             packet.Write((byte)VanillaModding.MessageType.VMTStatIncreasePlayerSync);
             packet.Write((byte)Player.whoAmI);
-            packet.Write((byte)DiamondHeart);
+            packet.Write((byte)EctoHeart);
             packet.Write((byte)LunarHeart);
             //packet.Write((byte)exampleManaCrystals);
             packet.Send(toWho, fromWho);
@@ -431,7 +431,7 @@ namespace VanillaModding.Common
         // Called in ExampleMod.Networking.cs
         public void ReceivePlayerSync(BinaryReader reader)
         {
-            DiamondHeart = reader.ReadByte();
+            EctoHeart = reader.ReadByte();
             LunarHeart = reader.ReadByte();
             //exampleManaCrystals = reader.ReadByte();
         }
@@ -439,7 +439,7 @@ namespace VanillaModding.Common
         public override void CopyClientState(ModPlayer targetCopy)
         {
             VanillaModdingPlayer clone = (VanillaModdingPlayer)targetCopy;
-            clone.DiamondHeart = DiamondHeart;
+            clone.EctoHeart = EctoHeart;
             clone.LunarHeart = LunarHeart;
             //clone.exampleManaCrystals = exampleManaCrystals;
         }
@@ -448,7 +448,7 @@ namespace VanillaModding.Common
         {
             VanillaModdingPlayer clone = (VanillaModdingPlayer)clientPlayer;
 
-            if (DiamondHeart != clone.DiamondHeart || LunarHeart != clone.LunarHeart)
+            if (EctoHeart != clone.EctoHeart || LunarHeart != clone.LunarHeart)
             {
                 // This example calls SyncPlayer to send all the data for this ModPlayer when any change is detected, but if you are dealing with a large amount of data you should try to be more efficient and use custom packets to selectively send only specific data that has changed.
                 SyncPlayer(toWho: -1, fromWho: Main.myPlayer, newPlayer: false);
@@ -457,13 +457,13 @@ namespace VanillaModding.Common
 
         public override void SaveData(TagCompound tag)
         {
-            tag["diamondHeart"] = DiamondHeart;
+            tag["ectoHeart"] = EctoHeart;
             tag["lunarHeart"] = LunarHeart;
         }
 
         public override void LoadData(TagCompound tag)
         {
-            DiamondHeart = tag.GetInt("diamondHeart");
+            EctoHeart = tag.GetInt("ectoHeart");
             LunarHeart = tag.GetInt("lunarHeart");
         }
     }

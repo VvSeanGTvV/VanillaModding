@@ -21,9 +21,9 @@ namespace VanillaModding.Content.Items.Consumable.Healing
             Item.holdStyle = ItemHoldStyleID.HoldFront;
             Item.useTurn = true;
 
-            Item.healLife = 75;
+            Item.healLife = 45;
             Item.potion = true;
-            Item.potionDelay = 2100;
+            Item.potionDelay = 60*10;
             Item.maxStack = Item.CommonMaxStack;
 
             Item.useStyle = ItemUseStyleID.EatFood;
@@ -35,6 +35,12 @@ namespace VanillaModding.Content.Items.Consumable.Healing
             //Item.expert = true;
 
             Item.UseSound = SoundID.Item2;
+        }
+
+        public override bool? UseItem(Player player)
+        {
+            player.AddBuff(BuffID.WellFed, 60*(60*6)); // 10 minutes of Well Fed buff
+            return base.UseItem(player);
         }
     }
 }
