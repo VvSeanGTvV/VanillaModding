@@ -39,6 +39,7 @@ namespace VanillaModding.Content.Items.Armor.Vanity
             ArmorIDs.Body.Sets.HidesArms[Item.bodySlot] = true;
             //ArmorIDs.Body.Sets.HidesBottomSkin[Item.bodySlot] = true;
             ArmorIDs.Body.Sets.HidesTopSkin[Item.bodySlot] = true;
+            Item.ResearchUnlockCount = 1;
         }
     }
 }

@@ -14,6 +14,10 @@ namespace VanillaModding.Content.Items.Accessories
 {
     internal class AdrenalinePen : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.Size = new Vector2(8, 24);

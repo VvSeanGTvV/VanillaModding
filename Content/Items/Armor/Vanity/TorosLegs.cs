@@ -36,6 +36,7 @@ namespace VanillaModding.Content.Items.Armor.Vanity
         {
             // HidesHands defaults to true which we don't want.
             ArmorIDs.Legs.Sets.HidesBottomSkin[Item.legSlot] = true;
+            Item.ResearchUnlockCount = 1;
         }
     }
 }

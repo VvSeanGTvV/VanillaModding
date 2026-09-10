@@ -10,6 +10,10 @@ namespace VanillaModding.Content.Items.Weapon.Melee.Hammer
 {
     internal class SpectrePaladinHammer : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.width = 52;

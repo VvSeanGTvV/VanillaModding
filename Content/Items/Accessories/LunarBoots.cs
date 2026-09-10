@@ -14,6 +14,10 @@ namespace VanillaModding.Content.Items.Accessories
         public int lavaMax = 420;
         public override LocalizedText Tooltip => base.Tooltip.WithFormatArgs(speedBoost*100, lavaMax / 60);
 
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.width = 36;

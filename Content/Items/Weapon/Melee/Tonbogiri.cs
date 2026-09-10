@@ -5,6 +5,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Common.Systems;
 using VanillaModding.Content.Items.Materials;
 using VanillaModding.Content.Projectiles.Tonbogiri;
 
@@ -44,19 +45,12 @@ namespace VanillaModding.Content.Items.Weapon.Melee
 
         public override void AddRecipes()
         {
-            Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.AdamantiteBar, 15);
-            recipe.AddIngredient(ModContent.ItemType<SoulofBlight>(), 15);
-            recipe.AddIngredient(ItemID.Gungnir, 1);
-            recipe.AddTile(TileID.MythrilAnvil);
-            recipe.Register();
-
-            Recipe recipe1 = CreateRecipe();
-            recipe1.AddIngredient(ItemID.TitaniumBar, 15);
-            recipe1.AddIngredient(ModContent.ItemType<SoulofBlight>(), 15);
-            recipe1.AddIngredient(ItemID.Gungnir, 1);
-            recipe1.AddTile(TileID.MythrilAnvil);
-            recipe1.Register();
+            CreateRecipe()
+                .AddRecipeGroup(VanillaModdingRecipeGroupID.AnyAdamantiteBar, 15)
+                .AddIngredient(ModContent.ItemType<SoulofBlight>(), 15)
+                .AddIngredient(ItemID.Gungnir, 1)
+                .AddTile(TileID.MythrilAnvil)
+                .Register();
         }
 
         public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)

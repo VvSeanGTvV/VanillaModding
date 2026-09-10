@@ -14,6 +14,11 @@ namespace VanillaModding.Content.Items.Weapon.Ranged
 {
     internal class Sharanga : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
+
         public override void SetDefaults()
         {
             // Common Properties
@@ -48,7 +53,7 @@ namespace VanillaModding.Content.Items.Weapon.Ranged
         {
             Recipe recipe1 = CreateRecipe();
             recipe1.AddIngredient(ItemID.MoltenFury, 1);
-            recipe1.AddIngredient(ItemID.ShroomiteBar,35);
+            recipe1.AddIngredient(ItemID.ShroomiteBar, 5);
             recipe1.AddTile(TileID.Anvils);
             recipe1.Register();
         }

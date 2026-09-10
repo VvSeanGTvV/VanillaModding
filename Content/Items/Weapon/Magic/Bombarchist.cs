@@ -17,6 +17,10 @@ namespace VanillaModding.Content.Items.Weapon.Magic
 {
     internal class Bombarchist : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.width = 28;

@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Common.Systems;
 using VanillaModding.Content.Items.Materials;
 using VanillaModding.Content.Projectiles.Tizona;
 using static System.Net.Mime.MediaTypeNames;
@@ -39,19 +40,11 @@ namespace VanillaModding.Content.Items.Weapon.Melee
 
         public override void AddRecipes()
         {
-            Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.AdamantiteBar, 15);
-            recipe.AddIngredient(ModContent.ItemType<SoulofBlight>(), 15);
-            recipe.AddIngredient(ItemID.Excalibur, 1);
-            recipe.AddTile(TileID.MythrilAnvil);
-            recipe.Register();
-
-            Recipe recipe1 = CreateRecipe();
-            recipe1.AddIngredient(ItemID.TitaniumBar, 15);
-            recipe1.AddIngredient(ModContent.ItemType<SoulofBlight>(), 15);
-            recipe1.AddIngredient(ItemID.Excalibur, 1);
-            recipe1.AddTile(TileID.MythrilAnvil);
-            recipe1.Register();
+            CreateRecipe()
+                .AddRecipeGroup(VanillaModdingRecipeGroupID.AnyAdamantiteBar, 15)
+                .AddIngredient(ItemID.Excalibur, 1)
+                .AddTile(TileID.MythrilAnvil)
+                .Register();
         }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)

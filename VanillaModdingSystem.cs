@@ -9,6 +9,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.Utilities;
+using VanillaModding.Common.Systems;
 using VanillaModding.Content.Items.Accessories;
 using VanillaModding.Content.Items.Consumable.Healing;
 using VanillaModding.Content.Items.Pets;
@@ -21,6 +22,9 @@ namespace VanillaModding
     {
         // LOCALIZED TEXT
         public static LocalizedText Priceless { get; private set; }
+
+        // RECIPE GROUPS
+        public static RecipeGroup SilverBarRecipeGroup;
 
         public static float Zoom = 1;
         public static int DiscoR;
@@ -326,7 +330,7 @@ namespace VanillaModding
 
         public override void AddRecipeGroups() //uh
         {
-
+            VanillaModdingRecipeGroupID.RegisterRecipeGroups();
         }
     }
 }

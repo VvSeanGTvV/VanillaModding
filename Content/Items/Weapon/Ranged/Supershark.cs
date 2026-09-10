@@ -16,6 +16,11 @@ namespace VanillaModding.Content.Items.Weapon.Ranged
 {
     internal class Supershark : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
+
         public override void SetDefaults()
         {
             // Common Properties

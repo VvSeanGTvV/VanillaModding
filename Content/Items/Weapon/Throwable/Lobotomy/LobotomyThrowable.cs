@@ -12,7 +12,7 @@ namespace VanillaModding.Content.Items.Weapon.Throwable.Lobotomy
         public override void SetStaticDefaults()
         {
             //ItemID.Sets.ItemsThatCountAsBombsForDemolitionistToSpawn[Type] = true;
-            Item.ResearchUnlockCount = 5;
+            Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()

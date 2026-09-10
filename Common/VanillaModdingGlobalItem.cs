@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
@@ -11,7 +9,7 @@ using Terraria.ModLoader;
 using VanillaModding.Content.Items.Accessories;
 using VanillaModding.Content.Items.Accessories.Book;
 using VanillaModding.Content.Items.Weapon.Melee;
-using VanillaModding.Content.Rarities;
+using VanillaModding.Content.Items.Weapon.Throwable;
 
 namespace VanillaModding.Common
 {
@@ -29,6 +27,15 @@ namespace VanillaModding.Common
                 sellPrice.Text = VanillaModdingSystem.Priceless.Value;
             }
         }
+
+        public override void SetDefaults(Item entity)
+        {
+            if (entity.type == ItemID.RottenEgg)
+            {
+                entity.ammo = ModContent.ItemType<Egg>();
+            }
+        }
+
         bool ItemExistInArmor(Player player, int slot, int item, bool ignoreSocialAccessory = true)
         {
             /*for (int i = 0; i < player.armor.Length; i++)

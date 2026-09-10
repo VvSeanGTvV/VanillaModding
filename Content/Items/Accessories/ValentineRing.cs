@@ -14,6 +14,10 @@ namespace VanillaModding.Content.Items.Accessories
     [AutoloadEquip(EquipType.HandsOn)]
     internal class ValentineRing : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             int width = 28; int height = 20;

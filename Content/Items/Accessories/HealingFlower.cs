@@ -13,6 +13,10 @@ namespace VanillaModding.Content.Items.Accessories
     [AutoloadEquip(EquipType.Waist)]
     internal class HealingFlower : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             Item.width = 20;

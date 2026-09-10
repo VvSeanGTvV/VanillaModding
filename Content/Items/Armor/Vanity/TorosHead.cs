@@ -36,6 +36,7 @@ namespace VanillaModding.Content.Items.Armor.Vanity
         {
             // HidesHands defaults to true which we don't want.
             ArmorIDs.Head.Sets.DrawHead[Item.headSlot] = false;
+            Item.ResearchUnlockCount = 1;
         }
     }
 }

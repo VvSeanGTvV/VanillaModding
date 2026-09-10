@@ -7,6 +7,10 @@ namespace VanillaModding.Content.Items.Weapon.Throwable.Redfish
 {
     internal class RedFish : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 99;
+        }
         public override void SetDefaults()
         {
             Item.useStyle = ItemUseStyleID.Swing;

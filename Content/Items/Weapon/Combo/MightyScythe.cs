@@ -18,12 +18,11 @@ namespace VanillaModding.Content.Items.Weapon.Combo
 {
     public class MightyScythe : ModItem
     {
-        public static short glowMask;
         public override void SetStaticDefaults()
         {
+            Item.ResearchUnlockCount = 1;
             VanillaModdingSystem.Sickle[Type] = new VanillaModdingSystem.SickleData(true, 2, 4, 4, 6);
         }
-
 
         // just a method to consolidate the default stats of the item, so we can easily switch between the two modes
         public void SetDefaultStats()

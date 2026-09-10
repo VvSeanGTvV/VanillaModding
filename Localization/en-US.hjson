@@ -574,7 +574,17 @@ Mods: {
 
 			EggCannon: {
 				DisplayName: Egg Cannon
-				Tooltip: ""
+				Tooltip: Shoots eggs
+			}
+
+			Egg: {
+				DisplayName: Egg
+				Tooltip: Best used to cook some
+			}
+
+			FlintlockRifle: {
+				DisplayName: Flintlock Rifle
+				Tooltip: "'Marksman's Otherworld Rifle'"
 			}
 		}
 
@@ -696,6 +706,8 @@ Mods: {
 			MightyScytheOLD_PROJ.DisplayName: Mighty Scythe O L D_ P R O J
 			DirtiestExplode.DisplayName: Dirtiest Explode
 			EasterEgg.DisplayName: Easter Egg
+			Egg.DisplayName: Egg
+			EggEgg.DisplayName: Egg Egg
 		}
 
 		Prefixes: {

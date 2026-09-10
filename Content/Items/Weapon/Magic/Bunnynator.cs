@@ -14,6 +14,10 @@ namespace VanillaModding.Content.Items.Weapon.Magic
 {
     internal class Bunnynator : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
         public override void SetDefaults()
         {
             // Common Properties

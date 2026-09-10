@@ -17,6 +17,11 @@ namespace VanillaModding.Content.Items.Weapon.Ranged
 {
     internal class BoringBow : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
+
         public override void SetDefaults()
         {
             // Common Properties

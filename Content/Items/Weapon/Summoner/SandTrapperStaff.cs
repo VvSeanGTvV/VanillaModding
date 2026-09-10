@@ -10,7 +10,6 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Content.Projectiles.DuneTrapper;
 using VanillaModding.Content.Pets.SandTrapperPet;
-using static Humanizer.In;
 
 namespace VanillaModding.Content.Items.Weapon.Summoner
 {
@@ -42,6 +41,7 @@ namespace VanillaModding.Content.Items.Weapon.Summoner
 
         public override void SetStaticDefaults()
         {
+            Item.ResearchUnlockCount = 1;
             ItemID.Sets.GamepadWholeScreenUseRange[Item.type] = true; // This lets the player target anywhere on the whole screen while using a controller
             ItemID.Sets.LockOnIgnoresCollision[Item.type] = true;
 

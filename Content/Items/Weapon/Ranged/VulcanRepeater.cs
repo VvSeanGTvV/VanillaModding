@@ -4,17 +4,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Terraria.DataStructures;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
-using VanillaModding.Content.Projectiles.Arrows;
+using VanillaModding.Common.Systems;
 using VanillaModding.Content.Items.Materials;
+using VanillaModding.Content.Projectiles.Arrows;
 
 namespace VanillaModding.Content.Items.Weapon.Ranged
 {
     internal class VulcanRepeater : ModItem
     {
+        public override void SetStaticDefaults()
+        {
+            Item.ResearchUnlockCount = 1;
+        }
+
         public override void SetDefaults()
         {
             // Common Properties
@@ -47,14 +53,7 @@ namespace VanillaModding.Content.Items.Weapon.Ranged
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.AdamantiteBar, 15)
-                .AddIngredient(ModContent.ItemType<SoulofBlight>(), 15)
-                .AddIngredient(ItemID.HallowedRepeater, 1)
-                .AddTile(TileID.MythrilAnvil)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.TitaniumBar, 15)
+                .AddRecipeGroup(VanillaModdingRecipeGroupID.AnyAdamantiteBar, 15)
                 .AddIngredient(ModContent.ItemType<SoulofBlight>(), 15)
                 .AddIngredient(ItemID.HallowedRepeater, 1)
                 .AddTile(TileID.MythrilAnvil)

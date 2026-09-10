@@ -20,7 +20,7 @@ namespace VanillaModding.Content.Items.Materials.Bars
             Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(5, 9));
             ItemID.Sets.AnimatesAsSoul[Item.type] = true; // Makes the item have an animation while in world (not held.). Use in combination with RegisterItemAnimation
 
-            Item.ResearchUnlockCount = 25; // Configure the amount of this item that's needed to research it in Journey mode.
+            Item.ResearchUnlockCount = 100; // Configure the amount of this item that's needed to research it in Journey mode.
             ItemID.Sets.SortingPriorityMaterials[Type] = 59;
             ItemID.Sets.ItemNoGravity[Item.type] = true; // Makes the item have no gravity
         }
