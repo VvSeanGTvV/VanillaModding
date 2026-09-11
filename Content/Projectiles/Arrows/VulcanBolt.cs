@@ -6,15 +6,18 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.GameContent.Drawing;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Content.Items.Ammo;
 using VanillaModding.Content.Projectiles.Tizona;
 
 namespace VanillaModding.Content.Projectiles.Arrows
 {
     internal class VulcanBolt : ModProjectile
     {
+        public override string Texture => ($"{nameof(VanillaModding)}/{TextureAssets.Item[ModContent.ItemType<VulcanBolt_Ammo>()].Name}").Replace(@"\", "/");
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.IsAMineThatDealsTripleDamageWhenStationary[Type] = true; // Deal triple damage when not moving and "armed".

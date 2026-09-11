@@ -5,13 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Content.Items.Ammo;
 
 namespace VanillaModding.Content.Projectiles.Arrows
 {
     internal class SpectralArrow : ModProjectile
     {
+        public override string Texture => ($"{nameof(VanillaModding)}/{TextureAssets.Item[ModContent.ItemType<SpectralArrow_Ammo>()].Name}").Replace(@"\", "/");
         public override void SetDefaults()
         {
             Projectile.width = 10; // The width of projectile hitbox

@@ -1,15 +1,17 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Terraria.Audio;
-using Terraria.ID;
 using Terraria;
+using Terraria.Audio;
+using Terraria.GameContent;
+using Terraria.ID;
 using Terraria.ModLoader;
-using Microsoft.Xna.Framework;
-using VanillaModding.Content.NPCs.DuneTrapper;
 using VanillaModding.Common.Systems;
+using VanillaModding.Content.Items.Bombs;
+using VanillaModding.Content.NPCs.DuneTrapper;
 
 namespace VanillaModding.Content.Projectiles.Bombs
 {
@@ -17,6 +19,7 @@ namespace VanillaModding.Content.Projectiles.Bombs
     {
         private const int DefaultWidthHeight = 26;
         private const int ExplosionWidthHeight = 250;
+        public override string Texture => ($"{nameof(VanillaModding)}/{TextureAssets.Item[ModContent.ItemType<HolyHandGrenade>()].Name}").Replace(@"\", "/");
 
         public override void SetDefaults()
         {

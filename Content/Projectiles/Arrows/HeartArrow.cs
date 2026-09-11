@@ -6,14 +6,18 @@ using System.Text;
 using System.Threading.Tasks;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using VanillaModding.Content.Buffs;
+using VanillaModding.Content.Items.Ammo;
+using VanillaModding.Content.Items.Bombs;
 
 namespace VanillaModding.Content.Projectiles.Arrows
 {
     internal class HeartArrow : ModProjectile
     {
+        public override string Texture => ($"{nameof(VanillaModding)}/{TextureAssets.Item[ModContent.ItemType<HeartArrow_Ammo>()].Name}").Replace(@"\", "/");
         public override void SetDefaults()
         {
             Projectile.width = 10; // The width of projectile hitbox
