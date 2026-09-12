@@ -116,7 +116,7 @@ namespace VanillaModding.Content.Projectiles.FishProjectile
                 target.velocity.X += Projectile.spriteDirection * 50f * (1f - target.knockBackResist);
             }
             Dust.NewDustDirect(Owner.position - new Vector2(142 / 2, Owner.height), 1, 1, ModContent.DustType<SMASH>());
-            SoundEngine.PlaySound(VanillaModdingSoundID.FishHit, Projectile.position);
+            SoundEngine.PlaySound(VMSoundID.FishHit, Projectile.position);
             base.OnHitNPC(target, hit, damageDone);
         }
 
@@ -124,7 +124,7 @@ namespace VanillaModding.Content.Projectiles.FishProjectile
         {
             target.velocity.Y -= 10f;
             target.velocity.X += Projectile.spriteDirection * 50f;
-            SoundEngine.PlaySound(VanillaModdingSoundID.FishHit, Projectile.position);
+            SoundEngine.PlaySound(VMSoundID.FishHit, Projectile.position);
             Dust.NewDustDirect(Owner.position - new Vector2(142 / 2, Owner.height), 1, 1, ModContent.DustType<SMASH>());
             base.OnHitPlayer(target, info);
         }

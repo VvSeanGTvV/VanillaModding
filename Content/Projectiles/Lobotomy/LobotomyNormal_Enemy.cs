@@ -155,7 +155,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
 
         public override void OnSpawn(IEntitySource data)
         {
-            SoundEngine.PlaySound(VanillaModdingSoundID.FireInTheHoleHigh, Projectile.position);
+            SoundEngine.PlaySound(VMSoundID.FireInTheHoleHigh, Projectile.position);
         }
     }
 }

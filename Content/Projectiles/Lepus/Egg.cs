@@ -8,6 +8,7 @@ using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
+using VanillaModding.Common.Systems;
 
 namespace VanillaModding.Content.Projectiles.Lepus
 {
@@ -38,15 +39,14 @@ namespace VanillaModding.Content.Projectiles.Lepus
             if (Main.rand.NextBool(200)) NPC.NewNPC(Projectile.GetSource_Death(), (int)Projectile.Center.X, (int)Projectile.Center.Y, bird);
             //if (Main.rand.NextBool(200) && WorldGen) NPC.NewNPC(Projectile.GetSource_Death(), (int)Projectile.Center.X, (int)Projectile.Center.Y, NPCID.ExplosiveBunny);
 
-            /*if (Main.netMode != NetmodeID.Server)
+            if (Main.netMode != NetmodeID.Server)
             {
-                int easterEggGoreType = ModContent.Find<ModGore>("CLA/EasterEggGore").Type;
                 for (int i = 0; i < 1; i++)
                 {
-                    Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, new Vector2(Main.rand.Next(-2, 2), -1), easterEggGoreType);
-                    Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, new Vector2(Main.rand.Next(-2, 2), -1), easterEggGoreType);
+                    Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, new Vector2(Main.rand.Next(-2, 2), -1), VMGoreID.EggCrack1);
+                    Gore.NewGore(Projectile.GetSource_Death(), Projectile.position, new Vector2(Main.rand.Next(-2, 2), -1), VMGoreID.EggCrack2);
                 }
-            }*/
+            }
             //SoundEngine.PlaySound(SoundID. { Volume = 0.4f, Pitch = 0.2f, MaxInstances = 0, PitchVariance = 0.1f }, Projectile.position);
         }
     }

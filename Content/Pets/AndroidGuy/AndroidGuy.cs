@@ -94,7 +94,7 @@ namespace VanillaModding.Content.Pets.AndroidGuy
             if (Math.Abs(distance) > 1500f)
             {
                 Projectile.position = player.Center - new Vector2(0, Projectile.height / 2);
-                SoundEngine.PlaySound(VanillaModdingSoundID.MessageSamsung, Projectile.Center);
+                SoundEngine.PlaySound(VMSoundID.MessageSamsung, Projectile.Center);
                 for (int i = 0; i < 20; i++) Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.MagicMirror);
             }
             if (Math.Abs(distanceX) > 50f)

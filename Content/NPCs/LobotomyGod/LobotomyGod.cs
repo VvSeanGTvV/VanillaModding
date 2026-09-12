@@ -52,7 +52,7 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
 
             if (!Main.dedServ)
             {
-                Music = VanillaModdingMusicID.LobotomyGod;
+                Music = VMMusicID.LobotomyGod;
             }
         }
 

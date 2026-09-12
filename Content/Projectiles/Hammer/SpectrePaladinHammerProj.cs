@@ -75,7 +75,7 @@ namespace VanillaModding.Content.Projectiles.Hammer
 
             if (Projectile.timeLeft > 10)
             {
-                SoundEngine.PlaySound(VanillaModdingSoundID.HammerHit with { Pitch = (EmpoweredHammer + 2f) * 0.1f - 0.2f }, Projectile.Center);
+                SoundEngine.PlaySound(VMSoundID.HammerHit with { Pitch = (EmpoweredHammer + 2f) * 0.1f - 0.2f }, Projectile.Center);
                 for (int a = 0; a < 25; a++)
                 {
                     Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.SpectreStaff, Projectile.velocity.X, Projectile.velocity.Y, 100, default, 3f);
@@ -220,7 +220,7 @@ namespace VanillaModding.Content.Projectiles.Hammer
 
         public override bool PreKill(int timeLeft)
         {
-            SoundEngine.PlaySound(VanillaModdingSoundID.HammerBigHit, Projectile.Center);
+            SoundEngine.PlaySound(VMSoundID.HammerBigHit, Projectile.Center);
             int pr = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity * 0.001f, ModContent.ProjectileType<SpectreExplodeHammer>(), Projectile.damage / 2, Projectile.knockBack, Projectile.owner);
             Main.projectile[pr].rotation = Projectile.rotation;
             //SoundEngine.PlaySound(VanillaModdingSoundID.DeathNoteItemAsylum, Projectile.Center);

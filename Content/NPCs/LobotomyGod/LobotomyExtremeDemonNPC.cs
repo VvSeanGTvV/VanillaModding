@@ -94,8 +94,8 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
         public override void OnSpawn(IEntitySource source)
         {
             NPC.localAI[0] = 60 * 6; // Used to track if the spawn sound has been played
-            SoundEngine.PlaySound(VanillaModdingSoundID.ExtremeDemonFire, NPC.position);
-            SoundEngine.PlaySound(VanillaModdingSoundID.ExtremeDemonFire2, NPC.position);
+            SoundEngine.PlaySound(VMSoundID.ExtremeDemonFire, NPC.position);
+            SoundEngine.PlaySound(VMSoundID.ExtremeDemonFire2, NPC.position);
         }
 
         public override void OnKill()

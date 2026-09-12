@@ -86,8 +86,8 @@ namespace VanillaModding.Content.Projectiles.Hammer
                 dust.scale = 2.5f;
             }
 
-            if (HighBong) SoundEngine.PlaySound(VanillaModdingSoundID.HammerHit with { Pitch = 6 * 0.1f - 0.2f }, Projectile.Center);
-            else SoundEngine.PlaySound(VanillaModdingSoundID.HammerHit with { Pitch = (EmpoweredHammer + 2f) * 0.1f - 0.2f }, Projectile.Center);
+            if (HighBong) SoundEngine.PlaySound(VMSoundID.HammerHit with { Pitch = 6 * 0.1f - 0.2f }, Projectile.Center);
+            else SoundEngine.PlaySound(VMSoundID.HammerHit with { Pitch = (EmpoweredHammer + 2f) * 0.1f - 0.2f }, Projectile.Center);
             return false;
         }
 
@@ -237,7 +237,7 @@ namespace VanillaModding.Content.Projectiles.Hammer
                 i++;
             }
 
-            SoundEngine.PlaySound(VanillaModdingSoundID.HammerBigHit, Projectile.Center);
+            SoundEngine.PlaySound(VMSoundID.HammerBigHit, Projectile.Center);
             //SoundEngine.PlaySound(VanillaModdingSoundID.DeathNoteItemAsylum, Projectile.Center);
             return false;
         }

@@ -126,7 +126,7 @@ namespace VanillaModding.Content.NPCs.Ocram
 
             if (!Main.dedServ)
             {
-                Music = VanillaModdingMusicID.Ocram;
+                Music = VMMusicID.Ocram;
             }
             ocramServants = new int[MaxMinions];
         }

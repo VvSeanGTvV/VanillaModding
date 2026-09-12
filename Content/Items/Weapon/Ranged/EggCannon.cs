@@ -49,7 +49,7 @@ namespace VanillaModding.Content.Items.Weapon.Ranged
         {
             CreateRecipe()
                 .AddIngredient(ItemID.Minishark, 1)
-                .AddRecipeGroup(VanillaModdingRecipeGroupID.AnySilverBar, 20)
+                .AddRecipeGroup(VMRecipeGroupID.AnySilverBar, 20)
                 .AddIngredient<Content.Items.Weapon.Throwable.Egg>(10)
                 .AddTile(TileID.Anvils)
                 .Register();

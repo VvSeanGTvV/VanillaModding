@@ -24,7 +24,7 @@ namespace VanillaModding
 
         //public override Asset<Texture2D> MoonTexture => ModContent.Request<Texture2D>($"{menuAssetPath}/ExampliumMoon");
 
-        public override int Music => VanillaModdingMusicID.NowhereHome;
+        public override int Music => VMMusicID.NowhereHome;
 
         //public override ModSurfaceBackgroundStyle MenuBackgroundStyle => ModContent.GetInstance<ExampleSurfaceBackgroundStyle>();
 

@@ -46,7 +46,7 @@ namespace VanillaModding.Content.NPCs.LobotomyGod
                 return;
 
             SoundEngine.PlaySound(SoundID.Shatter, new Vector2(NPC.Center.X, NPC.Center.Y));
-            SoundEngine.PlaySound(VanillaModdingSoundID.FireInTheHole, new Vector2(NPC.Center.X, NPC.Center.Y));
+            SoundEngine.PlaySound(VMSoundID.FireInTheHole, new Vector2(NPC.Center.X, NPC.Center.Y));
 
             NPC.NewNPC(
                 NPC.GetSource_Death(),

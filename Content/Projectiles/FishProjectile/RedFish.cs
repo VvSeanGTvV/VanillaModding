@@ -44,17 +44,17 @@ namespace VanillaModding.Content.Projectiles.FishProjectile
 
         public override void OnSpawn(IEntitySource source)
         {
-            SoundEngine.PlaySound(VanillaModdingSoundID.FishSpeak, Projectile.position);
+            SoundEngine.PlaySound(VMSoundID.FishSpeak, Projectile.position);
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            SoundEngine.PlaySound(VanillaModdingSoundID.FishHit, Projectile.position);
+            SoundEngine.PlaySound(VMSoundID.FishHit, Projectile.position);
         }
 
         public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            SoundEngine.PlaySound(VanillaModdingSoundID.FishHit, Projectile.position);
+            SoundEngine.PlaySound(VMSoundID.FishHit, Projectile.position);
         }
 
         public override void OnKill(int timeLeft)

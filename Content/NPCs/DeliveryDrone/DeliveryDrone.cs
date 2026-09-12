@@ -98,7 +98,7 @@ namespace VanillaModding.Content.NPCs.DeliveryDrone
         }
 
 
-        SoundStyle Whirr = VanillaModdingSoundID.Whirr;
+        SoundStyle Whirr = VMSoundID.Whirr;
         public override void AI()
         {
             int deliveryTo = (int)NPC.ai[0];

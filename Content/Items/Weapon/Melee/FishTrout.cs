@@ -33,7 +33,7 @@ namespace VanillaModding.Content.Items.Weapon.Melee
             Item.shoot = ModContent.ProjectileType<Projectiles.FishProjectile.FishTrout>();
 
             Item.rare = ModContent.RarityType<OceanBlue>();
-            Item.UseSound = VanillaModdingSoundID.FishSpeeenShort;
+            Item.UseSound = VMSoundID.FishSpeeenShort;
             Item.autoReuse = true;
 
             Item.knockBack = 20;

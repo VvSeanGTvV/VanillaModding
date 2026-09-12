@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria;
+using VanillaModding.Common.Systems;
 using VanillaModding.Content.NPCs.Ocram;
 
 namespace VanillaModding.Content.Items.Consumable.BossSummon
@@ -74,19 +75,7 @@ namespace VanillaModding.Content.Items.Consumable.BossSummon
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddIngredient(ItemID.AdamantiteBar, 10)
-                .AddIngredient(ItemID.Bone, 15)
-                .AddIngredient(ItemID.SoulofFright, 5)
-                .AddIngredient(ItemID.SoulofMight, 5)
-                .AddIngredient(ItemID.SoulofSight, 5)
-                .AddIngredient(ItemID.SoulofNight, 5)
-                .AddIngredient(ItemID.SoulofLight, 5)
-                .AddTile(TileID.MythrilAnvil)
-                .SortAfterFirstRecipesOf(ItemID.MechanicalSkull)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.TitaniumBar, 10)
+                .AddRecipeGroup(VMRecipeGroupID.AnyAdamantiteBar, 15)
                 .AddIngredient(ItemID.Bone, 15)
                 .AddIngredient(ItemID.SoulofFright, 5)
                 .AddIngredient(ItemID.SoulofMight, 5)

@@ -586,6 +586,33 @@ Mods: {
 				DisplayName: Flintlock Rifle
 				Tooltip: "'Marksman's Otherworld Rifle'"
 			}
+
+			DragonMask: {
+				DisplayName: Dragon Mask
+				Tooltip:
+					'''
+					{0}% increased melee speed and damage
+					{1}% increased critical strike chance
+					'''
+			}
+
+			DragonGreaves: {
+				DisplayName: Dragon Greaves
+				Tooltip:
+					'''
+					{0}% increased movement speed
+					{1}% increased melee speed
+					'''
+			}
+
+			DragonBreastplate: {
+				DisplayName: Dragon Breastplate
+				Tooltip:
+					'''
+					{0}% increased melee damage
+					{1}% increased critical strike chance
+					'''
+			}
 		}
 
 		NPCs: {

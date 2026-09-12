@@ -8,6 +8,7 @@ using Terraria.ID;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using VanillaModding.Common;
+using VanillaModding.Common.Systems;
 using VanillaModding.Content.Items.Materials;
 
 namespace VanillaModding.Content.Items.Accessories
@@ -80,15 +81,7 @@ namespace VanillaModding.Content.Items.Accessories
                 .AddIngredient(ItemID.HeroShield)
                 .AddIngredient(ItemID.CobaltShield)
                 .AddIngredient<SoulofBlight>(10)
-                .AddIngredient(ItemID.AdamantiteBar, 10)
-                .AddTile(TileID.MythrilAnvil)
-                .Register();
-
-            CreateRecipe()
-                .AddIngredient(ItemID.HeroShield)
-                .AddIngredient(ItemID.CobaltShield)
-                .AddIngredient<SoulofBlight>(10)
-                .AddIngredient(ItemID.TitaniumBar, 10)
+                .AddRecipeGroup(VMRecipeGroupID.AnyAdamantiteBar, 15)
                 .AddTile(TileID.MythrilAnvil)
                 .Register();
         }

@@ -151,7 +151,7 @@ namespace VanillaModding.Content.Projectiles.Bombs
 
             if (Projectile.timeLeft <= 100 && !played && Projectile.ai[1] == 0)
             {
-                SoundEngine.PlaySound(VanillaModdingSoundID.Hallelujah, Projectile.position);
+                SoundEngine.PlaySound(VMSoundID.Hallelujah, Projectile.position);
                 played = true;
             }
         }

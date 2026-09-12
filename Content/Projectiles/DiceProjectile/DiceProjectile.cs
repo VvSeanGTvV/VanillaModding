@@ -141,7 +141,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
                         }
 
                         SoundEngine.PlaySound(SoundID.Item37, Projectile.position);
-                        SoundEngine.PlaySound(VanillaModdingSoundID.DeathNoteItemAsylum, Projectile.position);
+                        SoundEngine.PlaySound(VMSoundID.DeathNoteItemAsylum, Projectile.position);
                     }
                     modPlayer.rolling = false;
                 }
@@ -231,7 +231,7 @@ namespace VanillaModding.Content.Projectiles.DiceProjectile
                         }
 
                         SoundEngine.PlaySound(SoundID.Item37, Projectile.position);
-                        SoundEngine.PlaySound(VanillaModdingSoundID.DeathNoteItemAsylum, Projectile.position);
+                        SoundEngine.PlaySound(VMSoundID.DeathNoteItemAsylum, Projectile.position);
                     }
                     modNPC.rolling = false;
                 }

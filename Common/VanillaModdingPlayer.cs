@@ -3,6 +3,7 @@ using System.IO;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.Graphics;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -10,6 +11,7 @@ using VanillaModding.Common.Systems;
 using VanillaModding.Content.Buffs;
 using VanillaModding.Content.Items.Accessories;
 using VanillaModding.Content.Items.Accessories.Book;
+using VanillaModding.Content.Items.Armor;
 using VanillaModding.Content.Items.Consumable.Healing;
 using VanillaModding.Content.Prefixes;
 
@@ -43,6 +45,8 @@ namespace VanillaModding.Common
         public bool accSharedBrutalShield = false;
         public bool accBrutalShield = false;
         
+        // Armors Bool
+        public bool isDragonArmorSet = false;
 
         // This variable is for D I C E item.
         /// <summary>
@@ -158,7 +162,7 @@ namespace VanillaModding.Common
                     Player.statLife = (int)(Player.statLifeMax2 * 0.5f);
                     Player.statMana = (int)(Player.statManaMax2 * 0.5f);
                     SoundEngine.PlaySound(SoundID.Item3, Player.position);
-                    SoundEngine.PlaySound(VanillaModdingSoundID.Hallelujah, Player.position);
+                    SoundEngine.PlaySound(VMSoundID.Hallelujah, Player.position);
 
                     int potionDuration = (int)Player.PotionDelayModifier.ApplyTo(Player.potionDelayTime * 1.25f);
                     Player.AddBuff(BuffID.PotionSickness, potionDuration);
@@ -181,7 +185,56 @@ namespace VanillaModding.Common
         public override void PreUpdate()
         {
             ResetBool();
+
+            isDragonArmorSet = (
+                Player.armor[0].type == ModContent.ItemType<DragonMask>() && 
+                Player.armor[1].type == ModContent.ItemType<DragonBreastplate>() && 
+                Player.armor[2].type == ModContent.ItemType<DragonGreaves>()
+                );
+            
             base.PreUpdate();
+        }
+
+        public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
+        {
+            if (drawInfo.shadow > 0f && isDragonArmorSet)
+            {
+                r *= 0.5f;
+                g *= 0.5f;
+                b *= 0.5f;
+            }
+        }
+
+        public override void DrawPlayer(Camera camera)
+        {
+            Player player = Player;
+
+            if (player == null || !player.active || player.dead)
+            {
+                return;
+            }
+            if (isDragonArmorSet)
+            {
+                for (int i = 1; i <= 5; i++)
+                {
+                    float shadow = i / 6f;
+
+                    Vector2 offset = new Vector2(
+                        -player.velocity.X * i * 0.75f,
+                        -player.velocity.Y * i * 0.75f
+                    );
+
+                    Main.PlayerRenderer.DrawPlayer(
+                        camera,
+                        player,
+                        player.position + offset,
+                        player.fullRotation,
+                        player.fullRotationOrigin,
+                        shadow,
+                        1f
+                    );
+                }
+            }
         }
 
         public override void ModifyMaxStats(out StatModifier health, out StatModifier mana)

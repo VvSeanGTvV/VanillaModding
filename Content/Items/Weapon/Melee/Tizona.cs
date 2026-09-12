@@ -41,7 +41,7 @@ namespace VanillaModding.Content.Items.Weapon.Melee
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddRecipeGroup(VanillaModdingRecipeGroupID.AnyAdamantiteBar, 15)
+                .AddRecipeGroup(VMRecipeGroupID.AnyAdamantiteBar, 15)
                 .AddIngredient(ItemID.Excalibur, 1)
                 .AddTile(TileID.MythrilAnvil)
                 .Register();

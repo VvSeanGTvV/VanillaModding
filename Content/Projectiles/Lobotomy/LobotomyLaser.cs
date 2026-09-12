@@ -71,7 +71,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
 
             if (Projectile.ai[1] > (int)(60 * 1f))
             {
-                if (!fire) SoundEngine.PlaySound(VanillaModdingSoundID.LobotomyLaserFire, Projectile.position);
+                if (!fire) SoundEngine.PlaySound(VMSoundID.LobotomyLaserFire, Projectile.position);
                 Projectile.hostile = true;
                 fire = true;
                 

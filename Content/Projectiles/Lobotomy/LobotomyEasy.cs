@@ -50,12 +50,12 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
         public override void OnSpawn(IEntitySource source)
         {
             startPosition = Projectile.position;
-            SoundEngine.PlaySound(VanillaModdingSoundID.LobotomyEasySpell, Projectile.position);
+            SoundEngine.PlaySound(VMSoundID.LobotomyEasySpell, Projectile.position);
         }
 
         public override void AI()
         {
-            if (value == -1f) SoundEngine.PlaySound(VanillaModdingSoundID.LobotomyEasy, Projectile.position);
+            if (value == -1f) SoundEngine.PlaySound(VMSoundID.LobotomyEasy, Projectile.position);
             value += 0.05f / 2.75f;  // increase value each tick
 
             if (value > 1f)
@@ -63,7 +63,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
                 value = -1f;
                 float lastPositionY = Projectile.position.Y;
                 Projectile.position = new Vector2(startPosition.X, lastPositionY);  // reset position on each bounce cycle
-                SoundEngine.PlaySound(VanillaModdingSoundID.LobotomyEasyBounce, Projectile.position);
+                SoundEngine.PlaySound(VMSoundID.LobotomyEasyBounce, Projectile.position);
                 PunchCameraModifier modifier = new(Projectile.Center, (Main.rand.NextFloat() * ((float)Math.PI * 2f)).ToRotationVector2(), 20f, 6f, 20, 1000f, FullName);
                 Main.instance.CameraModifiers.Add(modifier);
                 bounce++;

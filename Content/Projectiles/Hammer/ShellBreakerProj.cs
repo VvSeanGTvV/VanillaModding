@@ -96,8 +96,8 @@ namespace VanillaModding.Content.Projectiles.Hammer
                 i += (flip) ? 1 : -1;
             }
 
-            if (HighBong) SoundEngine.PlaySound(VanillaModdingSoundID.HammerHit with { Pitch = 6 * 0.1f - 0.2f }, Projectile.Center);
-            else SoundEngine.PlaySound(VanillaModdingSoundID.HammerHit with { Pitch = (EmpoweredHammer + 2f) * 0.1f - 0.2f }, Projectile.Center);
+            if (HighBong) SoundEngine.PlaySound(VMSoundID.HammerHit with { Pitch = 6 * 0.1f - 0.2f }, Projectile.Center);
+            else SoundEngine.PlaySound(VMSoundID.HammerHit with { Pitch = (EmpoweredHammer + 2f) * 0.1f - 0.2f }, Projectile.Center);
             //SoundEngine.PlaySound(SoundID.Item16 with { Pitch = (EmpoweredHammer + 1f) * 0.1f - 0.2f, Volume = 1.15f }, Projectile.Center);
 
             return false;
@@ -229,7 +229,7 @@ namespace VanillaModding.Content.Projectiles.Hammer
             }
 
             Projectile.ai[0] = 0;
-            SoundEngine.PlaySound(VanillaModdingSoundID.HammerHit, Projectile.Center);
+            SoundEngine.PlaySound(VMSoundID.HammerHit, Projectile.Center);
             SoundEngine.PlaySound(SoundID.Item16 with { Volume = 1.45f }, Projectile.Center);
             base.OnHitNPC(target, hit, damageDone);
         }
@@ -248,7 +248,7 @@ namespace VanillaModding.Content.Projectiles.Hammer
             }
 
             Projectile.ai[0] = 0;
-            SoundEngine.PlaySound(VanillaModdingSoundID.HammerHit, Projectile.Center);
+            SoundEngine.PlaySound(VMSoundID.HammerHit, Projectile.Center);
             SoundEngine.PlaySound(SoundID.Item16 with { Volume = 1.45f }, Projectile.Center);
             base.OnHitPlayer(target, info);
         }
@@ -294,7 +294,7 @@ namespace VanillaModding.Content.Projectiles.Hammer
             }
 
 
-            SoundEngine.PlaySound(VanillaModdingSoundID.HammerBigHit, Projectile.Center);
+            SoundEngine.PlaySound(VMSoundID.HammerBigHit, Projectile.Center);
             //SoundEngine.PlaySound(VanillaModdingSoundID.DeathNoteItemAsylum, Projectile.Center);
             return false;
         }

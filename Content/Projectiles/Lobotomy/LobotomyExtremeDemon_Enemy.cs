@@ -152,8 +152,8 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
 
         public override void OnSpawn(IEntitySource source)
         {
-            SoundEngine.PlaySound(VanillaModdingSoundID.ExtremeDemonFire, Projectile.position);
-            SoundEngine.PlaySound(VanillaModdingSoundID.ExtremeDemonFire2, Projectile.position);
+            SoundEngine.PlaySound(VMSoundID.ExtremeDemonFire, Projectile.position);
+            SoundEngine.PlaySound(VMSoundID.ExtremeDemonFire2, Projectile.position);
         }
     }
 }

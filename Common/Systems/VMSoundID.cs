@@ -8,7 +8,7 @@ using Terraria.Audio;
 
 namespace VanillaModding.Common.Systems
 {
-    internal class VanillaModdingSoundID
+    internal class VMSoundID
     {
         /// <summary>
         /// Loads specific sounds from the mod's Assets folder.

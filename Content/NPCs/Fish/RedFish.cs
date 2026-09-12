@@ -153,7 +153,7 @@ namespace VanillaModding.Content.NPCs.Fish
                     direction.Normalize();
 
                     NPC.velocity = direction * speed;
-                    SoundEngine.PlaySound(VanillaModdingSoundID.FishSpeak, NPC.position);
+                    SoundEngine.PlaySound(VMSoundID.FishSpeak, NPC.position);
                     NPC.spriteDirection = (NPC.Center.X > nearPlayer.Center.X) ? -1 : 1;
                     YeetMode = true;
                     //Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, init, ModContent.ProjectileType<Projectiles.FishProjectile.RedFish>(), 10, 6, -1, Type, aggroTo+1, NPC.life);
@@ -191,7 +191,7 @@ namespace VanillaModding.Content.NPCs.Fish
                         NPC.velocity.Y -= 5f;
                     }
                     
-                    if (d > 0) SoundEngine.PlaySound(VanillaModdingSoundID.FishHit, NPC.position);
+                    if (d > 0) SoundEngine.PlaySound(VMSoundID.FishHit, NPC.position);
                 }
                 NPC.GetGlobalNPC<VanillaModdingNPC>().attacked = false;
                 NPC.rotation += MathHelper.ToRadians(15f) * NPC.spriteDirection;

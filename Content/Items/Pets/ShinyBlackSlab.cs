@@ -42,7 +42,7 @@ namespace VanillaModding.Content.Items.Pets
             Item.useStyle = ItemUseStyleID.HoldUp;
             Item.useAnimation = 20;
             Item.useTime = 20;
-            Item.UseSound = VanillaModdingSoundID.AndroidSummon;
+            Item.UseSound = VMSoundID.AndroidSummon;
             Item.value = Item.sellPrice(0, 0, 15, 0);
 
             Item.buffType = ModContent.BuffType<PetAndroid>();

@@ -330,7 +330,7 @@ namespace VanillaModding
 
         public override void AddRecipeGroups() //uh
         {
-            VanillaModdingRecipeGroupID.RegisterRecipeGroups();
+            VMRecipeGroupID.RegisterRecipeGroups();
         }
     }
 }

@@ -4,7 +4,7 @@ using Terraria.Localization;
 
 namespace VanillaModding.Common.Systems
 {
-    internal class VanillaModdingRecipeGroupID
+    internal class VMRecipeGroupID
     {
         public static int AnyCopperBar { get; private set; }
         public static int AnyIronBar { get; private set; }

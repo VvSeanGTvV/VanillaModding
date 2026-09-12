@@ -76,7 +76,7 @@ namespace VanillaModding.Content.Projectiles.Lobotomy
                     Vector2 unit = velocityDirection.RotatedBy(rotationOffset).SafeNormalize(Vector2.UnitX);
                     Vector2 beamStart = Projectile.Center - unit * (actualBeamLength / 2f);
                     Vector2 beamEnd = Projectile.Center + unit * (actualBeamLength / 2f);
-                    if (fire == false) SoundEngine.PlaySound(VanillaModdingSoundID.LobotomyInsane, Projectile.position);
+                    if (fire == false) SoundEngine.PlaySound(VMSoundID.LobotomyInsane, Projectile.position);
                     fire = true;
                     for (int i = 0; i < 12; i++)
                     {

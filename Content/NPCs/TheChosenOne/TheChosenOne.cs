@@ -70,7 +70,7 @@ namespace VanillaModding.Content.NPCs.TheChosenOne
 
             if (!Main.dedServ)
             {
-                Music = VanillaModdingMusicID.TheChosenOne;
+                Music = VMMusicID.TheChosenOne;
             }
             //ScaleStats();
         }
